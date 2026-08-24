@@ -29,7 +29,7 @@ var canada_adjustment_factors = {
 
 Q.con_canada_elections_vote = 23.92;
 Q.libcon_canada_elections_vote = 29.2;
-Q.lib_canada_elections_vote = 13.6;
+Q.clib_canada_elections_vote = 13.6;
 Q.ac_canada_elections_vote = 19.0;
 
 if (Q.treaty_Washington == 0) {
@@ -91,10 +91,10 @@ if (Q.alaska_purchased == 1) {
 
 Q.con_canada_elections_vote = Q.con_canada_elections_vote*canada_adjustment_factors.con;
 Q.libcon_canada_elections_vote = Q.libcon_canada_elections_vote*canada_adjustment_factors.libcon;
-Q.lib_canada_elections_vote = Q.lib_canada_elections_vote*canada_adjustment_factors.lib;
+Q.clib_canada_elections_vote = Q.lib_canada_elections_vote*canada_adjustment_factors.lib;
 Q.ac_canada_elections_vote = Q.ac_canada_elections_vote*canada_adjustment_factors.ac;
 
-Q.total_votes_canada = Q.con_canada_elections_vote + Q.libcon_canada_elections_vote + Q.lib_canada_elections_vote + Q.ac_canada_elections_vote;
+Q.total_votes_canada = Q.con_canada_elections_vote + Q.libcon_canada_elections_vote + Q.clib_canada_elections_vote + Q.ac_canada_elections_vote;
 
 Q.con_r = 0;
 Q.libcon_r = 0;
@@ -157,7 +157,7 @@ on-display: {!
         id: "liberal_conservatives",
         seats: Math.round(Q.libcon_r),
         color: "#9999FF",
-        outline: "#9999FF"
+        outline: "#6495ED"
       },
       {
         id: "liberals",
@@ -216,13 +216,13 @@ go-to: canada_menu
 {!<table>!} 
 {!<tr><td>Party</td><td>Vote share</td><td>Parliament Seats</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#E3000F; outline: 2px solid;'> </div> !} <span style="color: #6495ED;">Conservatives:</span> {!</td><td>!} [+ con_r +] seats {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#6495ED; outline: 2px solid;'> </div> !} <span style="color: #6495ED;">**Conservatives**:</span> {!</td><td>!} [+ con_canada_elections_vote +]  votes {!</td><td>!}  [+ con_r +]  seats {!</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#E3000F; outline: 2px solid;'> </div> !} <span style="color: #9999FF;">Liberal Conservatives:</span> {!</td><td>!} [+ libcon_r +] seats {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#9999FF; outline: 2px solid;'> </div> !} <span style="color: #9999FF;">Liberal Conservatives:</span> {!</td><td>!}  [+ libcon_canada_elections_vote +]  votes {!</td><td>!}  [+ libcon_r +]  seats {!</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#E3000F; outline: 2px solid;'> </div> !} <span style="color: #EA6D6A;">Liberals:</span> {!</td><td>!} [+ clib_r +] seats {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#EA6D6A; outline: 2px solid;'> </div> !} <span style="color: #EA6D6A;">Liberals:</span> {!</td><td>!}  [+ clib_canada_elections_vote +]  votes {!</td><td>!}  [+ clib_r +]  seats {!</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#E3000F; outline: 2px solid;'> </div> !} <span style="color: #EABB94;">Anti-Confederation:</span> {!</td><td>!} [+ ac_r +] seats {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#EA6D6A; outline: 2px solid;'> </div> !} <span style="color: #EABB94;">Anti-Conferation:</span> {!</td><td>!}  [+ ac_canada_elections_vote +]  votes {!</td><td>!}  [+ ac_r +]  seats {!</td></tr>!}
 {!</table>!}
 
 @canada_menu
