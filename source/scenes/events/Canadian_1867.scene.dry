@@ -15,15 +15,15 @@ The Canadian Confederation are to hold their 1st legislative elections now.
 @Canada
 on-arrival: {!
 
-// con is Conservative Party of Canada
-// lib is Liberal Party of Canada
-// libcon is the Liberal-Conservative Party of Canada
-// ac is the Anti-Confederation Party
+// con = Conservative Party of Canada
+// libcon = Liberal-Conservative Party
+// clib = Liberal Party of Canada
+// ac = Anti-Confederation Party
 
 var canada_adjustment_factors = {
     con: 1.0,
     libcon: 1.0,
-    lib: 1.0,
+    clib: 1.0,
     ac: 1.0,
 };
 
@@ -32,81 +32,129 @@ Q.libcon_canada_elections_vote = 29.2;
 Q.clib_canada_elections_vote = 13.6;
 Q.ac_canada_elections_vote = 19.0;
 
+
+// Washington Treaty
 if (Q.treaty_Washington == 0) {
     canada_adjustment_factors.con += 0.06;
     canada_adjustment_factors.libcon += 0.06;
     canada_adjustment_factors.ac += 0.06;
+
 } else if (Q.treaty_Washington == 1) {
     canada_adjustment_factors.con += 0.03;
     canada_adjustment_factors.libcon += 0.03;
+    canada_adjustment_factors.clib += 0.03;
     canada_adjustment_factors.ac += 0.03;
-    canada_adjustment_factors.lib += 0.03;
-} else if (Q.treaty_Washington == 2) {
-    canada_adjustment_factors.lib += 0.06;
-} 
 
+} else if (Q.treaty_Washington == 2) {
+    canada_adjustment_factors.clib += 0.06;
+}
+
+
+// Fenian activity
 if (Q.fenian >= 4) {
     canada_adjustment_factors.con += 0.06;
     canada_adjustment_factors.libcon += 0.06;
+
 } else if (Q.fenian == 3) {
     canada_adjustment_factors.con += 0.04;
     canada_adjustment_factors.libcon += 0.04;
+
 } else if (Q.fenian == 2) {
     canada_adjustment_factors.con += 0.03;
     canada_adjustment_factors.libcon += 0.03;
+
 } else if (Q.fenian == 1) {
     canada_adjustment_factors.con += 0.02;
     canada_adjustment_factors.libcon += 0.02;
+
 } else if (Q.fenian <= 0) {
-    canada_adjustment_factors.lib += 0.04;
+    canada_adjustment_factors.clib += 0.04;
     canada_adjustment_factors.ac += 0.03;
 }
 
+
+// European relations
 if (Q.europe_relation >= 3 && Q.rep_majority) {
-    canada_adjustment_factors.lib += (Q.europe_relation / 50);
+
+    canada_adjustment_factors.clib += (Q.europe_relation / 50);
+
     if (Q.radical_strength >= 50) {
         canada_adjustment_factors.con += (Q.radical_strength / 400);
         canada_adjustment_factors.libcon += (Q.radical_strength / 400);
     }
 }
 
+
+// Economic growth
 if (Q.economic_growth >= 6) {
-    canada_adjustment_factors.lib += (Q.economic_growth / 150);
+    canada_adjustment_factors.clib += (Q.economic_growth / 150);
+
 } else if (Q.economic_growth <= -2) {
     canada_adjustment_factors.ac += 0.03;
     canada_adjustment_factors.con += 0.02;
 }
 
+
+// Inflation
 if (Q.inflation >= 7) {
     canada_adjustment_factors.ac += 0.04;
-    canada_adjustment_factors.lib -= 0.02;
+    canada_adjustment_factors.clib -= 0.02;
+
 } else if (Q.inflation <= 0) {
-    canada_adjustment_factors.lib += 0.03;
+    canada_adjustment_factors.clib += 0.03;
 }
 
+
+// Alaska purchase
 if (Q.alaska_purchased == 1) {
     canada_adjustment_factors.con += 0.05;
     canada_adjustment_factors.libcon += 0.05;
 }
 
-Q.con_canada_elections_vote = Q.con_canada_elections_vote*canada_adjustment_factors.con;
-Q.libcon_canada_elections_vote = Q.libcon_canada_elections_vote*canada_adjustment_factors.libcon;
-Q.clib_canada_elections_vote = Q.lib_canada_elections_vote*canada_adjustment_factors.lib;
-Q.ac_canada_elections_vote = Q.ac_canada_elections_vote*canada_adjustment_factors.ac;
 
-Q.total_votes_canada = Q.con_canada_elections_vote + Q.libcon_canada_elections_vote + Q.clib_canada_elections_vote + Q.ac_canada_elections_vote;
+// Apply adjustments
+Q.con_canada_elections_vote *= canada_adjustment_factors.con;
+Q.libcon_canada_elections_vote *= canada_adjustment_factors.libcon;
+Q.clib_canada_elections_vote *= canada_adjustment_factors.clib;
+Q.ac_canada_elections_vote *= canada_adjustment_factors.ac;
 
+
+// Calculate total votes
+Q.total_votes_canada =
+    Q.con_canada_elections_vote +
+    Q.libcon_canada_elections_vote +
+    Q.clib_canada_elections_vote +
+    Q.ac_canada_elections_vote;
+
+
+// Convert to percentage vote shares
+Q.con_canada_elections_vote =
+    Math.round((Q.con_canada_elections_vote / Q.total_votes_canada) * 10000) / 100;
+
+Q.libcon_canada_elections_vote =
+    Math.round((Q.libcon_canada_elections_vote / Q.total_votes_canada) * 10000) / 100;
+
+Q.clib_canada_elections_vote =
+    Math.round((Q.clib_canada_elections_vote / Q.total_votes_canada) * 10000) / 100;
+
+Q.ac_canada_elections_vote =
+    Math.round((Q.ac_canada_elections_vote / Q.total_votes_canada) * 10000) / 100;
+
+
+// Seat calculation
 Q.con_r = 0;
 Q.libcon_r = 0;
 Q.clib_r = 0;
 Q.ac_r = 0;
+
 Q.n = 1.25;
 
 Q.parties = ['con', 'libcon', 'clib', 'ac'];
 
-let totalPow = Math.pow(Q.con_canada_elections_vote, Q.n) +
+let totalPow =
+    Math.pow(Q.con_canada_elections_vote, Q.n) +
     Math.pow(Q.libcon_canada_elections_vote, Q.n) +
-    Math.pow(Q.lib_canada_elections_vote, Q.n) +
+    Math.pow(Q.clib_canada_elections_vote, Q.n) +
     Math.pow(Q.ac_canada_elections_vote, Q.n);
 
 let exactSeats = {};
@@ -114,20 +162,30 @@ let flooredSeats = {};
 let seatsGivenOut = 0;
 
 for (let party of Q.parties) {
-    let precent = Math.pow(Q[party + "_canada_elections_vote"], Q.n) / totalPow;
-    exactSeats[party] = 180 * precent;
+
+    let percent =
+        Math.pow(Q[party + "_canada_elections_vote"], Q.n) /
+        totalPow;
+
+    exactSeats[party] = 180 * percent;
     flooredSeats[party] = Math.floor(exactSeats[party]);
+
     seatsGivenOut += flooredSeats[party];
 }
+
 
 let seatsLeft = 180 - seatsGivenOut;
 
 while (seatsLeft > 0) {
+
     let bestParty = null;
     let bestRemainder = -1;
 
     for (let party of Q.parties) {
-        let remainder = exactSeats[party] - flooredSeats[party];
+
+        let remainder =
+            exactSeats[party] - flooredSeats[party];
+
         if (remainder > bestRemainder) {
             bestRemainder = remainder;
             bestParty = party;
@@ -136,9 +194,12 @@ while (seatsLeft > 0) {
 
     flooredSeats[bestParty] += 1;
     exactSeats[bestParty] = -1;
+
     seatsLeft -= 1;
 }
 
+
+// Store final seat totals
 for (let party of Q.parties) {
     Q[party + "_r"] = flooredSeats[party];
 }
@@ -216,13 +277,13 @@ go-to: canada_menu
 {!<table>!} 
 {!<tr><td>Party</td><td>Vote share</td><td>Parliament Seats</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#6495ED; outline: 2px solid;'> </div> !} <span style="color: #6495ED;">**Conservatives**:</span> {!</td><td>!} [+ con_canada_elections_vote +]  votes {!</td><td>!}  [+ con_r +]  seats {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#6495ED; outline: 2px solid;'> </div> !} <span style="color: #6495ED;">**Conservatives**:</span> {!</td><td>!} [+ con_canada_elections_vote +]% {!</td><td>!}  [+ con_r +]  seats {!</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#9999FF; outline: 2px solid;'> </div> !} <span style="color: #9999FF;">Liberal Conservatives:</span> {!</td><td>!}  [+ libcon_canada_elections_vote +]  votes {!</td><td>!}  [+ libcon_r +]  seats {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#9999FF; outline: 2px solid;'> </div> !} <span style="color: #9999FF;">Liberal Conservatives:</span> {!</td><td>!}  [+ libcon_canada_elections_vote +]% {!</td><td>!}  [+ libcon_r +]  seats {!</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#EA6D6A; outline: 2px solid;'> </div> !} <span style="color: #EA6D6A;">Liberals:</span> {!</td><td>!}  [+ clib_canada_elections_vote +]  votes {!</td><td>!}  [+ clib_r +]  seats {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#EA6D6A; outline: 2px solid;'> </div> !} <span style="color: #EA6D6A;">Liberals:</span> {!</td><td>!}  [+ clib_canada_elections_vote +]% {!</td><td>!}  [+ clib_r +]  seats {!</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#EA6D6A; outline: 2px solid;'> </div> !} <span style="color: #EABB94;">Anti-Conferation:</span> {!</td><td>!}  [+ ac_canada_elections_vote +]  votes {!</td><td>!}  [+ ac_r +]  seats {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#EA6D6A; outline: 2px solid;'> </div> !} <span style="color: #EABB94;">Anti-Conferation:</span> {!</td><td>!}  [+ ac_canada_elections_vote +]%  {!</td><td>!}  [+ ac_r +]  seats {!</td></tr>!}
 {!</table>!}
 
 @canada_menu
