@@ -253,7 +253,7 @@ on-display: {!
 
     // Increase seat outline thickness
     container.selectAll(".seat")
-        .attr("stroke-width", 2);
+        .attr("stroke-width", 3);
 }
 
 if (!window.d3) {
@@ -285,7 +285,7 @@ go-to: canada_menu
 {!<svg id="houseChart" style="width: 500px; height: 250px;"> </svg>!}
 
 {!<table>!} 
-{!<tr><td>**Party**</td><td>**Vote share**</td><td>**Parliament Seats**</td></tr>!}
+{!<tr><td><b>Party<b></td><td><b>Vote share<b></td><td><b>Parliament Seats<b></td></tr!}
 
 {!<tr><td><div class="box" style='background-color:#6495ED; outline: 2px solid;'> </div> !} <span style="color: #6495ED;">**Conservatives**:</span> {!</td><td>!} [+ con_canada_elections_vote +]% {!</td><td>!}  [+ con_r +]  seats {!</td></tr>!}
 
@@ -293,7 +293,7 @@ go-to: canada_menu
 
 {!<tr><td><div class="box" style='background-color:#EA6D6A; outline: 2px solid;'> </div> !} <span style="color: #EA6D6A;">**Liberals**:</span> {!</td><td>!}  [+ clib_canada_elections_vote +]% {!</td><td>!}  [+ clib_r +]  seats {!</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#EABB94; outline: 2px solid;'> </div> !} <span style="color: #EABB94;">**Anti-Conferation**:</span> {!</td><td>!}  [+ ac_canada_elections_vote +]%  {!</td><td>!}  [+ ac_r +]  seats {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#EABB94; outline: 2px solid;'> </div> !} <span style="color: #EABB94;">**Anti-Confederation**:</span> {!</td><td>!}  [+ ac_canada_elections_vote +]%  {!</td><td>!}  [+ ac_r +]  seats {!</td></tr>!}
 {!</table>!}
 
 @canada_menu
