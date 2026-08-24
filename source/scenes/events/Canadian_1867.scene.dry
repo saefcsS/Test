@@ -28,9 +28,9 @@ var canada_adjustment_factors = {
 };
 
 Q.con_canada_elections_vote = 23.92;
-Q.libcon_canada_elections_vote = 29.2;
-Q.clib_canada_elections_vote = 13.6;
-Q.ac_canada_elections_vote = 19.0;
+Q.libcon_canada_elections_vote = 11.08;
+Q.clib_canada_elections_vote = 22.67;
+Q.ac_canada_elections_vote = 7.92;
 
 
 // Washington Treaty
@@ -240,32 +240,42 @@ on-display: {!
     if (container.empty()) {
       container = d3.select("#content").append("svg").attr("id", "houseChart");
     }
+
     container.attr("width", width)
              .attr("height", width / 2)
              .html("");
 
-    var parliament = d3.parliament().width(width).innerRadiusCoef(0.4);
-    container.data([chartData]).call(parliament);
-  }
+    var parliament = d3.parliament()
+        .width(width)
+        .innerRadiusCoef(0.4);
 
-  if (!window.d3) {
+    container.data([chartData]).call(parliament);
+
+    // Increase seat outline thickness
+    container.selectAll(".seat")
+        .attr("stroke-width", 2);
+}
+
+if (!window.d3) {
     var script = document.createElement('script');
     script.src = 'https://d3js.org/d3.v7.min.js';
     script.onload = function() {
-      var subscript = document.createElement('script');
-      subscript.src = 'https://cdn.jsdelivr.net/npm/d3-parliament@1.0.3/build/d3-parliament.min.js';
-      subscript.onload = drawChart;
-      document.head.appendChild(subscript);
+        var subscript = document.createElement('script');
+        subscript.src = 'https://cdn.jsdelivr.net/npm/d3-parliament@1.0.3/build/d3-parliament.min.js';
+        subscript.onload = drawChart;
+        document.head.appendChild(subscript);
     };
     document.head.appendChild(script);
-  } else if (!window.d3.parliament) {
+
+} else if (!window.d3.parliament) {
     var script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/d3-parliament@1.0.3/build/d3-parliament.min.js';
     script.onload = drawChart;
     document.head.appendChild(script);
-  } else {
+
+} else {
     drawChart();
-  }
+}
 !}
 go-to: canada_menu
 
@@ -275,15 +285,15 @@ go-to: canada_menu
 {!<svg id="houseChart" style="width: 500px; height: 250px;"> </svg>!}
 
 {!<table>!} 
-{!<tr><td>Party</td><td>Vote share</td><td>Parliament Seats</td></tr>!}
+{!<tr><td>**Party**</td><td>**Vote share**</td><td>**Parliament Seats**</td></tr>!}
 
 {!<tr><td><div class="box" style='background-color:#6495ED; outline: 2px solid;'> </div> !} <span style="color: #6495ED;">**Conservatives**:</span> {!</td><td>!} [+ con_canada_elections_vote +]% {!</td><td>!}  [+ con_r +]  seats {!</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#9999FF; outline: 2px solid;'> </div> !} <span style="color: #9999FF;">Liberal Conservatives:</span> {!</td><td>!}  [+ libcon_canada_elections_vote +]% {!</td><td>!}  [+ libcon_r +]  seats {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#9999FF; outline: 2px solid;'> </div> !} <span style="color: #9999FF;">**Liberal Conservatives**:</span> {!</td><td>!}  [+ libcon_canada_elections_vote +]% {!</td><td>!}  [+ libcon_r +]  seats {!</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#EA6D6A; outline: 2px solid;'> </div> !} <span style="color: #EA6D6A;">Liberals:</span> {!</td><td>!}  [+ clib_canada_elections_vote +]% {!</td><td>!}  [+ clib_r +]  seats {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#EA6D6A; outline: 2px solid;'> </div> !} <span style="color: #EA6D6A;">**Liberals**:</span> {!</td><td>!}  [+ clib_canada_elections_vote +]% {!</td><td>!}  [+ clib_r +]  seats {!</td></tr>!}
 
-{!<tr><td><div class="box" style='background-color:#EA6D6A; outline: 2px solid;'> </div> !} <span style="color: #EABB94;">Anti-Conferation:</span> {!</td><td>!}  [+ ac_canada_elections_vote +]%  {!</td><td>!}  [+ ac_r +]  seats {!</td></tr>!}
+{!<tr><td><div class="box" style='background-color:#EABB94; outline: 2px solid;'> </div> !} <span style="color: #EABB94;">**Anti-Conferation**:</span> {!</td><td>!}  [+ ac_canada_elections_vote +]%  {!</td><td>!}  [+ ac_r +]  seats {!</td></tr>!}
 {!</table>!}
 
 @canada_menu
