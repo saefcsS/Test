@@ -108,7 +108,6 @@ for (let state of Q.states) {
     // If fusion occurred, Democratic voters fold into the Greeley/lib vote
     if (Q.greeley_fusion) {
       adjLib += adjDem;
-      adjDem = adjDem * 0.05; // residual protest vote / abstentions modeled as reduced dem
     }
 
     // If Hancock or another strong Dem is running independently alongside Greeley,
