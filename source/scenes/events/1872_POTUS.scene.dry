@@ -64,7 +64,7 @@ let closeStates = {
 
 // If Greeley fusion occurred, the combined Dem+Lib vote is much stronger
 // so we tighten all margins significantly
-let fusionModifier = Q.greeley_fusion ? 0.5 : 1.0;
+let fusionModifier = Q.greeley_fusion ? 0.2 : 1.0;
 
 // National swing calculation
 let baselineRep = 55;
@@ -107,8 +107,8 @@ for (let state of Q.states) {
 
     // If fusion occurred, Democratic voters fold into the Greeley/lib vote
     if (Q.greeley_fusion) {
-      adjLib += adjDem * 0.70;
-      adjDem = adjDem * 0.30; // residual protest vote / abstentions modeled as reduced dem
+      adjLib += adjDem;
+      adjDem = adjDem * 0.05; // residual protest vote / abstentions modeled as reduced dem
     }
 
     // If Hancock or another strong Dem is running independently alongside Greeley,
