@@ -137,7 +137,8 @@ for (let state of Q.states) {
   if (closeStates[state] !== undefined) {
     let nudge = closeStates[state] * 0.1 * fusionModifier;
     let randomJitter = (Math.random() * 0.8) - 0.4;
-    let marginTarget = nudge + randomJitter;
+    let fusionFlatBonus = Q.greeley_fusion ? -0.75 : 0;
+    let marginTarget = nudge + randomJitter + fusionFlatBonus;
 
     let twoPartyTotal = votes.rep + votes.dem + votes.lib;
     let oppTotal = votes.dem + votes.lib; // combined opposition
