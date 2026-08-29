@@ -54,17 +54,17 @@ let closeStates = {
   "AR":  -0.14,
   "LA":  -0.62,
   "VA":  -8.83,
-  "GA":  -32.06,
-  "KY":  -38.66,
-  "MD":  -41.00,
-  "DE":  -34.00,
-  "MO":  -39.00,
-  "TX":  -35.00
+  "GA":  -28.06,
+  "KY":  -34.66,
+  "MD":  -38.00,
+  "DE":  -29.00,
+  "MO":  -35.00,
+  "TX":  -26.00
 };
 
 // If Greeley fusion occurred, the combined Dem+Lib vote is much stronger
 // so we tighten all margins significantly
-let fusionModifier = Q.greeley_fusion ? 0.2 : 1.0;
+let fusionModifier = Q.greeley_fusion ? 0.5 : 1.0;
 
 // National swing calculation
 let baselineRep = 55;
@@ -107,7 +107,8 @@ for (let state of Q.states) {
 
     // If fusion occurred, Democratic voters fold into the Greeley/lib vote
     if (Q.greeley_fusion) {
-      adjLib += adjDem;
+      adjLib += adjDem * 0.70;
+      adjDem = adjDem * 0.30; // residual protest vote / abstentions modeled as reduced dem
     }
 
     // If Hancock or another strong Dem is running independently alongside Greeley,
@@ -136,9 +137,7 @@ for (let state of Q.states) {
   if (closeStates[state] !== undefined) {
     let nudge = closeStates[state] * 0.1 * fusionModifier;
     let randomJitter = (Math.random() * 0.8) - 0.4;
-    let fusionFlatBonus = Q.greeley_fusion ? -1.30 : 0;
-    let marginTarget = nudge + randomJitter + fusionFlatBonus;
-
+    let marginTarget = nudge + randomJitter;
 
     let twoPartyTotal = votes.rep + votes.dem + votes.lib;
     let oppTotal = votes.dem + votes.lib; // combined opposition
@@ -162,8 +161,8 @@ for (let state of Q.states) {
   // Determine state winner
   let winner = "rep";
   if (Q.greeley_fusion) {
-    // Fusion: lib is the main opposition candidate
-    if (votes.lib >= votes.rep) winner = "lib";
+    let oppTotal = votes.lib + votes.dem;
+    if (oppTotal >= votes.rep) winner = "lib";
   } else if (Q.liberal_split) {
     // Three-way race
     if (votes.dem >= votes.rep && votes.dem >= votes.lib) winner = "dem";
@@ -253,8 +252,6 @@ on-display: {!
     dc: Q.dc_winner_color,
   };
 
-  // NEW: build results from the percentages saved during on-arrival,
-  // instead of hardcoding two states by hand
   let results = {};
   for (let state of Q.states) {
     let key = state.toLowerCase();
