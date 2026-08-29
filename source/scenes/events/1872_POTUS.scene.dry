@@ -54,12 +54,12 @@ let closeStates = {
   "AR":  -0.14,
   "LA":  -0.62,
   "VA":  -8.83,
-  "GA":  -28.06,
-  "KY":  -34.66,
-  "MD":  -38.00,
-  "DE":  -29.00,
-  "MO":  -35.00,
-  "TX":  -26.00
+  "GA":  -32.06,
+  "KY":  -38.66,
+  "MD":  -41.00,
+  "DE":  -34.00,
+  "MO":  -39.00,
+  "TX":  -35.00
 };
 
 // If Greeley fusion occurred, the combined Dem+Lib vote is much stronger
