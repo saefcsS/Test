@@ -139,6 +139,7 @@ for (let state of Q.states) {
     let fusionFlatBonus = Q.greeley_fusion ? -1.30 : 0;
     let marginTarget = nudge + randomJitter + fusionFlatBonus;
 
+
     let twoPartyTotal = votes.rep + votes.dem + votes.lib;
     let oppTotal = votes.dem + votes.lib; // combined opposition
     if (twoPartyTotal > 0) {
