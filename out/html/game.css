@@ -688,6 +688,14 @@ video {
   text-align: center;
 }
 
+#Dixie-map {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%; 
+}
+
 .et-title {
   font-weight: bold;
   text-align: center;
