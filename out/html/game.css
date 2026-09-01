@@ -689,18 +689,17 @@ video {
 }
 
 #Dixie-map {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+#Dixie-map svg {
   width: 100%;
   height: 100%;
   display: block;
 }
 
-#svg1 {
-  width: 100%;
-  height: 100%;
-}
+#id
 
 .et-title {
   font-weight: bold;
