@@ -164,7 +164,6 @@ for (let state of Q.states) {
     let oppTotal = votes.lib + votes.dem;
     if (oppTotal >= votes.rep) winner = "lib";
   } else if (Q.liberal_split) {
-    // Three-way race
     if (votes.dem >= votes.rep && votes.dem >= votes.lib) winner = "dem";
     if (votes.lib >= votes.rep && votes.lib >= votes.dem) winner = "lib";
   } else {
