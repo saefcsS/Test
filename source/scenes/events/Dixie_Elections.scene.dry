@@ -2,16 +2,41 @@ title: Southern State Elections
 subtitle: In the land of Cotton
 tags: event
 view-if: year = 1865 and month = 5
+title: Southern State Elections
+subtitle: In the land of Cotton
+tags: event
+view-if: year = 1865 and month = 5
 on-arrival: {!
 
 let dixie1865 = {
-  TN: { winner: "rep", margin: 99, contested: false, seats: 75 },
-  GA: { winner: "dem", margin: 97, contested: false, seats: 175 },
-  LA: { winner: "rep", margin: 95, contested: false, seats: 105 },
-  SC: { winner: "rep", margin: 4,  contested: true,  seats: 124 },
-  NC: { winner: "rep", margin: 12, contested: true,  seats: 170 },
-  AL: { winner: "rep", margin: 10, contested: true,  seats: 100 },
-  MS: { winner: "dem", margin: 15, contested: true,  seats: 115 },
+  TN: {
+    gub: { winner: "rep", margin: 99, contested: false },
+    leg: { winner: "rep", margin: 95, contested: false, seats: 75 },
+  },
+  GA: {
+    gub: { winner: "dem", margin: 97, contested: false },
+    leg: { winner: "dem", margin: 90, contested: false, seats: 175 },
+  },
+  LA: {
+    gub: { winner: "rep", margin: 95, contested: false },
+    leg: { winner: "dem", margin: 80, contested: false, seats: 105 },
+  },
+  SC: {
+    gub: { winner: "rep", margin: 4,  contested: true },
+    leg: { winner: "rep", margin: 8,  contested: true, seats: 124 },
+  },
+  NC: {
+    gub: { winner: "rep", margin: 12, contested: true },
+    leg: { winner: "dem", margin: 40, contested: true, seats: 170 },
+  },
+  AL: {
+    gub: { winner: "rep", margin: 10, contested: true },
+    leg: { winner: "rep", margin: 5,  contested: true, seats: 100 },
+  },
+  MS: {
+    gub: { winner: "dem", margin: 15, contested: true },
+    leg: { winner: "dem", margin: 25, contested: true, seats: 115 },
+  },
 };
 
 let partyLabel = { rep: "Unionist", dem: "Conservative" };
@@ -21,33 +46,43 @@ let baselineDem = 42;
 let nationalRepSwing = (Q.workers_rep + Q.middle_class_rep + Q.rural_rep + Q.freemen_rep) / 4 - baselineRep;
 nationalRepSwing = Math.max(-6, Math.min(6, nationalRepSwing));
 
-for (let state in dixie1865) {
-  let data = dixie1865[state];
-
-  let floorMargin = data.contested ? data.margin : Math.max(80, data.margin - Math.abs(nationalRepSwing) * 2);
+// shared helper: takes a race object (gub or leg), returns its final rep/dem share
+function resolveRace(race) {
+  let floorMargin = race.contested ? race.margin : Math.max(80, race.margin - Math.abs(nationalRepSwing) * 2);
 
   let adjMargin = floorMargin;
-  if (data.contested) {
-    adjMargin += nationalRepSwing * (data.winner === "rep" ? 1 : -1);
+  if (race.contested) {
+    adjMargin += nationalRepSwing * (race.winner === "rep" ? 1 : -1);
     adjMargin += (Math.random() * 10) - 5;
     adjMargin = Math.max(0.5, adjMargin);
   }
 
-  let repShare = data.winner === "rep" ? 50 + adjMargin / 2 : 50 - adjMargin / 2;
+  let repShare = race.winner === "rep" ? 50 + adjMargin / 2 : 50 - adjMargin / 2;
   let demShare = 100 - repShare;
-
   let finalWinner = repShare >= demShare ? "rep" : "dem";
 
-  Q[state + "_gub_winner"] = finalWinner;
-  Q[state + "_gub_margin"] = Math.abs(repShare - demShare).toFixed(2);
+  return { repShare: repShare, demShare: demShare, winner: finalWinner };
+}
 
-  let repSeats = Math.round(data.seats * (repShare / 100));
-  let demSeats = data.seats - repSeats;
+for (let state in dixie1865) {
+  let data = dixie1865[state];
 
+  // governor: resolved independently
+  let gubResult = resolveRace(data.gub);
+  Q[state + "_gub_winner"] = gubResult.winner;
+  Q[state + "_gub_margin"] = Math.abs(gubResult.repShare - gubResult.demShare).toFixed(2);
+
+  // legislature: resolved independently, own swing roll, own seat math
+  let legResult = resolveRace(data.leg);
+  let repSeats = Math.round(data.leg.seats * (legResult.repShare / 100));
+  let demSeats = data.leg.seats - repSeats;
+
+  Q[state + "_leg_winner"] = legResult.winner;
   Q[state + "_leg_rep_seats"] = repSeats;
   Q[state + "_leg_dem_seats"] = demSeats;
 
-  console.log(state + " (" + partyLabel[finalWinner] + "): rep=" + repShare.toFixed(1) + "%, dem=" + demShare.toFixed(1) + "%, seats " + repSeats + "-" + demSeats);
+  console.log(state + " GOV (" + partyLabel[gubResult.winner] + "): " + gubResult.repShare.toFixed(1) + "-" + gubResult.demShare.toFixed(1)
+    + " | LEG (" + partyLabel[legResult.winner] + "): seats " + repSeats + "-" + demSeats);
 }
 
 !}
