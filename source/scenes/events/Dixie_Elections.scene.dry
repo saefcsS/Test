@@ -2,6 +2,55 @@ title: Southern State Elections
 subtitle: In the land of Cotton
 tags: event
 view-if: year = 1865 and month = 5
+on-arrival: {!
+
+let dixie1865 = {
+  TN: { winner: "rep", margin: 99, contested: false, seats: 75 },
+  GA: { winner: "dem", margin: 97, contested: false, seats: 175 },
+  LA: { winner: "rep", margin: 95, contested: false, seats: 105 },
+  SC: { winner: "rep", margin: 4,  contested: true,  seats: 124 },
+  NC: { winner: "rep", margin: 12, contested: true,  seats: 170 },
+  AL: { winner: "rep", margin: 10, contested: true,  seats: 100 },
+  MS: { winner: "dem", margin: 15, contested: true,  seats: 115 },
+};
+
+let partyLabel = { rep: "Unionist", dem: "Conservative" };
+
+let baselineRep = 55;
+let baselineDem = 42;
+let nationalRepSwing = (Q.workers_rep + Q.middle_class_rep + Q.rural_rep + Q.freemen_rep) / 4 - baselineRep;
+nationalRepSwing = Math.max(-6, Math.min(6, nationalRepSwing));
+
+for (let state in dixie1865) {
+  let data = dixie1865[state];
+
+  let floorMargin = data.contested ? data.margin : Math.max(80, data.margin - Math.abs(nationalRepSwing) * 2);
+
+  let adjMargin = floorMargin;
+  if (data.contested) {
+    adjMargin += nationalRepSwing * (data.winner === "rep" ? 1 : -1);
+    adjMargin += (Math.random() * 10) - 5;
+    adjMargin = Math.max(0.5, adjMargin);
+  }
+
+  let repShare = data.winner === "rep" ? 50 + adjMargin / 2 : 50 - adjMargin / 2;
+  let demShare = 100 - repShare;
+
+  let finalWinner = repShare >= demShare ? "rep" : "dem";
+
+  Q[state + "_gub_winner"] = finalWinner;
+  Q[state + "_gub_margin"] = Math.abs(repShare - demShare).toFixed(2);
+
+  let repSeats = Math.round(data.seats * (repShare / 100));
+  let demSeats = data.seats - repSeats;
+
+  Q[state + "_leg_rep_seats"] = repSeats;
+  Q[state + "_leg_dem_seats"] = demSeats;
+
+  console.log(state + " (" + partyLabel[finalWinner] + "): rep=" + repShare.toFixed(1) + "%, dem=" + demShare.toFixed(1) + "%, seats " + repSeats + "-" + demSeats);
+}
+
+!}
 on-display: {!
 
 var DixieMap = {
@@ -12,9 +61,8 @@ var DixieMap = {
     var results = opts.results || {};
 
     var partyColors = {
-      rep: "#c10000",
-      dem: "#0015bc",
-      lib: "#f1c40f",
+      rep: "#B22222",
+      dem: "#F79500",
       unknown: "#a0a0a0"
     };
 
@@ -53,17 +101,13 @@ function drawMap() {
   DixieMap.draw({
     container: "#Dixie-map",
     results: {
-      FL: "rep",
-      SC: "dem",
-      GA: "rep",
-      AL: "dem",
-      NC: "rep",
-      TN: "rep",
-      VA: "rep",
-      TX: "dem",
-      MS: "dem",
-      AR: "rep",
-      LA: "dem",
+      TN: Q.TN_gub_winner,
+      SC: Q.SC_gub_winner,
+      GA: Q.GA_gub_winner,
+      AL: Q.AL_gub_winner,
+      NC: Q.NC_gub_winner,
+      MS: Q.MS_gub_winner,
+      LA: Q.LA_gub_winner,
     },
   });
 }
