@@ -693,7 +693,7 @@ video {
   height: 100%;
 }
 
-#Dixie-map svg {
+#Dixie-map > svg {
   width: 100%;
   height: 100%;
   display: block;
@@ -711,7 +711,27 @@ video {
   box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.3);
   color: var(--text-color);
   font-size: 0.85em;
-  min-width: 200px;
+  width: 260px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.et-pie {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+}
+
+#dixie-leg-parliament {
+  width: 140px;
+  height: 70px;
+  flex-shrink: 0;
+  display: block;
+  margin: 0 auto;
+}
+
+.et-results {
+  min-width: 0;
 }
 
 .et-subtitle {

@@ -166,6 +166,8 @@ var DixieMap = {
       chart.update.animate(false);   // no transition lag while hovering between states
       chart.enter.smallToBig(false);
       chart.enter.fromCenter(false);
+      chart.exit.bigToSmall(false);
+      chart.exit.toCenter(false);
 
       d3.select(svgEl).datum(data).call(chart);
     }
