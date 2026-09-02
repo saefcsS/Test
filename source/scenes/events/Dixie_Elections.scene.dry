@@ -109,58 +109,51 @@ var DixieMap = {
     `;
 
     var tooltip = container.querySelector("#dixie-tooltip");
+    var titleEl = container.querySelector("#dixie-tooltip-title");
+    var gubPieSVG = container.querySelector("#dixie-gub-pie");
+    var gubResultsEl = container.querySelector("#dixie-gub-results");
+    var legParliamentSVG = container.querySelector("#dixie-leg-parliament");
+    var legResultsEl = container.querySelector("#dixie-leg-results");
 
-    // --- pie chart for governor's race (two-slice donut) ---
-    function pieSVG(repPct, demPct, repColor, demColor) {
+    // --- pie chart for governor's race (kept hand-built; d3-parliament is
+    // seat-based and isn't meant for a two-slice pie) ---
+    function drawPie(svgEl, repPct, demPct, repColor, demColor) {
       var repDeg = (repPct / 100) * 360;
       function point(deg, r) {
         var rad = (deg - 90) * Math.PI / 180;
         return [50 + r * Math.cos(rad), 50 + r * Math.sin(rad)];
       }
-      var p1 = point(0, 40);
-      var p2 = point(repDeg, 40);
+      var p1 = point(0, 45);
+      var p2 = point(repDeg, 45);
       var largeArc = repDeg > 180 ? 1 : 0;
-      var repPath = "M50,50 L" + p1[0] + "," + p1[1] + " A40,40 0 " + largeArc + " 1 " + p2[0] + "," + p2[1] + " Z";
-      var p3 = point(repDeg, 40);
-      var p4 = point(360, 40);
+      var repPath = "M50,50 L" + p1[0] + "," + p1[1] + " A45,45 0 " + largeArc + " 1 " + p2[0] + "," + p2[1] + " Z";
+      var p3 = point(repDeg, 45);
+      var p4 = point(360, 45);
       var largeArc2 = (360 - repDeg) > 180 ? 1 : 0;
-      var demPath = "M50,50 L" + p3[0] + "," + p3[1] + " A40,40 0 " + largeArc2 + " 1 " + p4[0] + "," + p4[1] + " Z";
+      var demPath = "M50,50 L" + p3[0] + "," + p3[1] + " A45,45 0 " + largeArc2 + " 1 " + p4[0] + "," + p4[1] + " Z";
 
-      return '<svg viewBox="0 0 100 100" width="90" height="90">'
-        + '<path d="' + repPath + '" fill="' + repColor + '"/>'
-        + '<path d="' + demPath + '" fill="' + demColor + '"/>'
-        + '</svg>';
+      svgEl.innerHTML =
+        '<path d="' + repPath + '" fill="' + repColor + '"></path>' +
+        '<path d="' + demPath + '" fill="' + demColor + '"></path>';
     }
 
-    // --- parliament arc for legislature seats (dots along a semicircle, sorted by party) ---
-    function parliamentSVG(repSeats, demSeats, repColor, demColor) {
-      var total = repSeats + demSeats;
-      var dots = [];
-      // build seat list: rep seats first, then dem, so the chart reads as a
-      // contiguous block per party (classic parliament-chart convention)
-      var seatOrder = [];
-      for (var i = 0; i < repSeats; i++) seatOrder.push(repColor);
-      for (var j = 0; j < demSeats; j++) seatOrder.push(demColor);
+    // --- legislature seats via d3-parliament.js ---
+    function drawParliament(svgEl, repSeats, demSeats, repColor, demColor) {
+      var data = [
+        { id: "rep", seats: repSeats, color: repColor, outline: "var(--content-bg-color)" },
+        { id: "dem", seats: demSeats, color: demColor, outline: "var(--content-bg-color)" },
+      ];
 
-      // arrange dots across a semicircle using rows (simple concentric-arc layout)
-      var rows = 4;
-      var seatsPerRow = Math.ceil(total / rows);
-      var idx = 0;
-      for (var row = 0; row < rows; row++) {
-        var radius = 20 + row * 12;
-        var rowSeats = Math.min(seatsPerRow, total - idx);
-        if (rowSeats <= 0) break;
-        for (var s = 0; s < rowSeats; s++) {
-          var angle = rowSeats === 1 ? 90 : 15 + (150 * s / (rowSeats - 1));
-          var rad = angle * Math.PI / 180;
-          var cx = 65 - radius * Math.cos(rad);
-          var cy = 65 - radius * Math.sin(rad);
-          dots.push('<circle cx="' + cx + '" cy="' + cy + '" r="3" fill="' + seatOrder[idx] + '"/>');
-          idx++;
-        }
-      }
+      var chart = d3.parliament().width(140);
+      chart.update.animate(false);   // no transition lag while hovering between states
+      chart.enter.smallToBig(false);
+      chart.enter.fromCenter(false);
 
-      return '<svg viewBox="0 0 130 70" width="130" height="70">' + dots.join("") + '</svg>';
+      d3.select(svgEl).datum(data).call(chart);
+    }
+
+    function resultRow(label, pctOrSeats, color) {
+      return '<div class="et-row"><span class="et-swatch" style="background-color:' + color + ';"></span>' + label + ' ' + pctOrSeats + '</div>';
     }
 
     var paths = container.querySelectorAll("path[id]");
@@ -171,26 +164,23 @@ var DixieMap = {
       var winner = stateResults ? stateResults.gubWinner : null;
       path.style.fill = winner ? partyColors[winner] : partyColors.unknown;
 
-      if (!stateResults) return; // no election data, no tooltip
+      if (!stateResults) return;
 
-      path.addEventListener("mouseenter", function(e) {
-        var repColor = partyColors.rep;
-        var demColor = partyColors.dem;
+      var repColor = partyColors.rep;
+      var demColor = partyColors.dem;
 
-        tooltip.innerHTML =
-          '<div style="font-weight:bold; margin-bottom:6px;">' + stateId + '</div>'
-          + '<div style="margin-bottom:4px;">Governor</div>'
-          + pieSVG(stateResults.gubRepPct, stateResults.gubDemPct, repColor, demColor)
-          + '<div style="font-size:11px; margin:4px 0;">'
-            + '<span style="color:' + repColor + ';">' + partyLabel.rep + ' ' + stateResults.gubRepPct + '%</span> · '
-            + '<span style="color:' + demColor + ';">' + partyLabel.dem + ' ' + stateResults.gubDemPct + '%</span>'
-          + '</div>'
-          + '<div style="margin:6px 0 4px;">Legislature (' + (stateResults.legRepSeats + stateResults.legDemSeats) + ' seats)</div>'
-          + parliamentSVG(stateResults.legRepSeats, stateResults.legDemSeats, repColor, demColor)
-          + '<div style="font-size:11px; margin-top:4px;">'
-            + '<span style="color:' + repColor + ';">' + partyLabel.rep + ' ' + stateResults.legRepSeats + '</span> · '
-            + '<span style="color:' + demColor + ';">' + partyLabel.dem + ' ' + stateResults.legDemSeats + '</span>'
-          + '</div>';
+      path.addEventListener("mouseenter", function() {
+        titleEl.textContent = stateId;
+
+        drawPie(gubPieSVG, stateResults.gubRepPct, stateResults.gubDemPct, repColor, demColor);
+        gubResultsEl.innerHTML =
+          resultRow(partyLabel.rep, stateResults.gubRepPct + "%", repColor) +
+          resultRow(partyLabel.dem, stateResults.gubDemPct + "%", demColor);
+
+        drawParliament(legParliamentSVG, stateResults.legRepSeats, stateResults.legDemSeats, repColor, demColor);
+        legResultsEl.innerHTML =
+          resultRow(partyLabel.rep, stateResults.legRepSeats + " seats", repColor) +
+          resultRow(partyLabel.dem, stateResults.legDemSeats + " seats", demColor);
 
         tooltip.style.display = "block";
       });
@@ -230,7 +220,3 @@ function drawMap() {
 drawMap();
 
 !}
-
-= DIXIE
-
-{!<div id="Dixie-map"></div>!}
