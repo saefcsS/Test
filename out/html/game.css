@@ -711,7 +711,7 @@ video {
   box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.3);
   color: var(--text-color);
   font-size: 0.85em;
-  width: 220px;
+  width: 260px;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -723,9 +723,8 @@ video {
 }
 
 #dixie-leg-parliament {
-  width: 100%;
-  max-width: 200px;
-  height: 100px;
+  width: 140px;
+  height: 70px;
   flex-shrink: 0;
   display: block;
   margin: 0 auto;
@@ -735,19 +734,34 @@ video {
   min-width: 0;
 }
 
-/* legislature section stacks vertically instead of side-by-side */
-.et-section:nth-child(3) .et-body {
-  flex-direction: column;
+.et-subtitle {
+  font-weight: bold;
+  margin: 0.4em 0 0.2em 0;
+  font-size: 0.9em;
+}
+
+.et-section {
+  margin-bottom: 0.4em;
+}
+
+#id
+
+.et-title {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0.4em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.et-body {
+  display: flex;
   align-items: center;
-  gap: 0.2em;
+  gap: 0.6em;
 }
 
-.et-section:nth-child(3) .et-results {
-  width: 100%;
-}
-
-.et-section:nth-child(3) .et-row {
-  justify-content: center;
+.et-results {
+  flex: 1;
 }
 
 .et-row {
