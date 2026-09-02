@@ -760,6 +760,22 @@ video {
   gap: 0.6em;
 }
 
+#dixie-leg-parliament-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3em;
+  width: 100%;
+}
+
+#dixie-leg-parliament-wrap .et-results {
+  width: 100%;
+}
+
+#dixie-leg-parliament-wrap .et-row {
+  justify-content: flex-start;
+}
+
 .et-results {
   flex: 1;
 }

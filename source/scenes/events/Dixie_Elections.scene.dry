@@ -118,7 +118,7 @@ var DixieMap = {
 
           <div class="et-section">
             <div class="et-subtitle">Legislature</div>
-              <div class="et-body">
+              <div class="et-body" id="dixie-leg-parliament-wrap">
                 <svg class="et-pie" id="dixie-leg-parliament" width="140" height="70"></svg>
               <div class="et-results" id="dixie-leg-results"></div>
             </div>
