@@ -3,7 +3,7 @@ subtitle: In the land of Cotton
 tags: event
 view-if: year = 1865 and month = 12
 audio: music/Dixie's_Land_Instrumental.mp3
-
+set-bg: img/Confederate_congress.jpg
 max-visits: 1
 
 Seven Southern states hold their first elections since the collapse of the rebellion. With the old political order broken, Unionists seek to rebuild within the restored Union while Conservatives, drawn largely from the planter class and former Confederates, move to reclaim control over Southern affairs.
