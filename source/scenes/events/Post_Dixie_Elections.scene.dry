@@ -38,7 +38,7 @@ function resolveState(stateCode, seats) {
 
   let stateRepShare = stateClassCount > 0 ? (stateRepTotal / stateClassCount) : nationalRepShare;
 
-  let blendedRep = (stateRepShare * 0.8) + (nationalRepShare * 0.25);
+  let blendedRep = (stateRepShare * 0.75) + (nationalRepShare * 0.25);
   blendedRep = blendedRep / 1.05;
 
   blendedRep += (Math.random() * 8) - 4;
@@ -212,6 +212,17 @@ var DixieMap = {
 };
 
 function drawMap() {
+  var results = {};
+  Q.southern_states.forEach(function(state) {
+    results[state] = {
+      gubWinner: Q[state + "_gub_winner"],
+      gubRepPct: Q[state + "_gub_rep_pct"],
+      gubDemPct: Q[state + "_gub_dem_pct"],
+      legRepSeats: Q[state + "_leg_rep_seats"],
+      legDemSeats: Q[state + "_leg_dem_seats"],
+    };
+  });
+
   DixieMap.draw({
     container: "#Dixie-map",
     partyColors: {
@@ -219,17 +230,11 @@ function drawMap() {
       dem: "#0015bc",
     },
     partyLabel: { rep: "Republicans", dem: "Democrats" },
-    results: {
-      TN: { gubWinner: Q.TN_gub_winner, gubRepPct: Q.TN_gub_rep_pct, gubDemPct: Q.TN_gub_dem_pct, legRepSeats: Q.TN_leg_rep_seats, legDemSeats: Q.TN_leg_dem_seats },
-      SC: { gubWinner: Q.SC_gub_winner, gubRepPct: Q.SC_gub_rep_pct, gubDemPct: Q.SC_gub_dem_pct, legRepSeats: Q.SC_leg_rep_seats, legDemSeats: Q.SC_leg_dem_seats },
-      GA: { gubWinner: Q.GA_gub_winner, gubRepPct: Q.GA_gub_rep_pct, gubDemPct: Q.GA_gub_dem_pct, legRepSeats: Q.GA_leg_rep_seats, legDemSeats: Q.GA_leg_dem_seats },
-      AL: { gubWinner: Q.AL_gub_winner, gubRepPct: Q.AL_gub_rep_pct, gubDemPct: Q.AL_gub_dem_pct, legRepSeats: Q.AL_leg_rep_seats, legDemSeats: Q.AL_leg_dem_seats },
-      NC: { gubWinner: Q.NC_gub_winner, gubRepPct: Q.NC_gub_rep_pct, gubDemPct: Q.NC_gub_dem_pct, legRepSeats: Q.NC_leg_rep_seats, legDemSeats: Q.NC_leg_dem_seats },
-      MS: { gubWinner: Q.MS_gub_winner, gubRepPct: Q.MS_gub_rep_pct, gubDemPct: Q.MS_gub_dem_pct, legRepSeats: Q.MS_leg_rep_seats, legDemSeats: Q.MS_leg_dem_seats },
-      LA: { gubWinner: Q.LA_gub_winner, gubRepPct: Q.LA_gub_rep_pct, gubDemPct: Q.LA_gub_dem_pct, legRepSeats: Q.LA_leg_rep_seats, legDemSeats: Q.LA_leg_dem_seats },
-    },
+    results: results,
   });
 }
+
+drawMap();
 
 drawMap();
 
