@@ -4,7 +4,7 @@ tags: event
 view-if: year = 1868 and month = 4
 max-visits: 1
 
-Under the new state constitutions, freedmen vote for the first time alongside white Southerners, and the modern Republican and Democratic coalitions take real shape in the South. Whatever ground has been won or lost — in Congress, on the plantation, in the streets — will be tested today.
+Test
 
 - @Dixie: Lets see the results
 
@@ -239,29 +239,30 @@ drawMap();
 = DIXIE
 
 {!<div id="Dixie-map"></div>!}
+
 {!<table>!}
 {!<tr><td>State</td><td>Governor</td><td>Legislature</td></tr>!}
 
-{!<tr><td>Virginia</td><td>[? if VA_gub_winner = "rep" : Republican ?][? if VA_gub_winner = "dem" : Democrat ?] ([+ VA_gub_rep_pct +]%–[+ VA_gub_dem_pct +]%)</td><td>[? if VA_leg_winner = "rep" : Republican ?][? if VA_leg_winner = "dem" : Democrat ?] ([+ VA_leg_rep_seats +]–[+ VA_leg_dem_seats +])</td></tr>!}
+{!<tr><td>Virginia</td><td>!}[? if VA_gub_winner = "rep" : Republican ?][? if VA_gub_winner = "dem" : Democrat ?] ([+ VA_gub_rep_pct +]%–[+ VA_gub_dem_pct +]%){!</td><td>!}[? if VA_leg_winner = "rep" : Republican ?][? if VA_leg_winner = "dem" : Democrat ?] ([+ VA_leg_rep_seats +]–[+ VA_leg_dem_seats +]){!</td></tr>!}
 
-{!<tr><td>North Carolina</td><td>[? if NC_gub_winner = "rep" : Republican ?][? if NC_gub_winner = "dem" : Democrat ?] ([+ NC_gub_rep_pct +]%–[+ NC_gub_dem_pct +]%)</td><td>[? if NC_leg_winner = "rep" : Republican ?][? if NC_leg_winner = "dem" : Democrat ?] ([+ NC_leg_rep_seats +]–[+ NC_leg_dem_seats +])</td></tr>!}
+{!<tr><td>North Carolina</td><td>!}[? if NC_gub_winner = "rep" : Republican ?][? if NC_gub_winner = "dem" : Democrat ?] ([+ NC_gub_rep_pct +]%–[+ NC_gub_dem_pct +]%){!</td><td>!}[? if NC_leg_winner = "rep" : Republican ?][? if NC_leg_winner = "dem" : Democrat ?] ([+ NC_leg_rep_seats +]–[+ NC_leg_dem_seats +]){!</td></tr>!}
 
-{!<tr><td>South Carolina</td><td>[? if SC_gub_winner = "rep" : Republican ?][? if SC_gub_winner = "dem" : Democrat ?] ([+ SC_gub_rep_pct +]%–[+ SC_gub_dem_pct +]%)</td><td>[? if SC_leg_winner = "rep" : Republican ?][? if SC_leg_winner = "dem" : Democrat ?] ([+ SC_leg_rep_seats +]–[+ SC_leg_dem_seats +])</td></tr>!}
+{!<tr><td>South Carolina</td><td>!}[? if SC_gub_winner = "rep" : Republican ?][? if SC_gub_winner = "dem" : Democrat ?] ([+ SC_gub_rep_pct +]%–[+ SC_gub_dem_pct +]%){!</td><td>!}[? if SC_leg_winner = "rep" : Republican ?][? if SC_leg_winner = "dem" : Democrat ?] ([+ SC_leg_rep_seats +]–[+ SC_leg_dem_seats +]){!</td></tr>!}
 
-{!<tr><td>Georgia</td><td>[? if GA_gub_winner = "rep" : Republican ?][? if GA_gub_winner = "dem" : Democrat ?] ([+ GA_gub_rep_pct +]%–[+ GA_gub_dem_pct +]%)</td><td>[? if GA_leg_winner = "rep" : Republican ?][? if GA_leg_winner = "dem" : Democrat ?] ([+ GA_leg_rep_seats +]–[+ GA_leg_dem_seats +])</td></tr>!}
+{!<tr><td>Georgia</td><td>!}[? if GA_gub_winner = "rep" : Republican ?][? if GA_gub_winner = "dem" : Democrat ?] ([+ GA_gub_rep_pct +]%–[+ GA_gub_dem_pct +]%){!</td><td>!}[? if GA_leg_winner = "rep" : Republican ?][? if GA_leg_winner = "dem" : Democrat ?] ([+ GA_leg_rep_seats +]–[+ GA_leg_dem_seats +]){!</td></tr>!}
 
-{!<tr><td>Alabama</td><td>[? if AL_gub_winner = "rep" : Republican ?][? if AL_gub_winner = "dem" : Democrat ?] ([+ AL_gub_rep_pct +]%–[+ AL_gub_dem_pct +]%)</td><td>[? if AL_leg_winner = "rep" : Republican ?][? if AL_leg_winner = "dem" : Democrat ?] ([+ AL_leg_rep_seats +]–[+ AL_leg_dem_seats +])</td></tr>!}
+{!<tr><td>Alabama</td><td>!}[? if AL_gub_winner = "rep" : Republican ?][? if AL_gub_winner = "dem" : Democrat ?] ([+ AL_gub_rep_pct +]%–[+ AL_gub_dem_pct +]%){!</td><td>!}[? if AL_leg_winner = "rep" : Republican ?][? if AL_leg_winner = "dem" : Democrat ?] ([+ AL_leg_rep_seats +]–[+ AL_leg_dem_seats +]){!</td></tr>!}
 
-{!<tr><td>Florida</td><td>[? if FL_gub_winner = "rep" : Republican ?][? if FL_gub_winner = "dem" : Democrat ?] ([+ FL_gub_rep_pct +]%–[+ FL_gub_dem_pct +]%)</td><td>[? if FL_leg_winner = "rep" : Republican ?][? if FL_leg_winner = "dem" : Democrat ?] ([+ FL_leg_rep_seats +]–[+ FL_leg_dem_seats +])</td></tr>!}
+{!<tr><td>Florida</td><td>!}[? if FL_gub_winner = "rep" : Republican ?][? if FL_gub_winner = "dem" : Democrat ?] ([+ FL_gub_rep_pct +]%–[+ FL_gub_dem_pct +]%){!</td><td>!}[? if FL_leg_winner = "rep" : Republican ?][? if FL_leg_winner = "dem" : Democrat ?] ([+ FL_leg_rep_seats +]–[+ FL_leg_dem_seats +]){!</td></tr>!}
 
-{!<tr><td>Mississippi</td><td>[? if MS_gub_winner = "rep" : Republican ?][? if MS_gub_winner = "dem" : Democrat ?] ([+ MS_gub_rep_pct +]%–[+ MS_gub_dem_pct +]%)</td><td>[? if MS_leg_winner = "rep" : Republican ?][? if MS_leg_winner = "dem" : Democrat ?] ([+ MS_leg_rep_seats +]–[+ MS_leg_dem_seats +])</td></tr>!}
+{!<tr><td>Mississippi</td><td>!}[? if MS_gub_winner = "rep" : Republican ?][? if MS_gub_winner = "dem" : Democrat ?] ([+ MS_gub_rep_pct +]%–[+ MS_gub_dem_pct +]%){!</td><td>!}[? if MS_leg_winner = "rep" : Republican ?][? if MS_leg_winner = "dem" : Democrat ?] ([+ MS_leg_rep_seats +]–[+ MS_leg_dem_seats +]){!</td></tr>!}
 
-{!<tr><td>Arkansas</td><td>[? if AR_gub_winner = "rep" : Republican ?][? if AR_gub_winner = "dem" : Democrat ?] ([+ AR_gub_rep_pct +]%–[+ AR_gub_dem_pct +]%)</td><td>[? if AR_leg_winner = "rep" : Republican ?][? if AR_leg_winner = "dem" : Democrat ?] ([+ AR_leg_rep_seats +]–[+ AR_leg_dem_seats +])</td></tr>!}
+{!<tr><td>Arkansas</td><td>!}[? if AR_gub_winner = "rep" : Republican ?][? if AR_gub_winner = "dem" : Democrat ?] ([+ AR_gub_rep_pct +]%–[+ AR_gub_dem_pct +]%){!</td><td>!}[? if AR_leg_winner = "rep" : Republican ?][? if AR_leg_winner = "dem" : Democrat ?] ([+ AR_leg_rep_seats +]–[+ AR_leg_dem_seats +]){!</td></tr>!}
 
-{!<tr><td>Texas</td><td>[? if TX_gub_winner = "rep" : Republican ?][? if TX_gub_winner = "dem" : Democrat ?] ([+ TX_gub_rep_pct +]%–[+ TX_gub_dem_pct +]%)</td><td>[? if TX_leg_winner = "rep" : Republican ?][? if TX_leg_winner = "dem" : Democrat ?] ([+ TX_leg_rep_seats +]–[+ TX_leg_dem_seats +])</td></tr>!}
+{!<tr><td>Texas</td><td>!}[? if TX_gub_winner = "rep" : Republican ?][? if TX_gub_winner = "dem" : Democrat ?] ([+ TX_gub_rep_pct +]%–[+ TX_gub_dem_pct +]%){!</td><td>!}[? if TX_leg_winner = "rep" : Republican ?][? if TX_leg_winner = "dem" : Democrat ?] ([+ TX_leg_rep_seats +]–[+ TX_leg_dem_seats +]){!</td></tr>!}
 
-{!<tr><td>Louisiana</td><td>[? if LA_gub_winner = "rep" : Republican ?][? if LA_gub_winner = "dem" : Democrat ?] ([+ LA_gub_rep_pct +]%–[+ LA_gub_dem_pct +]%)</td><td>[? if LA_leg_winner = "rep" : Republican ?][? if LA_leg_winner = "dem" : Democrat ?] ([+ LA_leg_rep_seats +]–[+ LA_leg_dem_seats +])</td></tr>!}
+{!<tr><td>Louisiana</td><td>!}[? if LA_gub_winner = "rep" : Republican ?][? if LA_gub_winner = "dem" : Democrat ?] ([+ LA_gub_rep_pct +]%–[+ LA_gub_dem_pct +]%){!</td><td>!}[? if LA_leg_winner = "rep" : Republican ?][? if LA_leg_winner = "dem" : Democrat ?] ([+ LA_leg_rep_seats +]–[+ LA_leg_dem_seats +]){!</td></tr>!}
 
-{!<tr><td>Tennessee</td><td>[? if TN_gub_winner = "rep" : Republican ?][? if TN_gub_winner = "dem" : Democrat ?] ([+ TN_gub_rep_pct +]%–[+ TN_gub_dem_pct +]%)</td><td>[? if TN_leg_winner = "rep" : Republican ?][? if TN_leg_winner = "dem" : Democrat ?] ([+ TN_leg_rep_seats +]–[+ TN_leg_dem_seats +])</td></tr>!}
+{!<tr><td>Tennessee</td><td>!}[? if TN_gub_winner = "rep" : Republican ?][? if TN_gub_winner = "dem" : Democrat ?] ([+ TN_gub_rep_pct +]%–[+ TN_gub_dem_pct +]%){!</td><td>!}[? if TN_leg_winner = "rep" : Republican ?][? if TN_leg_winner = "dem" : Democrat ?] ([+ TN_leg_rep_seats +]–[+ TN_leg_dem_seats +]){!</td></tr>!}
 
 {!</table>!}
