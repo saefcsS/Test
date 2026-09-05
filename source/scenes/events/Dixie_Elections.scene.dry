@@ -4,8 +4,6 @@ tags: event
 view-if: year = 1865 and month = 12
 max-visits: 1
 
-= Elections, [+ month +] [+ year +]
-
 Seven Southern states hold their first elections since the collapse of the rebellion. With the old political order broken, Unionists seek to rebuild within the restored Union while Conservatives, drawn largely from the planter class and former Confederates, move to reclaim control over Southern affairs.
 
 President Johnson's lenient Reconstruction has returned civilian government to the South remarkably quickly. Freedmen remain barred from the ballot, while pardoned Confederates return to public office across the region. Whether these elections mark genuine reunion or the restoration of the old order will be decided in Washington.
@@ -260,18 +258,18 @@ drawMap();
 {!<table>!}
 {!<tr><td>State</td><td>Governor</td><td>Legislature</td></tr>!}
 
-{!<tr><td><div class="box" style="background-color:#B22222;"></div> !}<span style="color: #B22222;">**Tennessee**</span>{!</td><td>!}[? if TN_gub_winner = "rep" : Unionist ?][? if TN_gub_winner = "dem" : Conservative ?] ([+ TN_gub_rep_pct +]%–[+ TN_gub_dem_pct +]%){!</td><td>!}[? if TN_leg_winner = "rep" : Unionist ?][? if TN_leg_winner = "dem" : Conservative ?] ([+ TN_leg_rep_seats +]–[+ TN_leg_dem_seats +]){!</td></tr>!}
+{!<tr><td><div class="box" style="background-color:#B22222;"></div> !}<span style="color: #B22222;">**Tennessee**</span>{!</td><td>!}[? if TN_gub_winner = "rep" : Unionist ?][? if TN_gub_winner = "dem" : Conservative ?]{!</td><td>!}[? if TN_leg_winner = "rep" : Unionist ?][? if TN_leg_winner = "dem" : Conservative ?] {!</td></tr>!}
 
-{!<tr><td><div class="box" style="background-color:#B22222;"></div> !}<span style="color: #B22222;">**South Carolina**</span>{!</td><td>!}[? if SC_gub_winner = "rep" : Unionist ?][? if SC_gub_winner = "dem" : Conservative ?] ([+ SC_gub_rep_pct +]%–[+ SC_gub_dem_pct +]%){!</td><td>!}[? if SC_leg_winner = "rep" : Unionist ?][? if SC_leg_winner = "dem" : Conservative ?] ([+ SC_leg_rep_seats +]–[+ SC_leg_dem_seats +]){!</td></tr>!}
+{!<tr><td><div class="box" style="background-color:#B22222;"></div> !}<span style="color: #B22222;">**South Carolina**</span>{!</td><td>!}[? if SC_gub_winner = "rep" : Unionist ?][? if SC_gub_winner = "dem" : Conservative ?] {!</td><td>!}[? if SC_leg_winner = "rep" : Unionist ?][? if SC_leg_winner = "dem" : Conservative ?] {!</td></tr>!}
 
-{!<tr><td><div class="box" style="background-color:#F79500;"></div> !}<span style="color: #F79500;">**Georgia**</span>{!</td><td>!}[? if GA_gub_winner = "rep" : Unionist ?][? if GA_gub_winner = "dem" : Conservative ?] ([+ GA_gub_rep_pct +]%–[+ GA_gub_dem_pct +]%){!</td><td>!}[? if GA_leg_winner = "rep" : Unionist ?][? if GA_leg_winner = "dem" : Conservative ?] ([+ GA_leg_rep_seats +]–[+ GA_leg_dem_seats +]){!</td></tr>!}
+{!<tr><td><div class="box" style="background-color:#F79500;"></div> !}<span style="color: #F79500;">**Georgia**</span>{!</td><td>!}[? if GA_gub_winner = "rep" : Unionist ?][? if GA_gub_winner = "dem" : Conservative ?]{!</td><td>!}[? if GA_leg_winner = "rep" : Unionist ?][? if GA_leg_winner = "dem" : Conservative ?] {!</td></tr>!}
 
-{!<tr><td><div class="box" style="background-color:#B22222;"></div> !}<span style="color: #B22222;">**Alabama**</span>{!</td><td>!}[? if AL_gub_winner = "rep" : Unionist ?][? if AL_gub_winner = "dem" : Conservative ?] ([+ AL_gub_rep_pct +]%–[+ AL_gub_dem_pct +]%){!</td><td>!}[? if AL_leg_winner = "rep" : Unionist ?][? if AL_leg_winner = "dem" : Conservative ?] ([+ AL_leg_rep_seats +]–[+ AL_leg_dem_seats +]){!</td></tr>!}
+{!<tr><td><div class="box" style="background-color:#B22222;"></div> !}<span style="color: #B22222;">**Alabama**</span>{!</td><td>!}[? if AL_gub_winner = "rep" : Unionist ?][? if AL_gub_winner = "dem" : Conservative ?] {!</td><td>!}[? if AL_leg_winner = "rep" : Unionist ?][? if AL_leg_winner = "dem" : Conservative ?] {!</td></tr>!}
 
-{!<tr><td><div class="box" style="background-color:#B22222;"></div> !}<span style="color: #B22222;">**North Carolina**</span>{!</td><td>!}[? if NC_gub_winner = "rep" : Unionist ?][? if NC_gub_winner = "dem" : Conservative ?] ([+ NC_gub_rep_pct +]%–[+ NC_gub_dem_pct +]%){!</td><td>!}[? if NC_leg_winner = "rep" : Unionist ?][? if NC_leg_winner = "dem" : Conservative ?] ([+ NC_leg_rep_seats +]–[+ NC_leg_dem_seats +]){!</td></tr>!}
+{!<tr><td><div class="box" style="background-color:#B22222;"></div> !}<span style="color: #B22222;">**North Carolina**</span>{!</td><td>!}[? if NC_gub_winner = "rep" : Unionist ?][? if NC_gub_winner = "dem" : Conservative ?] {!</td><td>!}[? if NC_leg_winner = "rep" : Unionist ?][? if NC_leg_winner = "dem" : Conservative ?] {!</td></tr>!}
 
-{!<tr><td><div class="box" style="background-color:#F79500;"></div> !}<span style="color: #F79500;">**Mississippi**</span>{!</td><td>!}[? if MS_gub_winner = "rep" : Unionist ?][? if MS_gub_winner = "dem" : Conservative ?] ([+ MS_gub_rep_pct +]%–[+ MS_gub_dem_pct +]%){!</td><td>!}[? if MS_leg_winner = "rep" : Unionist ?][? if MS_leg_winner = "dem" : Conservative ?] ([+ MS_leg_rep_seats +]–[+ MS_leg_dem_seats +]){!</td></tr>!}
+{!<tr><td><div class="box" style="background-color:#F79500;"></div> !}<span style="color: #F79500;">**Mississippi**</span>{!</td><td>!}[? if MS_gub_winner = "rep" : Unionist ?][? if MS_gub_winner = "dem" : Conservative ?] {!</td><td>!}[? if MS_leg_winner = "rep" : Unionist ?][? if MS_leg_winner = "dem" : Conservative ?] {!</td></tr>!}
 
-{!<tr><td><div class="box" style="background-color:#B22222;"></div> !}<span style="color: #B22222;">**Louisiana**</span>{!</td><td>!}[? if LA_gub_winner = "rep" : Unionist ?][? if LA_gub_winner = "dem" : Conservative ?] ([+ LA_gub_rep_pct +]%–[+ LA_gub_dem_pct +]%){!</td><td>!}[? if LA_leg_winner = "rep" : Unionist ?][? if LA_leg_winner = "dem" : Conservative ?] ([+ LA_leg_rep_seats +]–[+ LA_leg_dem_seats +]){!</td></tr>!}
+{!<tr><td><div class="box" style="background-color:#B22222;"></div> !}<span style="color: #B22222;">**Louisiana**</span>{!</td><td>!}[? if LA_gub_winner = "rep" : Unionist ?][? if LA_gub_winner = "dem" : Conservative ?] {!</td><td>!}[? if LA_leg_winner = "rep" : Unionist ?][? if LA_leg_winner = "dem" : Conservative ?] {!</td></tr>!}
 
 {!</table>!}
