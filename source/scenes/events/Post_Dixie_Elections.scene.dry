@@ -2,9 +2,16 @@ title: Southern State Elections
 subtitle: Reconstruction at the Ballot Box
 tags: event
 view-if: year = 1868 and month = 4
-max-visits: 1
 
-Test
+[? if Radical_plan = 1 or Moderate_plan = 1 : Under the Reconstruction Acts of 1867, the former Confederate states have been divided into military districts, their new constitutions drafted by conventions in which freedmen sat as delegates for the first time in Southern history. Now those constitutions go before the voters — and so do the men who will govern under them. ?]
+
+[? if Johnson_plan = 1 : With the President's lenient policy still in force, the South has been spared military districts and federal oversight of the ballot. Restored civilian governments — dominated by pardoned Confederates and the old planter class — hold new elections on their own terms. Freedmen remain barred from voting in most of these states, and the question is less whether Reconstruction will take hold than whether it will happen at all. ?]
+
+[? if Radical_plan = 1 : Military registrars have enrolled freedmen by the hundreds of thousands while barring many former Confederate officeholders under the Ironclad Oath. In several states, Black voters make up a majority of the registered electorate. ?]
+
+[? if Moderate_plan = 1 : Registration has proceeded unevenly — freedmen are enrolled, but with fewer restrictions on ex-Confederates than the Radicals in Congress wanted. ?]
+
+[? if Radical_plan = 1 or Moderate_plan = 1 : Klan violence and economic intimidation are already working to suppress the freedmen vote in some districts, even as Union League organizers push registration in others. ?]
 
 - @Dixie: Lets see the results
 
@@ -13,7 +20,6 @@ on-arrival: {!
 
 Q.southern_states = ['VA', 'NC', 'SC', 'GA', 'AL', 'FL', 'MS', 'AR', 'TX', 'LA', 'TN'];
 
-// total legislature seats per state
 let stateSeats = {
   VA: 132, NC: 170, SC: 124, GA: 175, AL: 100,
   FL: 76,  MS: 115, AR: 100, TX: 90,  LA: 105, TN: 75,
@@ -24,22 +30,20 @@ let partyLabel = { rep: "Republican", dem: "Democrat" };
 let nationalRepShare = (Q.workers_rep + Q.middle_class_rep + Q.rural_rep + Q.freemen_rep + Q.immigrant_laborers_rep + Q.unemployed_rep) / 6;
 
 function resolveState(stateCode, seats) {
-  let classes = ["workers", "middle_class", "rural", "freemen", "immigrant_laborers", "unemployed"];
-  let stateRepTotal = 0;
-  let stateClassCount = 0;
+  // Pull from the persistent reconstruction simulation instead of
+  // recomputing a parallel demographic blend from scratch.
+  let loyalty = Q[stateCode + "_loyalty"];
+  let raceEquality = Q[stateCode + "_raceEqualitySupport"];
+  let hasSimData = (loyalty !== undefined && raceEquality !== undefined);
 
-  classes.forEach(function(c) {
-    let key = stateCode + "_" + c + "_rep";
-    if (Q[key] !== undefined) {
-      stateRepTotal += Q[key];
-      stateClassCount++;
-    }
-  });
+  let simRepShare = hasSimData
+    ? (loyalty * 0.5) + (raceEquality * 0.5)
+    : nationalRepShare;
 
-  let stateRepShare = stateClassCount > 0 ? (stateRepTotal / stateClassCount) : nationalRepShare;
-
-  let blendedRep = (stateRepShare * 0.75) + (nationalRepShare * 0.25);
-  blendedRep = blendedRep / 1.05;
+  // Blend the persistent state simulation with the national mood swing,
+  // weighted toward the state's own trajectory since that's what the
+  // player has actually been steering via Reconstruction policy.
+  let blendedRep = (simRepShare * 0.7) + (nationalRepShare * 0.3);
 
   blendedRep += (Math.random() * 8) - 4;
   blendedRep = Math.max(1, Math.min(99, blendedRep));
@@ -62,6 +66,17 @@ function resolveState(stateCode, seats) {
   Q[stateCode + "_leg_rep_seats"] = repSeats;
   Q[stateCode + "_leg_dem_seats"] = demSeats;
   Q[stateCode + "_leg_total_seats"] = seats;
+
+  // Feed the result back into the persistent simulation so later scenes
+  // (Colfax_Massacre, Sharecropping, White_League_Formation, the 1872
+  // readmission check, etc.) can react to who actually holds power.
+  Q[stateCode + "_last_election_party"] = winner;
+  if (winner === "dem") {
+    // A "Redeemer" win signals organized resistance to Reconstruction
+    // took hold locally — nudge the score down slightly rather than
+    // letting the monthly recompute alone smooth it over.
+    Q[stateCode + "_reconstructionScore"] = Math.max(0, (Q[stateCode + "_reconstructionScore"] || 0) - 3);
+  }
 }
 
 Q.southern_states.forEach(function(stateCode) {
