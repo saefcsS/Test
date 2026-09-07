@@ -24,52 +24,71 @@ let stateSeats = {
   FL: 76,  MS: 115, AR: 100, TX: 90,  LA: 105, TN: 75,
 };
 
-let partyLabel = { rep: "Republican", dem: "Democrat" };
+for (let state of Q.southern_states) {
+  if (Q.states.indexOf(state) === -1) continue;
 
-let nationalRepShare = (Q.workers_rep + Q.middle_class_rep + Q.rural_rep + Q.freemen_rep + Q.immigrant_laborers_rep + Q.unemployed_rep) / 6;
+  let repVotes = 0;
+  let demVotes = 0;
 
-function resolveState(stateCode, seats) {
-  let loyalty = Q[stateCode + "_loyalty"];
-  let raceEquality = Q[stateCode + "_raceEqualitySupport"];
-  let hasSimData = (loyalty !== undefined && raceEquality !== undefined);
+  for (let cls of Q.classes) {
 
-  let simRepShare = hasSimData
-    ? (loyalty * 0.5) + (raceEquality * 0.5)
-    : nationalRepShare;
+    if (cls === "freemen" && Q.fifthteen == 0) {
+      continue;
+    }
 
-  let blendedRep = (simRepShare * 0.7) + (nationalRepShare * 0.3);
+    let pop = Q[state + "_" + cls] || 0;
 
-  blendedRep += (Math.random() * 8) - 4;
-  blendedRep = Math.max(1, Math.min(99, blendedRep));
+    if (cls === "freemen") {
+      pop = pop * (Q.freedmen_turnout / 100);
+    }
 
-  let repShare = blendedRep;
-  let demShare = 100 - repShare;
-  let winner = repShare >= demShare ? "rep" : "dem";
+    let localRep = Q[state + "_" + cls + "_rep"] || 0;
+    let localDem = Q[state + "_" + cls + "_dem"] || 0;
 
-  let legBlend = blendedRep + ((Math.random() * 10) - 5);
-  legBlend = Math.max(1, Math.min(99, legBlend));
-  let repSeats = Math.round(seats * (legBlend / 100));
+    let nationalRep = Q[cls + "_rep"] || 0;
+    let nationalDem = Q[cls + "_dem"] || 0;
+
+    // Blend: 75% local state support, 25% national support
+    let adjRep = 0.75 * localRep + 0.25 * nationalRep;
+    let adjDem = 0.75 * localDem + 0.25 * nationalDem;
+
+    let total = adjRep + adjDem;
+    if (total === 0) continue;
+
+    repVotes += pop * (adjRep / total);
+    demVotes += pop * (adjDem / total);
+  }
+
+  let totalVotes = repVotes + demVotes;
+  if (totalVotes === 0) continue;
+
+  let repPct = (repVotes / totalVotes) * 100;
+
+  // election-day noise
+  repPct += (Math.random() * 8) - 4;
+  repPct = Math.max(1, Math.min(99, repPct));
+  let demPct = 100 - repPct;
+
+  let gubWinner = repPct >= demPct ? "rep" : "dem";
+
+  Q[state + "_gub_winner"] = gubWinner;
+  Q[state + "_gub_rep_pct"] = repPct.toFixed(1);
+  Q[state + "_gub_dem_pct"] = demPct.toFixed(1);
+
+  // legislature: same blended share, own independent noise roll
+  let legRepPct = repPct + ((Math.random() * 10) - 5);
+  legRepPct = Math.max(1, Math.min(99, legRepPct));
+
+  let seats = stateSeats[state] || 100;
+  let repSeats = Math.round(seats * (legRepPct / 100));
   let demSeats = seats - repSeats;
   let legWinner = repSeats >= demSeats ? "rep" : "dem";
 
-  Q[stateCode + "_gub_winner"] = winner;
-  Q[stateCode + "_gub_rep_pct"] = repShare.toFixed(1);
-  Q[stateCode + "_gub_dem_pct"] = demShare.toFixed(1);
-
-  Q[stateCode + "_leg_winner"] = legWinner;
-  Q[stateCode + "_leg_rep_seats"] = repSeats;
-  Q[stateCode + "_leg_dem_seats"] = demSeats;
-  Q[stateCode + "_leg_total_seats"] = seats;
-
-  Q[stateCode + "_last_election_party"] = winner;
-  if (winner === "dem") {
-    Q[stateCode + "_reconstructionScore"] = Math.max(0, (Q[stateCode + "_reconstructionScore"] || 0) - 3);
-  }
+  Q[state + "_leg_winner"] = legWinner;
+  Q[state + "_leg_rep_seats"] = repSeats;
+  Q[state + "_leg_dem_seats"] = demSeats;
+  Q[state + "_leg_total_seats"] = seats;
 }
-
-Q.southern_states.forEach(function(stateCode) {
-  resolveState(stateCode, stateSeats[stateCode]);
-});
 
 !}
 on-display: {!

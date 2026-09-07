@@ -1,5 +1,5 @@
 title: 1872 Presidential Election
-subtitle: [+ Candidate +] vs. [+ dem_candidate_1872 +][? if liberal_split = 1 and greeley_fusion = 0 : vs. Greeley ?]
+subtitle: [+ Candidate +] vs. [+ dem_candidate_1872 +][? if liberal_split = 1 and greeley_fusion = 0 : vs. Greeley ?][? if radical_split = 1: vs. [+ radical_candidate +] ?]
 tags: event
 view-if: year = 1872 and month = 11
 max-visits: 1
@@ -11,6 +11,7 @@ The Presidential election is to be held now.
 [? if greeley_fusion = 1 : The <span style="color: #0015bc;">**Democrats**</span> have endorsed the <span style="color: #DAA520;">**Liberal Republican**</span> ticket of Greeley and Brown, uniting the opposition behind a single anti-Grant candidate. ?]
 [? if liberal_split = 1 and greeley_fusion = 0 : The <span style="color: #DAA520;">**Liberal Republicans**</span> have fielded Greeley independently while the <span style="color: #0015bc;">**Democrats**</span> run their own candidate, splitting the opposition vote. ?]
 [? if liberal_split = 0 : The <span style="color: #0015bc;">**Democrats**</span> are running their own candidate against the <span style="color: #c00000;">**Republicans**</span> in a straight two-party contest. ?]
+[? if radical_split = 1 : The <span style="color: #7A1F5C;">**Radical Republicans**</span> have fielded their own candidate to counter our "compromise" candidate for president. ?]
 
 - @POTUS_election_algorithm_1872: May we do our best...
 
@@ -19,9 +20,8 @@ on-arrival:{!
 Q.repEVTotal = 0;
 Q.demEVTotal = 0;
 Q.libEVTotal = 0;
+Q.radEVTotal = 0;
 
-// Historical 1872 margins (Republican margin in percentage points)
-// Greeley ran as both Liberal Republican and Democrat in real history
 let closeStates = {
   "VT":  78.97,
   "MA":  69.30,
@@ -62,8 +62,6 @@ let closeStates = {
   "TX":  -26.00
 };
 
-// If Greeley fusion occurred, the combined Dem+Lib vote is much stronger
-// so we tighten all margins significantly
 let fusionModifier = Q.greeley_fusion ? 0.5 : 1.0;
 
 // National swing calculation
@@ -77,7 +75,7 @@ let nationalDemSwing = (Q.workers_dem + Q.middle_class_dem + Q.rural_dem + Q.fre
 let fusionCandidate = Q.greeley_fusion ? "lib" : "dem";
 
 for (let state of Q.states) {
-  let votes = { rep: 0, dem: 0, lib: 0 };
+  let votes = { rep: 0, dem: 0, lib: 0, rad: 0 };
 
   for (let cls of Q.classes) {
     if (cls === "freemen" && Q.fifthteen == 0) continue;
@@ -93,13 +91,16 @@ for (let state of Q.states) {
     let localRep = Q[state + "_" + cls + "_rep"] || 0;
     let localDem = Q[state + "_" + cls + "_dem"] || 0;
     let localLib = Q[state + "_" + cls + "_lib"] || 0;
+    let localRad = Q[state + "_" + cls + "_rad"] || 0;
     let nationalRep = Q[cls + "_rep"] || 0;
     let nationalDem = Q[cls + "_dem"] || 0;
     let nationalLib = Q[cls + "_lib"] || 0;
+    let nationalRad = Q[cls + "_rad"] || 0;
 
     let adjRep = 0.5 * localRep + 0.5 * nationalRep;
     let adjDem = 0.5 * localDem + 0.5 * nationalDem;
     let adjLib = Q.liberal_split ? (0.5 * localLib + 0.5 * nationalLib) : 0;
+    let adjRad = Q.radical_split ? (0.5 * localRad + 0.5 * nationalRad) : 0;
 
     // Apply national swing
     adjRep = Math.max(0, adjRep + nationalRepSwing * 0.3);
@@ -111,11 +112,7 @@ for (let state of Q.states) {
       adjDem = adjDem * 0.30; // residual protest vote / abstentions modeled as reduced dem
     }
 
-    // If Hancock or another strong Dem is running independently alongside Greeley,
-    // split the opposition more severely
     if (Q.liberal_split && !Q.greeley_fusion) {
-      // Greeley and Dem candidate split the anti-Rep vote
-      // Lib gets reform-minded voters, Dem gets loyalists
       adjLib = adjLib * 1.2;
       adjDem = adjDem * 0.85;
     }
@@ -124,13 +121,15 @@ for (let state of Q.states) {
     adjRep *= (0.92 + Math.random() * 0.16);
     adjDem *= (0.92 + Math.random() * 0.16);
     if (Q.liberal_split || Q.greeley_fusion) adjLib *= (0.92 + Math.random() * 0.16);
+    if (Q.radical_split) adjRad *= (0.92 + Math.random() * 0.16);
 
-    let total = adjRep + adjDem + adjLib;
+    let total = adjRep + adjDem + adjLib + adjRad;
     if (!total) continue;
 
     votes.rep += pop * (adjRep / total);
     votes.dem += pop * (adjDem / total);
     if (Q.liberal_split || Q.greeley_fusion) votes.lib += pop * (adjLib / total);
+    if (Q.radical_split) votes.rad += pop * (adjRad / total);
   }
 
   // Close state nudge, weakened by fusion modifier
@@ -139,8 +138,8 @@ for (let state of Q.states) {
     let randomJitter = (Math.random() * 0.8) - 0.4;
     let marginTarget = nudge + randomJitter;
 
-    let twoPartyTotal = votes.rep + votes.dem + votes.lib;
-    let oppTotal = votes.dem + votes.lib; // combined opposition
+    let twoPartyTotal = votes.rep + votes.dem + votes.lib + votes.rad;
+    let oppTotal = votes.dem + votes.lib + votes.rad; // combined opposition
     if (twoPartyTotal > 0) {
       let currentMargin = ((votes.rep - oppTotal) / twoPartyTotal) * 100;
       let marginDiff = marginTarget - currentMargin;
@@ -151,23 +150,39 @@ for (let state of Q.states) {
       } else {
         votes.dem -= twoPartyTotal * (marginDiff / 200);
       }
+      votes.rad += twoPartyTotal * (marginDiff / 200);
 
       votes.rep = Math.max(0, votes.rep);
       votes.dem = Math.max(0, votes.dem);
       votes.lib = Math.max(0, votes.lib);
+      votes.rad = Math.max(0, votes.rad);
     }
   }
 
   // Determine state winner
   let winner = "rep";
-  if (Q.greeley_fusion) {
-    let oppTotal = votes.lib + votes.dem;
-    if (oppTotal >= votes.rep) winner = "lib";
-  } else if (Q.liberal_split) {
-    if (votes.dem >= votes.rep && votes.dem >= votes.lib) winner = "dem";
-    if (votes.lib >= votes.rep && votes.lib >= votes.dem) winner = "lib";
-  } else {
-    // Straight two-party
+  if (Q.greeley_fusion) 
+  {
+  if (votes.lib + votes.dem >= votes.rep) winner = "lib";
+  }
+  else if (Q.liberal_split) 
+  {
+    if (Q.radical_split)
+    {
+      if (votes.rep >= votes.dem && votes.rep >= votes.lib && votes.rep >= votes.rad) winner = "rep";
+      else if (votes.dem >= votes.lib && votes.dem >= votes.rad) winner = "dem";
+      else if (votes.lib >= votes.rad) winner = "lib";
+      else winner = "rad";
+    }
+    else
+    {
+      if (votes.rep >= votes.dem && votes.rep >= votes.lib) winner = "rep";
+      else if (votes.dem >= votes.lib) winner = "dem";
+      else winner = "lib";
+    }
+  } 
+  else 
+  {
     if (votes.dem >= votes.rep) winner = "dem";
   }
 
@@ -176,11 +191,12 @@ for (let state of Q.states) {
   let color = "#d73027";
   if (winner === "dem") color = "#4575b4";
   if (winner === "lib") color = "#DAA520";
+  if (winner === "rad") color = "#7A1F5C";
   Q[state.toLowerCase() + "_winner_color"] = color;
 
-  let margin = votes.rep - (votes.dem + votes.lib);
-  let marginPct = ((Math.abs(margin) / (votes.rep + votes.dem + (votes.lib || 0))) * 100).toFixed(2);
-  console.log(`${state} winner: ${winner}, rep=${votes.rep.toFixed(0)}, dem=${votes.dem.toFixed(0)}, lib=${votes.lib.toFixed(0)}, margin=${marginPct}%`);
+  let margin = votes.rep - (votes.dem + votes.lib + votes.rad);
+  let marginPct = ((Math.abs(margin) / (votes.rep + votes.dem + (votes.lib || 0) + (votes.rad || 0))) * 100).toFixed(2);
+  console.log(`${state} winner: ${winner}, rep=${votes.rep.toFixed(0)}, dem=${votes.dem.toFixed(0)}, lib=${votes.lib.toFixed(0)}, rad=${votes.rad.toFixed(0)}, margin=${marginPct}%`);
 }
 
 // Allocate EVs
@@ -192,17 +208,19 @@ for (let state of Q.states) {
   if (w === "rep") Q.repEVTotal += ev;
   else if (w === "dem") Q.demEVTotal += ev;
   else if (w === "lib") Q.libEVTotal += ev;
+  else if (w === "rad") Q.radEVTotal += ev;
 }
 
-let totalEV = Q.repEVTotal + Q.demEVTotal + Q.libEVTotal;
+let totalEV = Q.repEVTotal + Q.demEVTotal + Q.libEVTotal + Q.radEVTotal;
 let majority = Math.floor(totalEV / 2) + 1;
 
 if (Q.repEVTotal >= majority) Q.potus_winner = "rep";
 else if (Q.demEVTotal >= majority) Q.potus_winner = "dem";
 else if (Q.libEVTotal >= majority) Q.potus_winner = "lib";
+else if (Q.radEVTotal >= majority) Q.potus_winner = "rad";
 else Q.potus_winner = "house";
 
-if(Q.demEVTotal == 0 && Q.libEVTotal == 0)
+if(Q.demEVTotal == 0 && Q.libEVTotal == 0 && Q.radEVTotal)
 {
   this.achieve("washington");
 }
@@ -261,6 +279,9 @@ on-display: {!
     if (Q.liberal_split && (Q[state + "_lib_pct"] || 0) > 0) {
       entry["Liberal Republican"] = Q[state + "_lib_pct"];
     }
+    if (Q.radical_split && (Q[state + "_rad_pct"] || 0) > 0) {
+      entry["Radical Republican"] = Q[state + "_rad_pct"];
+    }
     results[key] = entry;
   }
 
@@ -290,6 +311,8 @@ go-to: potus_menu_1872
 
 [? if liberal_split = 1 or greeley_fusion = 1 : {!<tr><td><div class="box" style="background-color:#DAA520; outline:2px solid;"></div> !}[? if greeley_fusion = 1 : <span style="color: #DAA520;">**Liberal Republican**</span>/<span style="color: #0015bc;">**Democrat**</span> (Greeley) ?][? if greeley_fusion = 0 : <span style="color: #DAA520;">**Liberal Republicans**</span> (Greeley) ?]{!</td><td>!}[+ libEVTotal +] votes{!</td></tr>!} ?]
 
+[? if radical_relation = 1: {!<tr><td><div class="box" style="background-color:#d73027; outline:2px solid;"></div> !}<span style="color: #7A1F5C;">**Radical Republicans ([+ radical_candidate +])**</span>{!</td><td>!}[+ radEVTotal +] votes{!</td></tr>!}?]
+
 {!</table>!}
 
 @potus_menu_1872
@@ -298,6 +321,7 @@ go-to: potus_menu_1872
 - @defeat_dem_1872
 - @defeat_greeley_fusion
 - @defeat_greeley_independent
+- @defeat_rad_1872
 - @house_decides_1872
 - @defeat_O_1872
 
@@ -801,6 +825,33 @@ No candidate has secured a majority of electoral votes. Under the Constitution, 
 
 [? if house_majority >= 2 : With <span style="color: #c00000;">**Republicans**</span> controlling a majority of state delegations, the House elects [+ Candidate +] as President. ?]
 [? if house_majority < 2 : The <span style="color: #0015bc;">**Democratic**</span>-leaning delegations carry the day. [+ dem_candidate_1872 +] is elected President by the House. ?]
+
+@defeat_rad_1872
+title: The <span style="color: #7A1F5C;">**Radicals**</span> have won the presidency.
+subtitle: <span style="color: #7A1F5C;">**Radical Republican**</span>: [+ radEVTotal +] electoral votes
+view-if: potus_winner = "rad"
+on-arrival: {!
+    Q.president = radical_candidate;
+    Q.vice_president = radical_vp_candidate; 
+    Q.president_party = "rad";
+    Q.lose_vote = 1;
+    
+    // Radical CABINET
+    Q.sect_state = "Charles Sumner";
+    Q.sect_state_party = "Rad";
+    Q.sect_treasury = "Henry Charles Carey";
+    Q.sect_treasury_party = "Rad";
+    Q.sect_war = "Edwin M. Stanton";
+    Q.sect_war_party = "R";
+    Q.sect_interior = "George W. Julian";
+    Q.sect_interior_party = "Rad";
+    Q.sect_postmaster = "John A. J. Creswell";
+    Q.sect_postmaster_party = "Rad";
+    Q.attorney_general = "John Bingham";
+    Q.attorney_general_party = "Rad";
+    Q.sect_agriculture = "Owen Lovejoy";
+    Q.sect_agriculture_party = "Rad";
+!}
 
 @defeat_O_1872
 title: Something has gone very wrong.

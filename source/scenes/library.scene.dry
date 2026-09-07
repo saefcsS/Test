@@ -197,7 +197,7 @@ go-to: menu
 
 Current relations: [+ dem_relation : relationships +]
 
-[ ? if liberal_split = 1: <span style="color: #DAA520;">**Liberal Republican Party**</span> - The liberal faction of our party has defected to form their own party, established on the ideals of free-market capitalism, civil service reform, and more. ?]
+[? if liberal_split = 1: <span style="color: #DAA520;">**Liberal Republican Party**</span> - The liberal faction of our party has defected to form their own party, established on the ideals of free-market capitalism, civil service reform, and more. ?]
 
 [? if radical_split = 1: <span style="color: #7A1F5C;">**Radical Republican Party**</span> - The radical faction of our party has defected to form their own party due to our increasing compromise with conservative forces over the issue of reconstruction. They are campaigning on total equality for the freedmen and a stronger federal government. ?]
 

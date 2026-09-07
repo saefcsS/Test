@@ -1,5 +1,5 @@
 title: 1876 Presidential Election
-subtitle: [+ Candidate +] vs. [+ dem_candidate_1876 +]
+subtitle: [+ Candidate +] vs. [+ dem_candidate_1876 +][? if liberal_split = 1 and greeley_fusion = 0 : vs. Greeley ?][? if radical_split = 1: vs. [+ radical_candidate +] ?]
 tags: event
 view-if: year = 1876 and month = 11
 max-visits: 1
@@ -7,6 +7,10 @@ max-visits: 1
 = Elections, [+ month +] [+ year +]
 
 The Presidential election is to be held now. <span style="color: #c00000;">**Republicans**</span> and <span style="color: #0015bc;">**Democrats**</span> face off in a straight two-party contest, the closest since the war began.
+
+[? if liberal_split = 1 : The <span style="color: #DAA520;">**Liberal Republicans**</span> have fielded their own candidate, threatening to split the anti-<span style="color: #0015bc;">**Democrat**</span> vote. ?]
+
+[? if radical_split = 1 : The <span style="color: #7A1F5C;">**Radical Republicans**</span> have fielded their own candidate to counter our candidate for president. ?]
 
 - @POTUS_election_algorithm_1876: May we do our best...
 

@@ -2062,6 +2062,8 @@ Q.Candidate = "";
 Q.VPCandidate = "";
 Q.Winner_68 = "";
 Q.Winner_72 = "";
+Q.radical_candidate = "";
+Q.radical_vp_candidate = "";
 
 Q.liberal_reunion_triggered = 0;
 Q.liberal_reunion_seen = 0;
