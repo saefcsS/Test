@@ -130,7 +130,7 @@ let libPowerHouse = Q.liberal_split ? Math.pow(libShareHouse, 3) : 0;
 let radPowerHouse = Q.radical_split ? Math.pow(radShareHouse, 3) : 0;
 let otherPowerHouse = Math.pow(otherShareHouse, 3);
 
-let powerTotalHouse = repPowerHouse + demPowerHouse + radPowerHouse + otherPowerHouse;
+let powerTotalHouse = repPowerHouse + demPowerHouse + libPowerHouse + radPowerHouse + otherPowerHouse;
 if (powerTotalHouse === 0) powerTotalHouse = 1;
 
 // Same per-year seat totals as the real House election
@@ -164,7 +164,7 @@ Q.rad_senate_pro = 0;
 Q.other_senate_pro = 0;
 
 for (let state of Q.states) {
-    let repVotes = 0; demVotes = 0, libVotes = 0, radVotes = 0; otherVotes = 0;
+    let repVotes = 0, demVotes = 0, libVotes = 0, radVotes = 0, otherVotes = 0;
 
     for (let cls of Q.classes) {
 
@@ -229,7 +229,7 @@ for (let state of Q.states) {
     results.sort((a, b) => b.pct - a.pct);
 
     let first = results[0], second = results[1];
-    let repSeats = 0, demSeats = 0, libSeats = 0, radSears = 0, otherSeats = 0;
+    let repSeats = 0, demSeats = 0, libSeats = 0, radSeats = 0, otherSeats = 0;
 
     function addSeatPro(party) {
         if (party === "rep") repSeats++;
