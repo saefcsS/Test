@@ -313,7 +313,7 @@ let houseData = [
         color: "#AAAAAA",
         outline: "#666666",
         seats: Math.floor(Q.other_r),
-    },
+    }
 ];
 
 let senateData = [
@@ -356,7 +356,7 @@ let senateData = [
         color: "#AAAAAA",
         outline: "#666666",
         seats: Q.other_senate_r,
-    },
+    }
 ];
 
 if (d3 && window) {
