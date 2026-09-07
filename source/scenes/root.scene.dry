@@ -54,6 +54,7 @@ Q.conservative_dissent = 5;
 Q.liberal_strength = 5;
 Q.liberal_dissent = 10;
 Q.liberal_split = 0;
+Q.radical_split = 0;
 Q.Greeley_Camp = 0;
 Q.liberal_split_timer = 0;
 
@@ -98,6 +99,7 @@ Q.veto_success = 0;
 // inter-party relations
 Q.dem_relation = 5;
 Q.liberal_relation = 50;
+Q.radical_relation = 50;
 
 // paramilitary groups
 Q.kkk_strength = 1;
@@ -172,7 +174,7 @@ Q.Panic_seen = 0;
 Q.laissez_faire = 0;
 
 Q.classes = ['workers', 'middle_class', 'rural', 'freemen', 'immigrant_laborers', 'unemployed'];
-Q.parties = ['rep', 'dem', 'lib', 'other'];
+Q.parties = ['rep', 'dem', 'lib', 'rad', 'other'];
 
 Q.southern_states = ['VA', 'NC', 'SC', 'GA', 'AL', 'FL', 'MS', 'AR', 'TX', 'LA'];
 
@@ -224,17 +226,20 @@ Q.LA_admitted = 0;
 Q.rep_r = 136;
 Q.dem_r = 38;
 Q.lib_r = 0;
+Q.rad_r = 0;
 Q.other_r = 15;
 Q.vacant_r = 52;
 
 Q.rep_r_pro = 147;
 Q.dem_r_pro = 44;
 Q.lib_r_pro = 0;
+Q.rad_r_pro = 0;
 Q.other_r_pro = 4;
 
 Q.old_rep_r = 133;
 Q.old_dem_r = 52;
 Q.old_lib_r = 0;
+Q.old_rad_r = 0;
 Q.old_other_r = 12;
 Q.old_vacant_r = 44;
 
@@ -242,18 +247,21 @@ Q.old_vacant_r = 44;
 Q.rep_senate_r = 38;
 Q.dem_senate_r = 9;
 Q.lib_senate_r = 0;
+Q.rad_senate_r = 0;
 Q.other_senate_r = 1;
 Q.vacant_senate = 24;
 
 Q.rep_senate_pro = 39;
 Q.dem_senate_pro = 10;
 Q.lib_senate_pro = 0;
+Q.rad_senate_pro = 0;
 Q.other_senate_pro = 3;
 
 Q.old_rep_senate_r = 33;
 Q.old_dem_senate_r = 10;
 Q.old_lib_senate_r = 0;
 Q.old_other_senate_r = 7;
+Q.old_rad_senate_r = 0;
 Q.old_vacant_senate_r = 22;
 
 Q.house_total_seat_1866 = 193;
@@ -278,31 +286,37 @@ Q.num_states = 25;
 Q.freemen_rep = 100;
 Q.freemen_dem = 0;
 Q.freemen_lib = 0;
+Q.freemen_lib = 0;
 Q.freemen_other = 0;
 
 Q.workers_rep = 52;
 Q.workers_dem = 45;
 Q.workers_lib = 0;
+Q.workers_rad = 0;
 Q.workers_other = 3;
 
 Q.middle_class_rep = 65;
 Q.middle_class_dem = 31;
 Q.middle_class_lib = 0;
+Q.middle_class_rad = 0;
 Q.middle_class_other = 4;
 
 Q.rural_rep = 58;
 Q.rural_dem = 40;
 Q.rural_lib = 0;
+Q.rural_rad = 0;
 Q.rural_other = 2;
 
 Q.immigrant_laborers_rep = 40;
 Q.immigrant_laborers_dem = 55;
 Q.immigrant_laborers_lib = 0;
+Q.immigrant_laborers_rad = 0;
 Q.immigrant_laborers_other = 5;
 
 Q.unemployed_rep = 35;
 Q.unemployed_dem = 63;
 Q.unemployed_lib = 0;
+Q.unemployed_rad = 0;
 Q.unemployed_other = 2;
 
 Q.AL_EV_1868 = 8;
@@ -418,11 +432,13 @@ Q.WI_EV_1876 = 10;
 Q.repEVTotal = 0;
 Q.demEVTotal = 0;
 Q.libEVTotal = 0;
+Q.radEVTotal = 0;
 Q.otherEVTotal = 0;
 
 Q.repEV_disp = 0;
 Q.demEV_disp = 0;
 Q.libEV_disp = 0;
+Q.radEV_disp = 0;
 Q.otherEV_disp = 0;
 
 Q.potus_winner = "";
@@ -432,36 +448,42 @@ Q.CA_workers = 20000;
 Q.CA_workers_rep = 55;
 Q.CA_workers_dem = 35;
 Q.CA_workers_lib = 0;
+Q.CA_workers_rad = 0;
 Q.CA_workers_other = 10;
 
 Q.CA_middle_class = 10000;
 Q.CA_middle_class_rep = 60;
 Q.CA_middle_class_dem = 30;
 Q.CA_middle_class_lib = 0;
+Q.CA_middle_class_rad = 0;
 Q.CA_middle_class_other = 10;
 
 Q.CA_rural = 300000;
 Q.CA_rural_rep = 50;
 Q.CA_rural_dem = 40;
 Q.CA_rural_lib = 0;
+Q.CA_rural_rad = 0;
 Q.CA_rural_other = 10;
 
 Q.CA_freemen = 4000;
 Q.CA_freemen_rep = 90;
 Q.CA_freemen_dem = 5;
 Q.CA_freemen_lib = 0;
+Q.CA_freemen_rad = 0;
 Q.CA_freemen_other = 5;
 
 Q.CA_immigrant_laborers = 50000;
 Q.CA_immigrant_laborers_rep = 45;
 Q.CA_immigrant_laborers_dem = 45;
 Q.CA_immigrant_laborers_lib = 0;
+Q.CA_immigrant_laborers_rad = 0;
 Q.CA_immigrant_laborers_other = 10;
 
 Q.CA_unemployed = 25000;
 Q.CA_unemployed_rep = 40;
 Q.CA_unemployed_dem = 50;
 Q.CA_unemployed_lib = 0;
+Q.CA_unemployed_rad = 0;
 Q.CA_unemployed_other = 10;
 
 // === CONNECTICUT ===
@@ -469,36 +491,42 @@ Q.CT_workers = 70000;
 Q.CT_workers_rep = 50;
 Q.CT_workers_dem = 40;
 Q.CT_workers_lib = 0;
+Q.CT_workers_rad = 0;
 Q.CT_workers_other = 10;
 
 Q.CT_middle_class = 40000;
 Q.CT_middle_class_rep = 65;
 Q.CT_middle_class_dem = 25;
 Q.CT_middle_class_lib = 0;
+Q.CT_middle_class_rad = 0;
 Q.CT_middle_class_other = 10;
 
 Q.CT_rural = 160000;
 Q.CT_rural_rep = 60;
 Q.CT_rural_dem = 30;
 Q.CT_rural_lib = 0;
+Q.CT_rural_rad = 0;
 Q.CT_rural_other = 10;
 
 Q.CT_freemen = 6000;
 Q.CT_freemen_rep = 95;
 Q.CT_freemen_dem = 0;
 Q.CT_freemen_lib = 0;
+Q.CT_freemen_rad = 0;
 Q.CT_freemen_other = 5;
 
 Q.CT_immigrant_laborers = 30000;
 Q.CT_immigrant_laborers_rep = 40;
 Q.CT_immigrant_laborers_dem = 50;
 Q.CT_immigrant_laborers_lib = 0;
+Q.CT_immigrant_laborers_rad = 0;
 Q.CT_immigrant_laborers_other = 10;
 
 Q.CT_unemployed = 21000;
 Q.CT_unemployed_rep = 45;
 Q.CT_unemployed_dem = 45;
 Q.CT_unemployed_lib = 0;
+Q.CT_unemployed_rad = 0;
 Q.CT_unemployed_other = 10;
 
 // === DELAWARE ===
@@ -506,36 +534,42 @@ Q.DE_workers = 20000;
 Q.DE_workers_rep = 45;
 Q.DE_workers_dem = 45;
 Q.DE_workers_lib = 0;
+Q.DE_workers_rad = 0;
 Q.DE_workers_other = 10;
 
 Q.DE_middle_class = 10000;
 Q.DE_middle_class_rep = 50;
 Q.DE_middle_class_dem = 40;
 Q.DE_middle_class_lib = 0;
+Q.DE_middle_class_rad = 0;
 Q.DE_middle_class_other = 10;
 
 Q.DE_rural = 80000;
 Q.DE_rural_rep = 40;
 Q.DE_rural_dem = 50;
 Q.DE_rural_lib = 0;
+Q.DE_rural_rad = 0;
 Q.DE_rural_other = 10;
 
 Q.DE_freemen = 8000;
 Q.DE_freemen_rep = 85;
 Q.DE_freemen_dem = 10;
 Q.DE_freemen_lib = 0;
+Q.DE_freemen_rad = 0;
 Q.DE_freemen_other = 5;
 
 Q.DE_immigrant_laborers = 2000;
 Q.DE_immigrant_laborers_rep = 35;
 Q.DE_immigrant_laborers_dem = 55;
 Q.DE_immigrant_laborers_lib = 0;
+Q.DE_immigrant_laborers_rad = 0;
 Q.DE_immigrant_laborers_other = 10;
 
 Q.DE_unemployed = 7000;
 Q.DE_unemployed_rep = 35;
 Q.DE_unemployed_dem = 55;
 Q.DE_unemployed_lib = 0;
+Q.DE_unemployed_rad = 0;
 Q.DE_unemployed_other = 10;
 
 // === ILLINOIS ===
@@ -543,36 +577,42 @@ Q.IL_workers = 100000;
 Q.IL_workers_rep = 55;
 Q.IL_workers_dem = 35;
 Q.IL_workers_lib = 0;
+Q.IL_workers_rad = 0;
 Q.IL_workers_other = 10;
 
 Q.IL_middle_class = 70000;
 Q.IL_middle_class_rep = 65;
 Q.IL_middle_class_dem = 25;
 Q.IL_middle_class_lib = 0;
+Q.IL_middle_class_rad = 0;
 Q.IL_middle_class_other = 10;
 
 Q.IL_rural = 1320000;
 Q.IL_rural_rep = 60;
 Q.IL_rural_dem = 30;
 Q.IL_rural_lib = 0;
+Q.IL_rural_rad = 0;
 Q.IL_rural_other = 10;
 
 Q.IL_freemen = 13000;
 Q.IL_freemen_rep = 95;
 Q.IL_freemen_dem = 0;
 Q.IL_freemen_lib = 0;
+Q.IL_freemen_rad = 0;
 Q.IL_freemen_other = 5;
 
 Q.IL_immigrant_laborers = 220000;
 Q.IL_immigrant_laborers_rep = 40;
 Q.IL_immigrant_laborers_dem = 50;
 Q.IL_immigrant_laborers_lib = 0;
+Q.IL_immigrant_laborers_rad = 0;
 Q.IL_immigrant_laborers_other = 10;
 
 Q.IL_unemployed = 117000;
 Q.IL_unemployed_rep = 45;
 Q.IL_unemployed_dem = 45;
 Q.IL_unemployed_lib = 0;
+Q.IL_unemployed_rad = 0;
 Q.IL_unemployed_other = 10;
 
 // === INDIANA ===
@@ -580,36 +620,42 @@ Q.IN_workers = 90000;
 Q.IN_workers_rep = 60;
 Q.IN_workers_dem = 30;
 Q.IN_workers_lib = 0;
+Q.IN_workers_rad = 0;
 Q.IN_workers_other = 10;
 
 Q.IN_middle_class = 60000;
 Q.IN_middle_class_rep = 65;
 Q.IN_middle_class_dem = 25;
 Q.IN_middle_class_lib = 0;
+Q.IN_middle_class_rad = 0;
 Q.IN_middle_class_other = 10;
 
 Q.IN_rural = 1080000;
 Q.IN_rural_rep = 55;
 Q.IN_rural_dem = 35;
 Q.IN_rural_lib = 0;
+Q.IN_rural_rad = 0;
 Q.IN_rural_other = 10;
 
 Q.IN_freemen = 16000;
 Q.IN_freemen_rep = 95;
 Q.IN_freemen_dem = 0;
 Q.IN_freemen_lib = 0;
+Q.IN_freemen_rad = 0;
 Q.IN_freemen_other = 5;
 
 Q.IN_immigrant_laborers = 180000;
 Q.IN_immigrant_laborers_rep = 45;
 Q.IN_immigrant_laborers_dem = 45;
 Q.IN_immigrant_laborers_lib = 0;
+Q.IN_immigrant_laborers_rad = 0;
 Q.IN_immigrant_laborers_other = 10;
 
 Q.IN_unemployed = 96000;
 Q.IN_unemployed_rep = 40;
 Q.IN_unemployed_dem = 50;
 Q.IN_unemployed_lib = 0;
+Q.IN_unemployed_rad = 0;
 Q.IN_unemployed_other = 10;
 
 // === IOWA ===
@@ -617,36 +663,42 @@ Q.IA_workers = 60000;
 Q.IA_workers_rep = 65;
 Q.IA_workers_dem = 25;
 Q.IA_workers_lib = 0;
+Q.IA_workers_rad = 0;
 Q.IA_workers_other = 10;
 
 Q.IA_middle_class = 40000;
 Q.IA_middle_class_rep = 70;
 Q.IA_middle_class_dem = 20;
 Q.IA_middle_class_lib = 0;
+Q.IA_middle_class_rad = 0;
 Q.IA_middle_class_other = 10;
 
 Q.IA_rural = 580000;
 Q.IA_rural_rep = 60;
 Q.IA_rural_dem = 30;
 Q.IA_rural_lib = 0;
+Q.IA_rural_rad = 0;
 Q.IA_rural_other = 10;
 
 Q.IA_freemen = 5000;
 Q.IA_freemen_rep = 95;
 Q.IA_freemen_dem = 0;
 Q.IA_freemen_lib = 0;
+Q.IA_freemen_rad = 0;
 Q.IA_freemen_other = 5;
 
 Q.IA_immigrant_laborers = 100000;
 Q.IA_immigrant_laborers_rep = 50;
 Q.IA_immigrant_laborers_dem = 40;
 Q.IA_immigrant_laborers_lib = 0;
+Q.IA_immigrant_laborers_rad = 0;
 Q.IA_immigrant_laborers_other = 10;
 
 Q.IA_unemployed = 53000;
 Q.IA_unemployed_rep = 45;
 Q.IA_unemployed_dem = 45;
 Q.IA_unemployed_lib = 0;
+Q.IA_unemployed_rad = 0;
 Q.IA_unemployed_other = 10;
 
 // === KANSAS ===
@@ -654,36 +706,42 @@ Q.KS_workers = 30000;
 Q.KS_workers_rep = 70;
 Q.KS_workers_dem = 20;
 Q.KS_workers_lib = 0;
+Q.KS_workers_rad = 0;
 Q.KS_workers_other = 10;
 
 Q.KS_middle_class = 20000;
 Q.KS_middle_class_rep = 75;
 Q.KS_middle_class_dem = 15;
 Q.KS_middle_class_lib = 0;
+Q.KS_middle_class_rad = 0;
 Q.KS_middle_class_other = 10;
 
 Q.KS_rural = 270000;
 Q.KS_rural_rep = 65;
 Q.KS_rural_dem = 25;
 Q.KS_rural_lib = 0;
+Q.KS_rural_rad = 0;
 Q.KS_rural_other = 10;
 
 Q.KS_freemen = 6000;
 Q.KS_freemen_rep = 95;
 Q.KS_freemen_dem = 0;
 Q.KS_freemen_lib = 0;
+Q.KS_freemen_rad = 0;
 Q.KS_freemen_other = 5;
 
 Q.KS_immigrant_laborers = 20000;
 Q.KS_immigrant_laborers_rep = 55;
 Q.KS_immigrant_laborers_dem = 35;
 Q.KS_immigrant_laborers_lib = 0;
+Q.KS_immigrant_laborers_rad = 0;
 Q.KS_immigrant_laborers_other = 10;
 
 Q.KS_unemployed = 23000;
 Q.KS_unemployed_rep = 50;
 Q.KS_unemployed_dem = 40;
 Q.KS_unemployed_lib = 0;
+Q.KS_unemployed_rad = 0;
 Q.KS_unemployed_other = 10;
 
 // === KENTUCKY ===
@@ -691,36 +749,42 @@ Q.KY_workers = 40000;
 Q.KY_workers_rep = 40;
 Q.KY_workers_dem = 50;
 Q.KY_workers_lib = 0;
+Q.KY_workers_rad = 0;
 Q.KY_workers_other = 10;
 
 Q.KY_middle_class = 20000;
 Q.KY_middle_class_rep = 45;
 Q.KY_middle_class_dem = 45;
 Q.KY_middle_class_lib = 0;
+Q.KY_middle_class_rad = 0;
 Q.KY_middle_class_other = 10;
 
 Q.KY_rural = 900000;
 Q.KY_rural_rep = 30;
 Q.KY_rural_dem = 60;
 Q.KY_rural_lib = 0;
+Q.KY_rural_rad = 0;
 Q.KY_rural_other = 10;
 
 Q.KY_freemen = 225000;
 Q.KY_freemen_rep = 90;
 Q.KY_freemen_dem = 5;
 Q.KY_freemen_lib = 0;
+Q.KY_freemen_rad = 0;
 Q.KY_freemen_other = 5;
 
 Q.KY_immigrant_laborers = 60000;
 Q.KY_immigrant_laborers_rep = 35;
 Q.KY_immigrant_laborers_dem = 55;
 Q.KY_immigrant_laborers_lib = 0;
+Q.KY_immigrant_laborers_rad = 0;
 Q.KY_immigrant_laborers_other = 10;
 
 Q.KY_unemployed = 68000;
 Q.KY_unemployed_rep = 30;
 Q.KY_unemployed_dem = 60;
 Q.KY_unemployed_lib = 0;
+Q.KY_unemployed_rad = 0;
 Q.KY_unemployed_other = 10;
 
 // === MAINE ===
@@ -728,36 +792,42 @@ Q.ME_workers = 30000;
 Q.ME_workers_rep = 55;
 Q.ME_workers_dem = 35;
 Q.ME_workers_lib = 0;
+Q.ME_workers_rad = 0;
 Q.ME_workers_other = 10;
 
 Q.ME_middle_class = 20000;
 Q.ME_middle_class_rep = 70;
 Q.ME_middle_class_dem = 20;
 Q.ME_middle_class_lib = 0;
+Q.ME_middle_class_rad = 0;
 Q.ME_middle_class_other = 10;
 
 Q.ME_rural = 560000;
 Q.ME_rural_rep = 65;
 Q.ME_rural_dem = 25;
 Q.ME_rural_lib = 0;
+Q.ME_rural_rad = 0;
 Q.ME_rural_other = 10;
 
 Q.ME_freemen = 2000;
 Q.ME_freemen_rep = 95;
 Q.ME_freemen_dem = 0;
 Q.ME_freemen_lib = 0;
+Q.ME_freemen_rad = 0;
 Q.ME_freemen_other = 5;
 
 Q.ME_immigrant_laborers = 40000;
 Q.ME_immigrant_laborers_rep = 40;
 Q.ME_immigrant_laborers_dem = 50;
 Q.ME_immigrant_laborers_lib = 0;
+Q.ME_immigrant_laborers_rad = 0;
 Q.ME_immigrant_laborers_other = 10;
 
 Q.ME_unemployed = 44000;
 Q.ME_unemployed_rep = 50;
 Q.ME_unemployed_dem = 40;
 Q.ME_unemployed_lib = 0;
+Q.ME_unemployed_rad = 0;
 Q.ME_unemployed_other = 10;
 
 // === MARYLAND ===
@@ -765,36 +835,42 @@ Q.MD_workers = 60000;
 Q.MD_workers_rep = 48;
 Q.MD_workers_dem = 42;
 Q.MD_workers_lib = 0;
+Q.MD_workers_rad = 0;
 Q.MD_workers_other = 10;
 
 Q.MD_middle_class = 40000;
 Q.MD_middle_class_rep = 55;
 Q.MD_middle_class_dem = 35;
 Q.MD_middle_class_lib = 0;
+Q.MD_middle_class_rad = 0;
 Q.MD_middle_class_other = 10;
 
 Q.MD_rural = 600000;
 Q.MD_rural_rep = 35;
 Q.MD_rural_dem = 55;
 Q.MD_rural_lib = 0;
+Q.MD_rural_rad = 0;
 Q.MD_rural_other = 10;
 
 Q.MD_freemen = 90000;
 Q.MD_freemen_rep = 92;
 Q.MD_freemen_dem = 3;
 Q.MD_freemen_lib = 0;
+Q.MD_freemen_rad = 0;
 Q.MD_freemen_other = 5;
 
 Q.MD_immigrant_laborers = 60000;
 Q.MD_immigrant_laborers_rep = 40;
 Q.MD_immigrant_laborers_dem = 50;
 Q.MD_immigrant_laborers_lib = 0;
+Q.MD_immigrant_laborers_rad = 0;
 Q.MD_immigrant_laborers_other = 10;
 
 Q.MD_unemployed = 52000;
 Q.MD_unemployed_rep = 38;
 Q.MD_unemployed_dem = 52;
 Q.MD_unemployed_lib = 0;
+Q.MD_unemployed_rad = 0;
 Q.MD_unemployed_other = 10;
 
 // === MASSACHUSETTS ===
@@ -802,36 +878,42 @@ Q.MA_workers = 120000;
 Q.MA_workers_rep = 50;
 Q.MA_workers_dem = 40;
 Q.MA_workers_lib = 0;
+Q.MA_workers_rad = 0;
 Q.MA_workers_other = 10;
 
 Q.MA_middle_class = 80000;
 Q.MA_middle_class_rep = 65;
 Q.MA_middle_class_dem = 25;
 Q.MA_middle_class_lib = 0;
+Q.MA_middle_class_rad = 0;
 Q.MA_middle_class_other = 10;
 
 Q.MA_rural = 870000;
 Q.MA_rural_rep = 60;
 Q.MA_rural_dem = 30;
 Q.MA_rural_lib = 0;
+Q.MA_rural_rad = 0;
 Q.MA_rural_other = 10;
 
 Q.MA_freemen = 11000;
 Q.MA_freemen_rep = 95;
 Q.MA_freemen_dem = 0;
 Q.MA_freemen_lib = 0;
+Q.MA_freemen_rad = 0;
 Q.MA_freemen_other = 5;
 
 Q.MA_immigrant_laborers = 160000;
 Q.MA_immigrant_laborers_rep = 35;
 Q.MA_immigrant_laborers_dem = 55;
 Q.MA_immigrant_laborers_lib = 0;
+Q.MA_immigrant_laborers_rad = 0;
 Q.MA_immigrant_laborers_other = 10;
 
 Q.MA_unemployed = 83000;
 Q.MA_unemployed_rep = 45;
 Q.MA_unemployed_dem = 45;
 Q.MA_unemployed_lib = 0;
+Q.MA_unemployed_rad = 0;
 Q.MA_unemployed_other = 10;
 
 // === MICHIGAN ===
@@ -839,36 +921,42 @@ Q.MI_workers = 60000;
 Q.MI_workers_rep = 60;
 Q.MI_workers_dem = 30;
 Q.MI_workers_lib = 0;
+Q.MI_workers_rad = 0;
 Q.MI_workers_other = 10;
 
 Q.MI_middle_class = 40000;
 Q.MI_middle_class_rep = 65;
 Q.MI_middle_class_dem = 25;
 Q.MI_middle_class_lib = 0;
+Q.MI_middle_class_rad = 0;
 Q.MI_middle_class_other = 10;
 
 Q.MI_rural = 550000;
 Q.MI_rural_rep = 55;
 Q.MI_rural_dem = 35;
 Q.MI_rural_lib = 0;
+Q.MI_rural_rad = 0;
 Q.MI_rural_other = 10;
 
 Q.MI_freemen = 7000;
 Q.MI_freemen_rep = 95;
 Q.MI_freemen_dem = 0;
 Q.MI_freemen_lib = 0;
+Q.MI_freemen_rad = 0;
 Q.MI_freemen_other = 5;
 
 Q.MI_immigrant_laborers = 100000;
 Q.MI_immigrant_laborers_rep = 45;
 Q.MI_immigrant_laborers_dem = 45;
 Q.MI_immigrant_laborers_lib = 0;
+Q.MI_immigrant_laborers_rad = 0;
 Q.MI_immigrant_laborers_other = 10;
 
 Q.MI_unemployed = 51000;
 Q.MI_unemployed_rep = 40;
 Q.MI_unemployed_dem = 50;
 Q.MI_unemployed_lib = 0;
+Q.MI_unemployed_rad = 0;
 Q.MI_unemployed_other = 10;
 
 // === MINNESOTA ===
@@ -876,36 +964,42 @@ Q.MN_workers = 30000;
 Q.MN_workers_rep = 65;
 Q.MN_workers_dem = 25;
 Q.MN_workers_lib = 0;
+Q.MN_workers_rad = 0;
 Q.MN_workers_other = 10;
 
 Q.MN_middle_class = 20000;
 Q.MN_middle_class_rep = 70;
 Q.MN_middle_class_dem = 20;
 Q.MN_middle_class_lib = 0;
+Q.MN_middle_class_rad = 0;
 Q.MN_middle_class_other = 10;
 
 Q.MN_rural = 260000;
 Q.MN_rural_rep = 60;
 Q.MN_rural_dem = 30;
 Q.MN_rural_lib = 0;
+Q.MN_rural_rad = 0;
 Q.MN_rural_other = 10;
 
 Q.MN_freemen = 1000;
 Q.MN_freemen_rep = 95;
 Q.MN_freemen_dem = 0;
 Q.MN_freemen_lib = 0;
+Q.MN_freemen_rad = 0;
 Q.MN_freemen_other = 5;
 
 Q.MN_immigrant_laborers = 70000;
 Q.MN_immigrant_laborers_rep = 50;
 Q.MN_immigrant_laborers_dem = 40;
 Q.MN_immigrant_laborers_lib = 0;
+Q.MN_immigrant_laborers_rad = 0;
 Q.MN_immigrant_laborers_other = 10;
 
 Q.MN_unemployed = 26000;
 Q.MN_unemployed_rep = 45;
 Q.MN_unemployed_dem = 45;
 Q.MN_unemployed_lib = 0;
+Q.MN_unemployed_rad = 0;
 Q.MN_unemployed_other = 10;
 
 // === MISSOURI ===
@@ -913,36 +1007,42 @@ Q.MO_workers = 70000;
 Q.MO_workers_rep = 52;
 Q.MO_workers_dem = 38;
 Q.MO_workers_lib = 0;
+Q.MO_workers_rad = 0;
 Q.MO_workers_other = 10;
 
 Q.MO_middle_class = 50000;
 Q.MO_middle_class_rep = 55;
 Q.MO_middle_class_dem = 35;
 Q.MO_middle_class_lib = 0;
+Q.MO_middle_class_rad = 0;
 Q.MO_middle_class_other = 10;
 
 Q.MO_rural = 880000;
 Q.MO_rural_rep = 40;
 Q.MO_rural_dem = 50;
 Q.MO_rural_lib = 0;
+Q.MO_rural_rad = 0;
 Q.MO_rural_other = 10;
 
 Q.MO_freemen = 120000;
 Q.MO_freemen_rep = 93;
 Q.MO_freemen_dem = 2;
 Q.MO_freemen_lib = 0;
+Q.MO_freemen_rad = 0;
 Q.MO_freemen_other = 5;
 
 Q.MO_immigrant_laborers = 80000;
 Q.MO_immigrant_laborers_rep = 38;
 Q.MO_immigrant_laborers_dem = 52;
 Q.MO_immigrant_laborers_lib = 0;
+Q.MO_immigrant_laborers_rad = 0;
 Q.MO_immigrant_laborers_other = 10;
 
 Q.MO_unemployed = 69000;
 Q.MO_unemployed_rep = 35;
 Q.MO_unemployed_dem = 55;
 Q.MO_unemployed_lib = 0;
+Q.MO_unemployed_rad = 0;
 Q.MO_unemployed_other = 10;
 
 // === NEVADA ===
@@ -950,36 +1050,42 @@ Q.NV_workers = 15000;
 Q.NV_workers_rep = 60;
 Q.NV_workers_dem = 30;
 Q.NV_workers_lib = 0;
+Q.NV_workers_rad = 0;
 Q.NV_workers_other = 10;
 
 Q.NV_middle_class = 10000;
 Q.NV_middle_class_rep = 65;
 Q.NV_middle_class_dem = 25;
 Q.NV_middle_class_lib = 0;
+Q.NV_middle_class_rad = 0;
 Q.NV_middle_class_other = 10;
 
 Q.NV_rural = 50000;
 Q.NV_rural_rep = 55;
 Q.NV_rural_dem = 35;
 Q.NV_rural_lib = 0;
+Q.NV_rural_rad = 0;
 Q.NV_rural_other = 10;
 
 Q.NV_freemen = 1000;
 Q.NV_freemen_rep = 90;
 Q.NV_freemen_dem = 5;
 Q.NV_freemen_lib = 0;
+Q.NV_freemen_rad = 0;
 Q.NV_freemen_other = 5;
 
 Q.NV_immigrant_laborers = 20000;
 Q.NV_immigrant_laborers_rep = 45;
 Q.NV_immigrant_laborers_dem = 45;
 Q.NV_immigrant_laborers_lib = 0;
+Q.NV_immigrant_laborers_rad = 0;
 Q.NV_immigrant_laborers_other = 10;
 
 Q.NV_unemployed = 6000;
 Q.NV_unemployed_rep = 40;
 Q.NV_unemployed_dem = 50;
 Q.NV_unemployed_lib = 0;
+Q.NV_unemployed_rad = 0;
 Q.NV_unemployed_other = 10;
 
 // === NEW HAMPSHIRE ===
@@ -987,36 +1093,42 @@ Q.NH_workers = 20000;
 Q.NH_workers_rep = 55;
 Q.NH_workers_dem = 35;
 Q.NH_workers_lib = 0;
+Q.NH_workers_rad = 0;
 Q.NH_workers_other = 10;
 
 Q.NH_middle_class = 15000;
 Q.NH_middle_class_rep = 70;
 Q.NH_middle_class_dem = 20;
 Q.NH_middle_class_lib = 0;
+Q.NH_middle_class_rad = 0;
 Q.NH_middle_class_other = 10;
 
 Q.NH_rural = 300000;
 Q.NH_rural_rep = 65;
 Q.NH_rural_dem = 25;
 Q.NH_rural_lib = 0;
+Q.NH_rural_rad = 0;
 Q.NH_rural_other = 10;
 
 Q.NH_freemen = 1000;
 Q.NH_freemen_rep = 95;
 Q.NH_freemen_dem = 0;
 Q.NH_freemen_lib = 0;
+Q.NH_freemen_rad = 0;
 Q.NH_freemen_other = 5;
 
 Q.NH_immigrant_laborers = 30000;
 Q.NH_immigrant_laborers_rep = 40;
 Q.NH_immigrant_laborers_dem = 50;
 Q.NH_immigrant_laborers_lib = 0;
+Q.NH_immigrant_laborers_rad = 0;
 Q.NH_immigrant_laborers_other = 10;
 
 Q.NH_unemployed = 25000;
 Q.NH_unemployed_rep = 50;
 Q.NH_unemployed_dem = 40;
 Q.NH_unemployed_lib = 0;
+Q.NH_unemployed_rad = 0;
 Q.NH_unemployed_other = 10;
 
 // === NEW JERSEY ===
@@ -1024,36 +1136,42 @@ Q.NJ_workers = 90000;
 Q.NJ_workers_rep = 50;
 Q.NJ_workers_dem = 40;
 Q.NJ_workers_lib = 0;
+Q.NJ_workers_rad = 0;
 Q.NJ_workers_other = 10;
 
 Q.NJ_middle_class = 60000;
 Q.NJ_middle_class_rep = 60;
 Q.NJ_middle_class_dem = 30;
 Q.NJ_middle_class_lib = 0;
+Q.NJ_middle_class_rad = 0;
 Q.NJ_middle_class_other = 10;
 
 Q.NJ_rural = 300000;
 Q.NJ_rural_rep = 55;
 Q.NJ_rural_dem = 35;
 Q.NJ_rural_lib = 0;
+Q.NJ_rural_rad = 0;
 Q.NJ_rural_other = 10;
 
 Q.NJ_freemen = 20000;
 Q.NJ_freemen_rep = 95;
 Q.NJ_freemen_dem = 0;
 Q.NJ_freemen_lib = 0;
+Q.NJ_freemen_rad = 0;
 Q.NJ_freemen_other = 5;
 
 Q.NJ_immigrant_laborers = 100000;
 Q.NJ_immigrant_laborers_rep = 35;
 Q.NJ_immigrant_laborers_dem = 55;
 Q.NJ_immigrant_laborers_lib = 0;
+Q.NJ_immigrant_laborers_rad = 0;
 Q.NJ_immigrant_laborers_other = 10;
 
 Q.NJ_unemployed = 38000;
 Q.NJ_unemployed_rep = 45;
 Q.NJ_unemployed_dem = 45;
 Q.NJ_unemployed_lib = 0;
+Q.NJ_unemployed_rad = 0;
 Q.NJ_unemployed_other = 10;
 
 // === NEW YORK ===
@@ -1061,36 +1179,42 @@ Q.NY_workers = 400000;
 Q.NY_workers_rep = 45;
 Q.NY_workers_dem = 45;
 Q.NY_workers_lib = 0;
+Q.NY_workers_rad = 0;
 Q.NY_workers_other = 10;
 
 Q.NY_middle_class = 200000;
 Q.NY_middle_class_rep = 55;
 Q.NY_middle_class_dem = 35;
 Q.NY_middle_class_lib = 0;
+Q.NY_middle_class_rad = 0;
 Q.NY_middle_class_other = 10;
 
 Q.NY_rural = 2780000;
 Q.NY_rural_rep = 50;
 Q.NY_rural_dem = 40;
 Q.NY_rural_lib = 0;
+Q.NY_rural_rad = 0;
 Q.NY_rural_other = 10;
 
 Q.NY_freemen = 49000;
 Q.NY_freemen_rep = 95;
 Q.NY_freemen_dem = 0;
 Q.NY_freemen_lib = 0;
+Q.NY_freemen_rad = 0;
 Q.NY_freemen_other = 5;
 
 Q.NY_immigrant_laborers = 500000;
 Q.NY_immigrant_laborers_rep = 30;
 Q.NY_immigrant_laborers_dem = 60;
 Q.NY_immigrant_laborers_lib = 0;
+Q.NY_immigrant_laborers_rad = 0;
 Q.NY_immigrant_laborers_other = 10;
 
 Q.NY_unemployed = 260000;
 Q.NY_unemployed_rep = 40;
 Q.NY_unemployed_dem = 50;
 Q.NY_unemployed_lib = 0;
+Q.NY_unemployed_rad = 0;
 Q.NY_unemployed_other = 10;
 
 // === OHIO ===
@@ -1098,36 +1222,42 @@ Q.OH_workers = 120000;
 Q.OH_workers_rep = 60;
 Q.OH_workers_dem = 30;
 Q.OH_workers_lib = 0;
+Q.OH_workers_rad = 0;
 Q.OH_workers_other = 10;
 
 Q.OH_middle_class = 80000;
 Q.OH_middle_class_rep = 65;
 Q.OH_middle_class_dem = 25;
 Q.OH_middle_class_lib = 0;
+Q.OH_middle_class_rad = 0;
 Q.OH_middle_class_other = 10;
 
 Q.OH_rural = 1800000;
 Q.OH_rural_rep = 55;
 Q.OH_rural_dem = 35;
 Q.OH_rural_lib = 0;
+Q.OH_rural_rad = 0;
 Q.OH_rural_other = 10;
 
 Q.OH_freemen = 65000;
 Q.OH_freemen_rep = 95;
 Q.OH_freemen_dem = 0;
 Q.OH_freemen_lib = 0;
+Q.OH_freemen_rad = 0;
 Q.OH_freemen_other = 5;
 
 Q.OH_immigrant_laborers = 300000;
 Q.OH_immigrant_laborers_rep = 45;
 Q.OH_immigrant_laborers_dem = 45;
 Q.OH_immigrant_laborers_lib = 0;
+Q.OH_immigrant_laborers_rad = 0;
 Q.OH_immigrant_laborers_other = 10;
 
 Q.OH_unemployed = 161000;
 Q.OH_unemployed_rep = 40;
 Q.OH_unemployed_dem = 50;
 Q.OH_unemployed_lib = 0;
+Q.OH_unemployed_rad = 0;
 Q.OH_unemployed_other = 10;
 
 // === OREGON ===
@@ -1135,36 +1265,42 @@ Q.OR_workers = 10000;
 Q.OR_workers_rep = 65;
 Q.OR_workers_dem = 25;
 Q.OR_workers_lib = 0;
+Q.OR_workers_rad = 0;
 Q.OR_workers_other = 10;
 
 Q.OR_middle_class = 5000;
 Q.OR_middle_class_rep = 70;
 Q.OR_middle_class_dem = 20;
 Q.OR_middle_class_lib = 0;
+Q.OR_middle_class_rad = 0;
 Q.OR_middle_class_other = 10;
 
 Q.OR_rural = 60000;
 Q.OR_rural_rep = 60;
 Q.OR_rural_dem = 30;
 Q.OR_rural_lib = 0;
+Q.OR_rural_rad = 0;
 Q.OR_rural_other = 10;
 
 Q.OR_freemen = 0;
 Q.OR_freemen_rep = 95;
 Q.OR_freemen_dem = 0;
 Q.OR_freemen_lib = 0;
+Q.OR_freemen_rad = 0;
 Q.OR_freemen_other = 5;
 
 Q.OR_immigrant_laborers = 10000;
 Q.OR_immigrant_laborers_rep = 50;
 Q.OR_immigrant_laborers_dem = 40;
 Q.OR_immigrant_laborers_lib = 0;
+Q.OR_immigrant_laborers_rad = 0;
 Q.OR_immigrant_laborers_other = 10;
 
 Q.OR_unemployed = 6000;
 Q.OR_unemployed_rep = 45;
 Q.OR_unemployed_dem = 45;
 Q.OR_unemployed_lib = 0;
+Q.OR_unemployed_rad = 0;
 Q.OR_unemployed_other = 10;
 
 // === PENNSYLVANIA ===
@@ -1172,36 +1308,42 @@ Q.PA_workers = 250000;
 Q.PA_workers_rep = 50;
 Q.PA_workers_dem = 40;
 Q.PA_workers_lib = 0;
+Q.PA_workers_rad = 0;
 Q.PA_workers_other = 10;
 
 Q.PA_middle_class = 150000;
 Q.PA_middle_class_rep = 65;
 Q.PA_middle_class_dem = 25;
 Q.PA_middle_class_lib = 0;
+Q.PA_middle_class_rad = 0;
 Q.PA_middle_class_other = 10;
 
 Q.PA_rural = 2126000;
 Q.PA_rural_rep = 55;
 Q.PA_rural_dem = 35;
 Q.PA_rural_lib = 0;
+Q.PA_rural_rad = 0;
 Q.PA_rural_other = 10;
 
 Q.PA_freemen = 61000;
 Q.PA_freemen_rep = 95;
 Q.PA_freemen_dem = 0;
 Q.PA_freemen_lib = 0;
+Q.PA_freemen_rad = 0;
 Q.PA_freemen_other = 5;
 
 Q.PA_immigrant_laborers = 380000;
 Q.PA_immigrant_laborers_rep = 45;
 Q.PA_immigrant_laborers_dem = 45;
 Q.PA_immigrant_laborers_lib = 0;
+Q.PA_immigrant_laborers_rad = 0;
 Q.PA_immigrant_laborers_other = 10;
 
 Q.PA_unemployed = 191000;
 Q.PA_unemployed_rep = 40;
 Q.PA_unemployed_dem = 50;
 Q.PA_unemployed_lib = 0;
+Q.PA_unemployed_rad = 0;
 Q.PA_unemployed_other = 10;
 
 // === RHODE ISLAND ===
@@ -1209,36 +1351,42 @@ Q.RI_workers = 25000;
 Q.RI_workers_rep = 50;
 Q.RI_workers_dem = 40;
 Q.RI_workers_lib = 0;
+Q.RI_workers_rad = 0;
 Q.RI_workers_other = 10;
 
 Q.RI_middle_class = 15000;
 Q.RI_middle_class_rep = 65;
 Q.RI_middle_class_dem = 25;
 Q.RI_middle_class_lib = 0;
+Q.RI_middle_class_rad = 0;
 Q.RI_middle_class_other = 10;
 
 Q.RI_rural = 80000;
 Q.RI_rural_rep = 60;
 Q.RI_rural_dem = 30;
 Q.RI_rural_lib = 0;
+Q.RI_rural_rad = 0;
 Q.RI_rural_other = 10;
 
 Q.RI_freemen = 7000;
 Q.RI_freemen_rep = 95;
 Q.RI_freemen_dem = 0;
 Q.RI_freemen_lib = 0;
+Q.RI_freemen_rad = 0;
 Q.RI_freemen_other = 5;
 
 Q.RI_immigrant_laborers = 30000;
 Q.RI_immigrant_laborers_rep = 40;
 Q.RI_immigrant_laborers_dem = 50;
 Q.RI_immigrant_laborers_lib = 0;
+Q.RI_immigrant_laborers_rad = 0;
 Q.RI_immigrant_laborers_other = 10;
 
 Q.RI_unemployed = 10000;
 Q.RI_unemployed_rep = 45;
 Q.RI_unemployed_dem = 45;
 Q.RI_unemployed_lib = 0;
+Q.RI_unemployed_rad = 0;
 Q.RI_unemployed_other = 10;
 
 // === VERMONT ===
@@ -1246,36 +1394,42 @@ Q.VT_workers = 10000;
 Q.VT_workers_rep = 70;
 Q.VT_workers_dem = 20;
 Q.VT_workers_lib = 0;
+Q.VT_workers_rad = 0;
 Q.VT_workers_other = 10;
 
 Q.VT_middle_class = 10000;
 Q.VT_middle_class_rep = 75;
 Q.VT_middle_class_dem = 15;
 Q.VT_middle_class_lib = 0;
+Q.VT_middle_class_rad = 0;
 Q.VT_middle_class_other = 10;
 
 Q.VT_rural = 300000;
 Q.VT_rural_rep = 65;
 Q.VT_rural_dem = 25;
 Q.VT_rural_lib = 0;
+Q.VT_rural_rad = 0;
 Q.VT_rural_other = 10;
 
 Q.VT_freemen = 1000;
 Q.VT_freemen_rep = 95;
 Q.VT_freemen_dem = 0;
 Q.VT_freemen_lib = 0;
+Q.VT_freemen_rad = 0;
 Q.VT_freemen_other = 5;
 
 Q.VT_immigrant_laborers = 10000;
 Q.VT_immigrant_laborers_rep = 55;
 Q.VT_immigrant_laborers_dem = 35;
 Q.VT_immigrant_laborers_lib = 0;
+Q.VT_immigrant_laborers_rad = 0;
 Q.VT_immigrant_laborers_other = 10;
 
 Q.VT_unemployed = 22000;
 Q.VT_unemployed_rep = 50;
 Q.VT_unemployed_dem = 40;
 Q.VT_unemployed_lib = 0;
+Q.VT_unemployed_rad = 0;
 Q.VT_unemployed_other = 10;
 
 // === WEST VIRGINIA ===
@@ -1283,36 +1437,42 @@ Q.WV_workers = 30000;
 Q.WV_workers_rep = 55;
 Q.WV_workers_dem = 35;
 Q.WV_workers_lib = 0;
+Q.WV_workers_rad = 0;
 Q.WV_workers_other = 10;
 
 Q.WV_middle_class = 20000;
 Q.WV_middle_class_rep = 60;
 Q.WV_middle_class_dem = 30;
 Q.WV_middle_class_lib = 0;
+Q.WV_middle_class_rad = 0;
 Q.WV_middle_class_other = 10;
 
 Q.WV_rural = 300000;
 Q.WV_rural_rep = 45;
 Q.WV_rural_dem = 45;
 Q.WV_rural_lib = 0;
+Q.WV_rural_rad = 0;
 Q.WV_rural_other = 10;
 
 Q.WV_freemen = 30000;
 Q.WV_freemen_rep = 90;
 Q.WV_freemen_dem = 5;
 Q.WV_freemen_lib = 0;
+Q.WV_freemen_rad = 0;
 Q.WV_freemen_other = 5;
 
 Q.WV_immigrant_laborers = 10000;
 Q.WV_immigrant_laborers_rep = 40;
 Q.WV_immigrant_laborers_dem = 50;
 Q.WV_immigrant_laborers_lib = 0;
+Q.WV_immigrant_laborers_rad = 0;
 Q.WV_immigrant_laborers_other = 10;
 
 Q.WV_unemployed = 24000;
 Q.WV_unemployed_rep = 35;
 Q.WV_unemployed_dem = 55;
 Q.WV_unemployed_lib = 0;
+Q.WV_unemployed_rad = 0;
 Q.WV_unemployed_other = 10;
 
 // === WISCONSIN ===
@@ -1320,36 +1480,42 @@ Q.WI_workers = 70000;
 Q.WI_workers_rep = 60;
 Q.WI_workers_dem = 30;
 Q.WI_workers_lib = 0;
+Q.WI_workers_rad = 0;
 Q.WI_workers_other = 10;
 
 Q.WI_middle_class = 40000;
 Q.WI_middle_class_rep = 65;
 Q.WI_middle_class_dem = 25;
 Q.WI_middle_class_lib = 0;
+Q.WI_middle_class_rad = 0;
 Q.WI_middle_class_other = 10;
 
 Q.WI_rural = 600000;
 Q.WI_rural_rep = 55;
 Q.WI_rural_dem = 35;
 Q.WI_rural_lib = 0;
+Q.WI_rural_rad = 0;
 Q.WI_rural_other = 10;
 
 Q.WI_freemen = 2000;
 Q.WI_freemen_rep = 95;
 Q.WI_freemen_dem = 0;
 Q.WI_freemen_lib = 0;
+Q.WI_freemen_rad = 0;
 Q.WI_freemen_other = 5;
 
 Q.WI_immigrant_laborers = 140000;
 Q.WI_immigrant_laborers_rep = 45;
 Q.WI_immigrant_laborers_dem = 45;
 Q.WI_immigrant_laborers_lib = 0;
+Q.WI_immigrant_laborers_rad = 0;
 Q.WI_immigrant_laborers_other = 10;
 
 Q.WI_unemployed = 58000;
 Q.WI_unemployed_rep = 40;
 Q.WI_unemployed_dem = 50;
 Q.WI_unemployed_lib = 0;
+Q.WI_unemployed_rad = 0;
 Q.WI_unemployed_other = 10;
 
 // === TENNESSEE ===
@@ -1357,36 +1523,42 @@ Q.TN_workers = 40000;
 Q.TN_workers_rep = 50;
 Q.TN_workers_dem = 40;
 Q.TN_workers_lib = 0;
+Q.TN_workers_rad = 0;
 Q.TN_workers_other = 10;
 
 Q.TN_middle_class = 25000;
 Q.TN_middle_class_rep = 45;
 Q.TN_middle_class_dem = 45;
 Q.TN_middle_class_lib = 0;
+Q.TN_middle_class_rad = 0;
 Q.TN_middle_class_other = 10;
 
 Q.TN_rural = 700000;
 Q.TN_rural_rep = 40;
 Q.TN_rural_dem = 50;
 Q.TN_rural_lib = 0;
+Q.TN_rural_rad = 0;
 Q.TN_rural_other = 10;
 
 Q.TN_freemen = 150000;
 Q.TN_freemen_rep = 95;
 Q.TN_freemen_dem = 2;
 Q.TN_freemen_lib = 0;
+Q.TN_freemen_rad = 0;
 Q.TN_freemen_other = 3;
 
 Q.TN_immigrant_laborers = 10000;
 Q.TN_immigrant_laborers_rep = 35;
 Q.TN_immigrant_laborers_dem = 55;
 Q.TN_immigrant_laborers_lib = 0;
+Q.TN_immigrant_laborers_rad = 0;
 Q.TN_immigrant_laborers_other = 10;
 
 Q.TN_unemployed = 30000;
 Q.TN_unemployed_rep = 30;
 Q.TN_unemployed_dem = 60;
 Q.TN_unemployed_lib = 0;
+Q.TN_unemployed_rad = 0;
 Q.TN_unemployed_other = 10;
 
 // === NEBRASKA ===
@@ -1394,36 +1566,42 @@ Q.NE_workers = 18000;
 Q.NE_workers_rep = 55;
 Q.NE_workers_dem = 35;
 Q.NE_workers_lib = 0;
+Q.NE_workers_rad = 0;
 Q.NE_workers_other = 10;
 
 Q.NE_middle_class = 6500;
 Q.NE_middle_class_rep = 60;
 Q.NE_middle_class_dem = 30;
 Q.NE_middle_class_lib = 0;
+Q.NE_middle_class_rad = 0;
 Q.NE_middle_class_other = 10;
 
 Q.NE_rural = 105000;
 Q.NE_rural_rep = 65;
 Q.NE_rural_dem = 25;
 Q.NE_rural_lib = 0;
+Q.NE_rural_rad = 0;
 Q.NE_rural_other = 10;
 
 Q.NE_freemen = 1200;
 Q.NE_freemen_rep = 85;
 Q.NE_freemen_dem = 5;
 Q.NE_freemen_lib = 0;
+Q.NE_freemen_rad = 0;
 Q.NE_freemen_other = 10;
 
 Q.NE_immigrant_laborers = 10000;
 Q.NE_immigrant_laborers_rep = 45;
 Q.NE_immigrant_laborers_dem = 45;
 Q.NE_immigrant_laborers_lib = 0;
+Q.NE_immigrant_laborers_rad = 0;
 Q.NE_immigrant_laborers_other = 10;
 
 Q.NE_unemployed = 2800;
 Q.NE_unemployed_rep = 40;
 Q.NE_unemployed_dem = 50;
 Q.NE_unemployed_lib = 0;
+Q.NE_unemployed_rad = 0;
 Q.NE_unemployed_other = 10;
 
 // === ALABAMA ===
@@ -1431,36 +1609,42 @@ Q.AL_workers = 9000;
 Q.AL_workers_rep = 18; 
 Q.AL_workers_dem = 72; 
 Q.AL_workers_lib = 0; 
+Q.AL_workers_rad = 0;
 Q.AL_workers_other = 10;
 
 Q.AL_middle_class = 3000;
 Q.AL_middle_class_rep = 12; 
 Q.AL_middle_class_dem = 78; 
 Q.AL_middle_class_lib = 0; 
+Q.AL_middle_class_rad = 0;
 Q.AL_middle_class_other = 10;
 
 Q.AL_rural = 85000;
 Q.AL_rural_rep = 8; 
 Q.AL_rural_dem = 87; 
 Q.AL_rural_lib = 0; 
+Q.AL_rural_rad = 0;
 Q.AL_rural_other = 5;
 
 Q.AL_freemen = 12000;
 Q.AL_freemen_rep = 85; 
 Q.AL_freemen_dem = 5; 
 Q.AL_freemen_lib = 0; 
+Q.AL_freemen_rad = 0;
 Q.AL_freemen_other = 10;
 
 Q.AL_immigrant_laborers = 500;
 Q.AL_immigrant_laborers_rep = 20; 
 Q.AL_immigrant_laborers_dem = 70; 
 Q.AL_immigrant_laborers_lib = 0; 
+Q.AL_immigrant_laborers_rad = 0;
 Q.AL_immigrant_laborers_other = 10;
 
 Q.AL_unemployed = 2000;
 Q.AL_unemployed_rep = 15; 
 Q.AL_unemployed_dem = 75; 
 Q.AL_unemployed_lib = 0; 
+Q.AL_unemployed_rad = 0;
 Q.AL_unemployed_other = 10;
 
 // === ARKANSAS ===
@@ -1468,36 +1652,42 @@ Q.AR_workers = 7000;
 Q.AR_workers_rep = 22; 
 Q.AR_workers_dem = 68; 
 Q.AR_workers_lib = 0; 
+Q.AR_workers_rad = 0;
 Q.AR_workers_other = 10;
 
 Q.AR_middle_class = 2500;
 Q.AR_middle_class_rep = 15; 
 Q.AR_middle_class_dem = 75; 
 Q.AR_middle_class_lib = 0; 
+Q.AR_middle_class_rad = 0;
 Q.AR_middle_class_other = 10;
 
 Q.AR_rural = 60000;
 Q.AR_rural_rep = 15; 
 Q.AR_rural_dem = 80; 
 Q.AR_rural_lib = 0; 
+Q.AR_rural_rad = 0;
 Q.AR_rural_other = 5;
 
 Q.AR_freemen = 9000;
 Q.AR_freemen_rep = 80; 
 Q.AR_freemen_dem = 10; 
 Q.AR_freemen_lib = 0; 
+Q.AR_freemen_rad = 0;
 Q.AR_freemen_other = 10;
 
 Q.AR_immigrant_laborers = 400;
 Q.AR_immigrant_laborers_rep = 20; 
 Q.AR_immigrant_laborers_dem = 70; 
 Q.AR_immigrant_laborers_lib = 0; 
+Q.AR_immigrant_laborers_rad = 0;
 Q.AR_immigrant_laborers_other = 10;
 
 Q.AR_unemployed = 1500;
 Q.AR_unemployed_rep = 18; 
 Q.AR_unemployed_dem = 72;
 Q.AR_unemployed_lib = 0; 
+Q.AR_unemployed_rad = 0;
 Q.AR_unemployed_other = 10;
 
 // === FLORIDA ===
@@ -1505,36 +1695,42 @@ Q.FL_workers = 4000;
 Q.FL_workers_rep = 25; 
 Q.FL_workers_dem = 65; 
 Q.FL_workers_lib = 0; 
+Q.FL_workers_rad = 0;
 Q.FL_workers_other = 10;
 
 Q.FL_middle_class = 1500;
 Q.FL_middle_class_rep = 18; 
 Q.FL_middle_class_dem = 72; 
 Q.FL_middle_class_lib = 0; 
+Q.FL_middle_class_rad = 0;
 Q.FL_middle_class_other = 10;
 
 Q.FL_rural = 25000;
 Q.FL_rural_rep = 15; 
 Q.FL_rural_dem = 80; 
 Q.FL_rural_lib = 0; 
+Q.FL_rural_rad = 0;
 Q.FL_rural_other = 5;
 
 Q.FL_freemen = 6000;
 Q.FL_freemen_rep = 85; 
 Q.FL_freemen_dem = 5; 
 Q.FL_freemen_lib = 0; 
+Q.FL_freemen_rad = 0;
 Q.FL_freemen_other = 10;
 
 Q.FL_immigrant_laborers = 200;
 Q.FL_immigrant_laborers_rep = 20; 
 Q.FL_immigrant_laborers_dem = 70; 
 Q.FL_immigrant_laborers_lib = 0; 
+Q.FL_immigrant_laborers_rad = 0;
 Q.FL_immigrant_laborers_other = 10;
 
 Q.FL_unemployed = 1200;
 Q.FL_unemployed_rep = 20; 
 Q.FL_unemployed_dem = 70; 
 Q.FL_unemployed_lib = 0; 
+Q.FL_unemployed_rad = 0;
 Q.FL_unemployed_other = 10;
 
 // === LOUISIANA ===
@@ -1542,36 +1738,42 @@ Q.LA_workers = 8000;
 Q.LA_workers_rep = 28; 
 Q.LA_workers_dem = 62; 
 Q.LA_workers_lib = 0; 
+Q.LA_workers_rad = 0;
 Q.LA_workers_other = 10;
 
 Q.LA_middle_class = 3000;
 Q.LA_middle_class_rep = 18; 
 Q.LA_middle_class_dem = 72; 
 Q.LA_middle_class_lib = 0; 
+Q.LA_middle_class_rad = 0;
 Q.LA_middle_class_other = 10;
 
 Q.LA_rural = 70000;
 Q.LA_rural_rep = 12; 
 Q.LA_rural_dem = 83; 
 Q.LA_rural_lib = 0; 
+Q.LA_rural_rad = 0;
 Q.LA_rural_other = 5;
 
 Q.LA_freemen = 15000;
 Q.LA_freemen_rep = 85; 
 Q.LA_freemen_dem = 5; 
 Q.LA_freemen_lib = 0; 
+Q.LA_freemen_rad = 0;
 Q.LA_freemen_other = 10;
 
 Q.LA_immigrant_laborers = 1000;
 Q.LA_immigrant_laborers_rep = 30; 
 Q.LA_immigrant_laborers_dem = 60; 
 Q.LA_immigrant_laborers_lib = 0; 
-Q.LA_immigrant_laborers_other = 10
-;
+Q.LA_immigrant_laborers_rad = 0;
+Q.LA_immigrant_laborers_other = 10;
+
 Q.LA_unemployed = 2500;
 Q.LA_unemployed_rep = 22; 
 Q.LA_unemployed_dem = 68; 
 Q.LA_unemployed_lib = 0; 
+Q.LA_unemployed_rad = 0;
 Q.LA_unemployed_other = 10;
 
 // === NORTH CAROLINA ===
@@ -1579,36 +1781,42 @@ Q.NC_workers = 10000;
 Q.NC_workers_rep = 25; 
 Q.NC_workers_dem = 65; 
 Q.NC_workers_lib = 0; 
+Q.NC_workers_rad = 0;
 Q.NC_workers_other = 10;
 
 Q.NC_middle_class = 3500;
 Q.NC_middle_class_rep = 15; 
 Q.NC_middle_class_dem = 75; 
 Q.NC_middle_class_lib = 0; 
+Q.NC_middle_class_rad = 0;
 Q.NC_middle_class_other = 10;
 
 Q.NC_rural = 90000;
 Q.NC_rural_rep = 18; 
 Q.NC_rural_dem = 77; 
 Q.NC_rural_lib = 0; 
+Q.NC_rural_rad = 0;
 Q.NC_rural_other = 5;
 
 Q.NC_freemen = 13000;
 Q.NC_freemen_rep = 80; 
 Q.NC_freemen_dem = 10; 
 Q.NC_freemen_lib = 0; 
+Q.NC_freemen_rad = 0;
 Q.NC_freemen_other = 10;
 
 Q.NC_immigrant_laborers = 600;
 Q.NC_immigrant_laborers_rep = 20; 
 Q.NC_immigrant_laborers_dem = 70; 
 Q.NC_immigrant_laborers_lib = 0; 
+Q.NC_immigrant_laborers_rad = 0;
 Q.NC_immigrant_laborers_other = 10;
 
 Q.NC_unemployed = 2000;
 Q.NC_unemployed_rep = 18; 
 Q.NC_unemployed_dem = 72; 
 Q.NC_unemployed_lib = 0; 
+Q.NC_unemployed_rad = 0;
 Q.NC_unemployed_other = 10;
 
 // === SOUTH CAROLINA ===
@@ -1616,36 +1824,42 @@ Q.SC_workers = 6000;
 Q.SC_workers_rep = 30; 
 Q.SC_workers_dem = 60; 
 Q.SC_workers_lib = 0; 
+Q.SC_workers_rad = 0;
 Q.SC_workers_other = 10;
 
 Q.SC_middle_class = 2000;
 Q.SC_middle_class_rep = 18; 
 Q.SC_middle_class_dem = 72; 
 Q.SC_middle_class_lib = 0; 
+Q.SC_middle_class_rad = 0;
 Q.SC_middle_class_other = 10;
 
 Q.SC_rural = 50000;
 Q.SC_rural_rep = 12; 
 Q.SC_rural_dem = 83; 
 Q.SC_rural_lib = 0; 
+Q.SC_rural_rad = 0;
 Q.SC_rural_other = 5;
 
 Q.SC_freemen = 14000;
 Q.SC_freemen_rep = 95; 
 Q.SC_freemen_dem = 2; 
 Q.SC_freemen_lib = 0; 
+Q.SC_freemen_rad = 0;
 Q.SC_freemen_other = 3;
 
 Q.SC_immigrant_laborers = 400;
 Q.SC_immigrant_laborers_rep = 25; 
 Q.SC_immigrant_laborers_dem = 65; 
 Q.SC_immigrant_laborers_lib = 0; 
+Q.SC_immigrant_laborers_rad = 0;
 Q.SC_immigrant_laborers_other = 10;
 
 Q.SC_unemployed = 1500;
 Q.SC_unemployed_rep = 25; 
 Q.SC_unemployed_dem = 65; 
 Q.SC_unemployed_lib = 0; 
+Q.SC_unemployed_rad = 0;
 Q.SC_unemployed_other = 10;
 
 // === TEXAS ===
@@ -1653,36 +1867,42 @@ Q.TX_workers = 26772;
 Q.TX_workers_rep = 15; 
 Q.TX_workers_dem = 75; 
 Q.TX_workers_lib = 0; 
+Q.TX_workers_rad = 0;
 Q.TX_workers_other = 10;
 
 Q.TX_middle_class = 23000;
 Q.TX_middle_class_rep = 10; 
 Q.TX_middle_class_dem = 80; 
 Q.TX_middle_class_lib = 0; 
+Q.TX_middle_class_rad = 0;
 Q.TX_middle_class_other = 10;
 
 Q.TX_rural = 218411;
 Q.TX_rural_rep = 8; 
 Q.TX_rural_dem = 87; 
 Q.TX_rural_lib = 0; 
+Q.TX_rural_rad = 0;
 Q.TX_rural_other = 5;
 
 Q.TX_freemen = 91460;
 Q.TX_freemen_rep = 78; 
 Q.TX_freemen_dem = 12; 
 Q.TX_freemen_lib = 0; 
+Q.TX_freemen_rad = 0;
 Q.TX_freemen_other = 10;
 
 Q.TX_immigrant_laborers = 21711;
 Q.TX_immigrant_laborers_rep = 35; 
 Q.TX_immigrant_laborers_dem = 55; 
 Q.TX_immigrant_laborers_lib = 0; 
+Q.TX_immigrant_laborers_rad = 0;
 Q.TX_immigrant_laborers_other = 10;
 
 Q.TX_unemployed = 36600;
 Q.TX_unemployed_rep = 12; 
 Q.TX_unemployed_dem = 78; 
 Q.TX_unemployed_lib = 0; 
+Q.TX_unemployed_rad = 0;
 Q.TX_unemployed_other = 10;
 
 // === MISSISSIPPI ===
@@ -1690,36 +1910,42 @@ Q.MS_workers = 14187;
 Q.MS_workers_rep = 25; 
 Q.MS_workers_dem = 65; 
 Q.MS_workers_lib = 0; 
+Q.MS_workers_rad = 0;
 Q.MS_workers_other = 10;
 
 Q.MS_middle_class = 9231;
 Q.MS_middle_class_rep = 15; 
 Q.MS_middle_class_dem = 75; 
 Q.MS_middle_class_lib = 0; 
+Q.MS_middle_class_rad = 0;
 Q.MS_middle_class_other = 10;
 
 Q.MS_rural = 61581;
 Q.MS_rural_rep = 10; 
 Q.MS_rural_dem = 85; 
 Q.MS_rural_lib = 0; 
+Q.MS_rural_rad = 0;
 Q.MS_rural_other = 5;
 
 Q.MS_freemen = 219673;
 Q.MS_freemen_rep = 90; 
 Q.MS_freemen_dem = 6; 
 Q.MS_freemen_lib = 0; 
+Q.MS_freemen_rad = 0;
 Q.MS_freemen_other = 4;
 
 Q.MS_immigrant_laborers = 8558;
 Q.MS_immigrant_laborers_rep = 20; 
 Q.MS_immigrant_laborers_dem = 70; 
 Q.MS_immigrant_laborers_lib = 0; 
+Q.MS_immigrant_laborers_rad = 0;
 Q.MS_immigrant_laborers_other = 10;
 
 Q.MS_unemployed = 93439;
 Q.MS_unemployed_rep = 20; 
 Q.MS_unemployed_dem = 70; 
 Q.MS_unemployed_lib = 0; 
+Q.MS_unemployed_rad = 0;
 Q.MS_unemployed_other = 10;
 
 // === VIRGINIA ===
@@ -1727,36 +1953,42 @@ Q.VA_workers = 57598;
 Q.VA_workers_rep = 18; 
 Q.VA_workers_dem = 72; 
 Q.VA_workers_lib = 0; 
+Q.VA_workers_rad = 0;
 Q.VA_workers_other = 10;
 
 Q.VA_middle_class = 9367;
 Q.VA_middle_class_rep = 12; 
 Q.VA_middle_class_dem = 78; 
 Q.VA_middle_class_lib = 0; 
+Q.VA_middle_class_rad = 0;
 Q.VA_middle_class_other = 10;
 
 Q.VA_rural = 107447;
 Q.VA_rural_rep = 10; 
 Q.VA_rural_dem = 85; 
 Q.VA_rural_lib = 0; 
+Q.VA_rural_rad = 0;
 Q.VA_rural_other = 5;
 
 Q.VA_freemen = 277235;
 Q.VA_freemen_rep = 78; 
 Q.VA_freemen_dem = 12; 
 Q.VA_freemen_lib = 0; 
+Q.VA_freemen_rad = 0;
 Q.VA_freemen_other = 10;
 
 Q.VA_immigrant_laborers = 35058;
 Q.VA_immigrant_laborers_rep = 18; 
 Q.VA_immigrant_laborers_dem = 72; 
 Q.VA_immigrant_laborers_lib = 0; 
+Q.VA_immigrant_laborers_rad = 0;
 Q.VA_immigrant_laborers_other = 10;
 
 Q.VA_unemployed = 33039;
 Q.VA_unemployed_rep = 15; 
 Q.VA_unemployed_dem = 75; 
 Q.VA_unemployed_lib = 0; 
+Q.VA_unemployed_rad = 0;
 Q.VA_unemployed_other = 10;
 
 // === GEORGIA ===
@@ -1764,36 +1996,42 @@ Q.GA_workers = 28974;
 Q.GA_workers_rep = 15; 
 Q.GA_workers_dem = 75; 
 Q.GA_workers_lib = 0; 
+Q.GA_workers_rad = 0;
 Q.GA_workers_other = 10;
 
 Q.GA_middle_class = 12262;
 Q.GA_middle_class_rep = 10; 
 Q.GA_middle_class_dem = 80; 
 Q.GA_middle_class_lib = 0; 
+Q.GA_middle_class_rad = 0;
 Q.GA_middle_class_other = 10;
 
 Q.GA_rural = 75964;
 Q.GA_rural_rep = 8; 
 Q.GA_rural_dem = 87; 
 Q.GA_rural_lib = 0; 
+Q.GA_rural_rad = 0;
 Q.GA_rural_other = 5;
 
 Q.GA_freemen = 230862;
 Q.GA_freemen_rep = 80; 
 Q.GA_freemen_dem = 10; 
 Q.GA_freemen_lib = 0; 
+Q.GA_freemen_rad = 0;
 Q.GA_freemen_other = 10;
 
 Q.GA_immigrant_laborers = 11671;
 Q.GA_immigrant_laborers_rep = 18; 
 Q.GA_immigrant_laborers_dem = 72; 
 Q.GA_immigrant_laborers_lib = 0; 
+Q.GA_immigrant_laborers_rad = 0;
 Q.GA_immigrant_laborers_other = 10;
 
 Q.GA_unemployed = 206883;
 Q.GA_unemployed_rep = 15; 
 Q.GA_unemployed_dem = 75; 
 Q.GA_unemployed_lib = 0; 
+Q.GA_unemployed_rad = 0;
 Q.GA_unemployed_other = 10;
 
 // Election and economic history records
@@ -1827,6 +2065,8 @@ Q.Winner_72 = "";
 
 Q.liberal_reunion_triggered = 0;
 Q.liberal_reunion_seen = 0;
+Q.radical_reunion_triggered = 0;
+Q.radical_reunion_seen = 0;
 
 Q.sect_state = 'William H. Seward';
 Q.sect_state_party = 'R';
