@@ -95,6 +95,7 @@ Congress composition:
 <span style="color: #c00000;">**Republican**</span>: [+ rep_senate_r +]
 <span style="color: #0015bc;">**Democrats**</span>: [+ dem_senate_r +]
 [? if liberal_split = 1 : <span class="tooltip-text" title="Liberal Republican Party" style="color: #DAA520;">**Lib Republicans**</span>: [+ lib_senate_r +] seats, ?]
+[? if radical_split = 1 : <span class="tooltip-text" title="Radical Republican Party" style="color: #7A1F5C;">**Rad Republicans**</span>: [+ rad_senate_r +] seats, ?]
 <span style="color: #00cc00;">**Other**</span>: [+ other_senate_r +]
 
 **House of Representatives**:
@@ -102,6 +103,7 @@ Congress composition:
 <span style="color: #c00000;">**Republican**</span>: [+ rep_r +]
 <span style="color: #0015bc;">**Democrats**</span>: [+ dem_r +]
 [? if liberal_split = 1 : <span class="tooltip-text" title="Liberal Republican Party" style="color: #DAA520;">**Lib Republicans**</span>: [+ lib_r +] seats, ?]
+[? if radical_split = 1 : <span class="tooltip-text" title="Radical Republican Party" style="color: #7A1F5C;">**Rad Republicans**</span>: [+ rad_r +] seats, ?]
 <span style="color: #00cc00;">**Other**</span>: [+ other_r +]
 
 <span style="color: #c00000;">**Republican**</span> position: [? if rep_majority = 1 : Majority in government ?][? if rep_majority != 1 : Minority in government ?]
@@ -146,9 +148,15 @@ go-to: menu
 view-if: (not historical_mode) or game_over
 go-to: menu
 
+Senate:
+
 <span style="color: #c00000;">**Republican**</span>s: [+ rep_senate_r +] seats
 
 <span style="color: #0015bc;">**Democrats**</span>: [+ dem_senate_r +] seats
+
+[? if liberal_split = 1 : <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ lib_senate_pro +] seats ?]
+
+[? if radical_split = 1 : <span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ rad_senate_pro +] seats ?]
 
 <span style="color: #00cc00;">**Other**</span>: [+ other_senate_r +] seats
 
@@ -158,19 +166,25 @@ House:
 
 <span style="color: #0015bc;">**Democrats**</span>: [+ dem_r +] seats
 
+[? if radical_split = 1 : <span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ rad_r_pro +] seats ?]
+
+[? if liberal_split = 1 : <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ lib_r_pro +] seats ?]
+
 <span style="color: #00cc00;">**Other**</span>: [+ other_r +] seats
 
 **Detailed results for each demographic**
 
-Workers: <span style="color: #c00000;">**Republican**</span>: [+ workers_rep +]%, <span style="color: #0015bc;">**Democrats**</span>: [+ workers_dem +]%, <span style="color: #00cc00;">**Other**</span> [? if other_name != 0 : [+ other_name +]?]: [+ workers_other +]%
+Workers: <span style="color: #c00000;">**Republican**</span>: [+ workers_rep +]%, <span style="color: #0015bc;">**Democrats**</span>: [+ workers_dem +]%[? if liberal_split = 1 : , <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ workers_lib +]% ?], [? if radical_split = 1 :<span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ workers_rad +]% ?], <span style="color: #00cc00;">**Other**</span>: [+ workers_other +]%
 
-Middle Class: <span style="color: #c00000;">**Republican**</span>: [+ middle_class_rep +]%, <span style="color: #0015bc;">**Democrats**</span>: [+ middle_class_dem +]%, <span style="color: #00cc00;">**Other**</span> [? if other_name != 0 : [+ other_name +]?]: [+ middle_class_other +]%
+Rural: <span style="color: #c00000;">**Republican**</span>: [+ rural_rep +]%, <span style="color: #0015bc;">**Democrats**</span>: [+ rural_dem +]%[? if liberal_split = 1 : , <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ rural_lib +]% ?], [? if radical_split = 1 :<span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ rural_rad +]% ?], <span style="color: #00cc00;">**Other**</span>: [+ rural_other +]%
 
-Freemen: <span style="color: #c00000;">**Republican**</span>: [+ freemen_rep +]%, <span style="color: #0015bc;">**Democrats**</span>: [+ freemen_dem +]%, <span style="color: #00cc00;">**Other**</span> [? if other_name != 0 : [+ other_name +]?]: [+ freemen_other +]%
+Middle Class: <span style="color: #c00000;">**Republican**</span>: [+ middle_class_rep +]%, <span style="color: #0015bc;">**Democrats**</span>: [+ middle_class_dem +]%[? if liberal_split = 1 : , <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ middle_class_lib +]% ?], [? if radical_split = 1 :<span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ middle_class_rad +]% ?], <span style="color: #00cc00;">**Other**</span>: [+ middle_class_other +]%
 
-Immigrant Laborers: <span style="color: #c00000;">**Republican**</span>: [+ immigrant_laborers_rep +]%, <span style="color: #0015bc;">**Democrats**</span>: [+ immigrant_laborers_dem +]%, <span style="color: #00cc00;">**Other**</span> [? if other_name != 0 : [+ other_name +]?]: [+ immigrant_laborers_other +]%
+Freedmen ([+ freedmen_turnout +]% turnout): <span style="color: #c00000;">**Republican**</span>: [+ freemen_rep +]%, <span style="color: #0015bc;">**Democrats**</span>: [+ freemen_dem +]%[? if liberal_split = 1 : , <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ freemen_lib +]% ?], [? if radical_split = 1 :<span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ freemen_rad +]% ?], <span style="color: #00cc00;">**Other**</span>: [+ freemen_other +]% 
 
-Unemployed: <span style="color: #c00000;">**Republican**</span>: [+ unemployed_rep +]%, <span style="color: #0015bc;">**Democrats**</span>: [+ unemployed_dem +]%, <span style="color: #00cc00;">**Other**</span> [? if other_name != 0 : [+ other_name +]?]: [+ unemployed_other +]%
+Immigrant Laborers: <span style="color: #c00000;">**Republican**</span>: [+ immigrant_laborers_rep +]%, <span style="color: #0015bc;">**Democrats**</span>: [+ immigrant_laborers_dem +]%[? if liberal_split = 1 : , <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ immigrant_laborers_lib +]% ?], [? if radical_split = 1 :<span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ immigrant_laborers_rad +]% ?], <span style="color: #00cc00;">**Other**</span>: [+ immigrant_laborers_other +]%
+
+Unemployed: <span style="color: #c00000;">**Republican**</span>: [+ unemployed_rep +]%, <span style="color: #0015bc;">**Democrats**</span>: [+ unemployed_dem +]%[? if liberal_split = 1 : , <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ unemployed_lib +]% ?], [? if radical_split = 1 :<span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ unemployed_rad +]% ?], <span style="color: #00cc00;">**Other**</span>: [+ unemployed_other +]%
 
 Support for Reconstruction: [+ reconstruction_support +]%
 
@@ -182,6 +196,10 @@ go-to: menu
 <span style="color: #0015bc;">**Democratic Party**</span> - The opposition party: The <span style="color: #0015bc;">**Democrats**</span> represent a mix of Northern conservatives and Southern ex-Confederates. Though weakened by the war, they remain a force in Congress and dominate Southern state politics where federal troops are absent. They oppose <span style="color: #7A1F5C;">**Radical**</span> Reconstruction and civil rights for freedmen, and many <span style="color: #0015bc;">**Democrats**</span> advocate for a swift return to “home rule” in the South.
 
 Current relations: [+ dem_relation : relationships +]
+
+[ ? if liberal_split = 1: <span style="color: #DAA520;">**Liberal Republican Party**</span> - The liberal faction of our party has defected to form their own party, established on the ideals of free-market capitalism, civil service reform, and more. ?]
+
+[? if radical_split = 1: <span style="color: #7A1F5C;">**Radical Republican Party**</span> - The radical faction of our party has defected to form their own party due to our increasing compromise with conservative forces over the issue of reconstruction. They are campaigning on total equality for the freedmen and a stronger federal government. ?]
 
 <span style="color: #00cc00;">**Other**</span> - there is a multitude of small, mostly single issue parties, such as the many Unionists parties and independents who don't belong to any party.
 
@@ -257,6 +275,14 @@ go-to: menu
 on-display: {!
 let houseData = [
     {
+        id: "rad",
+        legend: "Radical Republicans",
+        name: "Radical Republicans",
+        color: "#7A1F5C",
+        outline: "#581742",
+        seats: Math.floor(Q.rad_r),
+    },
+    {
         id: "rep",
         legend: "Republican",
         name: "Republican",
@@ -264,6 +290,14 @@ let houseData = [
         outline: "#600000",
         seats: Math.floor(Q.rep_r),
     },
+    {
+        id: "lib",
+        legend: "Liberal Republicans",
+        name: "Liberal Republican",
+        color: "#DAA520",
+        outline: "#866614",
+        seats: Math.floor(Q.lib_r),
+    }
     {
         id: "dem",
         legend: "Democrat",
@@ -280,17 +314,17 @@ let houseData = [
         outline: "#666666",
         seats: Math.floor(Q.other_r),
     },
-    {
-        id: "lib",
-        legend: "Liberal Republicans",
-        name: "Liberal Republican",
-        color: "#DAA520",
-        outline: "#866614",
-        seats: Math.floor(Q.lib_r),
-    }
 ];
 
 let senateData = [
+    {
+        id: "rad",
+        legend: "Radical Republicans",
+        name: "Radical Republicans",
+        color: "#7A1F5C",
+        outline: "#581742",
+        seats: Math.floor(Q.rad_senate_r),
+    },
     {
         id: "rep",
         legend: "Republican",
@@ -299,6 +333,14 @@ let senateData = [
         outline: "#600000",
         seats: Q.rep_senate_r,
     },
+    {
+        id: "lib",
+        legend: "Liberal Republicans",
+        name: "Liberal Republican",
+        color: "#DAA520",
+        outline: "#866614",
+        seats: Math.floor(Q.lib_senate_r),
+    }
     {
         id: "dem",
         legend: "Democrat",
@@ -315,14 +357,6 @@ let senateData = [
         outline: "#666666",
         seats: Q.other_senate_r,
     },
-    {
-        id: "lib",
-        legend: "Liberal Republicans",
-        name: "Liberal Republican",
-        color: "#DAA520",
-        outline: "#866614",
-        seats: Math.floor(Q.lib_senate_r),
-    }
 ];
 
 if (d3 && window) {
@@ -352,8 +386,8 @@ if (d3 && window) {
 
     var lines = d3.linegraph(false, false,
         ["rep", "dem", "lib", "other"].filter(p => Q.election_records.some(r => r[p] > 0)),
-        {"rep": "#B22222", "dem": "#003366", "lib": "#DAA520", "other": "#AAAAAA"},
-        {"rep": "Republican", "dem": "Democrat", "lib": "Liberal Republican", "other": "Other"},
+        {"rep": "#B22222", "dem": "#003366", "lib": "#DAA520", "rad": "#7A1F5C", "other": "#AAAAAA"},
+        {"rep": "Republican", "dem": "Democrat", "lib": "Liberal Republican", "rad": "Radical Republican", "other": "Other"},
         100, 0, 10
     );
     lines.width(width).height(400);
@@ -364,8 +398,8 @@ if (d3 && window) {
     if (!Q.historical_mode || Q.game_over) {
         var lines_2 = d3.linegraph(true, true,
             ["rep", "dem", "lib", "other"].filter(p => Q.party_support_records.some(r => r[p] > 0)),
-            {"rep": "#B22222", "dem": "#003366", "lib": "#DAA520", "other": "#AAAAAA"},
-            {"rep": "Republican", "dem": "Democrat", "lib": "Liberal Republican", "other": "Other"},
+            {"rep": "#B22222", "dem": "#003366", "lib": "#DAA520", "rad": "#7A1F5C", "other": "#AAAAAA"},
+            {"rep": "Republican", "dem": "Democrat", "lib": "Liberal Republican", "rad": "Radical Republican", "other": "Other"},
             100, 0, 10
         );
         lines_2.width(width).height(400);
