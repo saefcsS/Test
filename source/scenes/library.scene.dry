@@ -297,7 +297,7 @@ let houseData = [
         color: "#DAA520",
         outline: "#866614",
         seats: Math.floor(Q.lib_r),
-    }
+    },
     {
         id: "dem",
         legend: "Democrat",
@@ -340,7 +340,7 @@ let senateData = [
         color: "#DAA520",
         outline: "#866614",
         seats: Math.floor(Q.lib_senate_r),
-    }
+    },
     {
         id: "dem",
         legend: "Democrat",
