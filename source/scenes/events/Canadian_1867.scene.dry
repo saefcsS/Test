@@ -97,8 +97,8 @@ if (Q.economic_growth >= 6) {
 // American Tariffs
 if (Q.tariffs > 0)
 {
-    canada_adjustment_factors.con += (Q.tariff / 100);
-    canada_adjustment_factors.clib -= (Q.tariff / 100);
+    canada_adjustment_factors.con += (Q.tariffs / 100);
+    canada_adjustment_factors.clib -= (Q.tariffs / 100);
 }
 
 // Inflation
@@ -321,13 +321,13 @@ go-to: canada_menu
 
 @canada_menu
 
-- @Con: <span style="color: #6495ED;">**Conservative**:</span> Majority
-- @Lib: <span style="color: #EA6D6A;">**Liberal**:</span> Majority
-- @LibCoalition: <span style="color: #EA6D6A;">**Liberal**:</span>-<span style="color: #EABB94;">**Anti-Confederation**:</span> Government
+- @Con: <span style="color: #6495ED;">**Conservative**</span> Majority
+- @Lib: <span style="color: #EA6D6A;">**Liberal**</span> Majority
+- @LibCoalition: <span style="color: #EA6D6A;">**Liberal**</span>-<span style="color: #EABB94;">**Anti-Confederation**</span> Government
 - @Hung: Hung Parliament
 
 @Con
-choose-if: Canada_Gov = "Conservative"
+view-if: Canada_Gov = "Conservative"
 subtitle: <span style="color: #6495ED;">**[+ con_r +]**:</span> + <span style="color: #9999FF;">**[+ libcon_r +]**:</span>
 on-arrival: uk_relation -= 3; economic_growth -= 0.02; conservative_strength += 4;
 
@@ -336,7 +336,7 @@ The <span style="color: #6495ED;">**Conservative**:</span> and <span style="colo
 Washington watches the new government closely. Macdonald's ministry is firmly aligned with Confederation and maintains strong ties to Britain.
 
 @Lib
-choose-if: Canada_Gov = "Liberal"
+view-if: Canada_Gov = "Liberal"
 subtitle: <span style="color: #EA6D6A;">**[+ clib_r +]**:</span>
 on-arrival: uk_relation += 2; economic_growth += 0.01; liberal_strength += 4;
 
@@ -345,7 +345,7 @@ The <span style="color: #EA6D6A;">**Liberal**:</span> Party has won enough seats
 The result places the new Dominion under a government opposed to John A. Macdonald and the Liberal-Conservative establishment. Ottawa's relations with Washington may improve as the new ministry seeks a different course for the young federation.
 
 @LibCoalition
-choose-if: Canada_Gov = "Liberal-Anti-Confederation"
+view-if: Canada_Gov = "Liberal-Anti-Confederation"
 subtitle: <span style="color: #EA6D6A;">**[+ clib_r +]**:</span> + <span style="color: #EABB94;">**[+ ac_r +]**:</span>
 on-arrival: uk_relation += 1; economic_growth -= 0.01; liberal_strength += 2; conservative_strength -= 1;
 
@@ -356,7 +356,7 @@ The arrangement is an uneasy one. The Liberals and Anti-Confederation members sh
 Canada therefore begins its first Parliament under a fragile Liberal government dependent on the very forces that had opposed Confederation.
 
 @Hung
-choose-if: Canada_Gov = "Hung"
+view-if: Canada_Gov = "Hung"
 subtitle: <span style="color: #EA6D6A;">**[+ clib_r +]**:</span> + <span style="color: #EABB94;">**[+ ac_r +]**:</span> + <span style="color: #6495ED;">**[+ con_r +]**:</span> + <span style="color: #9999FF;">**[+ libcon_r +]**:</span>
 on-arrival: {!
 Q.uk_relation -= 1;
