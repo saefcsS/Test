@@ -10,7 +10,7 @@ on-arrival: radical_split = 1;
 
 lorem ipsum dolor sit amet consectetuer adipiscing elit
 
-- @Test
+- @Test: Test
 
 @Test
 on-arrival: rep_r -= 5; rad_r += 5
