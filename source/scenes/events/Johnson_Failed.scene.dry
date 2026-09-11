@@ -2,7 +2,11 @@ title: The South Rejects Reconstruction
 subtitle: JOHNSON!!!!!!!!!!!!!!
 on-arrival: {! 
 
-    Q.radical_strength += 1; 
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 1;
+    } else {
+        Q.radical_strength += 1;
+    }
     Q.moderate_strength -= 1; 
     Q.conservative_strength -= 2; 
     Q.liberal_strength -= 2; 
@@ -104,20 +108,24 @@ on-arrival: {!
     Q.seats_removed = seatsRemoved;
     Q.senate_seats_removed = senateSeatsRemoved;
     
-    let totalHouse = Q.rep_r + Q.dem_r + (Q.lib_r || 0) + (Q.other_r || 0);
+    let totalHouse = Q.rep_r + Q.dem_r + (Q.lib_r || 0) + (Q.rad_r || 0) + (Q.other_r || 0);
     let repPct = (Q.rep_r / totalHouse) * 100;
     if (repPct >= 66.7) { Q.house_majority = 3; }
     else if (repPct >= 50) { Q.house_majority = 2; }
     else { Q.house_majority = 0; }
     
-    let totalSenate = Q.rep_senate_r + Q.dem_senate_r + (Q.other_senate_r || 0);
+    let totalSenate = Q.rep_senate_r + Q.dem_senate_r + (Q.rad_senate_r || 0) + (Q.other_senate_r || 0);
     let repSenPct = (Q.rep_senate_r / totalSenate) * 100;
     if (repSenPct >= 66.7) { Q.sen_majority = 3; }
     else if (repSenPct >= 50) { Q.sen_majority = 2; }
     else { Q.sen_majority = 0; }
     
-    Q.radical_strength += 5;
-    Q.radical_dissent -= 3;
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 6;
+    } else {
+        Q.radical_strength += 5;
+        Q.radical_dissent -= 3;
+    }
     Q.moderate_strength += 3;
     Q.conservative_dissent += 4;
     Q.dem_relation -= 8;
@@ -134,8 +142,12 @@ With [+ seats_removed +] House seats and [+ senate_seats_removed +] Senate seats
 
 @allow_seating
 on-arrival: {!
-    Q.radical_dissent += 8;
-    Q.radical_strength -= 3;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 8;
+    } else {
+        Q.radical_dissent += 8;
+        Q.radical_strength -= 3;
+    }
     Q.moderate_strength += 2;
     Q.conservative_strength += 3;
     Q.dem_relation += 4;
@@ -146,7 +158,9 @@ The Southern delegations are admitted without objection.
 
 Former Confederate officers and politicians take their seats beside the men who fought to preserve the Union, a sight that sends shockwaves through the Republican caucus.
 
-<span style="color: #7A1F5C;">**Radical Republicans**</span> erupt in protest, with several members refusing to remain in the chamber during the swearing-in ceremony.
+[? if radical_split = 0 : <span style="color: #7A1F5C;">**Radical Republicans**</span> erupt in protest, with several members refusing to remain in the chamber during the swearing-in ceremony. ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> erupts in protest from outside the chamber, holding the scene up as proof of exactly what it warned would happen the moment it left. ?]
 
 President Johnson's allies celebrate the victory, while the enlarged <span style="color: #0015bc;">**Democratic**</span> caucus suddenly becomes a far more formidable force in Congress.
 
@@ -174,7 +188,11 @@ on-arrival: {!
     Q.veto += 1; 
     Q.veto_reason = "Military Reconstruction Act"; 
     Q.occupation = 2; 
-    Q.radical_strength += 4; 
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 4;
+    } else {
+        Q.radical_strength += 4;
+    }
     Q.moderate_strength += 2; 
     Q.freedmen_rep += 2; 
     Q.rural_rep -= 1; 
@@ -189,7 +207,9 @@ Congress passes the **Military Reconstruction Act of 1867**.
 
 The former Confederate states are divided into five military districts under Union commanders. Civil governments are placed under federal supervision, Confederate officeholders are removed, and new state constitutions must recognize Black suffrage before readmission.
 
-<span style="color: #7A1F5C;">**Radical Republicans**</span> hail the legislation as the fulfillment of Reconstruction.
+[? if radical_split = 0 : <span style="color: #7A1F5C;">**Radical Republicans**</span> hail the legislation as the fulfillment of Reconstruction. ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> hails the legislation as vindication, though it is quick to note that the regular organization only got there after they had already left to force the issue. ?]
 
 Across the South, however, resistance hardens. Secret societies recruit openly, and the Ku Klux Klan begins expanding its campaign of terror.
 
@@ -199,7 +219,11 @@ on-arrival: {!
     Q.Johnson_plan = 0; 
     Q.Moderate_plan = 1; 
     Q.occupation = 1; 
-    Q.radical_strength -= 4;  
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 4;
+    } else {
+        Q.radical_strength -= 4;
+    }
     Q.moderate_strength += 2; 
     Q.freedmen_rep += 1; 
     Q.rural_rep += 1; 
@@ -216,13 +240,23 @@ Congress settles on a compromise.
 
 Federal military commanders are given authority to supervise elections and protect the rights of freedmen, but Southern governments retain broad control over their own affairs.
 
-It is enough to reassure many <span style="color: #9D2933;">**Moderate Republicans**</span>, but not enough to satisfy the <span style="color: #7A1F5C;">**Radical**</span> wing.
+It is enough to reassure many <span style="color: #9D2933;">**Moderate Republicans**</span>, but not enough to satisfy the <span style="color: #7A1F5C;">**Radical**</span> wing[? if radical_split = 1 : , regular or breakaway alike ?].
 
 Reconstruction survives, though its foundations remain uncertain.
 
 @Johnson_plan
 subtitle: Stay the Course
-on-arrival: radical_strength += 5;  radical_dissent += 2; moderate_strength += 1;  moderate_dissent += 1; liberal_dissent +=1
+on-arrival: {!
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 6;
+    } else {
+        Q.radical_strength += 5;
+        Q.radical_dissent += 2;
+    }
+    Q.moderate_strength += 1;
+    Q.moderate_dissent += 1;
+    Q.liberal_dissent += 1;
+!}
 
 Congress declines to intervene.
 
@@ -230,4 +264,6 @@ President Johnson's Reconstruction policy remains the law of the land, and the f
 
 Black Codes spread across the South, violence against freedmen intensifies, and many former Confederates quickly return to public office.
 
-<span style="color: #7A1F5C;">**Radical Republicans**</span> condemn the decision as a betrayal of the Union victory, accusing the administration of surrendering the peace it had won on the battlefield.
+[? if radical_split = 0 : <span style="color: #7A1F5C;">**Radical Republicans**</span> condemn the decision as a betrayal of the Union victory, accusing the administration of surrendering the peace it had won on the battlefield. ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> condemns the decision as a betrayal of the Union victory, accusing the administration of surrendering the peace it had won on the battlefield, and adds that no one should be surprised anymore. ?]

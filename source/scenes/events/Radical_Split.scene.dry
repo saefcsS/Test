@@ -1,18 +1,199 @@
 title: The Radical Republican Split
-subtitle: Oops
+subtitle: The party's left flank walks out.
 tags: event
 new-page: true
-view-if: radical_strength >= 15 and radical_dissent >= 25 and radical_split = 0
+view-if: radical_strength >= 15 and radical_dissent >= 30 and radical_split = 0 and year >= 1866
 max-visits: 1
 on-arrival: radical_split = 1;
 
-= Test
+= The Radical Republican Split
 
-lorem ipsum dolor sit amet consectetuer adipiscing elit
+The tensions within the <span style="color: #c00000;">**Republican Party**</span> have finally reached a breaking point, this time from the opposite direction. A faction of the party's most committed Reconstruction hardliners, convinced that the administration has grown too willing to compromise with the South, has decided it can no longer work within the regular organization.
 
-- @Test: Test
+[? if liberal_strength and conservative_strength >= 40 : The **<span style="color: #DAA520;">Liberal</span>** and **<span style="color: #B5651D;">Conservatives</span>** growing influence over party policy has been the final straw. These Radicals see talk of reconciliation, amnesty, and limited federal power as a betrayal of everything the war and Reconstruction were supposed to secure. ?]
 
-@Test
-on-arrival: rep_r -= 5; rad_r += 5
+[? if liberal_strength and conservative_strength < 40 : The Radicals believe that the party's course has grown too cautious particularly on enforcement in the South, the protection of freedmen's rights, and the pace at which former Confederates have been allowed back into political life. ?]
 
-COOL
+They have broken away to form the **<span style="color: #7A1F5C;">Radical Republican Party</span>**, advocating for continued federal enforcement of Reconstruction, stronger civil rights guarantees, and no further concessions to the former Confederacy. Sympathetic newspapers and Republican clubs across the North, particularly in New England, have already begun rallying to their cause.
+
+- @accept_split: Accept the split and focus on consolidating the remaining party.
+- @reach_out: Attempt to bring the radicals back into the fold.
+- @condemn: Condemn the splitters publicly.
+
+@accept_split
+on-arrival: {!
+
+    let classes = Q.classes;
+    let nationalBleed = {
+        workers: 0.08,
+        middle_class: 0.15,
+        rural: 0.04,
+        freemen: 0.35,
+        immigrant_laborers: 0.05,
+        unemployed: 0.05
+    };
+
+    for (let cls of classes) {
+        let bleed = nationalBleed[cls] || 0.10;
+        let transfer = Math.round(Q[cls + '_rep'] * bleed);
+        Q[cls + '_rep'] -= transfer;
+        Q[cls + '_rad'] = (Q[cls + '_rad'] || 0) + transfer;
+    }
+
+    for (let state of Q.states) {
+        for (let cls of classes) {
+            let bleed = nationalBleed[cls] || 0.10;
+            let stateKey = state + '_' + cls + '_rep';
+            let radKey = state + '_' + cls + '_rad';
+            let transfer = Math.round((Q[stateKey] || 0) * bleed);
+            Q[stateKey] -= transfer;
+            Q[radKey] = (Q[radKey] || 0) + transfer;
+        }
+    }
+
+    Q.rad_r = Math.round(Q.rep_r * (Q.radical_strength / 100) * 0.6);
+    Q.rep_r -= Q.rad_r;
+    Q.rad_senate_r = Math.round(Q.rep_senate_r * (Q.radical_strength / 100) * 0.6);
+    Q.rep_senate_r -= Q.rad_senate_r;
+
+    Q.radical_strength = 0;
+    Q.radical_dissent = 0;
+    Q.conservative_dissent -= 5;
+    Q.liberal_strength += 5;
+    Q.moderate_dissent -= 2;
+    Q.reconstruction_support -= 3;
+
+    let totalHouse = Q.rep_r + Q.dem_r + Q.lib_r + Q.rad_r + Q.other_r;
+    let repPct = (Q.rep_r / totalHouse) * 100;
+    if (repPct >= 66.7) {
+        Q.house_majority = 3;
+    } else if (repPct >= 50) {
+        Q.house_majority = 2;
+    } else {
+        Q.house_majority = 0;
+    }
+
+!}
+
+A painful but perhaps inevitable rupture. The **<span style="color: #7A1F5C;">Radical Republicans</span>** depart with [+ rad_r +] House seats and [+ rad_senate_r +] Senate seats. Their appeal is strongest among freedmen and the party's abolitionist-descended reform wing.
+
+Without them, the party is more ideologically coherent and easier to govern, but it has lost its most committed advocates for continued enforcement in the South.
+
+@reach_out
+subtitle: -2 resources
+choose-if: resources >= 2
+unavailable-subtitle: Not enough resources.
+on-arrival: {!
+
+    let classes = Q.classes;
+    let nationalBleed = {
+        workers: 0.04,
+        middle_class: 0.07,
+        rural: 0.02,
+        freemen: 0.15,
+        immigrant_laborers: 0.03,
+        unemployed: 0.03
+    };
+
+    for (let cls of classes) {
+        let bleed = nationalBleed[cls] || 0.05;
+        let transfer = Math.round(Q[cls + '_rep'] * bleed);
+        Q[cls + '_rep'] -= transfer;
+        Q[cls + '_rad'] = (Q[cls + '_rad'] || 0) + transfer;
+    }
+
+    for (let state of Q.states) {
+        for (let cls of classes) {
+            let bleed = nationalBleed[cls] || 0.05;
+            let stateKey = state + '_' + cls + '_rep';
+            let radKey = state + '_' + cls + '_rad';
+            let transfer = Math.round((Q[stateKey] || 0) * bleed);
+            Q[stateKey] -= transfer;
+            Q[radKey] = (Q[radKey] || 0) + transfer;
+        }
+    }
+
+    Q.rad_r = Math.round(Q.rep_r * (Q.radical_strength / 100) * 0.3);
+    Q.rep_r -= Q.rad_r;
+    Q.rad_senate_r = Math.round(Q.rep_senate_r * (Q.radical_strength / 100) * 0.3);
+    Q.rep_senate_r -= Q.rad_senate_r;
+
+    Q.resources -= 2;
+    Q.radical_strength = Math.round(Q.radical_strength * 0.4);
+    Q.radical_dissent -= 10;
+    Q.conservative_dissent += 3;
+    Q.moderate_dissent -= 2;
+
+    let totalHouse = Q.rep_r + Q.dem_r + Q.lib_r + Q.rad_r + Q.other_r;
+    let repPct = (Q.rep_r / totalHouse) * 100;
+    if (repPct >= 66.7) {
+        Q.house_majority = 3;
+    } else if (repPct >= 50) {
+        Q.house_majority = 2;
+    } else {
+        Q.house_majority = 0;
+    }
+!}
+
+Our outreach keeps some radicals in the fold, but the split still happens. A smaller **<span style="color: #7A1F5C;">Radical Republican</span>** faction departs with [+ rad_r +] House seats, taking some of our most committed Reconstruction advocates with them.
+
+The remaining radicals within our party are mollified for now, but their patience with the pace of enforcement remains thin.
+
+@condemn
+on-arrival: {!
+
+    let classes = Q.classes;
+    let nationalBleed = {
+        workers: 0.10,
+        middle_class: 0.18,
+        rural: 0.05,
+        freemen: 0.45,
+        immigrant_laborers: 0.06,
+        unemployed: 0.06
+    };
+
+    for (let cls of classes) {
+        let bleed = nationalBleed[cls] || 0.12;
+        let transfer = Math.round(Q[cls + '_rep'] * bleed);
+        Q[cls + '_rep'] -= transfer;
+        Q[cls + '_rad'] = (Q[cls + '_rad'] || 0) + transfer;
+    }
+
+    for (let state of Q.states) {
+        for (let cls of classes) {
+            let bleed = nationalBleed[cls] || 0.12;
+            let stateKey = state + '_' + cls + '_rep';
+            let radKey = state + '_' + cls + '_rad';
+            let transfer = Math.round((Q[stateKey] || 0) * bleed);
+            Q[stateKey] -= transfer;
+            Q[radKey] = (Q[radKey] || 0) + transfer;
+        }
+    }
+
+    Q.rad_r = Math.round(Q.rep_r * (Q.radical_strength / 100) * 0.8);
+    Q.rep_r -= Q.rad_r;
+    Q.rad_senate_r = Math.round(Q.rep_senate_r * (Q.radical_strength / 100) * 0.8);
+    Q.rep_senate_r -= Q.rad_senate_r;
+
+    Q.radical_strength = 0;
+    Q.radical_dissent = 0;
+    Q.conservative_dissent -= 8;
+    Q.liberal_strength += 8;
+    Q.moderate_dissent += 3;
+    Q.reconstruction_support -= 8;
+    Q.dem_relation += 5;
+
+    let totalHouse = Q.rep_r + Q.dem_r + Q.lib_r + Q.rad_r + Q.other_r;
+    let repPct = (Q.rep_r / totalHouse) * 100;
+    if (repPct >= 66.7) {
+        Q.house_majority = 3;
+    } else if (repPct >= 50) {
+        Q.house_majority = 2;
+    } else {
+        Q.house_majority = 0;
+    }
+!}
+
+Our condemnation only hardens their resolve. The **<span style="color: #7A1F5C;">Radical Republicans</span>** depart with [+ rad_r +] House seats and [+ rad_senate_r +] Senate seats more than they might have taken otherwise. Freedmen leaders and reform-minded editors accuse us of abandoning the cause Reconstruction was meant to serve.
+
+<span style="color: #0015bc;">**Democrats**</span> are pleased to see the party's enforcement wing cast out. But we have made enemies of men who were, until recently, our most committed allies.
