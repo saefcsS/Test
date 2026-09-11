@@ -12,7 +12,7 @@ lorem ipsum dolor sit amet consectetuer adipiscing elit
 
 - @Test
 
-@test
+@Test
 on-arrival: rep_r -= 5; rad_r += 5
 
 COOL
