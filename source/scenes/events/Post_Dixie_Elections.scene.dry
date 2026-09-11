@@ -47,9 +47,8 @@ for (let state of Q.southern_states) {
     let nationalRep = Q[cls + "_rep"] || 0;
     let nationalDem = Q[cls + "_dem"] || 0;
 
-    // Blend: 75% local state support, 25% national support
-    let adjRep = 0.75 * localRep + 0.25 * nationalRep;
-    let adjDem = 0.75 * localDem + 0.25 * nationalDem;
+    let adjRep = 0.50 * localRep + 0.50 * nationalRep;
+    let adjDem = 0.50 * localDem + 0.50 * nationalDem;
 
     let total = adjRep + adjDem;
     if (total === 0) continue;

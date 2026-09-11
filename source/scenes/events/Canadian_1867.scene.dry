@@ -328,28 +328,28 @@ go-to: canada_menu
 
 @Con
 view-if: Canada_Gov = "Conservative"
-subtitle: <span style="color: #6495ED;">**[+ con_r +]**:</span> + <span style="color: #9999FF;">**[+ libcon_r +]**:</span>
+subtitle: <span style="color: #6495ED;">**[+ con_r + libcon_r +]**</span> **seats**
 on-arrival: uk_relation -= 3; economic_growth -= 0.02; conservative_strength += 4;
 
-The <span style="color: #6495ED;">**Conservative**:</span> and <span style="color: #9999FF;">**Liberal-Conservative**:</span> coalition has secured a majority in the first Parliament of Canada. John A. Macdonald will form the first federal government of the new Dominion.
+The <span style="color: #6495ED;">**Conservative**</span> and <span style="color: #9999FF;">**Liberal-Conservative**</span> coalition has secured a majority in the first Parliament of Canada. John A. Macdonald will form the first federal government of the new Dominion.
 
 Washington watches the new government closely. Macdonald's ministry is firmly aligned with Confederation and maintains strong ties to Britain.
 
 @Lib
 view-if: Canada_Gov = "Liberal"
-subtitle: <span style="color: #EA6D6A;">**[+ clib_r +]**:</span>
+subtitle: <span style="color: #EA6D6A;">**[+ clib_r +]**</span> **seats**
 on-arrival: uk_relation += 2; economic_growth += 0.01; liberal_strength += 4;
 
-The <span style="color: #EA6D6A;">**Liberal**:</span> Party has won enough seats to form a majority government in the first Parliament of Canada.
+The <span style="color: #EA6D6A;">**Liberal**</span> Party has won enough seats to form a majority government in the first Parliament of Canada.
 
 The result places the new Dominion under a government opposed to John A. Macdonald and the Liberal-Conservative establishment. Ottawa's relations with Washington may improve as the new ministry seeks a different course for the young federation.
 
 @LibCoalition
 view-if: Canada_Gov = "Liberal-Anti-Confederation"
-subtitle: <span style="color: #EA6D6A;">**[+ clib_r +]**:</span> + <span style="color: #EABB94;">**[+ ac_r +]**:</span>
+subtitle: <span style="color: #EA6D6A;">**[+ clib_r +]**</span> + <span style="color: #EABB94;">**[+ ac_r +]**</span>: **[+ clib_r + ac_r +]** **seats**
 on-arrival: uk_relation += 1; economic_growth -= 0.01; liberal_strength += 2; conservative_strength -= 1;
 
-The <span style="color: #EA6D6A;">**Liberal**:</span> Party has emerged as the largest governing force, but it has fallen short of a majority. To remain in office, the Liberals must rely on the <span style="color: #EABB94;">**Anti-Confederation**:</span> members for support in the House.
+The <span style="color: #EA6D6A;">**Liberal**</span> Party has emerged as the largest governing force, but it has fallen short of a majority. To remain in office, the Liberals must rely on the <span style="color: #EABB94;">**Anti-Confederation**</span> members for support in the House.
 
 The arrangement is an uneasy one. The Liberals and Anti-Confederation members share an opposition to the Liberal-Conservative government, but their visions for Confederation differ sharply. For now, both sides have reason to keep the new ministry alive.
 
@@ -357,7 +357,6 @@ Canada therefore begins its first Parliament under a fragile Liberal government 
 
 @Hung
 view-if: Canada_Gov = "Hung"
-subtitle: <span style="color: #EA6D6A;">**[+ clib_r +]**:</span> + <span style="color: #EABB94;">**[+ ac_r +]**:</span> + <span style="color: #6495ED;">**[+ con_r +]**:</span> + <span style="color: #9999FF;">**[+ libcon_r +]**:</span>
 on-arrival: {!
 Q.uk_relation -= 1;
 Q.economic_growth -= 0.02;
@@ -365,6 +364,6 @@ Q.conservative_dissent += 1;
 Q.liberal_dissent += 1;
 !}
 
-The first Canadian election has produced a <span style="color: #B5651D;">**Hung Parliament**</span>. Neither the <span style="color: #6495ED;">**Conservative**:</span> and <span style="color: #9999FF;">**Liberal-Conservative**:</span> forces nor the <span style="color: #EA6D6A;">**Liberal**:</span> opposition can command a majority on their own.
+The first Canadian election has produced a <span style="color: #B5651D;">**Hung Parliament**</span>. Neither the <span style="color: #6495ED;">**Conservative**</span> and <span style="color: #9999FF;">**Liberal-Conservative**</span> forces nor the <span style="color: #EA6D6A;">**Liberal**</span> opposition can command a majority on their own.
 
 The new Dominion faces its first test of responsible government. A ministry must now be formed through negotiation between the parties, with the possibility of an unstable minority government or another election hanging over Parliament.
