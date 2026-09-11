@@ -329,7 +329,7 @@ go-to: canada_menu
 @Con
 choose-if: Canada_Gov = "Conservative"
 subtitle: <span style="color: #6495ED;">**[+ con_r +]**:</span> + <span style="color: #9999FF;">**[+ libcon_r +]**:</span>
-on-arrival: Q.uk_relation -= 3; Q.economic_growth -= 0.02; Q.conservative_strength += 4;
+on-arrival: uk_relation -= 3; economic_growth -= 0.02; conservative_strength += 4;
 
 The <span style="color: #6495ED;">**Conservative**:</span> and <span style="color: #9999FF;">**Liberal-Conservative**:</span> coalition has secured a majority in the first Parliament of Canada. John A. Macdonald will form the first federal government of the new Dominion.
 
@@ -338,7 +338,7 @@ Washington watches the new government closely. Macdonald's ministry is firmly al
 @Lib
 choose-if: Canada_Gov = "Liberal"
 subtitle: <span style="color: #EA6D6A;">**[+ clib_r +]**:</span>
-on-arrival: Q.uk_relation += 2; Q.economic_growth += 0.01; Q.liberal_strength += 4;
+on-arrival: uk_relation += 2; economic_growth += 0.01; liberal_strength += 4;
 
 The <span style="color: #EA6D6A;">**Liberal**:</span> Party has won enough seats to form a majority government in the first Parliament of Canada.
 
@@ -347,7 +347,7 @@ The result places the new Dominion under a government opposed to John A. Macdona
 @LibCoalition
 choose-if: Canada_Gov = "Liberal-Anti-Confederation"
 subtitle: <span style="color: #EA6D6A;">**[+ clib_r +]**:</span> + <span style="color: #EABB94;">**[+ ac_r +]**:</span>
-on-arrival: Q.uk_relation += 1; Q.economic_growth -= 0.01; Q.liberal_strength += 2; Q.conservative_strength -= 1;
+on-arrival: uk_relation += 1; economic_growth -= 0.01; liberal_strength += 2; conservative_strength -= 1;
 
 The <span style="color: #EA6D6A;">**Liberal**:</span> Party has emerged as the largest governing force, but it has fallen short of a majority. To remain in office, the Liberals must rely on the <span style="color: #EABB94;">**Anti-Confederation**:</span> members for support in the House.
 
