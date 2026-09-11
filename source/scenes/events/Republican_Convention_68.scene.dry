@@ -119,6 +119,7 @@ His nomination signals a greater willingness to pursue the goals of Reconstructi
 
 @WadeVP
 view-if: Candidate != "Wade" and president != "Wade"
+subtitle: Strong <span style="color: #7A1F5C;">**Radical**</span> support
 choose-if: radical_strength >= 30
 face-image: img/portraits/Benjamin_F_Wade.jpg
 unavailable-subtitle: [? if radical_strength < 30: The <span style="color: #7A1F5C;">**Radicals**</span> lack the power to force Wade onto the ticket ?]

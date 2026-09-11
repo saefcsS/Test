@@ -2,6 +2,7 @@ title: Southern State Elections
 subtitle: Reconstruction at the Ballot Box
 tags: event
 view-if: year = 1868 and month = 4
+max-visits: 1
 
 [? if Radical_plan = 1 or Moderate_plan = 1 : Under the Reconstruction Acts of 1867, the former Confederate states have been divided into military districts, their new constitutions drafted by conventions in which freedmen sat as delegates for the first time in Southern history. Now those constitutions go before the voters and so do the men who will govern under them. ?]
 

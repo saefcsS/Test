@@ -1,0 +1,18 @@
+title: The Radical Republican Split
+subtitle: Oops
+tags: event
+new-page: true
+view-if: radical_strength >= 15 and radical_dissent >= 25 and radical_split = 0
+max-visits: 1
+on-arrival: radical_split = 1;
+
+= Test
+
+lorem ipsum dolor sit amet consectetuer adipiscing elit
+
+- @Test
+
+@test
+on-arrival: rep_r -= 5; rad_r += 5
+
+COOL
