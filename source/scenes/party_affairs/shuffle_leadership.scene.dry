@@ -372,7 +372,7 @@ is-card: true
 card-image: img/portraits/Hamilton_Fish.jpg
 tags: moderate_advisor
 view-if: fish_advisor = 0 and ((difficulty = -1 and n_advisors < 4) or (difficulty > -1 and n_advisors < 3))
-on-arrival: fish_advisor = 1; n_advisors += 1; moderate_strength += 2; moderate_dissent -= 2; europe_relation += 3
+on-arrival: fish_advisor = 1; n_advisors += 1; moderate_strength += 2; moderate_dissent -= 2; uk_relation += 3
 go-to: advisor_menu
 
 Hamilton Fish is now an advisor. His diplomatic experience opens doors abroad that would otherwise remain closed.
@@ -410,7 +410,7 @@ is-card: true
 card-image: img/portraits/Seward.jpg
 tags: conservative_advisor
 view-if: seward_advisor = 0 and ((difficulty = -1 and n_advisors < 4) or (difficulty > -1 and n_advisors < 3))
-on-arrival: seward_advisor = 1; n_advisors += 1; conservative_strength += 3; conservative_dissent -= 3; europe_relation += 2; radical_dissent += 3
+on-arrival: seward_advisor = 1; n_advisors += 1; conservative_strength += 3; conservative_dissent -= 3; uk_relation += 2; radical_dissent += 3
 go-to: advisor_menu
 
 William Seward is now an advisor. His long experience in government is valuable, though the <span style="color: #7A1F5C;">**Radicals**</span> deeply distrust him.

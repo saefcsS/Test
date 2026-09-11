@@ -19,6 +19,8 @@ The proposal has powerful enemies. Senator Charles Sumner regards it as a scheme
 
 [? if president = "Grant" : President Grant is personally committed to the treaty and has dispatched Babcock precisely because he wanted a favorable result. His reputation is now somewhat tied to its passage. ?]
 
+[? if radical_split = 1 : Sumner's position carries even more weight now, sitting as he does with the breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> rather than inside the President's own caucus, free to organize opposition without any restraint from party leadership. ?]
+
 - @push_hard: Push hard for ratification using political capital to bring wavering Republicans on board.
 - @moderate_push: Support the treaty but leave the Senate to its own deliberations.
 - @oppose: Come out against the treaty and side with Sumner.
@@ -37,9 +39,10 @@ Q.dominican_pushed_hard = 1;
 let repSeats = Q.rep_senate_r || 0;
 let demSeats = Q.dem_senate_r || 0;
 let libSeats = Q.lib_senate_r || 0;
+let radSeats = Q.rad_senate_r || 0;
 let otherSeats = Q.other_senate_r || 0;
 
-let totalSenate = repSeats + demSeats + libSeats + otherSeats;
+let totalSenate = repSeats + demSeats + libSeats + radSeats + otherSeats;
 Q.dominican_total_senate = totalSenate;
 
 // Two-thirds majority required for treaty
@@ -80,12 +83,14 @@ let repYea = Math.round(repSeats * (
     radStr * radYea
 ));
 
-// Other parties mostly oppose
+// Other parties mostly oppose. The breakaway Radicals, led in spirit by
+// Sumner, are the most hostile bloc in the chamber to Caribbean annexation.
 let demYea = Math.round(demSeats * 0.05);
 let libYea_votes = Math.round(libSeats * 0.40);
+let radYea_votes = Math.round(radSeats * 0.15);
 let otherYea = Math.round(otherSeats * 0.30);
 
-let totalYea = repYea + demYea + libYea_votes + otherYea;
+let totalYea = repYea + demYea + libYea_votes + radYea_votes + otherYea;
 Q.dominican_yea = Math.max(0, Math.min(totalSenate, totalYea));
 Q.dominican_nah = totalSenate - Q.dominican_yea;
 Q.dominican_passes = (Q.dominican_yea >= requiredVotes) ? 1 : 0;
@@ -104,9 +109,10 @@ Q.dominican_pushed_hard = 0;
 let repSeats = Q.rep_senate_r || 0;
 let demSeats = Q.dem_senate_r || 0;
 let libSeats = Q.lib_senate_r || 0;
+let radSeats = Q.rad_senate_r || 0;
 let otherSeats = Q.other_senate_r || 0;
 
-let totalSenate = repSeats + demSeats + libSeats + otherSeats;
+let totalSenate = repSeats + demSeats + libSeats + radSeats + otherSeats;
 Q.dominican_total_senate = totalSenate;
 
 // Two-thirds majority required for treaty
@@ -145,12 +151,14 @@ let repYea = Math.round(repSeats * (
     radStr * radYea
 ));
 
-// Other parties mostly oppose
+// Other parties mostly oppose. The breakaway Radicals, led in spirit by
+// Sumner, are the most hostile bloc in the chamber to Caribbean annexation.
 let demYea = Math.round(demSeats * 0.05);
 let libYea_votes = Math.round(libSeats * 0.40);
+let radYea_votes = Math.round(radSeats * 0.15);
 let otherYea = Math.round(otherSeats * 0.30);
 
-let totalYea = repYea + demYea + libYea_votes + otherYea;
+let totalYea = repYea + demYea + libYea_votes + radYea_votes + otherYea;
 Q.dominican_yea = Math.max(0, Math.min(totalSenate, totalYea));
 Q.dominican_nah = totalSenate - Q.dominican_yea;
 Q.dominican_passes = (Q.dominican_yea >= requiredVotes) ? 1 : 0;
@@ -169,9 +177,10 @@ Q.dominican_pushed_hard = 0;
 let repSeats = Q.rep_senate_r || 0;
 let demSeats = Q.dem_senate_r || 0;
 let libSeats = Q.lib_senate_r || 0;
+let radSeats = Q.rad_senate_r || 0;
 let otherSeats = Q.other_senate_r || 0;
 
-let totalSenate = repSeats + demSeats + libSeats + otherSeats;
+let totalSenate = repSeats + demSeats + libSeats + radSeats + otherSeats;
 Q.dominican_total_senate = totalSenate;
 
 // Two-thirds majority required for treaty
@@ -212,22 +221,28 @@ let repYea = Math.round(repSeats * (
     radStr * radYea
 ));
 
-// Other parties mostly oppose
+// Other parties mostly oppose. With us openly siding with Sumner, the
+// breakaway Radicals have almost no incentive to break ranks and vote yea.
 let demYea = Math.round(demSeats * 0.03);
 let libYea_votes = Math.round(libSeats * 0.35);
+let radYea_votes = Math.round(radSeats * 0.10);
 let otherYea = Math.round(otherSeats * 0.25);
 
-let totalYea = repYea + demYea + libYea_votes + otherYea;
+let totalYea = repYea + demYea + libYea_votes + radYea_votes + otherYea;
 Q.dominican_yea = Math.max(0, Math.min(totalSenate, totalYea));
 Q.dominican_nah = totalSenate - Q.dominican_yea;
 Q.dominican_passes = (Q.dominican_yea >= requiredVotes) ? 1 : 0;
 
-Q.radical_strength  += 4;
-Q.radical_dissent   -= 3;
+if (Q.radical_split == 1) {
+    Q.radical_relation += 6;
+} else {
+    Q.radical_strength  += 4;
+    Q.radical_dissent   -= 3;
+}
 Q.moderate_dissent  += 3;
 Q.liberal_strength  += 2;
 Q.dem_relation      += 3;
-Q.europe_relation   += 1;
+Q.uk_relation   += 1;
 
 !}
 go-to: treaty_result
@@ -242,9 +257,10 @@ on-arrival: {!
 let repSeats = Q.rep_senate_r || 0;
 let demSeats = Q.dem_senate_r || 0;
 let libSeats = Q.lib_senate_r || 0;
+let radSeats = Q.rad_senate_r || 0;
 let otherSeats = Q.other_senate_r || 0;
 
-let totalSenate = repSeats + demSeats + libSeats + otherSeats;
+let totalSenate = repSeats + demSeats + libSeats + radSeats + otherSeats;
 Q.dominican_total_senate = totalSenate;
 
 // Simple majority required for lease (easier than annexation)
@@ -283,12 +299,14 @@ let repYea = Math.round(repSeats * (
     radStr * radYea
 ));
 
-// Other parties more amenable to lease-only proposal
+// Other parties more amenable to lease-only proposal. Even the breakaway
+// Radicals are less hostile to a naval lease than to outright annexation.
 let demYea = Math.round(demSeats * 0.20);
 let libYea_votes = Math.round(libSeats * 0.55);
+let radYea_votes = Math.round(radSeats * 0.30);
 let otherYea = Math.round(otherSeats * 0.45);
 
-let totalYea = repYea + demYea + libYea_votes + otherYea;
+let totalYea = repYea + demYea + libYea_votes + radYea_votes + otherYea;
 Q.dominican_yea = Math.max(0, Math.min(totalSenate, totalYea));
 Q.dominican_nah = totalSenate - Q.dominican_yea;
 Q.samanabay_lease = (Q.dominican_yea >= requiredVotes) ? 1 : 0;
@@ -297,17 +315,25 @@ Q.dominican_passes = 0; // full annexation never comes to vote
 if (Q.samanabay_lease) {
     Q.budget         += 1;
     Q.navy_strength  += 10;
-    Q.europe_relation -= 1;
+    Q.uk_relation -= 1;
     Q.moderate_strength += 2;
     Q.liberal_strength  += 2;
-    Q.radical_dissent   += 1;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 1;
+    } else {
+        Q.radical_dissent   += 1;
+    }
 }
 else
 {
   Q.lose_vote = 1;
   Q.moderate_strength -= 2;
   Q.liberal_strength -= 2;
-  Q.radical_dissent -= 2;
+  if (Q.radical_split == 1) {
+      Q.radical_relation += 2;
+  } else {
+      Q.radical_dissent -= 2;
+  }
 }
 
 !}
@@ -372,11 +398,15 @@ Q.dominican_annexed = 1;
 Q.budget -= 2;
 Q.navy_strength += 20;
 Q.samanabay_lease = 1;
-Q.europe_relation -= 2;
+Q.uk_relation -= 2;
 
 Q.moderate_strength += 4;
 Q.liberal_strength += 3;
-Q.radical_dissent += 6;
+if (Q.radical_split == 1) {
+    Q.radical_relation -= 6;
+} else {
+    Q.radical_dissent += 6;
+}
 Q.conservative_dissent -= 2;
 
 Q.middle_class_rep += 3;
@@ -393,7 +423,11 @@ if (!Q.dominican_pushed_hard) {
 
 The Senate ratifies the annexation treaty [? if dominican_pushed_hard = 0 :, passing it without or even against executive support, a remarkable show of Congressional independence ?]. The Dominican Republic will be formally incorporated into the United States, its debt assumed by the Treasury, and Samaná Bay opened to the U.S. Navy.
 
-Senator Sumner delivers a thundering denunciation from the floor, warning that the Republic has taken a step toward empire. <span style="color: #7A1F5C;">**Radical**</span> newspapers echo his concern. But the <span style="color: #9D2933;">**moderate**</span> and <span style="color: #B5651D;">**conservative**</span> wings of the party celebrate a triumph of Manifest Destiny.
+[? if radical_split = 0 : Senator Sumner delivers a thundering denunciation from the floor, warning that the Republic has taken a step toward empire. <span style="color: #7A1F5C;">**Radical**</span> newspapers echo his concern. ?]
+
+[? if radical_split = 1 : Senator Sumner delivers a thundering denunciation from the floor, warning that the Republic has taken a step toward empire. The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> treats the vote as confirmation of everything it warned about when it left. ?]
+
+But the <span style="color: #9D2933;">**moderate**</span> and <span style="color: #B5651D;">**conservative**</span> wings of the party celebrate a triumph of Manifest Destiny.
 
 - @dominican_statehood_note: What becomes of Dominican statehood?
 
@@ -414,11 +448,15 @@ if (Q.dominican_pushed_hard) {
     Q.moderate_dissent += 1;
 }
 
-Q.radical_strength += 2;
-Q.radical_dissent  -= 2;
+if (Q.radical_split == 1) {
+    Q.radical_relation += 4;
+} else {
+    Q.radical_strength += 2;
+    Q.radical_dissent  -= 2;
+}
 Q.liberal_strength += 1;
 Q.dem_relation     += 2;
-Q.europe_relation  += 1;
+Q.uk_relation  += 1;
 Q.lose_vote = 1;
 
 !}
@@ -428,7 +466,11 @@ The treaty falls short of the [+ dominican_required +] votes required for ratifi
 [? if dominican_pushed_hard = 1 : Despite our best efforts to bring wavering Republicans into line, too many sided with Sumner's wing of the party. The expenditure of political capital stings. ?]
 [? if dominican_pushed_hard = 0 : Without executive pressure, the pro-annexation senators could not organize enough votes to clear the two-thirds bar. ?]
 
-Sumner emerges from the chamber with the look of a man who has saved the Republic from folly. The Dominican Republic will remain independent for now.
+[? if radical_split = 0 : Sumner emerges from the chamber with the look of a man who has saved the Republic from folly. ?]
+
+[? if radical_split = 1 : Sumner and the breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> emerge from the chamber claiming vindication, having supplied a decisive bloc of the votes that sank the treaty. ?]
+
+The Dominican Republic will remain independent for now.
 
 @samana_result
 on-display: {!

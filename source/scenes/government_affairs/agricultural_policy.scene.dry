@@ -59,7 +59,7 @@ We flood Northern markets with cheap Midwestern grain. Textile workers cheer, bu
 title: Cotton Bureau
 subtitle: -2 budget – Federal price guarantees for cotton.
 choose-if: budget >= 2
-on-arrival: budget -= 2; PoliticalCostPenalty += 2; rural_rep += 7*(1-dissent); economic_growth += 0.4; europe_relation -= 2.5; moderate_strength += 3; conservative_dissent += 2; liberal_dissent += 1
+on-arrival: budget -= 2; PoliticalCostPenalty += 2; rural_rep += 7*(1-dissent); economic_growth += 0.4; uk_relation -= 2.5; moderate_strength += 3; conservative_dissent += 2; liberal_dissent += 1
 max-visits: 1
 
 The U.S. Cotton Bureau sets fixed prices, shielding freedmen from exploitative traders. London textile magnates threaten to buy Egyptian cotton instead, while Wall Street howls about needing limited government intervention.

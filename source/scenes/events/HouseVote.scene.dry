@@ -17,22 +17,30 @@ on-arrival: {!
   // 1. House composition
   let repSeats = Q.rep_r || 0;
   let demSeats = Q.dem_r || 0;
+  let radSeats = Q.radical_split ? (Q.rad_r || 0) : 0;
   let otherSeats = Q.other_r || 0;
 
-  let totalSeats = repSeats + demSeats + otherSeats;
+  let totalSeats = repSeats + demSeats + radSeats + otherSeats;
   Q.house_impeachment_total = totalSeats;
 
   // 2. Base loyalty
   let repYeaRate = 0.85;
   let demYeaRate = 0.05;
+  let radYeaRate = 0.95;
   let otherYeaRate = 0.50;
 
   // 3. Dissent and faction effects
   repYeaRate -= (Q.conservative_dissent || 0) * 0.02;
   demYeaRate += (Q.liberal_dissent || 0) * 0.02;
+  radYeaRate -= (Q.radical_dissent || 0) * 0.01;
 
-  repYeaRate += (Q.radical_strength || 0) * 0.01;
-  otherYeaRate += (Q.radical_strength || 0) * 0.01;
+  // Radical influence only lifts the rest of the chamber while the
+  // Radicals are still a faction inside the regular party. Once they've
+  // split off, that push comes from their own seats instead.
+  if (!Q.radical_split) {
+    repYeaRate += (Q.radical_strength || 0) * 0.01;
+    otherYeaRate += (Q.radical_strength || 0) * 0.01;
+  }
 
   function clamp(x) {
     return Math.max(0, Math.min(1, x));
@@ -40,14 +48,16 @@ on-arrival: {!
 
   repYeaRate = clamp(repYeaRate);
   demYeaRate = clamp(demYeaRate);
+  radYeaRate = clamp(radYeaRate);
   otherYeaRate = clamp(otherYeaRate);
 
   // 4. Count votes
   let repYea = Math.round(repSeats * repYeaRate);
   let demYea = Math.round(demSeats * demYeaRate);
+  let radYea = Math.round(radSeats * radYeaRate);
   let otherYea = Math.round(otherSeats * otherYeaRate);
 
-  let yeaVotes = repYea + demYea + otherYea;
+  let yeaVotes = repYea + demYea + radYea + otherYea;
   let nahVotes = totalSeats - yeaVotes;
 
   Q.yea_r = yeaVotes;

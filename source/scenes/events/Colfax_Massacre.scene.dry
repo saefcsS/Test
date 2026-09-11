@@ -32,7 +32,14 @@ unavailable-subtitle: [? if enforcement_acts = 0: Stronger legistation are requi
 on-arrival: {!
     Q.PoliticalCostPenalty += 2;
     Q.budget -= 1;
-    Q.radical_strength += 3;
+    
+    if (Q.radical_split == 1) {
+        Q.freemen_rep -= 3;
+        Q.freemen_rad += 3;
+    } else {
+        Q.radical_strength += 3;
+    }
+
     Q.conservative_dissent += 4;
     Q.whiteL_militancy += 0.05;
     Q.kkk_militancy += 0.05;
@@ -64,23 +71,29 @@ on-arrival: {!
     Q.LA_total_pop = Q.LA_workers + Q.LA_middle_class + Q.LA_rural + Q.LA_freemen + Q.LA_immigrant_laborers + Q.LA_unemployed;
     Q.LA_freedmen_share = Q.LA_freemen / Q.LA_total_pop;
 
-    Q.local_justice_score = (Q.LA_reconstructionScore * 1.5)
-        + (Q.LA_freedmen_share * 100)
-        - ((Q.kkk_strength + Q.whiteL_strength) / 20);
-
     if (Q.local_justice_score >= 60) {
-        Q.colfax_local_outcome = "convictions";
-        Q.Union_League_strength += 6;
+    Q.colfax_local_outcome = "convictions";
+    Q.Union_League_strength += 6;
+
+    if (Q.radical_split == 1) {
+        Q.freemen_rep -= 2;
+        Q.freemen_rad += 2;
+    } else {
         Q.radical_strength += 2;
-        Q.whiteL_strength += 1;
-        Q.LA_reconstructionScore += 3;
-    } else if (Q.local_justice_score >= 30) {
+    }
+
+    Q.whiteL_strength += 1;
+    Q.LA_reconstructionScore += 3;
+    } 
+    else if (Q.local_justice_score >= 30) {
         Q.colfax_local_outcome = "mixed";
         Q.Union_League_strength -= 2;
         Q.whiteL_strength += 3;
         Q.kkk_strength += 1;
         Q.radical_dissent += 3;
-    } else {
+    } 
+    else 
+    {
         Q.colfax_local_outcome = "acquittal";
         Q.Union_League_strength -= 6;
         Q.whiteL_strength += 5;
@@ -104,11 +117,19 @@ choose-if: conservative_strength + liberal_strength >= 40
 unavailable-subtitle: [? if conservative_strength + liberal_strength < 40: There is not enough support in the party to downplay a massacre this widely reported. ?]
 on-arrival: {!
     Q.PoliticalCostPenalty -= 1;
-    Q.radical_dissent += 10;
+    if (Q.radical_split == 1) {
+        Q.middle_class_rep -= 2;
+        Q.middle_class_rad += 2;
+        Q.LA_freemen_rep -= 3;
+        Q.LA_freemen_rad += 3;
+    } else {
+        Q.radical_dissent += 10;
+        Q.radical_strength += 3;
+        Q.LA_freemen_rep -= 5;
+    }
     Q.moderate_dissent += 3;
     Q.whiteL_strength += 3;
     Q.middle_class_rep -= 2;
-    Q.LA_freemen_rep -= 5;
 !}
 
 Administration allies in the press describe the killings as regrettable while portraying the militia's presence at the courthouse as provocative. The account shifts attention away from the men who carried out the killings.

@@ -22,6 +22,7 @@ for (let party of Q.parties) {
 let repVotes = 0;
 let demVotes = 0;
 let libVotes = 0;
+let radVotes = 0;
 let otherVotes = 0;
 
 for (let state of Q.states) {
@@ -40,24 +41,28 @@ for (let state of Q.states) {
       let rep = Q[state + "_" + cls + "_rep"] || 0;
       let dem = Q[state + "_" + cls + "_dem"] || 0;
       let lib = Q[state + "_" + cls + "_lib"] || 0;
+      let rad = Q[state + "_" + cls + "_rad"] || 0;
       let other = Q[state + "_" + cls + "_other"] || 0;
 
       let repMod = Q[cls + "_rep"] || 0;
       let demMod = Q[cls + "_dem"] || 0;
       let libMod = Q[cls + "_lib"] || 0;
+      let radMod = Q[cls + "_rad"] || 0;
       let otherMod = Q[cls + "_other"] || 0;
 
       let adjRep = 0.2 * rep + 0.8 * repMod;
       let adjDem = 0.2 * dem + 0.8 * demMod;
       let adjLib = Q.liberal_split ? (0.2 * lib + 0.8 * libMod) : 0;
+      let adjRad = Q.radical_split ? (0.2 * rad + 0.8 * radMod) : 0;
       let adjOther = 0.2 * other + 0.8 * otherMod;
 
-      let totalPct = adjRep + adjDem + adjLib + adjOther;
+      let totalPct = adjRep + adjDem + adjLib + adjRad + adjOther;
       if (totalPct === 0) continue;
 
       repVotes += pop * (adjRep / totalPct);
       demVotes += pop * (adjDem / totalPct);
       libVotes += pop * (adjLib / totalPct);
+      radVotes += pop * (adjRad / totalPct);
       otherVotes += pop * (adjOther / totalPct);
 
       if (Q.fifthteen == 0) {
@@ -68,7 +73,7 @@ for (let state of Q.states) {
 }
 
 // === 3. Allocate seats using cube law ===
-let totalVotes = repVotes + demVotes + libVotes + otherVotes;
+let totalVotes = repVotes + demVotes + libVotes + radVotes + otherVotes;
 
 let totalSeats;
 if (Q.year == 1866) {
@@ -88,23 +93,27 @@ if (Q.year == 1866) {
 let repShare = repVotes / totalVotes;
 let demShare = demVotes / totalVotes;
 let libShare = libVotes / totalVotes;
+let radShare = radVotes / totalVotes;
 let otherShare = otherVotes / totalVotes;
 
 let repPower = Math.pow(repShare, 3);
 let demPower = Math.pow(demShare, 3);
 let libPower = Q.liberal_split ? Math.pow(libShare, 3) : 0;
+let radPower = Q.radical_split ? Math.pow(radShare, 3) : 0;
 let otherPower = Math.pow(otherShare, 3);
 
-let powerTotal = repPower + demPower + libPower + otherPower;
+let powerTotal = repPower + demPower + libPower + radPower + otherPower;
 
 let repSeats = Math.floor((repPower / powerTotal) * totalSeats);
 let demSeats = Math.floor((demPower / powerTotal) * totalSeats);
 let libSeats = Q.liberal_split ? Math.floor((libPower / powerTotal) * totalSeats) : 0;
-let otherSeats = totalSeats - repSeats - demSeats - libSeats;
+let radSeats = Q.radical_split ? Math.floor((radPower / powerTotal) * totalSeats) : 0;
+let otherSeats = totalSeats - repSeats - demSeats - libSeats - radSeats;
 
 Q.rep_r = repSeats;
 Q.dem_r = demSeats;
 Q.lib_r = libSeats;
+Q.rad_r = radSeats;
 Q.other_r = otherSeats;
 
 // === 4. Track seat changes ===
@@ -119,13 +128,14 @@ for (let party of Q.parties) {
 
 // === 5. Largest party tracker ===
 Q.largest_party_r = "rep";
-if (Q.dem_r >= Q.rep_r && Q.dem_r >= Q.other_r && Q.dem_r >= Q.lib_r) Q.largest_party_r = "dem";
-if (Q.lib_r >= Q.rep_r && Q.lib_r >= Q.dem_r && Q.lib_r >= Q.other_r) Q.largest_party_r = "lib";
-if (Q.other_r >= Q.rep_r && Q.other_r >= Q.dem_r && Q.other_r >= Q.lib_r) Q.largest_party_r = "other";
+if (Q.dem_r >= Q.rep_r && Q.dem_r >= Q.other_r && Q.dem_r >= Q.lib_r && Q.dem_r >= Q.rad_r) Q.largest_party_r = "dem";
+if (Q.lib_r >= Q.rep_r && Q.lib_r >= Q.dem_r && Q.lib_r >= Q.other_r && Q.lib_r >= Q.rad_r) Q.largest_party_r = "lib";
+if (Q.rad_r >= Q.rep_r && Q.rad_r >= Q.dem_r && Q.rad_r >= Q.other_r && Q.rad_r >= Q.lib_r) Q.largest_party_r = "rad";
+if (Q.other_r >= Q.rep_r && Q.other_r >= Q.dem_r && Q.other_r >= Q.lib_r && Q.other_r >= Q.rad_r) Q.largest_party_r = "other";
 
 if (Q.liberal_split === 1 && Q.liberal_reunion_seen !== 1) {
     let libSeats = Q.lib_r || 0;
-    let totalHouse = Q.rep_r + Q.dem_r + Q.lib_r + Q.other_r;
+    let totalHouse = Q.rep_r + Q.dem_r + Q.lib_r + Q.rad_r + Q.other_r;
     let libPct = (libSeats / totalHouse) * 100;
  
     // They've lost balance of power (can't kingmake) AND dropped below 8% of seats
@@ -138,10 +148,26 @@ if (Q.liberal_split === 1 && Q.liberal_reunion_seen !== 1) {
     }
 }
 
+if (Q.radical_split === 1 && Q.radical_reunion_seen !== 1) {
+    let radSeatsCount = Q.rad_r || 0;
+    let totalHouse = Q.rep_r + Q.dem_r + Q.lib_r + Q.rad_r + Q.other_r;
+    let radPct = (radSeatsCount / totalHouse) * 100;
+
+    // Radicals have no working-majority coalition to fall back on the way
+    // the Liberals do, so collapse below the seat-share threshold alone
+    // is enough to trigger reunion talk.
+    let radCollapsed = radPct < 8;
+
+    if (radCollapsed) {
+        Q.radical_reunion_triggered = 1;
+    }
+}
+
 // === 6. Majority display vars ===
 Q.republican_majority_r = Q.rep_r;
 Q.democrat_majority_r = Q.dem_r;
 Q.liberal_majority_r = Q.lib_r;
+Q.radical_majority_r = Q.rad_r;
 Q.other_majority_r = Q.other_r;
 
 // === 7. Record the result ===
@@ -153,8 +179,8 @@ Q.house_election_records = Q.house_election_records || [];
 Q.house_election_records.push(result);
 
 // === 8. Majority strength ===
-// Republicans need majority of all seats including lib
-let totalHouse = Q.rep_r + Q.dem_r + Q.lib_r + Q.other_r;
+// Republicans need majority of all seats including lib and rad
+let totalHouse = Q.rep_r + Q.dem_r + Q.lib_r + Q.rad_r + Q.other_r;
 let repPctHouse = (Q.rep_r / totalHouse) * 100;
 
 if (repPctHouse >= 66.7) {
@@ -190,6 +216,12 @@ on-display: {!
         seats: Math.round(Q.lib_r),
         color: "#DAA520",
         outline: "#DAA520"
+      },
+      {
+        id: "radical_republicans",
+        seats: Math.round(Q.rad_r),
+        color: "#7A1F5C",
+        outline: "#7A1F5C"
       },
       {
         id: "others",
@@ -247,6 +279,8 @@ go-to: house_menu
 
 [? if liberal_split = 1 : {!<tr><td><div class="box" style='background-color:#DAA520'> </div> !} <span style="color: #DAA520;">**Liberal Republicans**</span>: {!</td><td>!} [+ lib_r_disp +] seats {!</td><td>!} [+ str_change_lib_r +] {!</td></tr>!} ?]
 
+[? if radical_split = 1 : {!<tr><td><div class="box" style='background-color:#7A1F5C'> </div> !} <span style="color: #7A1F5C;">**Radical Republicans**</span>: {!</td><td>!} [+ rad_r_disp +] seats {!</td><td>!} [+ str_change_rad_r +] {!</td></tr>!} ?]
+
 {!<tr><td><div class="box" style='background-color: #00cc00'> </div> !} Others: {!</td><td>!} [+ other_r_disp +] seats {!</td><td>!} [+ str_change_other_r +] {!</td></tr>!}
 {!</table>!}
 
@@ -257,6 +291,7 @@ go-to: house_menu
 - @house_rep_lib_majority
 - @house_defeat
 - @house_lib_kingmaker
+- @house_rad_kingmaker
 - @house_tie
 
 @house_simple_majority
@@ -298,6 +333,14 @@ view-if: house_majority = 0 and rep_lib_working_majority = 0 and dem_r <= rep_r 
 on-arrival: speaker_election_needed = 1; majority_lost = 1; lose_vote = 0;
 
 No party commands a majority. The <span style="color: #DAA520;">**Liberal Republicans**</span> find themselves in the position of kingmakers and their votes will determine whether Reconstruction legislation advances or stalls.
+
+@house_rad_kingmaker
+title: <span style="color: #7A1F5C;">**Radical Republicans**</span> hold the balance of power
+subtitle: <span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ rad_r +] seats
+view-if: house_majority = 0 and rep_lib_working_majority = 0 and dem_r <= rep_r and radical_split = 1
+on-arrival: speaker_election_needed = 1; majority_lost = 1; lose_vote = 0;
+
+No party commands a majority. The <span style="color: #7A1F5C;">**Radical Republicans**</span> find themselves in the position of kingmakers, and unlike a Liberal bloc, their price for cooperation is likely to be more enforcement in the South, not less.
 
 @house_tie
 title: The House is tied!

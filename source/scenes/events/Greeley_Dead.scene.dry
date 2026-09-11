@@ -23,7 +23,16 @@ We may have won the election but we aren't monsters. We should pay our respect t
 -@Prayers: Send our prayers to Horace Greeley and his team
 
 @Prayers
-on-arrival: radical_dissent -= 1; moderate_dissent -= 1; conservative_dissent -= 1; liberal_dissent -= 3;
+on-arrival: {!
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 1;
+    } else {
+        Q.radical_dissent -= 1;
+    }
+    Q.moderate_dissent -= 1;
+    Q.conservative_dissent -= 1;
+    Q.liberal_dissent -= 3;
+!}
 
 The papers run respectful obituaries. Our editors recall his decades crusading against slavery and his dedication to the <span style="color: #c00000;">**republican party**</span> (before his betrayal). R.I.P Horace Greeley.
 
@@ -57,6 +66,9 @@ on-arrival: {!
     Q.dem_relation -= 15;
     Q.liberal_dissent += 10;
     Q.conservative_strength += 3;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 8;
+    }
 !}
 go-to: greeley_end
 
@@ -66,11 +78,17 @@ The ruling is legally creative, to put it gently that even some <span style="col
 
 The years of careful judicial appointments have paid off in the only currency that mattered.
 
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> denounces the ruling as a judicial coup dressed up in legal language, and says so from the same podiums where it once denounced executive overreach from inside the party. ?]
+
 @court_ruling_against
 on-arrival: {!
     Q.president = "Brown";
     Q.president_party = "lib";
-    Q.radical_dissent += 6;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 6;
+    } else {
+        Q.radical_dissent += 6;
+    }
     Q.moderate_dissent += 6;
     Q.conservative_dissent += 4;
     Q.dem_relation += 6;
@@ -83,6 +101,8 @@ go-to: greeley_end
 The Court will not be rushed into rewriting the Constitution on the administration's behalf. The bench still thick with holdovers unmoved by reform rules that the electors are bound by their state's popular result and free to cast their ballots for whichever living man they judge their pledge most honors. In state after state, the opposing electors coalesce behind B. Gratz Brown.
 
 The attempt to intervene is now part of the story. <span style="color: #0015bc;">**Democratic**</span> papers brand it an attempted judicial coup, and the charge sticks. Brown will be inaugurated in March.
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> takes some satisfaction in the outcome, having warned from the outside that the administration would try exactly this. ?]
 
 @push_congress
 on-arrival: {!
@@ -111,7 +131,11 @@ on-arrival: {!
     Q.president = "Brown";
     Q.president_party = "lib";
     Q.moderate_dissent += 3;
-    Q.radical_dissent += 4;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 4;
+    } else {
+        Q.radical_dissent += 4;
+    }
     Q.dem_relation += 4;
     Q.lose_vote = 1;
 !}

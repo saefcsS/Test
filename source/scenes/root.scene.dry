@@ -153,6 +153,8 @@ Q.US_lose = 0;
 Q.cuba_status = "";
 Q.puerto_rico_status = "";
 
+Q.Canada_Gov = "";
+
 Q.speaker_election_needed = 0;
 Q.speaker_boosted_committee = "";
 Q.speaker_boost_amount = 0;
@@ -286,7 +288,7 @@ Q.num_states = 25;
 Q.freemen_rep = 100;
 Q.freemen_dem = 0;
 Q.freemen_lib = 0;
-Q.freemen_lib = 0;
+Q.freemen_rad = 0;
 Q.freemen_other = 0;
 
 Q.workers_rep = 52;
@@ -2101,7 +2103,7 @@ Q.enforcement_acts = 0;
 Q.habeas_suspended = 0;
 Q.March_DC = 0;
 
-Q.europe_relation = 0;
+Q.uk_relation = 0;
 Q.french_mexico = 0;
 Q.treaty_Washington = 0;
 Q.haiti_support = 0;

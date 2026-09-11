@@ -20,7 +20,7 @@ Should we proceed with this purchase or focus our resources at home?
 subtitle: -2 budget
 choose-if: budget >= 2
 unavailable-subtitle: [? if budget < 2: Not enough budget. ?]
-on-arrival: alaska_purchased = 1; budget -= 2; moderate_strength += 2; conservative_dissent += 2; freemen_rep -= 2; freemen_other += 2; workers_rep -= 3; workers_other += 3; middle_class_rep += 2; rural_rep -= 2; rural_other += 2; immigrant_laborers_rep -= 2; immigrant_laborers_other += 2; unemployed_rep -= 2; unemployed_other += 2; europe_relation -= 3;
+on-arrival: alaska_purchased = 1; budget -= 2; moderate_strength += 2; conservative_dissent += 2; freemen_rep -= 2; freemen_other += 2; workers_rep -= 3; workers_other += 3; middle_class_rep += 2; rural_rep -= 2; rural_other += 2; immigrant_laborers_rep -= 2; immigrant_laborers_other += 2; unemployed_rep -= 2; unemployed_other += 2; uk_relation -= 3;
 on-display: {!  
     var cardEl = document.createElement('div');  
     cardEl.className = "face-figure2";  
@@ -39,7 +39,7 @@ We finalize the Alaska Purchase. While critics remain vocal, visionaries hail th
 
 @reject_alaska
 subtitle: Focus on Reconstruction
-on-arrival: conservative_strength += 1; radical_dissent += 1; europe_relation += 2;
+on-arrival: conservative_strength += 1; radical_dissent += 1; uk_relation += 2;
 
 We decline the offer. For now, we must focus on mending the Union. Russia expresses disappointment, but our critics applaud our restraint.
 

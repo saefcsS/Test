@@ -853,6 +853,8 @@ on-arrival: {!
     Q.sect_agriculture_party = "Rad";
 !}
 
+The <span style="color: #7A1F5C;">**Radical Republicans**</span> have carried an outright electoral majority, breaking away from the regular party organization entirely. Reconstruction enters its most uncompromising phase yet, with the new administration committed to a hard line against the Redeemers of the South.
+
 @defeat_O_1872
 title: Something has gone very wrong.
 view-if: potus_winner = "other"

@@ -49,7 +49,7 @@ view-if: french_mexico = 0
 choose-if: budget >= 1
 subtitle: -1 budget
 unavailable-subtitle: We lack the budget to project power abroad.
-on-arrival: europe_relation -= 2; budget -= 1; PoliticalCostPenalty += 1; french_mexico = 1
+on-arrival: uk_relation -= 2; budget -= 1; PoliticalCostPenalty += 1; french_mexico = 1
 
 Under Napoleon III, France has installed Maximilian as Emperor of Mexico. This violates the Monroe Doctrine, and now that the Civil War has ended, we are signaling our intention to uphold it.
 
@@ -61,7 +61,7 @@ view-if: french_mexico = 1
 choose-if: budget >= 1
 subtitle: -1 budget
 unavailable-subtitle: We lack the budget to sustain foreign pressure.
-on-arrival: europe_relation -= 2; budget -= 1; PoliticalCostPenalty += 1; french_mexico = 2; middle_class_rep += 3; radical_strength += 2; radical_dissent -= 2;
+on-arrival: uk_relation -= 2; budget -= 1; PoliticalCostPenalty += 1; french_mexico = 2; middle_class_rep += 3; radical_strength += 2; radical_dissent -= 2;
 
 Facing mounting pressure and lacking international support, the French military evacuates Mexico. The Republican forces seize the opportunity to strike, defeating Maximilian's regime and executing the would-be Emperor.
 
@@ -72,7 +72,7 @@ title: Assert naval presence in the Caribbean.
 view-if: caribbean_patrol = 0
 choose-if: navy_strength >= 220 and budget >= 1
 unavailable-subtitle: Our Navy isn't large enough to enforce the Monroe Doctrine.
-on-arrival: caribbean_patrol += 1; europe_relation -= 1; moderate_strength += 1; economic_growth += 0.1; budget -= 1; PoliticalCostPenalty += 1; navy_strength -= 5
+on-arrival: caribbean_patrol += 1; uk_relation -= 1; moderate_strength += 1; economic_growth += 0.1; budget -= 1; PoliticalCostPenalty += 1; navy_strength -= 5
 
 The Caribbean is crawling with European ships and pirates. With our navy modernizing, we deploy warships to project power and enforce stability.
 
@@ -130,9 +130,9 @@ on-arrival: {!
     if (Q.san_juan_won === 1) {
         Q.navy_strength += 5;
         Q.middle_class_rep += 2;
-        Q.europe_relation += 1;
+        Q.uk_relation -= 1;
     } else {
-        Q.europe_relation -= 1;
+        Q.uk_relation += 1;
         Q.moderate_dissent += 1;
     }
 !}
@@ -153,7 +153,7 @@ title: Normalize relations with Haiti.
 view-if: haiti_support = 0
 choose-if: conservative_strength < 30
 unavailable-subtitle: The <span style="color: #B5651D;">**Conservatives**</span> sway the party away from this
-on-arrival: freedmen_rep += 3; radical_strength += 1; economic_growth += 0.1; europe_relation -= 1; haiti_support += 1; conservative_dissent -= 10
+on-arrival: freedmen_rep += 3; radical_strength += 1; economic_growth += 0.1; uk_relation -= 1; haiti_support += 1; conservative_dissent -= 10
 
 Though Haiti has been independent for decades, we have refused full diplomatic recognition, largely due to racial politics.
 
@@ -164,7 +164,7 @@ title: Continue relations with Haiti.
 view-if: haiti_support = 1
 choose-if: conservative_strength < 30
 unavailable-subtitle: The <span style="color: #B5651D;">**Conservatives**</span> sway the party away from this
-on-arrival: freedmen_rep += 3; radical_strength += 1; economic_growth += 0.1; europe_relation -= 1; conservative_dissent -= 5
+on-arrival: freedmen_rep += 3; radical_strength += 1; economic_growth += 0.1; uk_relation -= 1; conservative_dissent -= 5
 
 We continue relations with Haiti, which is seen as a beacon of hope to the Freedmen of the party and the rest of the United States.
 
@@ -193,7 +193,7 @@ title: Crack down on the Fenian raids.
 view-if: year >= 1866
 choose-if: Us_police_strength > 10 and Us_police_loyalty >= 0.7
 unavailable-subtitle: [? if Us_police_strength < 10: The Police force is too weak to forcefully stop the Fenian Brotherhood. ?][? if Us_police_loyalty < 0.7: The Police are too disloyal to effectively execute the job.?]
-on-arrival: immigrant_laborers_rep -= 4; moderate_dissent -= 1; europe_relation += 1; fenian = 0;
+on-arrival: immigrant_laborers_rep -= 4; moderate_dissent -= 1; uk_relation += 1; fenian = 0;
 
 Irish nationalists, many Union veterans, have begun launching illegal raids into Canada from American soil. While popular among Irish Americans, these attacks threaten U.S.–British relations.
 
@@ -202,7 +202,7 @@ We move to shut them down, seizing arms caches and arresting ringleaders, to rea
 @support_fenians
 title: Turn a blind eye to Fenian raids.
 view-if: year >= 1866
-on-arrival: immigrant_laborers_rep += 3; europe_relation -= 2; radical_strength += 1; conservative_dissent += 1; fenian += 1;
+on-arrival: immigrant_laborers_rep += 3; uk_relation -= 2; radical_strength += 1; conservative_dissent += 1; fenian += 1;
 
 Irish-American war veterans organize cross-border raids into Canada, aiming to pressure Britain into freeing Ireland. Officially, we do nothing. Unofficially, we let it happen.
 

@@ -39,7 +39,7 @@ on-arrival: {!
     Q.moderate_dissent -= 3;
     Q.conservative_dissent -= 4;
     Q.liberal_strength += 3;
-    Q.europe_relation += 2;
+    Q.uk_relation += 2;
     Q.budget += 1;
     Q.economic_expansion -= 10;
 !}
@@ -83,7 +83,7 @@ on-arrival: {!
     Q.conservative_dissent += 5;
     Q.radical_strength += 4;
     Q.radical_dissent -= 3;
-    Q.europe_relation -= 3;
+    Q.uk_relation -= 3;
     Q.economic_expansion += 5;
 !}
 
@@ -106,7 +106,7 @@ on-arrival: {!
     Q.rural_rep -= 2;
     Q.workers_rep -= 1;
     Q.radical_dissent += 4;
-    Q.europe_relation += 1;
+    Q.uk_relation += 1;
     Q.PoliticalCostPenalty += 1;
     Q.economic_expansion -= 3;
 !}

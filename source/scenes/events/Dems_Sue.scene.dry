@@ -26,8 +26,12 @@ choose-if: judicial_reform >= 2
 unavailable-subtitle: [? if judicial_reform < 2: Our court reforms are not deep enough to give us confidence in a full legal fight. ?]
 on-arrival: {!
     Q.court_fight = 1;
-    Q.radical_strength += 3;
-    Q.radical_dissent -= 2;
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 4;
+    } else {
+        Q.radical_strength += 3;
+        Q.radical_dissent -= 2;
+    }
     Q.liberal_dissent += 6;
     Q.conservative_dissent += 4;
     Q.moderate_dissent += 3;
@@ -49,6 +53,8 @@ go-to: court_outcome
 
 We instruct the Attorney General to defend the suspensions in full and argue that the ongoing paramilitary campaign in the South constitutes conditions sufficient to justify emergency measures. The case will go to the Supreme Court if necessary.
 
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> is glad to see the fight taken up, even from outside the administration's own ranks. ?]
+
 @narrow_the_scope
 on-arrival: {!
     Q.habeas_suspended = 0;
@@ -57,7 +63,11 @@ on-arrival: {!
     Q.moderate_dissent -= 3;
     Q.conservative_dissent -= 2;
     Q.liberal_dissent -= 4;
-    Q.radical_dissent += 4;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 4;
+    } else {
+        Q.radical_dissent += 4;
+    }
     Q.dem_relation += 3;
     Q.kkk_strength *= 1.05;
     Q.freemen_rep -= 1;
@@ -66,7 +76,11 @@ go-to: court_outcome
 
 We quietly restore civilian legal procedures in several of the less volatile counties, reducing the number of active suspensions and narrowing the legal target the <span style="color: #0015bc;">**Democrats**</span> are shooting at. It is a tactical retreat dressed as a policy refinement.
 
-<span style="color: #7A1F5C;">**Radicals**</span> are unhappy. But the legal exposure shrinks considerably.
+[? if radical_split = 0 : <span style="color: #7A1F5C;">**Radicals**</span> are unhappy. ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> is unhappy, and says so loudly, having no reason to soften its criticism of a policy it no longer has any hand in shaping. ?]
+
+But the legal exposure shrinks considerably.
 
 @lift_habeas
 on-arrival: {!
@@ -76,7 +90,11 @@ on-arrival: {!
     Q.moderate_dissent -= 5;
     Q.conservative_dissent -= 4;
     Q.liberal_dissent -= 6;
-    Q.radical_dissent += 8;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 8;
+    } else {
+        Q.radical_dissent += 8;
+    }
     Q.dem_relation += 6;
     Q.kkk_strength *= 1.15;
     Q.freemen_rep -= 3;
@@ -85,7 +103,13 @@ on-arrival: {!
 !}
 go-to: court_outcome
 
-We restore full civilian legal procedures and transfer the military tribunal cases to federal district courts. The legal challenge largely collapses without its target. <span style="color: #0015bc;">**Democrats**</span> claim a victory. <span style="color: #7A1F5C;">**Radicals**</span> call it a surrender. On the ground in the South, the Klan begins reorganizing in the counties where military pressure has lifted.
+We restore full civilian legal procedures and transfer the military tribunal cases to federal district courts. The legal challenge largely collapses without its target. <span style="color: #0015bc;">**Democrats**</span> claim a victory.
+
+[? if radical_split = 0 : <span style="color: #7A1F5C;">**Radicals**</span> call it a surrender. ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> calls it a surrender, and points to it as proof that the regular organization was never going to hold the line without them. ?]
+
+On the ground in the South, the Klan begins reorganizing in the counties where military pressure has lifted.
 
 @pack_the_argument
 choose-if: rep_majority >= 1 and radical_strength >= 35
@@ -93,8 +117,12 @@ unavailable-subtitle: [? if rep_majority < 1: We do not control Congress. ?][? i
 on-arrival: {!
     Q.court_ruling = "stripped";
     Q.court_jurisdiction_stripped = 1;
-    Q.radical_strength += 4;
-    Q.radical_dissent -= 3;
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 5;
+    } else {
+        Q.radical_strength += 4;
+        Q.radical_dissent -= 3;
+    }
     Q.liberal_dissent += 12;
     Q.conservative_dissent += 8;
     Q.moderate_dissent += 6;
@@ -109,6 +137,8 @@ go-to: court_outcome
 Congress passes legislation stripping the Supreme Court of jurisdiction over habeas corpus challenges arising from the Southern districts. The Court cannot rule on what it has no authority to hear. It is a constitutionally available move, if an aggressive one, and Congress has used it before.
 
 The reaction is fierce. The liberal press calls it the death of judicial independence. <span style="color: #B5651D;">**Conservative Republicans**</span> who might have tolerated the original suspensions draw the line here. But the prosecutions continue uninterrupted.
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> provides some of the votes needed to pass the measure, unwilling to let procedural scruples stand in the way of continued enforcement in the South. ?]
 
 @court_outcome
 

@@ -42,12 +42,20 @@ on-arrival: {!
 
 Congress moves to formally clear the way for readmission, whatever the lingering conditions. It is a practical concession to public fatigue and a quiet admission that Reconstruction's aims will go unfinished in [+ fatigue_readmit_list +].
 
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> denounces the move as an abandonment of everything it left the regular organization to defend. ?]
+
 @refuse_readmit
 on-arrival: {!
     reconstruction_support -= 15;
-    radical_dissent -= 3;
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 3;
+    } else {
+        Q.radical_dissent -= 3;
+    }
     conservative_strength += 5;
     conservative_dissent -= 2;
 !}
 
 You hold firm. [+ fatigue_readmit_list +] will remain outside Congress until they meet the conditions laid out under Reconstruction no matter how loudly the public clamors for an end to it. It is a deeply unpopular stand, but a principled one.
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> offers rare praise, holding this up as proof the regular organization can still be pressured into doing the right thing. ?]

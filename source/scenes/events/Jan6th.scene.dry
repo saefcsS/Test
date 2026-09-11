@@ -6,6 +6,9 @@ view-if: March_DC = 1 and year = 1877 and month = 2
 max-visits: 1
 on-arrival: {!
     Q.riot_prep_choices = 0;
+    Q.radical_muster_threshold_met = (Q.radical_split == 1)
+        ? ((Q.radical_relation || 0) >= 40 ? 1 : 0)
+        : ((Q.radical_strength || 0) >= 20 ? 1 : 0);
     this.achieve("reverse_jan6");
 !}
 go-to: vdr_muster
@@ -56,23 +59,33 @@ The Metropolitan Police report in force, spreading across the stairways, corrido
 @vdr_rally_radicals
 max-visits: 1
 go-to: vdr_muster
-choose-if: radical_strength >= 20
-unavailable-subtitle: The Radical wing isn't strong enough in the capital to raise an armed response on short notice.
+choose-if: radical_muster_threshold_met = 1
+unavailable-subtitle: [? if radical_split = 0 : The Radical wing isn't strong enough in the capital to raise an armed response on short notice. ?][? if radical_split = 1 : Relations with the breakaway Radical Republican Party aren't warm enough to expect them to turn out armed men on short notice. ?]
 on-arrival: {!
     Q.riot_prep_choices += 1;
-    Q.radical_strength += 2;
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 3;
+    } else {
+        Q.radical_strength += 2;
+    }
     Q.vdr_radicals_committed = 1;
 !}
 
 Word spreads quickly through Washington's Republican clubs and Grand Army posts. Armed Union veterans and <span style="color: #7A1F5C;">**Radical Republicans**</span> begin arriving in small groups, taking up positions beside the police and soldiers. It is an improvised defense, but one determined to see the electoral count completed.
 
+[? if radical_split = 1 : Whatever their quarrel with the regular organization, the breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> is not about to let a Bourbon mob decide the presidency by force. ?]
+
 @vdr_to_confrontation
 choose-if: riot_prep_choices >= 2
 unavailable-subtitle: Gather more of a defense before the crowd reaches the doors.
 on-arrival: {!
+    let radicalMultiplier = Q.radical_split == 1
+        ? (Q.radical_relation || 0) * 0.5
+        : (Q.radical_strength || 0) * 0.4;
+
     Q.defender_power = (Q.vdr_army_committed ? Q.army_strength * Q.army_loyalty * 3 : 0)
         + (Q.Us_police_strength * Q.Us_police_militancy * Q.Us_police_loyalty * 1.5)
-        + (Q.vdr_radicals_committed ? Q.radical_strength * 0.4 : 0);
+        + (Q.vdr_radicals_committed ? radicalMultiplier : 0);
 
     Q.attacker_power = (Q.dem_bourbon_strength * 1.2)
         + (Q.whiteL_strength * Q.whiteL_militancy * 0.6)
@@ -100,7 +113,11 @@ on-arrival: {!
     Q.dem_bourbon_dissent += 15;
     Q.whiteL_militancy = Math.max(0, Q.whiteL_militancy - 0.1);
     Q.kkk_militancy = Math.max(0, Q.kkk_militancy - 0.05);
-    Q.radical_strength += 4;
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 6;
+    } else {
+        Q.radical_strength += 4;
+    }
     Q.dem_relation -= 8;
 !}
 
@@ -119,7 +136,11 @@ For years afterward, Americans remember the image of an armed political mob driv
 @vdr_holdout
 on-arrival: {!
     Q.dem_bourbon_strength += 5;
-    Q.radical_dissent += 6;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 4;
+    } else {
+        Q.radical_dissent += 6;
+    }
     Q.Us_police_strength = Math.max(0, Q.Us_police_strength - 8);
     Q.dem_relation -= 3;
 !}
@@ -137,7 +158,11 @@ The electoral count is suspended as both sides scramble for reinforcements.
 on-arrival: {!
     Q.dem_bourbon_strength += 15;
     Q.dem_bourbon_dissent = Math.max(0, Q.dem_bourbon_dissent - 5);
-    Q.radical_dissent += 15;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 12;
+    } else {
+        Q.radical_dissent += 15;
+    }
     Q.Us_police_strength = Math.max(0, Q.Us_police_strength - 20);
     Q.vdr_capitol_seized = 1;
 !}
@@ -167,7 +192,11 @@ on-arrival: {!
     Q.kkk_strength = Math.max(0, Q.kkk_strength - 15);
     Q.dem_bourbon_strength = Math.max(0, Q.dem_bourbon_strength - 10);
     Q.dem_relation -= 15;
-    Q.radical_strength += 5;
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 7;
+    } else {
+        Q.radical_strength += 5;
+    }
     Q.vdr_capitol_retaken = 1;
 !}
 go-to: vdr_end
@@ -184,7 +213,11 @@ Yet Americans will remember not only the certification, but also the sight of Un
 on-arrival: {!
     Q.dem_bourbon_strength += 10;
     Q.dem_bourbon_dissent = Math.max(0, Q.dem_bourbon_dissent - 10);
-    Q.radical_dissent += 20;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 15;
+    } else {
+        Q.radical_dissent += 20;
+    }
     Q.freemen_rep -= 8;
     Q.dem_relation += 4;
     Q.vdr_negotiated_end = 1;
@@ -197,7 +230,9 @@ Before sunrise, the mob agrees to withdraw in exchange for renewed consideration
 
 The Capitol is recovered without further bloodshed, but at an enormous political cost.
 
-<span style="color: #7A1F5C;">**Radical Republicans**</span> denounce the agreement as capitulation to armed insurrection. Others argue that it prevented a massacre inside the seat of government.
+[? if radical_split = 0 : <span style="color: #7A1F5C;">**Radical Republicans**</span> denounce the agreement as capitulation to armed insurrection. Others argue that it prevented a massacre inside the seat of government. ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> denounces the agreement as capitulation to armed insurrection, adding that it is exactly the kind of surrender they left the regular organization to avoid being associated with. Others argue that it prevented a massacre inside the seat of government. ?]
 
 @vdr_end
 

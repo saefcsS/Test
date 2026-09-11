@@ -169,7 +169,7 @@ on-arrival: {!
     Q.radical_dissent += 1;
     Q.liberal_dissent += 2;
 
-    Q.europe_relation += 2;
+    Q.uk_relation += 2;
 
     Q.speaker_boosted_committee = "judiciary";
     Q.speaker_boost_amount = 2;

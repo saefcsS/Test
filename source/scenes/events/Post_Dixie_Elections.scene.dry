@@ -25,7 +25,6 @@ let stateSeats = {
 };
 
 for (let state of Q.southern_states) {
-  if (Q.states.indexOf(state) === -1) continue;
 
   let repVotes = 0;
   let demVotes = 0;

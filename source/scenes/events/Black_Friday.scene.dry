@@ -9,7 +9,14 @@ on-arrival: {!
     Q.moderate_dissent += 4;
     Q.conservative_dissent += 3;
     Q.liberal_dissent += 6;
-    Q.radical_dissent += 3;
+
+    if (Q.radical_split == 1) {
+        Q.workers_rad = Math.min(100, (Q.workers_rad || 0) + 1);
+        Q.middle_class_rad = Math.min(100, (Q.middle_class_rad || 0) + 1);
+    } else {
+        Q.radical_dissent += 3;
+    }
+
     Q.dem_relation -= 6;
     Q.middle_class_dem += 3;
     Q.workers_dem += 2;
@@ -62,7 +69,14 @@ Our support for Boutwell gives the administration credit for acting when the cri
 on-arrival: {!
     Q.liberal_dissent -= 5;
     Q.liberal_strength += 3;
-    Q.radical_dissent -= 2;
+
+    if (Q.radical_split == 1) {
+        Q.workers_rad = Math.max(0, (Q.workers_rad || 0) - 1);
+        Q.middle_class_rad = Math.max(0, (Q.middle_class_rad || 0) - 1);
+    } else {
+        Q.radical_dissent -= 2;
+    }
+
     Q.moderate_dissent += 4;   // moderates uncomfortable attacking Grant's family
     Q.conservative_dissent += 3;
 
@@ -86,7 +100,14 @@ on-arrival: {!
     Q.conservative_strength += 3;
     Q.moderate_dissent -= 2;
     Q.liberal_dissent += 8;    // liberals see this as rank tribalism
-    Q.radical_dissent += 2;
+
+    if (Q.radical_split == 1) {
+        Q.workers_rad = Math.min(100, (Q.workers_rad || 0) + 2);
+        Q.middle_class_rad = Math.min(100, (Q.middle_class_rad || 0) + 1);
+        Q.unemployed_rad = Math.min(100, (Q.unemployed_rad || 0) + 1);
+    } else {
+        Q.radical_dissent += 2;
+    }
 
     Q.middle_class_dem += 3;  // middle class doesn't believe us
     Q.rural_dem += 2;
@@ -108,7 +129,14 @@ We have tied the party's credibility to Grant's innocence.
 on-arrival: {!
     Q.moderate_dissent += 2;
     Q.liberal_dissent += 4;
-    Q.radical_dissent += 2;
+
+    if (Q.radical_split == 1) {
+        Q.workers_rad = Math.min(100, (Q.workers_rad || 0) + 1);
+        Q.unemployed_rad = Math.min(100, (Q.unemployed_rad || 0) + 1);
+    } else {
+        Q.radical_dissent += 2;
+    }
+
     Q.conservative_dissent += 1;
 
     // Silence is cowardice in a crisis
@@ -146,7 +174,13 @@ on-arrival: {!
     Q.conservative_dissent -= 3;
     Q.moderate_dissent -= 2;
     Q.liberal_dissent += 5;   // liberals see it as a cover-up attempt
-    Q.radical_dissent += 2;
+
+    if (Q.radical_split == 1) {
+        Q.middle_class_rad = Math.min(100, (Q.middle_class_rad || 0) + 1);
+        Q.workers_rad = Math.min(100, (Q.workers_rad || 0) + 1);
+    } else {
+        Q.radical_dissent += 2;
+    }
 
     Q.middle_class_rep += 2;
 
@@ -174,7 +208,13 @@ on-arrival: {!
     Q.liberal_strength += 4;
     Q.moderate_dissent -= 3;
     Q.conservative_dissent += 5;  // conservatives see it as throwing Grant to the wolves
-    Q.radical_dissent += 1;
+
+    if (Q.radical_split == 1) {
+        Q.workers_rad = Math.max(0, (Q.workers_rad || 0) - 1);
+        Q.middle_class_rad = Math.max(0, (Q.middle_class_rad || 0) - 1);
+    } else {
+        Q.radical_dissent += 1;
+    }
 
     Q.middle_class_rep += 5;
     Q.rural_rep += 2;
@@ -197,7 +237,14 @@ on-arrival: {!
     Q.liberal_dissent += 10;
     Q.liberal_strength -= 3;
     Q.moderate_dissent += 4;
-    Q.radical_dissent += 3;
+
+    if (Q.radical_split == 1) {
+        Q.workers_rad += 2;
+        Q.middle_class_rad += 2;
+        Q.rural_rad += 1;
+    } else {
+        Q.radical_dissent += 3;
+    }
 
     Q.middle_class_dem += 5;
     Q.rural_dem += 3;
@@ -223,7 +270,13 @@ on-arrival: {!
     Q.liberal_strength += 2;
     Q.moderate_dissent += 3;
     Q.conservative_dissent += 6;  // Grant loyalists furious at abandonment
-    Q.radical_dissent += 2;
+
+    if (Q.radical_split == 1) {
+        Q.workers_rad += 1;
+        Q.middle_class_rad += 1;
+    } else {
+        Q.radical_dissent += 2;
+    }
 
     Q.middle_class_rep += 3;
 

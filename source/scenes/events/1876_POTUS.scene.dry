@@ -1,12 +1,12 @@
 title: 1876 Presidential Election
-subtitle: [+ Candidate +] vs. [+ dem_candidate_1876 +][? if liberal_split = 1 and greeley_fusion = 0 : vs. Greeley ?][? if radical_split = 1: vs. [+ radical_candidate +] ?]
+subtitle: [+ Candidate +] vs. [+ dem_candidate_1876 +][? if liberal_split = 1 : vs. Greeley ?][? if radical_split = 1: vs. [+ radical_candidate +] ?]
 tags: event
 view-if: year = 1876 and month = 11
 max-visits: 1
 
 = Elections, [+ month +] [+ year +]
 
-The Presidential election is to be held now. <span style="color: #c00000;">**Republicans**</span> and <span style="color: #0015bc;">**Democrats**</span> face off in a straight two-party contest, the closest since the war began.
+The Presidential election is to be held now. <span style="color: #c00000;">**Republicans**</span> and <span style="color: #0015bc;">**Democrats**</span> face off[? if liberal_split = 0 and radical_split = 0 : in a straight two-party contest, the closest since the war began ?][? if liberal_split = 1 or radical_split = 1 : , with the opposition and the party both fractured ?].
 
 [? if liberal_split = 1 : The <span style="color: #DAA520;">**Liberal Republicans**</span> have fielded their own candidate, threatening to split the anti-<span style="color: #0015bc;">**Democrat**</span> vote. ?]
 
@@ -18,6 +18,8 @@ The Presidential election is to be held now. <span style="color: #c00000;">**Rep
 on-arrival: {!
 Q.repEVTotal = 0;
 Q.demEVTotal = 0;
+Q.libEVTotal = 0;
+Q.radEVTotal = 0;
 Q.disputedRepEV = 0;
 Q.disputedDemEV = 0;
 
@@ -69,7 +71,7 @@ let candidateNorthShift = {
 }[Q.dem_candidate_1876] || 0;
 
 for (let state of Q.states) {
-  let votes = { rep: 0, dem: 0 };
+  let votes = { rep: 0, dem: 0, lib: 0, rad: 0 };
   let isSouthern = southernCodes.includes(state);
 
   let planThreshold = Q.Radical_plan ? 50 : (Q.Moderate_plan ? 35 : 20);
@@ -91,23 +93,38 @@ for (let state of Q.states) {
 
     let localRep = Q[state + "_" + cls + "_rep"] || 0;
     let localDem = Q[state + "_" + cls + "_dem"] || 0;
+    let localLib = Q[state + "_" + cls + "_lib"] || 0;
+    let localRad = Q[state + "_" + cls + "_rad"] || 0;
     let nationalRep = Q[cls + "_rep"] || 0;
     let nationalDem = Q[cls + "_dem"] || 0;
+    let nationalLib = Q[cls + "_lib"] || 0;
+    let nationalRad = Q[cls + "_rad"] || 0;
 
     let adjRep = 0.5 * localRep + 0.5 * nationalRep;
     let adjDem = 0.5 * localDem + 0.5 * nationalDem;
+    let adjLib = Q.liberal_split ? (0.5 * localLib + 0.5 * nationalLib) : 0;
+    let adjRad = Q.radical_split ? (0.5 * localRad + 0.5 * nationalRad) : 0;
 
     adjRep = Math.max(0, adjRep + nationalRepSwing * 0.3);
     adjDem = Math.max(0, adjDem + nationalDemSwing * 0.3);
 
+    if (Q.liberal_split) {
+      adjLib = adjLib * 1.2;
+      adjRep = adjRep * 0.85;
+    }
+
     adjRep *= (0.92 + Math.random() * 0.16);
     adjDem *= (0.92 + Math.random() * 0.16);
+    if (Q.liberal_split) adjLib *= (0.92 + Math.random() * 0.16);
+    if (Q.radical_split) adjRad *= (0.92 + Math.random() * 0.16);
 
-    let total = adjRep + adjDem;
+    let total = adjRep + adjDem + adjLib + adjRad;
     if (!total) continue;
 
     votes.rep += pop * (adjRep / total);
     votes.dem += pop * (adjDem / total);
+    if (Q.liberal_split) votes.lib += pop * (adjLib / total);
+    if (Q.radical_split) votes.rad += pop * (adjRad / total);
   }
 
   if (!isSouthern && closeStates[state] !== undefined) {
@@ -115,14 +132,17 @@ for (let state of Q.states) {
     let randomJitter = (Math.random() * 0.8) - 0.4;
     let marginTarget = nudge + randomJitter;
 
-    let twoPartyTotal = votes.rep + votes.dem;
+    let twoPartyTotal = votes.rep + votes.dem + votes.lib + votes.rad;
+    let oppTotal = votes.dem + votes.lib + votes.rad;
     if (twoPartyTotal > 0) {
-      let currentMargin = ((votes.rep - votes.dem) / twoPartyTotal) * 100;
+      let currentMargin = ((votes.rep - oppTotal) / twoPartyTotal) * 100;
       let marginDiff = marginTarget - currentMargin;
       votes.rep += twoPartyTotal * (marginDiff / 200);
       votes.dem -= twoPartyTotal * (marginDiff / 200);
       votes.rep = Math.max(0, votes.rep);
       votes.dem = Math.max(0, votes.dem);
+      votes.lib = Math.max(0, votes.lib);
+      votes.rad = Math.max(0, votes.rad);
     }
   }
 
@@ -159,11 +179,32 @@ for (let state of Q.states) {
     }
   }
 
-  let winner = votes.dem >= votes.rep ? "dem" : "rep";
+  // Determine state winner
+  let winner = "rep";
+  if (Q.liberal_split && Q.radical_split) {
+    if (votes.rep >= votes.dem && votes.rep >= votes.lib && votes.rep >= votes.rad) winner = "rep";
+    else if (votes.dem >= votes.lib && votes.dem >= votes.rad) winner = "dem";
+    else if (votes.lib >= votes.rad) winner = "lib";
+    else winner = "rad";
+  } else if (Q.liberal_split) {
+    if (votes.rep >= votes.dem && votes.rep >= votes.lib) winner = "rep";
+    else if (votes.dem >= votes.lib) winner = "dem";
+    else winner = "lib";
+  } else if (Q.radical_split) {
+    if (votes.rep >= votes.dem && votes.rep >= votes.rad) winner = "rep";
+    else if (votes.dem >= votes.rad) winner = "dem";
+    else winner = "rad";
+  } else {
+    winner = votes.dem >= votes.rep ? "dem" : "rep";
+  }
+
   Q[state + "_winner"] = winner;
   Q[state + "_disputed_1876"] = stateDisputed;
 
-  let color = winner === "dem" ? "#4575b4" : "#d73027";
+  let color = "#d73027";
+  if (winner === "dem") color = "#4575b4";
+  if (winner === "lib") color = "#DAA520";
+  if (winner === "rad") color = "#7A1F5C";
   if (stateDisputed) color = "#8E536E";
   Q[state.toLowerCase() + "_winner_color"] = color;
 }
@@ -176,15 +217,17 @@ for (let state of Q.states) {
   let disputed = Q[state + "_disputed_1876"];
 
   if (w === "rep") Q.repEVTotal += ev;
-  else Q.demEVTotal += ev;
+  else if (w === "dem") Q.demEVTotal += ev;
+  else if (w === "lib") Q.libEVTotal += ev;
+  else if (w === "rad") Q.radEVTotal += ev;
 
   if (disputed) {
     if (w === "rep") Q.disputedRepEV += ev;
-    else Q.disputedDemEV += ev;
+    else if (w === "dem") Q.disputedDemEV += ev;
   }
 }
 
-let totalEV = Q.repEVTotal + Q.demEVTotal;
+let totalEV = Q.repEVTotal + Q.demEVTotal + Q.libEVTotal + Q.radEVTotal;
 let majority = Math.floor(totalEV / 2) + 1;
 
 let repUndisputed = Q.repEVTotal - Q.disputedRepEV;
@@ -199,13 +242,17 @@ if (Q.disputed_states_1876.length > 0 && repUndisputed < majority && demUndisput
   Q.potus_winner = "disputed";
 } else if (Q.repEVTotal >= majority) {
   Q.potus_winner = "rep";
-} else {
+} else if (Q.demEVTotal >= majority) {
   Q.potus_winner = "dem";
+} else if (Q.libEVTotal >= majority) {
+  Q.potus_winner = "lib";
+} else if (Q.radEVTotal >= majority) {
+  Q.potus_winner = "rad";
+} else {
+  Q.potus_winner = "house";
 }
 
-console.log(`${state} winner: ${winner}, rep=${votes.rep.toFixed(0)}, dem=${votes.dem.toFixed(0)}, lib=${votes.lib.toFixed(0)}, margin=${marginPct}%`);
-
-if(Q.demEVTotal == 0 && Q.libEVTotal == 0)
+if(Q.demEVTotal == 0 && Q.libEVTotal == 0 && Q.radEVTotal == 0)
 {
   this.achieve("washington");
 }
@@ -264,6 +311,9 @@ on-display: {!
     if (Q.liberal_split && (Q[state + "_lib_pct"] || 0) > 0) {
       entry["Liberal Republican"] = Q[state + "_lib_pct"];
     }
+    if (Q.radical_split && (Q[state + "_rad_pct"] || 0) > 0) {
+      entry["Radical Republican"] = Q[state + "_rad_pct"];
+    }
     results[key] = entry;
   }
 
@@ -288,6 +338,8 @@ go-to: potus_menu_1876
 {!<tr><td>Party</td><td>Electoral votes</td></tr>!}
 {!<tr><td><div class="box" style="background-color:#d73027; outline:2px solid;"></div> !}<span style="color: #c00000;">**Republicans ([+ Candidate +])**</span>{!</td><td>!}[+ repEVTotal +] votes{!</td></tr>!}
 {!<tr><td><div class="box" style="background-color:#4575b4; outline:2px solid;"></div> !}<span style="color: #0015bc;">**Democrats**</span> ([+ dem_candidate_1876 +]){!</td><td>!}[+ demEVTotal +] votes{!</td></tr>!}
+[? if liberal_split = 1 : {!<tr><td><div class="box" style="background-color:#DAA520; outline:2px solid;"></div> !}<span style="color: #DAA520;">**Liberal Republicans**</span> (Greeley){!</td><td>!}[+ libEVTotal +] votes{!</td></tr>!} ?]
+[? if radical_split = 1 : {!<tr><td><div class="box" style="background-color:#7A1F5C; outline:2px solid;"></div> !}<span style="color: #7A1F5C;">**Radical Republicans ([+ radical_candidate +])**</span>{!</td><td>!}[+ radEVTotal +] votes{!</td></tr>!} ?]
 [? if Disputed_Yes == 1 : {!<tr><td><div class="box" style="background-color:#8E536E; outline:2px solid;"></div> !}<span style="color: #8E536E;">**Disputed Results**</span> {!</td><td>!}[+ disputedRepEV + disputedDemEV +] votes{!</td></tr>!} ?]
 {!</table>!}
 
@@ -299,6 +351,8 @@ go-to: potus_menu_1876
 
 - @victory_1876
 - @defeat_dem_1876
+- @defeat_lib_1876
+- @defeat_rad_1876
 - @disputed_election_1876
 
 @victory_1876
@@ -517,6 +571,61 @@ on-arrival: {!
 !}
 
 [+ dem_candidate_1876 +] and the <span style="color: #0015bc;">**Democratic Party**</span> have carried a clear majority of the electoral vote. For the first time since before the war, a <span style="color: #0015bc;">**Democrat**</span> will occupy the White House. The Redemption of the South, already well underway in statehouses across the region, now has a friend in Washington.
+
+@defeat_lib_1876
+title: The <span style="color: #DAA520;">**Liberal Republicans**</span> have won!
+subtitle: <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ libEVTotal +] electoral votes
+view-if: potus_winner = "lib"
+on-arrival: {!
+    Q.president = "Greeley";
+    Q.president_party = "lib";
+    Q.liberal_split = 0;
+    Q.lose_vote = 1;
+
+    Q.sect_state = "Charles Francis Adams Sr.";
+    Q.sect_state_party = "LR";
+    Q.sect_treasury = "David Ames Wells";
+    Q.sect_treasury_party = "LR";
+    Q.sect_war = "Carl Schurz";
+    Q.sect_war_party = "LR";
+    Q.sect_interior = "Jacob D. Cox";
+    Q.sect_interior_party = "LR";
+    Q.sect_postmaster = "George William Curtis";
+    Q.sect_postmaster_party = "LR";
+    Q.attorney_general = "Benjamin H. Bristow";
+    Q.attorney_general_party = "LR";
+    Q.sect_agriculture = "Horace Capron";
+    Q.sect_agriculture_party = "R";
+!}
+
+In a stunning upset, the <span style="color: #DAA520;">**Liberal Republicans**</span> have carried an electoral majority on their own, without any fusion with the <span style="color: #0015bc;">**Democrats**</span>. The regular <span style="color: #c00000;">**Republican**</span> organization is shattered, and Reconstruction's future is now in the hands of a movement that campaigned against continued federal intervention in the South.
+
+@defeat_rad_1876
+title: The <span style="color: #7A1F5C;">**Radicals**</span> have won the presidency.
+subtitle: <span style="color: #7A1F5C;">**Radical Republican**</span>: [+ radEVTotal +] electoral votes
+view-if: potus_winner = "rad"
+on-arrival: {!
+    Q.president = radical_candidate;
+    Q.president_party = "rad";
+    Q.lose_vote = 1;
+
+    Q.sect_state = "Charles Sumner";
+    Q.sect_state_party = "Rad";
+    Q.sect_treasury = "Henry Charles Carey";
+    Q.sect_treasury_party = "Rad";
+    Q.sect_war = "Edwin M. Stanton";
+    Q.sect_war_party = "R";
+    Q.sect_interior = "George W. Julian";
+    Q.sect_interior_party = "Rad";
+    Q.sect_postmaster = "John A. J. Creswell";
+    Q.sect_postmaster_party = "Rad";
+    Q.attorney_general = "John Bingham";
+    Q.attorney_general_party = "Rad";
+    Q.sect_agriculture = "Owen Lovejoy";
+    Q.sect_agriculture_party = "Rad";
+!}
+
+The <span style="color: #7A1F5C;">**Radical Republicans**</span> have carried an outright electoral majority, breaking away from the regular party organization entirely. Reconstruction enters its most uncompromising phase yet, with the new administration committed to a hard line against the Redeemer governments of the South.
 
 @disputed_election_1876
 title: Ummmmm...

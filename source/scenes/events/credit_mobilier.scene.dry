@@ -7,7 +7,11 @@ on-arrival: {!
     Q.liberal_dissent += 6;
     Q.moderate_dissent += 4;
     Q.conservative_dissent += 3;
-    Q.radical_dissent += 3;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 3;
+    } else {
+        Q.radical_dissent += 3;
+    }
     Q.middle_class_dem += 4;
     Q.workers_dem += 2;
     Q.rural_dem += 2;
@@ -25,6 +29,8 @@ To discourage congressional scrutiny, discounted Credit Mobilier shares were dis
 [? if vice_president = "Colfax" : Worse still, Vice President Schuyler Colfax is among those named. He is accused of receiving shares while serving as Speaker of the House. Colfax denies wrongdoing, but the evidence has already damaged his defense. ?]
 
 [? if liberal_split = 1 : The <span style="color: #DAA520;">**Liberal Republicans**</span> call the scandal proof of the corruption they have warned about for years. The <span style="color: #0015bc;">**Democrats**</span> are making the same argument from the other side of the aisle. ?]
+
+[? if radical_split = 1 : Some of the men implicated sit with the breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> rather than the regular organization, an awkward complication for a party that has spent the last few years positioning itself as the more principled wing of the movement. ?]
 
 How do we respond?
 
@@ -52,12 +58,18 @@ For the moment, the damage is contained. Our core supporters remain with us and 
 
 [? if liberal_split = 1 : The <span style="color: #DAA520;">**Liberal Republicans**</span> are using this in every speech and pamphlet between now and November. ?]
 
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> is doing the same, careful to draw a line between its own implicated members and the "regular organization men" it says never should have been trusted with the railroad in the first place. ?]
+
 @sacrifice
 on-arrival: {!
     Q.liberal_dissent -= 3;
     Q.moderate_dissent -= 2;
     Q.conservative_dissent += 4;
-    Q.radical_dissent += 3;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 3;
+    } else {
+        Q.radical_dissent += 3;
+    }
     Q.middle_class_rep += 2;
     Q.middle_class_dem += 2;
     Q.dem_relation += 3;
@@ -66,7 +78,11 @@ on-arrival: {!
 
 We move quickly. Several of the most visibly implicated members are encouraged to step away from public office or decline to seek reelection. The administration calls for a full accounting rather than waiting for the <span style="color: #0015bc;">**Democrats**</span> to set the terms of the debate.
 
-Reformers give us some credit for acting. The men being cut loose and their allies are less forgiving. <span style="color: #B5651D;">**Conservatives**</span> and <span style="color: #7A1F5C;">**Radicals**</span> who depended on those members resent the decision.
+Reformers give us some credit for acting. The men being cut loose and their allies are less forgiving.
+
+[? if radical_split = 0 : <span style="color: #B5651D;">**Conservatives**</span> and <span style="color: #7A1F5C;">**Radicals**</span> who depended on those members resent the decision. ?]
+
+[? if radical_split = 1 : <span style="color: #B5651D;">**Conservatives**</span> who depended on those members resent the decision, and the breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> calls it a half-measure meant to save the organization rather than clean it out. ?]
 
 The scandal still hurts, but the party has shown some willingness to discipline its own.
 
@@ -76,7 +92,11 @@ on-arrival: {!
     Q.liberal_dissent -= 5;
     Q.moderate_dissent += 2;
     Q.conservative_dissent += 3;
-    Q.radical_dissent += 2;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 2;
+    } else {
+        Q.radical_dissent += 2;
+    }
     Q.middle_class_rep += 3;
     Q.dem_relation += 4;
     Q.resources -= 1;
@@ -93,7 +113,11 @@ on-arrival: {!
     Q.liberal_strength += 3;
     Q.moderate_dissent -= 3;
     Q.conservative_dissent += 6;
-    Q.radical_dissent += 4;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 4;
+    } else {
+        Q.radical_dissent += 4;
+    }
     Q.middle_class_rep += 5;
     Q.middle_class_dem -= 2;
     Q.dem_relation += 4;
@@ -104,7 +128,11 @@ We call for an immediate independent congressional investigation with full subpo
 
 The reformist wing approves. Members who had been drifting toward the <span style="color: #DAA520;">**Liberal Republicans**</span> have less reason to leave. The <span style="color: #0015bc;">**Democrats**</span> can still attack us, but a party that has opened its own books is harder to portray as completely corrupt.
 
-The investigation will hurt. Several prominent <span style="color: #c00000;">**Republicans**</span> will come under scrutiny, including men who expected the party to protect them. <span style="color: #B5651D;">**Conservatives**</span> and <span style="color: #7A1F5C;">**Radicals**</span> alike resent the exposure.
+The investigation will hurt. Several prominent <span style="color: #c00000;">**Republicans**</span> will come under scrutiny, including men who expected the party to protect them.
+
+[? if radical_split = 0 : <span style="color: #B5651D;">**Conservatives**</span> and <span style="color: #7A1F5C;">**Radicals**</span> alike resent the exposure. ?]
+
+[? if radical_split = 1 : <span style="color: #B5651D;">**Conservatives**</span> resent the exposure, and the breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> resents it just as much, having no wish to see its own implicated members dragged before the same committee. ?]
 
 @kick_out
 
@@ -119,7 +147,11 @@ on-arrival: {!
     Q.liberal_dissent -= 4;
     Q.moderate_dissent -= 2;
     Q.conservative_dissent += 5;
-    Q.radical_dissent += 3;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 3;
+    } else {
+        Q.radical_dissent += 3;
+    }
     Q.middle_class_rep += 4;
     Q.freemen_rep += 1;
     Q.dem_relation += 5;

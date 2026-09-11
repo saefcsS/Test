@@ -114,7 +114,7 @@ on-arrival: {!
     Q.rural_rep += 2;       // debtors benefit from inflation
 
     Q.middle_class_dem += 3;  // creditors and savers hurt
-    Q.europe_relation -= 2;   // foreign creditors alarmed
+    Q.uk_relation -= 2;   // foreign creditors alarmed
 !}
 
 We authorize an expansion of Greenback currency to relieve the credit squeeze strangling commerce. The theory is straightforward: tight money caused the crash, and loose money will ease the recovery.
