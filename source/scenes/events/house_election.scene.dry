@@ -96,11 +96,13 @@ let libShare = libVotes / totalVotes;
 let radShare = radVotes / totalVotes;
 let otherShare = otherVotes / totalVotes;
 
-let repPower = Math.pow(repShare, 3);
-let demPower = Math.pow(demShare, 3);
-let libPower = Q.liberal_split ? Math.pow(libShare, 3) : 0;
-let radPower = Q.radical_split ? Math.pow(radShare, 3) : 0;
-let otherPower = Math.pow(otherShare, 3);
+let nth = Math.log(totalVotes) / Math.log(totalSeats);
+
+let repPower = Math.pow(repShare, nth);
+let demPower = Math.pow(demShare, nth);
+let libPower = Q.liberal_split ? Math.pow(libShare, nth) : 0;
+let radPower = Q.radical_split ? Math.pow(radShare, nth) : 0;
+let otherPower = Math.pow(otherShare, nth);
 
 let powerTotal = repPower + demPower + libPower + radPower + otherPower;
 
