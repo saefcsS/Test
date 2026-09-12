@@ -8,7 +8,9 @@ on-arrival: civil_rights_timer += 6; month_actions += 1
 
 = Radicals Demand a Civil Rights Act
 
-[? if civil_rights_act_passed = 0 : The <span style="color: #7A1F5C;">**Radical Republicans**</span> are demanding that Congress pass sweeping civil rights legislation to protect freedmen from Southern "Black Codes" and ensure equality before the law. ?]
+[? if civil_rights_act_passed = 0 and radical_split = 0 : The <span style="color: #7A1F5C;">**Radical Republicans**</span> are demanding that Congress pass sweeping civil rights legislation to protect freedmen from Southern "Black Codes" and ensure equality before the law. ?]
+
+[? if civil_rights_act_passed = 0 and radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> is demanding, loudly and from outside the regular organization, that Congress pass sweeping civil rights legislation to protect freedmen from Southern "Black Codes" and ensure equality before the law. ?]
 
 [? if civil_rights_act_passed = 0 : They argue that Reconstruction means nothing without federal guarantees of citizenship, due process, and equal protection.?]
 
@@ -16,7 +18,9 @@ on-arrival: civil_rights_timer += 6; month_actions += 1
 
 [? if civil_rights_act_passed = 1 : With the passage of the Civil Rights acts, all citizens of the United States are to be treated equal under the law. But revanchist southerners aim to ignore the law and continue there racist ways to preserve "White Man's Rule" in the South. ?]
 
-[? if civil_rights_act_passed = 1 : The <span style="color: #7A1F5C;">**Radical Republicans**</span> are demanding that President exercise his executive powers to properly enforce the law across the south. ?]
+[? if civil_rights_act_passed = 1 and radical_split = 0 : The <span style="color: #7A1F5C;">**Radical Republicans**</span> are demanding that President exercise his executive powers to properly enforce the law across the south. ?]
+
+[? if civil_rights_act_passed = 1 and radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> is demanding that the President exercise his executive powers to properly enforce the law across the south, and is making the demand as loudly in public as it once did from inside the party. ?]
 
 What will we do???
 
@@ -31,7 +35,32 @@ subtitle: -2 budget & Congress majority
 unavailable-subtitle: [? if budget < 2: Not enough budget. ?][? if house_majority < 2: We don't have a House majority. ?][? if sen_majority < 2: We don't have a Senate majority. ?]
 choose-if: budget >= 2 and house_majority > 1 and sen_majority > 1
 view-if: civil_rights_act_passed = 0
-on-arrival: civil_rights_act_passed = 1; budget -= 2; PoliticalCostPenalty += 2; veto += 1; veto_reason = "Civil Rights Act"; freedmen_rep += 5; radical_strength += 5; moderate_dissent += 3; conservative_dissent += 4; liberal_dissent += 3; civil_rights += 5;
+on-arrival: {!
+    Q.civil_rights_act_passed = 1;
+    Q.budget -= 2;
+    Q.PoliticalCostPenalty += 2;
+    Q.veto += 1;
+    Q.veto_reason = "Civil Rights Act";
+    Q.freedmen_rep += 5;
+    Q.moderate_dissent += 3;
+    Q.conservative_dissent += 4;
+    Q.liberal_dissent += 3;
+    Q.civil_rights += 5;
+
+    // Delivering the Radicals' central demand pulls freedmen support
+    // back toward the regular party, even as the breakaway leadership
+    // is pleased that the demand was met at all.
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 6;
+        Q.freemen_rad -= 3;
+        Q.workers_rad -= 1;
+    } else {
+        Q.radical_strength += 5;
+    }
+    if (Q.liberal_split == 1) {
+        Q.rural_lib -= 1;
+    }
+!}
 
 We endorse the <span style="color: #7A1F5C;">**Radicals'**</span> initiative and pass the Civil Rights Act through Congress. It marks a bold stand for equality for all peoples in the United States.
 
@@ -40,15 +69,43 @@ subtitle: -1 budget
 unavailable-subtitle: [? if budget < 2: Not enough budget. ?][? if president_party != "rep": We don't control the executive. ?]
 choose-if: budget >= 1 and president_party = "rep"
 view-if: civil_rights_act_passed = 1
-on-arrival: civil_rights += 3; budget -= 1; kkk_strength -= 3; radical_strength += 3;
+on-arrival: {!
+    Q.civil_rights += 3;
+    Q.budget -= 1;
+    Q.kkk_strength -= 3;
+
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 4;
+        Q.freemen_rad -= 2;
+    } else {
+        Q.radical_strength += 3;
+    }
+!}
 
 We continue to enforce the civil rights act across the country to ensure the freedmen are treated equal.
 
 @stall_civil_rights
 subtitle: <span style="color: #9D2933;">**Moderate**</span> Stability
-on-arrival: radical_dissent += 5; moderate_strength += 3; freedmen_rep -= 3;
+on-arrival: {!
+    Q.moderate_strength += 3;
+    Q.freedmen_rep -= 3;
 
-We decide not to move forward yet. <span style="color: #9D2933;">**Moderates**</span> appreciate our restraint, but <span style="color: #7A1F5C;">**Radical Republicans**</span> allies and Black communities grow increasingly impatient.
+    // Refusing to act drives disillusioned freedmen and reformers toward
+    // the breakaway Radicals, the opposite of the pass/enforce direction.
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 5;
+        Q.freemen_rad += 3;
+        Q.workers_rad += 1;
+    } else {
+        Q.radical_dissent += 5;
+    }
+    if (Q.liberal_split == 1) {
+        Q.middle_class_lib += 1;
+    }
+!}
 
+We decide not to move forward yet. <span style="color: #9D2933;">**Moderates**</span> appreciate our restraint, but
 
+[? if radical_split = 0 : <span style="color: #7A1F5C;">**Radical Republicans**</span> allies and Black communities grow increasingly impatient. ?]
 
+[? if radical_split = 1 : the breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> and Black communities grow increasingly impatient, and the Radicals waste no time pointing out that the regular organization is once again the reason nothing gets done. ?]

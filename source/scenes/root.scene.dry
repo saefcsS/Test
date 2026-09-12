@@ -79,6 +79,7 @@ Q.impeach_month = 0;
 Q.rep_lib_working_majority = 0;
 Q.rep_lib_working_majority_senate = 0;
 
+
 Q.majority_lost = 0;
 
 Q.reconstruction_support = 70;

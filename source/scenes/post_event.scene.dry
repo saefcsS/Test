@@ -513,9 +513,15 @@ for (let state of Q.southern_states) {
 
 }
 
-if ((Q.house_majority === 3 || Q.house_majority === 2) && (Q.sen_majority === 3 || Q.sen_majority === 2)) {
+if ((Q.house_majority === 1 || Q.house_majority === 2) && (Q.sen_majority === 1 || Q.sen_majority === 2)) 
+{
     Q.rep_majority = 1;
-} else {
+} 
+else if ((Q.house_majority === 1 || Q.house_majority === 2 || Q.rep_lib_working_majority === 1 || Q.rep_rad_working_majority === 1) && (Q.sen_majority === 1 || Q.sen_majority === 2 || Q.rep_lib_working_majority_senate === 1 || Q.rep_rad_working_majority_senate === 1)) 
+{
+    Q.rep_majority = 0.5;
+} 
+else {
     Q.rep_majority = 0;
 }
 
@@ -966,11 +972,21 @@ if (Q.month_actions >= 1) {
     {
         Q.middle_class_rep -= 3/12;
         Q.middle_class_lib += 3/12;
+        Q.rural_lib += 1/12;
+        Q.immigrant_laborers_lib += 1/12;
+        Q.workers_lib += 1/12;
+        Q.unemployed_lib += 1/12;
+        Q.freemen_lib += 1/12
     }
     if(Q.radical_split)
     {
         Q.freedmen_rep -= 3/12
         Q.freedmen_rad += 3/12
+        Q.rural_rad += 1/12;
+        Q.immigrant_laborers_rad += 1/12;
+        Q.workers_rad += 1/12;
+        Q.unemployed_rad += 1/12;
+        Q.middle_class_rad += 1/12
     }
 
 }

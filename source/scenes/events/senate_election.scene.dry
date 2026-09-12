@@ -297,12 +297,14 @@ go-to: house_makeup
 - @defeat
 - @lib_senate_kingmaker
 - @rad_senate_kingmaker
+- @other_senate_kingmaker
 - @tie
 
 @simple_majority
 title: <span style="color: #c00000;">**Republicans**</span> gain a simple majority in the Senate
 subtitle: <span style="color: #c00000;">**Republicans**</span>: [+ rep_senate_r +] seats
 view-if: sen_majority = 2
+on-arrival: lose_vote = 1
 
 The <span style="color: #c00000;">**Republicans**</span> have gained a simple majority in the Senate.
 
@@ -310,50 +312,62 @@ The <span style="color: #c00000;">**Republicans**</span> have gained a simple ma
 title: <span style="color: #c00000;">**Republicans**</span> secure a supermajority in the Senate
 subtitle: <span style="color: #c00000;">**Republicans**</span>: [+ rep_senate_r +] seats
 view-if: sen_majority = 3
+on-arrival: lose_vote = 1
 
-The <span style="color: #c00000;">**Republicans**</span> have gained a supermajority in the Senate. Now they can override any presidential veto.
+The <span style="color: #c00000;">**Republicans**</span> have gained a supermajority in the Senate. They now possess enough seats to override presidential vetoes.
 
 @rep_lib_senate_majority
 title: <span style="color: #c00000;">**Republicans**</span> and <span style="color: #DAA520;">**Liberal Republicans**</span> hold a working Senate majority
 subtitle: <span style="color: #c00000;">**Republicans**</span>: [+ rep_senate_r +] seats, <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ lib_senate_r +] seats
 view-if: sen_majority = 0 and rep_lib_working_majority_senate = 1 and liberal_split = 1
-on-arrival: lose_vote = 1;
+on-arrival: lose_vote = 1
 
-Neither party holds an outright Senate majority, but <span style="color: #c00000;">**Republicans**</span> and <span style="color: #DAA520;">**Liberal Republicans**</span> together command enough seats to organize the chamber if they can find common ground. Their cooperation on legislation will not come without concessions.
+Neither party holds an outright Senate majority, but the <span style="color: #c00000;">**Republicans**</span> and <span style="color: #DAA520;">**Liberal Republicans**</span> together command enough seats to organize the chamber if they can find common ground. Their cooperation on legislation will require concessions from both sides.
 
 @defeat
 title: <span style="color: #c00000;">**Republicans**</span> have lost the Senate
 subtitle: <span style="color: #c00000;">**Republicans**</span>: [+ rep_senate_r +] seats
 view-if: sen_majority = 0 and rep_lib_working_majority_senate = 0 and dem_senate_r > rep_senate_r
-on-arrival: lose_vote = 1;
+on-arrival: lose_vote = 1
 
-The <span style="color: #c00000;">**Republicans**</span> have lost control of the Senate to the <span style="color: #0015bc;">**Democrats**</span>.
+The <span style="color: #0015bc;">**Democrats**</span> have become the largest major-party bloc in the Senate. Without another party's support, however, they cannot command an outright majority.
 
 @lib_senate_kingmaker
 title: <span style="color: #DAA520;">**Liberal Republicans**</span> hold the balance of power in the Senate
 subtitle: <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ lib_senate_r +] seats
-view-if: sen_majority = 0 and rep_lib_working_majority_senate = 0 and dem_senate_r <= rep_senate_r and liberal_split = 1
-on-arrival: lose_vote = 1;
+view-if: sen_majority = 0 and rep_lib_working_majority_senate = 0 and rep_senate_r >= dem_senate_r and liberal_split = 1 and lib_senate_r > rad_senate_r and lib_senate_r >= other_senate_r
+on-arrival: lose_vote = 1
 
-No party commands a Senate majority. The <span style="color: #DAA520;">**Liberal Republicans**</span> find themselves holding the balance of power. Every major vote will require negotiating their support.
+No party commands a Senate majority. The <span style="color: #DAA520;">**Liberal Republicans**</span> hold the largest bloc outside the two major parties, giving them the balance of power in the chamber.
 
 @rad_senate_kingmaker
 title: <span style="color: #7A1F5C;">**Radical Republicans**</span> hold the balance of power in the Senate
 subtitle: <span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ rad_senate_r +] seats
-view-if: sen_majority = 0 and rep_lib_working_majority_senate = 0 and dem_senate_r <= rep_senate_r and radical_split = 1
-on-arrival: lose_vote = 1;
+view-if: sen_majority = 0 and rep_lib_working_majority_senate = 0 and rep_senate_r >= dem_senate_r and radical_split = 1 and rad_senate_r > lib_senate_r and rad_senate_r >= other_senate_r
+on-arrival: lose_vote = 1
 
-No party commands a Senate majority. The <span style="color: #7A1F5C;">**Radical Republicans**</span> find themselves holding the balance of power, and every major vote on Reconstruction enforcement will now run through them rather than through the regular party's own leadership.
+No party commands a Senate majority. The <span style="color: #7A1F5C;">**Radical Republicans**</span> hold the largest bloc outside the two major parties, giving them the balance of power in the chamber.
+
+@other_senate_kingmaker
+title: Minor parties hold the balance of power in the Senate
+subtitle: Others: [+ other_senate_r +] seats
+view-if: sen_majority = 0 and rep_lib_working_majority_senate = 0 and rep_senate_r >= dem_senate_r and other_senate_r > lib_senate_r and other_senate_r > rad_senate_r
+on-arrival: lose_vote = 1
+
+No party commands a Senate majority, and neither the <span style="color: #DAA520;">**Liberal Republicans**</span> nor the <span style="color: #7A1F5C;">**Radical Republicans**</span> hold the largest minor-party bloc. Other senators will therefore play an important role in organizing the chamber.
 
 @tie
 title: A tied Senate!
 subtitle: <span style="color: #c00000;">**Republicans**</span> and <span style="color: #0015bc;">**Democrats**</span>: [+ rep_senate_r +] – [+ dem_senate_r +]
 view-if: rep_senate_r = dem_senate_r and sen_majority = 0 and rep_lib_working_majority_senate = 0
-on-arrival: lose_vote = 1;
+on-arrival: lose_vote = 1
 
-In a stunning turn of events, the Senate election has ended in a tie.
+The <span style="color: #c00000;">**Republicans**</span> and <span style="color: #0015bc;">**Democrats**</span> are tied in the Senate. Neither major party can organize the chamber without support from another bloc.
 
 [? if president_party = "rep" : The Vice President can cast the deciding vote in favor of the <span style="color: #c00000;">**Republicans**</span>. ?]
+
 [? if president_party = "dem" : The Vice President can cast the deciding vote in favor of the <span style="color: #0015bc;">**Democrats**</span>. ?]
-[? if president_party = "lib" : With a <span style="color: #DAA520;">**Liberal Republican**</span> president, the Vice President's tie-breaking votes may not favor either major party. ?]
-[? if president_party = "rad" : With a <span style="color: #7A1F5C;">**Radical Republican**</span> president, the Vice President's tie-breaking votes may not favor either major party. ?]
+
+[? if president_party = "lib" : With a <span style="color: #DAA520;">**Liberal Republican**</span> president, the Vice President would determine tied votes according to the administration's position. ?]
+
+[? if president_party = "rad" : With a <span style="color: #7A1F5C;">**Radical Republican**</span> president, the Vice President would determine tied votes according to the administration's position. ?]

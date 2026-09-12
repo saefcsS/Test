@@ -1,7 +1,7 @@
 title: Constitutional Reform
 new-page: true
 is-card: true
-view-if: rep_majority = 1 and limit = 1
+view-if: rep_majority = 1 and limit = 1 and (fortheen_A = 0 or fifthteen = 0 or Blain = 0 or fifth_A = 0)
 tags: cotus_affairs
 on-arrival: month_actions += 1; constitutional_reform_timer += 12;
 card-image: img/portraits/Thaddeus_Stevens.jpg
@@ -9,7 +9,9 @@ go-to: reforms_menu
 
 = Rewriting the Nation's Charter
 
-Many <span style="color: #7A1F5C;">**Radical Republicans**</span> of the <span style="color: #c00000;">**Republican**</span> party aim to amend the Constitution to push through their agenda and speed up the reconstruction process.
+[? if radical_split = 0 : Many <span style="color: #7A1F5C;">**Radical Republicans**</span> of the <span style="color: #c00000;">**Republican**</span> party aim to amend the Constitution to push through their agenda and speed up the reconstruction process. ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span>, along with what remains of the Radical wing still inside the <span style="color: #c00000;">**Republican**</span> party, continues pushing to amend the Constitution to speed up the reconstruction process. ?]
 
 A constitutional amendment requires either a two-thirds supermajority in Congress as well as three-fourths support of all the states.
 
@@ -28,7 +30,29 @@ subtitle: Birthright Citizenship & Equal Protection
 view-if: fortheen_A = 0
 choose-if: amendmentResult = 1 and house_majority = 3 and sen_majority = 3 and limit = 1
 unavailable-subtitle: [? if limit < 1: We shouldn't pass too many amendments?][? if house_majority < 3: We do not have enough seats in the House ?][? if sen_majority < 3: We also do not have enough seats in the Senate ?][? if amendmentResult = 0: 3/4th of the States don't approve of the amendment?]
-on-arrival: limit -= 1; kkk_militancy += 0.1; fortheen_A = 1; reconstruction_support += 8; radical_strength += 5; moderate_dissent += 3; freemen_rep += 12; rural_dem += 7; immigrant_laborers_dem += 4; middle_class_rep += 3; liberal_strength += 6; liberal_dissent -= 3; fortheen_A = 1
+on-arrival: {!
+    Q.limit -= 1;
+    Q.kkk_militancy += 0.1;
+    Q.fortheen_A = 1;
+    Q.reconstruction_support += 8;
+    Q.moderate_dissent += 3;
+    Q.freemen_rep += 12;
+    Q.rural_dem += 7;
+    Q.immigrant_laborers_dem += 4;
+    Q.middle_class_rep += 3;
+    Q.liberal_strength += 6;
+    Q.liberal_dissent -= 3;
+
+    // Delivering birthright citizenship satisfies the Radical agenda,
+    // pulling freedmen support back toward the regular party even as
+    // the breakaway leadership is pleased it happened at all.
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 6;
+        Q.freemen_rad -= 2;
+    } else {
+        Q.radical_strength += 5;
+    }
+!}
 
 The amendment passes! ' All persons born...are citizens' is now engraved in constitutional marble. All former slaves are now citizens of the United States and have the same rights as their light-skinned counterparts.
 
@@ -40,7 +64,33 @@ subtitle: Birthright Citizenship & Equal Protection
 view-if: fifthteen = 0
 choose-if: amendmentResult = 1 and house_majority = 3 and sen_majority = 3 and limit = 1
 unavailable-subtitle: [? if limit < 1: We shouldn't pass too many amendments?][? if house_majority < 3: We do not have enough seats in the House ?][? if sen_majority < 3: We also do not have enough seats in the Senate ?][? if amendmentResult = 0: 3/4th of the States don't approve of the amendment?]
-on-arrival: limit -= 1; fifthteen = 1; kkk_militancy += 0.25; reconstruction_support += 10; radical_strength += 8; moderate_dissent += 5; freemen_rep += 15; rural_dem += 10; middle_class_rep += middle_class_other*0.6; middle_class_other *= 0.2; rural_rep += rural_other*0.4; rural_other *= 0.2; immigrant_laborers_rep += immigrant_laborers_other*0.3; immigrant_laborers_other *= 0.3; liberal_strength += 8; liberal_dissent -= 4; fifthteen = 1
+on-arrival: {!
+    Q.limit -= 1;
+    Q.fifthteen = 1;
+    Q.kkk_militancy += 0.25;
+    Q.reconstruction_support += 10;
+    Q.moderate_dissent += 5;
+    Q.freemen_rep += 15;
+    Q.rural_dem += 10;
+    Q.middle_class_rep += Q.middle_class_other * 0.6;
+    Q.middle_class_other *= 0.2;
+    Q.rural_rep += Q.rural_other * 0.4;
+    Q.rural_other *= 0.2;
+    Q.immigrant_laborers_rep += Q.immigrant_laborers_other * 0.3;
+    Q.immigrant_laborers_other *= 0.3;
+    Q.liberal_strength += 8;
+    Q.liberal_dissent -= 4;
+
+    // The single biggest Radical demand in the whole card. Delivering
+    // it pulls even more freedmen support back from the breakaway party
+    // than the 14th does.
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 9;
+        Q.freemen_rad -= 3;
+    } else {
+        Q.radical_strength += 8;
+    }
+!}
 
 The amendment is ratified! 'The right to vote shall not be denied...on account of race.' Freedmen celebrate while Southern legislatures are already devising method to try to circumvent the amendment. The Klan's night rides intensify.
 
@@ -62,11 +112,37 @@ subtitle: <span style="color: #7A1F5C;">**Radical**</span> Land Reform: Amend th
 view-if: fifth_A = 0
 choose-if: amendmentResult = 1 and house_majority = 3 and sen_majority = 3 and limit = 1
 unavailable-subtitle: [? if limit < 1: We shouldn't pass too many amendments?][? if house_majority < 3: We do not have enough seats in the House ?][? if sen_majority < 3: We also do not have enough seats in the Senate ?][? if amendmentResult = 0: 3/4th of the States don't approve of the amendment?]
-on-arrival: limit -= 1; fifth_A = 1; conservative_dissent += 10; radical_dissent -= 5; freemen_rep += 0.2 * freemen_other; freemen_other *= 0.8; conservative_strength -= 2; rural_rep += 5; rural_dem -= 4; unemployed_other += 5; kkk_strength += 3; kkk_militancy += 0.1; liberal_strength += 5; liberal_dissent -= 2;
+on-arrival: {!
+    Q.limit -= 1;
+    Q.fifth_A = 1;
+    Q.conservative_dissent += 10;
+    Q.freemen_rep += 0.2 * Q.freemen_other;
+    Q.freemen_other *= 0.8;
+    Q.conservative_strength -= 2;
+    Q.rural_rep += 5;
+    Q.rural_dem -= 4;
+    Q.unemployed_other += 5;
+    Q.kkk_strength += 3;
+    Q.kkk_militancy += 0.1;
+    Q.liberal_strength += 5;
+    Q.liberal_dissent -= 2;
+
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 6;
+        Q.freemen_rad -= 2;
+        Q.rural_rad -= 1;
+    } else {
+        Q.radical_dissent -= 5;
+    }
+!}
 
 The revised 5th Amendment has passed Congress and been ratified by the states. The "just compensation" clause has been struck from the Constitution, opening the door for uncompensated land confiscation from former Confederates.
 
-<span style="color: #7A1F5C;">**Radical Republicans**</span> hail the amendment as the cornerstone of true Reconstruction. Southern elites are outraged, denouncing the amendment as tyranny. The path ahead will be turbulent, but this is a revolution in land ownership and federal power.
+[? if radical_split = 0 : <span style="color: #7A1F5C;">**Radical Republicans**</span> hail the amendment as the cornerstone of true Reconstruction. ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> hails the amendment as the cornerstone of true Reconstruction, though it notes the regular organization took its time getting there. ?]
+
+Southern elites are outraged, denouncing the amendment as tyranny. The path ahead will be turbulent, but this is a revolution in land ownership and federal power.
 
 - @reforms_menu: See other reform options.
 

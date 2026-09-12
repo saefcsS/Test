@@ -6,7 +6,13 @@ max-visits: 1
 
 = Jefferson Davis Treason Case
 
-Jefferson Davis remains under arrest for his leadership of the rebellious Confederate states. <span style="color: #7A1F5C;">**Radical Republicans**</span> push for a high-profile treason trial, seeing it as essential to uphold federal authority. <span style="color: #9D2933;">**Moderates**</span> and <span style="color: #B5651D;">**Conservatives**</span> warn that such a trial could spark Southern vengeance or risk a Supreme Court ruling that legitimizes secession.
+Jefferson Davis remains under arrest for his leadership of the rebellious Confederate states.
+
+[? if radical_split = 0 : <span style="color: #7A1F5C;">**Radical Republicans**</span> push for a high-profile treason trial, seeing it as essential to uphold federal authority. ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> pushes hard from outside the regular organization for a high-profile treason trial, seeing it as essential to uphold federal authority. ?]
+
+<span style="color: #9D2933;">**Moderates**</span> and <span style="color: #B5651D;">**Conservatives**</span> warn that such a trial could spark Southern vengeance or risk a Supreme Court ruling that legitimizes secession.
 
 Do we proceed with prosecuting Davis?
 
@@ -29,12 +35,46 @@ on-display: {!
     var contentDiv = document.querySelector("#page #mid_panel #content");
     contentDiv.appendChild(cardEl);
 !}
-on-arrival: radical_strength += 1; radical_dissent -= 2; moderate_strength -= 1; conservative_strength -= 2; conservative_dissent += 2; kkk_strength += 5; kkk_militancy += 0.1;
+on-arrival: {!
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 3;
+        Q.middle_class_rad += 1;
+    } else {
+        Q.radical_strength += 1;
+        Q.radical_dissent -= 2;
+    }
+    Q.moderate_strength -= 1;
+    Q.conservative_strength -= 2;
+    Q.conservative_dissent += 2;
+    Q.kkk_strength += 5;
+    Q.kkk_militancy += 0.1;
+!}
 
-Congress votes to put Davis on trial. <span style="color: #7A1F5C;">**Radicals**</span> celebrate a stand for the Republic, while <span style="color: #9D2933;">**Moderates**</span> and <span style="color: #B5651D;">**Conservatives**</span> warn of the dangers: Southern resentment may explode, and a hostile court could even declare secession legal, threatening the legitimacy of Reconstruction.
+Congress votes to put Davis on trial.
+
+[? if radical_split = 0 : <span style="color: #7A1F5C;">**Radicals**</span> celebrate a stand for the Republic, while <span style="color: #9D2933;">**Moderates**</span> and <span style="color: #B5651D;">**Conservatives**</span> warn of the dangers: Southern resentment may explode, and a hostile court could even declare secession legal, threatening the legitimacy of Reconstruction. ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> celebrates a stand for the Republic it had been demanding for some time, while <span style="color: #9D2933;">**Moderates**</span> and <span style="color: #B5651D;">**Conservatives**</span> still inside the party warn of the dangers: Southern resentment may explode, and a hostile court could even declare secession legal, threatening the legitimacy of Reconstruction. ?]
 
 @NOPE
 subtitle: Exercise caution, avoid provocation
-on-arrival: radical_strength -= 1; radical_dissent += 2; moderate_strength += 2; conservative_strength += 2; conservative_dissent -= 2; kkk_strength -= 3; kkk_militancy -= 0.1;
+on-arrival: {!
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 3;
+        Q.middle_class_rad -= 1;
+    } else {
+        Q.radical_strength -= 1;
+        Q.radical_dissent += 2;
+    }
+    Q.moderate_strength += 2;
+    Q.conservative_strength += 2;
+    Q.conservative_dissent -= 2;
+    Q.kkk_strength -= 3;
+    Q.kkk_militancy -= 0.1;
+!}
 
-<span style="color: #9D2933;">**Moderate**</span> and <span style="color: #B5651D;">**Conservative**</span> voices prevail. They cite Lincoln's approach of forgiveness and argue that a trial could validate Redeemer propaganda in the South. Avoiding the trial maintains relative stability but frustrates the <span style="color: #7A1F5C;">**Radicals**</span>, who see an opportunity for federal authority lost.
+<span style="color: #9D2933;">**Moderate**</span> and <span style="color: #B5651D;">**Conservative**</span> voices prevail. They cite Lincoln's approach of forgiveness and argue that a trial could validate Redeemer propaganda in the South. Avoiding the trial maintains relative stability but frustrates
+
+[? if radical_split = 0 : the <span style="color: #7A1F5C;">**Radicals**</span>, who see an opportunity for federal authority lost. ?]
+
+[? if radical_split = 1 : the breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span>, who see an opportunity for federal authority lost and one more piece of evidence that the regular organization lacks the will to see Reconstruction through. ?]

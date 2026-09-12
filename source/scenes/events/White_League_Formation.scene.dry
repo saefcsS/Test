@@ -29,8 +29,20 @@ Though the government wins some victories, the new paramilitaries are discipline
 @ignore
 choose-if: conservative_strength + liberal_strength >= 50
 unavailable-subtitle: [? if conservative_strength + liberal_strength < 50: Too many <span style="color: #c00000;">**Republicans**</span> demand action. ?]
-on-arrival: whiteL_strength += 3; whiteL_militancy += 0.05; radical_dissent += 4; moderate_dissent += 2
+on-arrival: {!
+    Q.whiteL_strength += 3;
+    Q.whiteL_militancy += 0.05;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 4;
+        Q.middle_class_rad -= 1;
+    } else {
+        Q.radical_dissent += 4;
+    }
+    Q.moderate_dissent += 2;
+!}
 
 The administration chooses not to escalate the situation. Many newspapers portray the White Leagues as harmless veterans' associations, and confronting them could inflame tensions in the South.
 
-<span style="color: #7A1F5C;">**Radicals**</span> are furious, warning that ignoring the threat will only embolden Reconstruction's enemies.
+[? if radical_split = 0 : <span style="color: #7A1F5C;">**Radicals**</span> are furious, warning that ignoring the threat will only embolden Reconstruction's enemies. ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> is furious, warning that ignoring the threat will only embolden Reconstruction's enemies, and adding that this is precisely the kind of timidity they left the regular organization over. ?]

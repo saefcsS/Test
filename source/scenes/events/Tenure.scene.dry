@@ -5,13 +5,27 @@ max-visits: 1
 tags: event
 new-page: true
 go-to: Response
-on-arrival: veto = 0; radical_strength += 2; moderate_strength += 1; conservative_strength -= 1; radicalization += 3;
+on-arrival: {!
+    veto = 0;
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 2;
+    } else {
+        Q.radical_strength += 2;
+    }
+    moderate_strength += 1;
+    conservative_strength -= 1;
+    radicalization += 3;
+!}
 
 = Congress Passes the Tenure of Office Act
 
 In a historic assertion of legislative authority, Congress passes the Tenure of Office Act. The law requires the President to obtain Senate approval before removing any official whose appointment originally required Senate confirmation in a clear response to Johnson's aggressive Cabinet purges.
 
-<span style="color: #7A1F5C;">**Radical Republicans**</span> celebrate the measure as essential to protecting Reconstruction, while <span style="color: #9D2933;">**moderates**</span> cautiously support it as a necessary check on executive overreach. <span style="color: #B5651D;">**Conservatives**</span> cry foul, calling it an unconstitutional encroachment on presidential power.  
+[? if radical_split = 0 : <span style="color: #7A1F5C;">**Radical Republicans**</span> celebrate the measure as essential to protecting Reconstruction, while <span style="color: #9D2933;">**moderates**</span> cautiously support it as a necessary check on executive overreach. ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> celebrates the measure as essential to protecting Reconstruction, and claims a share of the credit for having pushed the issue long before the regular organization was willing to act, while <span style="color: #9D2933;">**moderates**</span> still inside the party cautiously support it as a necessary check on executive overreach. ?]
+
+<span style="color: #B5651D;">**Conservatives**</span> cry foul, calling it an unconstitutional encroachment on presidential power.  
 
 Although Johnson will try to veto it, tensions between the executive and Congress reach a new high. This legislation lays the groundwork for a future confrontation over presidential authority.
 
@@ -21,11 +35,34 @@ Although Johnson will try to veto it, tensions between the executive and Congres
 - @caution: Advise moderation and compromise.
 
 @celebrate
-on-arrival: radical_strength += 5; radical_dissent -= 1; moderate_dissent += 1; impeachment_ready = 1; tenure_act = 2; veto += 1; veto_reason = "Tenure of Office Act";
+on-arrival: {!
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 6;
+    } else {
+        Q.radical_strength += 5;
+        Q.radical_dissent -= 1;
+    }
+    Q.moderate_dissent += 1;
+    Q.impeachment_ready = 1;
+    Q.tenure_act = 2;
+    Q.veto += 1;
+    Q.veto_reason = "Tenure of Office Act";
+!}
 
-The <span style="color: #7A1F5C;">**Radicals**</span> mobilize, confident that the law secures their ability to enforce Reconstruction without presidential interference.
+[? if radical_split = 0 : The <span style="color: #7A1F5C;">**Radicals**</span> mobilize, confident that the law secures their ability to enforce Reconstruction without presidential interference. ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> mobilizes its own supporters in celebration, confident that the law secures the ability to enforce Reconstruction without presidential interference, regardless of which organization gets the credit. ?]
 
 @caution
-on-arrival: moderate_strength += 3; radical_dissent += 1; conservative_dissent -= 1; impeachment_ready = 1
+on-arrival: {!
+    Q.moderate_strength += 3;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 1;
+    } else {
+        Q.radical_dissent += 1;
+    }
+    Q.conservative_dissent -= 1;
+    Q.impeachment_ready = 1;
+!}
 
 <span style="color: #9D2933;">**Moderates**</span> urge patience, warning that Johnson will surely test the law, but the legislative check has at least been established.

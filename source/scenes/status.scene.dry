@@ -40,7 +40,7 @@ window._senateData = _senate;
 
 Resources available: [+ resources +]
 
-<span style="color: #c00000;">**Republican**</span> position: [? if rep_majority = 1 : Majority government ?][? if rep_majority != 1 : Out of Government ?]
+<span style="color: #c00000;">**Republican**</span> position: [? if rep_majority = 1 : Majority government ?][? if rep_majority = 0.5 and rep_lib_working_majority = 1 and rep_lib_working_majority_senate = 1 : Coalition government with <span style="color: #DAA520;">**Liberal Republicans**</span> ?][? if rep_majority = 0.5 and rep_rad_working_majority = 1 and rep_rad_working_majority_senate = 1 : Coalition government with <span style="color: #7A1F5C;">**Radical Republicans**</span> ?][? if rep_majority = 0 : Out of Government ?]
 
 Internal dissent: [+ dissent_percent : dissent +]
 

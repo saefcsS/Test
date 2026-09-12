@@ -136,16 +136,8 @@ if (Q.rad_r >= Q.rep_r && Q.rad_r >= Q.dem_r && Q.rad_r >= Q.other_r && Q.rad_r 
 if (Q.other_r >= Q.rep_r && Q.other_r >= Q.dem_r && Q.other_r >= Q.lib_r && Q.other_r >= Q.rad_r) Q.largest_party_r = "other";
 
 if (Q.liberal_split === 1 && Q.liberal_reunion_seen !== 1) {
-    let libSeats = Q.lib_r || 0;
-    let totalHouse = Q.rep_r + Q.dem_r + Q.lib_r + Q.rad_r + Q.other_r;
-    let libPct = (libSeats / totalHouse) * 100;
  
-    // They've lost balance of power (can't kingmake) AND dropped below 8% of seats
-    // Adjust 8% threshold to taste. lower = harder to trigger reunion
-    let libCanKingmake = Q.rep_lib_working_majority === 0 && libSeats > 0;
-    let libCollapsed = libPct < 8;
- 
-    if (libCollapsed && !libCanKingmake) {
+    if (Q.lib_r <= Q.old_lib_r) {
         Q.liberal_reunion_triggered = 1;
     }
 }
@@ -310,44 +302,52 @@ subtitle: <span style="color: #c00000;">**Republicans**</span>: [+ rep_r +] seat
 view-if: house_majority = 3
 on-arrival: speaker_election_needed = 1
 
-With two-thirds of the House, <span style="color: #c00000;">**Republicans**</span> now wield veto-proof power.
+With two-thirds of the House, the <span style="color: #c00000;">**Republicans**</span> now wield veto-proof power.
 
 @house_rep_lib_majority
 title: <span style="color: #c00000;">**Republicans**</span> and <span style="color: #DAA520;">**Liberal Republicans**</span> hold a working majority
 subtitle: <span style="color: #c00000;">**Republicans**</span>: [+ rep_r +] seats, <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ lib_r +] seats
 view-if: house_majority = 0 and rep_lib_working_majority = 1 and liberal_split = 1
-on-arrival: speaker_election_needed = 1; majority_lost = 1; lose_vote = 0;
+on-arrival: speaker_election_needed = 1; majority_lost = 1; lose_vote = 0
 
-Neither party holds an outright majority, but <span style="color: #c00000;">**Republicans**</span> and <span style="color: #DAA520;">**Liberal Republicans**</span> together command enough seats to pass legislation if they can find common ground. Their cooperation will not come without a price.
+Neither party holds an outright majority, but the <span style="color: #c00000;">**Republicans**</span> and <span style="color: #DAA520;">**Liberal Republicans**</span> together hold enough seats to organize the House and pass legislation if they can reach an agreement.
 
 @house_defeat
 title: <span style="color: #c00000;">**Republicans**</span> lose the House
 subtitle: <span style="color: #c00000;">**Republicans**</span>: [+ rep_r +] seats
 view-if: house_majority = 0 and rep_lib_working_majority = 0 and dem_r > rep_r
-on-arrival: speaker_election_needed = 1; majority_lost = 1; lose_vote = 0;
+on-arrival: speaker_election_needed = 1; majority_lost = 1; lose_vote = 0
 
-The <span style="color: #0015bc;">**Democrats**</span> have taken control of the House of Representatives.
+The <span style="color: #0015bc;">**Democrats**</span> have taken the largest bloc in the House of Representatives.
 
 @house_lib_kingmaker
 title: <span style="color: #DAA520;">**Liberal Republicans**</span> hold the balance of power
 subtitle: <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ lib_r +] seats
-view-if: house_majority = 0 and rep_lib_working_majority = 0 and dem_r <= rep_r and liberal_split = 1
-on-arrival: speaker_election_needed = 1; majority_lost = 1; lose_vote = 0;
+view-if: house_majority = 0 and rep_lib_working_majority = 0 and dem_r <= rep_r and liberal_split = 1 and lib_r > rad_r and lib_r >= other_r
+on-arrival: speaker_election_needed = 1; majority_lost = 1; lose_vote = 0
 
-No party commands a majority. The <span style="color: #DAA520;">**Liberal Republicans**</span> find themselves in the position of kingmakers and their votes will determine whether Reconstruction legislation advances or stalls.
+No party commands a majority. The <span style="color: #DAA520;">**Liberal Republicans**</span> hold the largest bloc outside the two major parties, giving them the votes needed to determine which side can organize the House.
 
 @house_rad_kingmaker
 title: <span style="color: #7A1F5C;">**Radical Republicans**</span> hold the balance of power
 subtitle: <span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ rad_r +] seats
-view-if: house_majority = 0 and rep_lib_working_majority = 0 and dem_r <= rep_r and radical_split = 1
-on-arrival: speaker_election_needed = 1; majority_lost = 1; lose_vote = 0;
+view-if: house_majority = 0 and rep_lib_working_majority = 0 and dem_r <= rep_r and radical_split = 1 and rad_r > lib_r and rad_r >= other_r
+on-arrival: speaker_election_needed = 1; majority_lost = 1; lose_vote = 0
 
-No party commands a majority. The <span style="color: #7A1F5C;">**Radical Republicans**</span> find themselves in the position of kingmakers, and unlike a Liberal bloc, their price for cooperation is likely to be more enforcement in the South, not less.
+No party commands a majority. The <span style="color: #7A1F5C;">**Radical Republicans**</span> hold the largest bloc outside the two major parties, giving them significant leverage over the organization of the House.
+
+@house_other_kingmaker
+title: The balance of power is held by the minor parties
+subtitle: Others: [+ other_r +] seats
+view-if: house_majority = 0 and rep_lib_working_majority = 0 and dem_r <= rep_r and other_r > lib_r and other_r > rad_r
+on-arrival: speaker_election_needed = 1; majority_lost = 1; lose_vote = 0
+
+No party commands a majority, and neither the <span style="color: #DAA520;">**Liberal Republicans**</span> nor the <span style="color: #7A1F5C;">**Radical Republicans**</span> hold enough seats to determine the balance of power. The minor parties and independents will have an outsized role in organizing the House.
 
 @house_tie
 title: The House is tied!
-subtitle: Both parties are neck and neck
-view-if: rep_r = dem_r and house_majority = 0 and rep_lib_working_majority = 0
-on-arrival: speaker_election_needed = 1; majority_lost = 1; lose_vote = 0;
+subtitle: Republicans and Democrats hold equal numbers of seats
+view-if: house_majority = 0 and rep_lib_working_majority = 0 and rep_r = dem_r
+on-arrival: speaker_election_needed = 1; majority_lost = 1; lose_vote = 0
 
-A tied House will cause major legislative deadlock in the months ahead.
+The <span style="color: #c00000;">**Republicans**</span> and <span style="color: #0015bc;">**Democrats**</span> are tied in the House. Neither party can organize the chamber without support from another bloc.

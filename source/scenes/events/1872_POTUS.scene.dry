@@ -334,7 +334,6 @@ on-arrival: {!
     Q.vice_president = Q.VPCandidate;
     Q.Winner_72 = Q.Candidate;
     Q.president_party = "rep";
-    Q.liberal_reunion_triggered = 1;
 
     if (Q.Candidate == "Grant") {
         Q.sect_state = "Hamilton Fish";

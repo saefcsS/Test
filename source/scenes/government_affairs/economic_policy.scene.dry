@@ -35,13 +35,20 @@ on-arrival: {!
     Q.rural_dem += 3;
     Q.workers_rep -= 2;
     Q.workers_dem += 2;
-    Q.radical_dissent += 5;
     Q.moderate_dissent -= 3;
     Q.conservative_dissent -= 4;
     Q.liberal_strength += 3;
     Q.uk_relation += 2;
     Q.budget += 1;
     Q.economic_expansion -= 10;
+
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 5;
+        Q.workers_rad += 1;
+        Q.rural_rad += 1;
+    } else {
+        Q.radical_dissent += 5;
+    }
 !}
 
 We begin the return to specie payments and retire the Greenbacks. Creditors and bankers welcome the decision, while foreign investors regain confidence in the dollar.
@@ -81,10 +88,17 @@ on-arrival: {!
     Q.middle_class_rep -= 4;
     Q.middle_class_dem += 3;
     Q.conservative_dissent += 5;
-    Q.radical_strength += 4;
-    Q.radical_dissent -= 3;
     Q.uk_relation -= 3;
     Q.economic_expansion += 5;
+
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 5;
+        Q.workers_rad -= 1;
+        Q.rural_rad -= 1;
+    } else {
+        Q.radical_strength += 4;
+        Q.radical_dissent -= 3;
+    }
 !}
 
 We authorize a major expansion of the Greenback currency. Credit becomes cheaper, giving farmers, workers, and Southern businesses greater access to capital.
@@ -105,10 +119,17 @@ on-arrival: {!
     Q.moderate_dissent -= 1;
     Q.rural_rep -= 2;
     Q.workers_rep -= 1;
-    Q.radical_dissent += 4;
     Q.uk_relation += 1;
     Q.PoliticalCostPenalty += 1;
     Q.economic_expansion -= 3;
+
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 4;
+        Q.workers_rad += 1;
+        Q.rural_rad += 1;
+    } else {
+        Q.radical_dissent += 4;
+    }
 !}
 
 We devote federal funds to retiring the war debt.
@@ -126,8 +147,14 @@ on-arrival: {!
     Q.conservative_strength += 1;
     Q.moderate_strength += 1;
     Q.workers_rep += 1;
-    Q.radical_dissent -= 2;
     Q.economic_expansion += 4;
+
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 2;
+        Q.workers_rad -= 1;
+    } else {
+        Q.radical_dissent -= 2;
+    }
 !}
 
 We expand the national banking system into the South, bringing Northern capital and federal banking institutions into the region.
@@ -147,11 +174,18 @@ on-arrival: {!
     Q.rural_rep -= 3;
     Q.rural_dem += 3;
     Q.workers_dem += 2;
-    Q.radical_dissent += 6;
     Q.moderate_dissent += 2;
     Q.budget -= 0.5;
     Q.PoliticalCostPenalty += 0.5;
     Q.economic_expansion -= 6;
+
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 6;
+        Q.workers_rad += 2;
+        Q.rural_rad += 1;
+    } else {
+        Q.radical_dissent += 6;
+    }
 !}
 
 With prices rising, we begin retiring Greenbacks from circulation.
