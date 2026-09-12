@@ -32,7 +32,11 @@ on-arrival: {!
     if (!wasSpeaker) {
         Q.moderate_strength += 4;
         Q.moderate_dissent -= 3;
-        Q.radical_dissent += 2;
+        if (Q.radical_split == 1) {
+            Q.radical_relation -= 2;
+        } else {
+            Q.radical_dissent += 2;
+        }
         Q.conservative_dissent -= 2;
         Q.liberal_dissent -= 2;
         Q.middle_class_rep += 2;
@@ -46,7 +50,11 @@ on-arrival: {!
 !}
 go-to: speaker_end
 
-Schuyler Colfax, the "Smiler," is elected Speaker. Known for his warm personality and skill at building consensus, he is popular across the party's <span style="color: #9D2933;">**moderate**</span> and <span style="color: #B5651D;">**conservative**</span> wings. <span style="color: #7A1F5C;">**Radicals**</span> tolerate him, if not love him.
+Schuyler Colfax, the "Smiler," is elected Speaker. Known for his warm personality and skill at building consensus, he is popular across the party's <span style="color: #9D2933;">**moderate**</span> and <span style="color: #B5651D;">**conservative**</span> wings.
+
+[? if radical_split = 0 : <span style="color: #7A1F5C;">**Radicals**</span> tolerate him, if not love him. ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> has no particular love for him either, though it is no longer their problem to solve. ?]
 
 [? if speaker = "Colfax" : Colfax continues his tenure. The House settles into its familiar rhythms under his steady hand. ?]
 
@@ -55,7 +63,7 @@ His speakership opens channels to Ways & Means, strengthening our hand on tariff
 @Stevens
 title: Thaddeus Stevens (Pennsylvania)
 subtitle: [? if speaker = "Stevens" : Currently serving ?][? if speaker != "Stevens" : Radical choice. Transforms the speakership into a weapon for Reconstruction. ?]
-view-if: year <= 1868 and stevens_advisor = 1
+view-if: year <= 1868 and stevens_advisor = 1 and radical_split = 0
 on-arrival: {!
     Q.speaker = "Stevens";
     Q.speaker_party = "R";
@@ -85,7 +93,11 @@ on-arrival: {!
     if (!wasSpeaker) {
         Q.moderate_strength += 5;
         Q.conservative_strength += 3;
-        Q.radical_dissent += 4;
+        if (Q.radical_split == 1) {
+            Q.radical_relation -= 4;
+        } else {
+            Q.radical_dissent += 4;
+        }
         Q.liberal_dissent -= 2;
         Q.middle_class_rep += 3;
     }
@@ -110,7 +122,11 @@ on-arrival: {!
 
     Q.conservative_strength += 5;
     Q.conservative_dissent -= 4;
-    Q.radical_dissent += 5;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 5;
+    } else {
+        Q.radical_dissent += 5;
+    }
     Q.liberal_dissent -= 3;
     Q.moderate_dissent += 2;
 
@@ -124,7 +140,11 @@ go-to: speaker_end
 
 Henry Dawes brings a reputation for financial integrity and reform sympathies to the speakership. His selection satisfies the <span style="color: #B5651D;">**conservative**</span> and <span style="color: #DAA520;">**liberal**</span> factions, who see him as a counterweight to Radical excess.
 
-<span style="color: #7A1F5C;">**Radicals**</span> distrust him. The working class, sensing he will not be their champion, shift slightly.
+[? if radical_split = 0 : <span style="color: #7A1F5C;">**Radicals**</span> distrust him. ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> distrusts him, unsurprised that the regular organization would pick a counterweight to everything they stood for. ?]
+
+The working class, sensing he will not be their champion, shift slightly.
 
 His speakership strengthens fiscal oversight and accelerates currency legislation.
 
@@ -138,7 +158,11 @@ on-arrival: {!
     Q.speaker_party = "R";
 
     Q.moderate_strength += 4;
-    Q.radical_dissent -= 2;
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 2;
+    } else {
+        Q.radical_dissent -= 2;
+    }
     Q.conservative_dissent += 1;
     Q.liberal_dissent -= 1;
 
@@ -153,6 +177,8 @@ go-to: speaker_end
 
 James Garfield, the self-made man from Ohio and celebrated Union general, brings credibility with both <span style="color: #7A1F5C;">**Radical**</span> and <span style="color: #9D2933;">**moderate**</span> wings. A gifted orator, he commands the floor with natural authority.
 
+[? if radical_split = 1 : Even the breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> regards him as one of the few men left in the regular organization it can still work with. ?]
+
 His broad appeal reduces factional friction and opens up Reconstruction-minded legislation.
 
 
@@ -166,7 +192,11 @@ on-arrival: {!
 
     Q.moderate_strength += 3;
     Q.conservative_strength += 2;
-    Q.radical_dissent += 1;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 1;
+    } else {
+        Q.radical_dissent += 1;
+    }
     Q.liberal_dissent += 2;
 
     Q.uk_relation += 2;
@@ -204,7 +234,11 @@ on-arrival: {!
         Q.speaker_party = "D";
     }
 
-    Q.radical_dissent += 5;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 5;
+    } else {
+        Q.radical_dissent += 5;
+    }
     Q.moderate_dissent += 3;
     Q.reconstruction_support -= 5;
 

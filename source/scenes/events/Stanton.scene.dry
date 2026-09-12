@@ -6,13 +6,28 @@ tags: event
 new-page: true
 go-to: Response
 face-image: img/portraits/Stanton.jpg
-on-arrival: sect_war = "Edwin M. Stanton"; sect_war_party = "R"; radical_dissent += 2; moderate_dissent += 1; conservative_strength += 1; radicalization += 5;
+on-arrival: {!
+    sect_war = "Edwin M. Stanton";
+    sect_war_party = "R";
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 2;
+    } else {
+        Q.radical_dissent += 2;
+    }
+    moderate_dissent += 1;
+    conservative_strength += 1;
+    radicalization += 5;
+!}
 
 = The Dismissal of Edwin Stanton
 
 In a direct challenge to Congress, President Andrew Johnson removes Secretary of War Edwin M. Stanton from office, claiming a conflict over Reconstruction policy. Stanton, a staunch supporter of the Radical agenda, is seen by many in Congress as indispensable for enforcing federal authority in the South.
 
-<span style="color: #7A1F5C;">**Radical Republicans**</span> see Johnson's move as an outright defiance of the Tenure of Office Act, while <span style="color: #9D2933;">**moderates**</span> express cautious concern over the president's overreach. The stage is set for an unprecedented confrontation between the executive and legislative branches.
+[? if radical_split = 0 : <span style="color: #7A1F5C;">**Radical Republicans**</span> see Johnson's move as an outright defiance of the Tenure of Office Act, while <span style="color: #9D2933;">**moderates**</span> express cautious concern over the president's overreach. ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> sees Johnson's move as an outright defiance of the Tenure of Office Act, and treats it as fresh proof the regular organization was never going to hold him to it, while <span style="color: #9D2933;">**moderates**</span> still inside the party express cautious concern over the president's overreach. ?]
+
+The stage is set for an unprecedented confrontation between the executive and legislative branches.
 
 @Response
 
@@ -20,13 +35,34 @@ In a direct challenge to Congress, President Andrew Johnson removes Secretary of
 - @allow: Accept the dismissal and avoid immediate confrontation.
 
 @resist
-on-arrival: radical_strength += 3; moderate_strength += 1; radical_dissent += 2; impeachment_unlocked = 1
+on-arrival: {!
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 5;
+    } else {
+        Q.radical_strength += 3;
+        Q.radical_dissent += 2;
+    }
+    Q.moderate_strength += 1;
+    Q.impeachment_unlocked = 1;
+!}
 go-to: HouseVote
 
-Congress reacts swiftly. The <span style="color: #7A1F5C;">**Radical**</span> wing rallies support for a formal impeachment resolution, arguing that the President's violation of the Tenure of Office Act endangers the entire Reconstruction project.
+Congress reacts swiftly.
+
+[? if radical_split = 0 : The <span style="color: #7A1F5C;">**Radical**</span> wing rallies support for a formal impeachment resolution, arguing that the President's violation of the Tenure of Office Act endangers the entire Reconstruction project. ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> rallies outside support for a formal impeachment resolution, arguing that the President's violation of the Tenure of Office Act endangers the entire Reconstruction project, and finds a receptive audience among the moderates still inside the regular organization. ?]
 
 @allow
-on-arrival: moderate_strength += 2; conservative_dissent -= 1; radicalization -= 2
+on-arrival: {!
+    Q.moderate_strength += 2;
+    Q.conservative_dissent -= 1;
+    Q.radicalization -= 2;
+!}
 go-to: HouseVote
 
-Some moderates hope for a cooling-off period, fearing that a direct challenge could backfire. <span style="color: #7A1F5C;">**Radicals**</span> warn that postponement risks letting Johnson sabotage Reconstruction further.
+Some moderates hope for a cooling-off period, fearing that a direct challenge could backfire.
+
+[? if radical_split = 0 : <span style="color: #7A1F5C;">**Radicals**</span> warn that postponement risks letting Johnson sabotage Reconstruction further. ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> warns that postponement risks letting Johnson sabotage Reconstruction further, and reminds anyone who will listen that this is exactly the caution they left the party over. ?]

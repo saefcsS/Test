@@ -1994,42 +1994,42 @@ Q.VA_unemployed_rad = 0;
 Q.VA_unemployed_other = 10;
 
 // === GEORGIA ===
-Q.GA_workers = 28974;
+Q.GA_workers = 42110;
 Q.GA_workers_rep = 15; 
 Q.GA_workers_dem = 75; 
 Q.GA_workers_lib = 0; 
 Q.GA_workers_rad = 0;
 Q.GA_workers_other = 10;
 
-Q.GA_middle_class = 12262;
+Q.GA_middle_class = 28450;
 Q.GA_middle_class_rep = 10; 
 Q.GA_middle_class_dem = 80; 
 Q.GA_middle_class_lib = 0; 
 Q.GA_middle_class_rad = 0;
 Q.GA_middle_class_other = 10;
 
-Q.GA_rural = 75964;
+Q.GA_rural = 137842;
 Q.GA_rural_rep = 8; 
 Q.GA_rural_dem = 87; 
 Q.GA_rural_lib = 0; 
 Q.GA_rural_rad = 0;
 Q.GA_rural_other = 5;
 
-Q.GA_freemen = 230862;
+Q.GA_freemen = 231204;
 Q.GA_freemen_rep = 80; 
 Q.GA_freemen_dem = 10; 
 Q.GA_freemen_lib = 0; 
 Q.GA_freemen_rad = 0;
 Q.GA_freemen_other = 10;
 
-Q.GA_immigrant_laborers = 11671;
+Q.GA_immigrant_laborers = 14820;
 Q.GA_immigrant_laborers_rep = 18; 
 Q.GA_immigrant_laborers_dem = 72; 
 Q.GA_immigrant_laborers_lib = 0; 
 Q.GA_immigrant_laborers_rad = 0;
 Q.GA_immigrant_laborers_other = 10;
 
-Q.GA_unemployed = 206883;
+Q.GA_unemployed = 6940;
 Q.GA_unemployed_rep = 15; 
 Q.GA_unemployed_dem = 75; 
 Q.GA_unemployed_lib = 0; 

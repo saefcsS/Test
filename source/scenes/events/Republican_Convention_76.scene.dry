@@ -13,9 +13,13 @@ Q.third_term_bid = (Q.Winner_68 !== "" && Q.Winner_68 === Q.Winner_72) ? 1 : 0;
 
 [? if third_term_bid = 0 and president = "Grant" : President Grant, having succeeded to a first full term of his own, could seek renomination, though the party's mood has shifted considerably since his first victory. ?]
 
-[? if third_term_bid = 0 and president = "Wade" : President Wade's **<span style="color: #7A1F5C;">radical</span>** tenure has energized the base but alarmed **<span style="color: #B5651D;">Conservatives</span>** and **<span style="color: #9D2933;">Moderates</span>**  alike. Whether he stands again is very much in question. ?]
+[? if third_term_bid = 0 and president = "Wade" and radical_split = 0 : President Wade's **<span style="color: #7A1F5C;">radical</span>** tenure has energized the base but alarmed **<span style="color: #B5651D;">Conservatives</span>** and **<span style="color: #9D2933;">Moderates</span>**  alike. Whether he stands again is very much in question. ?]
 
-[? if third_term_bid = 0 and president = "Chase" : President Chase's **<span style="color: #9D2933;">Moderate</span>** course has frustrated the **<span style="color: #7A1F5C;">Radicals</span>** wing throughout his term, and challengers are already lining up ahead of the convention. ?]
+[? if third_term_bid = 0 and president = "Wade" and radical_split = 1 : President Wade's tenure began with the **<span style="color: #7A1F5C;">Radical</span>** wing still inside the party, but that wing has since departed to form its own organization. Whether Wade can command a convention majority without it is very much in question. ?]
+
+[? if third_term_bid = 0 and president = "Chase" and radical_split = 0 : President Chase's **<span style="color: #9D2933;">Moderate</span>** course has frustrated the **<span style="color: #7A1F5C;">Radicals</span>** wing throughout his term, and challengers are already lining up ahead of the convention. ?]
+
+[? if third_term_bid = 0 and president = "Chase" and radical_split = 1 : President Chase's **<span style="color: #9D2933;">Moderate</span>** course drove the **<span style="color: #7A1F5C;">Radicals</span>** out of the party altogether during his term, and what remains of the party's left flank is already lining up challengers ahead of the convention. ?]
 
 [? if president = "Blaine" or president = "Conkling" : President [+ president +] enters the convention as the incumbent, having taken the office after the last contested floor fight. The party is not entirely settled behind him. ?]
 
@@ -32,7 +36,11 @@ choose-if: dissent_percent <= 30
 unavailable-subtitle: The party's factions are too divided to sustain a third-term push.
 on-arrival: {!
 Q.Candidate = Q.president;
-Q.radical_dissent += 10;
+if (Q.radical_split == 1) {
+    Q.radical_relation -= 10;
+} else {
+    Q.radical_dissent += 10;
+}
 Q.moderate_dissent += 6;
 Q.conservative_dissent += 12;
 Q.liberal_dissent += 15;
@@ -62,7 +70,11 @@ choose-if: (president = "Grant" and moderate_strength + conservative_strength >=
 unavailable-subtitle: The party's factions won't hold the line for a renomination fight.
 on-arrival: {!
 Q.Candidate = Q.president;
-Q.radical_dissent += (Q.president === "Wade") ? -5 : 6;
+if (Q.radical_split == 1) {
+    Q.radical_relation += (Q.president === "Wade") ? 5 : -6;
+} else {
+    Q.radical_dissent += (Q.president === "Wade") ? -5 : 6;
+}
 Q.moderate_dissent += (Q.president === "Chase") ? -3 : 3;
 Q.conservative_dissent += (Q.president === "Grant") ? -3 : 4;
 Q.liberal_dissent += 4;
@@ -107,7 +119,7 @@ With no incumbent standing, the convention turns into a genuine contest between 
 
 - @Blaine_nominate: James G. Blaine of Maine , the **<span style="color: #9D2933;">Moderate</span>** favorite, tarnished by rumors of railroad corruption
 - @Morton_nominate: Oliver P. Morton of Indiana , a **<span style="color: #7A1F5C;">Radical</span>** stalwart, though his health is failing
-- @Conkling_nominate: Roscoe Conkling of New York , the **<span style="color: #B5651D;">Conservatives</span>** machine's man
+- @Conkling_nominate: Roscoe Conkling of New York , the **<span style="color: #B5651D;">Conservatives**</span> machine's man
 - @Hayes_nominate: Rutherford B. Hayes of Ohio, a compromise candidate, untainted by scandal
 
 @Blaine_nominate
@@ -118,7 +130,11 @@ Q.Candidate = "Blaine";
 Q.moderate_strength += 4;
 Q.moderate_dissent -= 3;
 Q.conservative_dissent += 5;
-Q.radical_dissent += 3;
+if (Q.radical_split == 1) {
+    Q.radical_relation -= 3;
+} else {
+    Q.radical_dissent += 3;
+}
 Q.middle_class_rep += 3;
 Q.workers_rep += 1;
 !}
@@ -128,6 +144,7 @@ go-to: VP_1876
 Blaine's magnetism carries the **<span style="color: #9D2933;">Moderates</span>**, though whispers of the Mulligan letters and his railroad dealings will dog him through the general election.
 
 @Morton_nominate
+view-if: radical_split = 0
 choose-if: radical_strength >= 30
 unavailable-subtitle: The **<span style="color: #7A1F5C;">Radical</span>** faction lacks the delegate strength to carry Morton.
 on-arrival: {!
@@ -151,7 +168,11 @@ on-arrival: {!
 Q.Candidate = "Conkling";
 Q.conservative_strength += 4;
 Q.conservative_dissent -= 3;
-Q.radical_dissent += 5;
+if (Q.radical_split == 1) {
+    Q.radical_relation -= 5;
+} else {
+    Q.radical_dissent += 5;
+}
 Q.liberal_dissent += 3;
 Q.middle_class_rep += 2;
 Q.rural_rep += 2;
@@ -165,7 +186,11 @@ Conkling's New York machine delivers him the nomination. Reformers in the party 
 on-arrival: {!
 Q.Candidate = "Hayes";
 Q.moderate_strength += 2;
-Q.radical_dissent -= 2;
+if (Q.radical_split == 1) {
+    Q.radical_relation += 2;
+} else {
+    Q.radical_dissent -= 2;
+}
 Q.conservative_dissent -= 2;
 Q.liberal_dissent -= 4;
 Q.middle_class_rep += 2;
@@ -206,7 +231,11 @@ on-arrival: {!
 Q.VPCandidate = "Wheeler";
 Q.moderate_strength += 2;
 Q.conservative_dissent -= 2;
-Q.radical_dissent += 1;
+if (Q.radical_split == 1) {
+    Q.radical_relation -= 1;
+} else {
+    Q.radical_dissent += 1;
+}
 Q.middle_class_rep += 2;
 !}
 face-image: img/portraits/19_William_Wheeler_3x4.jpg
@@ -223,7 +252,11 @@ Q.VPCandidate = "Bristow";
 Q.liberal_strength += 3;
 Q.liberal_dissent -= 5;
 Q.conservative_dissent += 6;
-Q.radical_dissent += 2;
+if (Q.radical_split == 1) {
+    Q.radical_relation -= 2;
+} else {
+    Q.radical_dissent += 2;
+}
 Q.middle_class_rep += 4;
 !}
 face-image: img/portraits/Benjamin_Helm_Bristow_Brady_-_Handy_U.S._Secretary_of_Treasury.jpg
@@ -237,7 +270,11 @@ on-arrival: {!
 Q.VPCandidate = "Frelinghuysen";
 Q.conservative_strength += 3;
 Q.conservative_dissent -= 3;
-Q.radical_dissent += 2;
+if (Q.radical_split == 1) {
+    Q.radical_relation -= 2;
+} else {
+    Q.radical_dissent += 2;
+}
 Q.rural_rep += 2;
 !}
 face-image: img/portraits/Frederick_T._Frelinghuysen_-_Brady-Handy.jpg
@@ -255,6 +292,10 @@ The <span style="color: #c00000;">**Republican Party**</span> will enter the 187
 
 [? if liberal_dissent >= 25 : The **<span style="color: #DAA520;">Liberal Republican</span>** wing is deeply unhappy with the ticket, and turnout among reform-minded voters may suffer. ?]
 
-[? if radical_dissent >= 25 : **<span style="color: #7A1F5C;">Radical Republicans</span>** are openly grumbling. Their lukewarm support could suppress turnout among freedmen and Northern reformers alike. ?]
+[? if radical_split = 0 and radical_dissent >= 25 : **<span style="color: #7A1F5C;">Radical Republicans</span>** are openly grumbling. Their lukewarm support could suppress turnout among freedmen and Northern reformers alike. ?]
 
-[? if liberal_dissent < 25 and radical_dissent < 25 : The party appears reasonably unified behind the ticket, all things considered. ?]
+[? if radical_split = 1 and radical_relation < 40 : The breakaway **<span style="color: #7A1F5C;">Radical Republican Party**</span> is openly hostile to the ticket. Their opposition could suppress turnout among freedmen and Northern reformers alike, this time from entirely outside the party's control. ?]
+
+[? if radical_split = 0 and liberal_dissent < 25 and radical_dissent < 25 : The party appears reasonably unified behind the ticket, all things considered. ?]
+
+[? if radical_split = 1 and liberal_dissent < 25 and radical_relation >= 40 : The party appears reasonably unified behind the ticket, all things considered, and relations with the breakaway Radical Republican Party are at least civil. ?]

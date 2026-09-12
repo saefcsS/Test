@@ -2,17 +2,36 @@ title: The Radical Republican Split
 subtitle: The party's left flank walks out.
 tags: event
 new-page: true
-view-if: radical_strength >= 15 and radical_dissent >= 30 and radical_split = 0 and year >= 1866
+view-if: radical_strength >= 15 and radical_dissent >= 25 and radical_split = 0 and year >= 1866
 max-visits: 1
-on-arrival: radical_split = 1;
+on-arrival: {! 
+
+    Q.radical_split = 1; 
+
+    Q.n_advisors_start = Q.n_advisors;
+    if (Q.stevens_advisor == 1) Q.n_advisors -= 1;
+    if (Q.sumner_advisor == 1) Q.n_advisors -= 1;
+    if (Q.wade_advisor == 1) Q.n_advisors -= 1;
+    if (Q.chandler_advisor == 1) Q.n_advisors -= 1;
+    if (Q.morton_advisor == 1) Q.n_advisors -= 1;
+    if (Q.butler_advisor == 1) Q.n_advisors -= 1;
+    Q.stevens_advisor = 0; 
+    Q.sumner_advisor = 0; 
+    Q.wade_advisor = 0;
+    Q.chandler_advisor = 0;
+    Q.morton_advisor = 0;
+    Q.butler_advisor = 0;
+    if (Q.n_advisors < Q.n_advisors_start) Q.shuffle_leadership_timer = 0;
+
+!}
 
 = The Radical Republican Split
 
 The tensions within the <span style="color: #c00000;">**Republican Party**</span> have finally reached a breaking point, this time from the opposite direction. A faction of the party's most committed Reconstruction hardliners, convinced that the administration has grown too willing to compromise with the South, has decided it can no longer work within the regular organization.
 
-[? if liberal_strength and conservative_strength >= 40 : The **<span style="color: #DAA520;">Liberal</span>** and **<span style="color: #B5651D;">Conservatives</span>** growing influence over party policy has been the final straw. These Radicals see talk of reconciliation, amnesty, and limited federal power as a betrayal of everything the war and Reconstruction were supposed to secure. ?]
+[? if liberal_strength >= 40 : The **<span style="color: #DAA520;">Liberal</span>** wing's growing influence over party policy has been the final straw. These Radicals see talk of reconciliation, amnesty, and limited federal power as a betrayal of everything the war and Reconstruction were supposed to secure. ?]
 
-[? if liberal_strength and conservative_strength < 40 : The Radicals believe that the party's course has grown too cautious particularly on enforcement in the South, the protection of freedmen's rights, and the pace at which former Confederates have been allowed back into political life. ?]
+[? if liberal_strength < 40 : Even without a strong Liberal faction to blame, these Radicals remain convinced that the party's course has grown too cautious particularly on enforcement in the South, the protection of freedmen's rights, and the pace at which former Confederates have been allowed back into political life. ?]
 
 They have broken away to form the **<span style="color: #7A1F5C;">Radical Republican Party</span>**, advocating for continued federal enforcement of Reconstruction, stronger civil rights guarantees, and no further concessions to the former Confederacy. Sympathetic newspapers and Republican clubs across the North, particularly in New England, have already begun rallying to their cause.
 
@@ -23,18 +42,33 @@ They have broken away to form the **<span style="color: #7A1F5C;">Radical Republ
 @accept_split
 on-arrival: {!
 
-    let classes = Q.classes;
-    let nationalBleed = {
-        workers: 0.08,
-        middle_class: 0.15,
-        rural: 0.04,
-        freemen: 0.35,
-        immigrant_laborers: 0.05,
-        unemployed: 0.05
+    // Each class bleeds a share of Republican support proportional to
+    // radical_strength itself, scaled by how aligned that class is with
+    // the Radical cause. A multiplier of 1.0 means that class defects at
+    // roughly the same rate as radical_strength suggests; freedmen, the
+    // Radicals' strongest base, bleed well above that rate, while rural
+    // and immigrant voters barely move.
+    let classMultiplier = {
+        workers: 0.3,
+        middle_class: 0.5,
+        rural: 0.15,
+        freemen: 1.5,
+        immigrant_laborers: 0.2,
+        unemployed: 0.2
     };
 
+    let splitIntensity = 1.0; // clean, uncontested break
+    let radFraction = (Q.radical_strength || 0) / 100;
+
+    function clamp(x) {
+        return Math.max(0, Math.min(0.9, x));
+    }
+
+    let classes = Q.classes;
+
     for (let cls of classes) {
-        let bleed = nationalBleed[cls] || 0.10;
+        let mult = classMultiplier[cls] || 0.3;
+        let bleed = clamp(radFraction * mult * splitIntensity);
         let transfer = Math.round(Q[cls + '_rep'] * bleed);
         Q[cls + '_rep'] -= transfer;
         Q[cls + '_rad'] = (Q[cls + '_rad'] || 0) + transfer;
@@ -42,7 +76,8 @@ on-arrival: {!
 
     for (let state of Q.states) {
         for (let cls of classes) {
-            let bleed = nationalBleed[cls] || 0.10;
+            let mult = classMultiplier[cls] || 0.3;
+            let bleed = clamp(radFraction * mult * splitIntensity);
             let stateKey = state + '_' + cls + '_rep';
             let radKey = state + '_' + cls + '_rad';
             let transfer = Math.round((Q[stateKey] || 0) * bleed);
@@ -51,9 +86,9 @@ on-arrival: {!
         }
     }
 
-    Q.rad_r = Math.round(Q.rep_r * (Q.radical_strength / 100) * 0.6);
+    Q.rad_r = Math.round(Q.rep_r * radFraction * splitIntensity);
     Q.rep_r -= Q.rad_r;
-    Q.rad_senate_r = Math.round(Q.rep_senate_r * (Q.radical_strength / 100) * 0.6);
+    Q.rad_senate_r = Math.round(Q.rep_senate_r * radFraction * splitIntensity);
     Q.rep_senate_r -= Q.rad_senate_r;
 
     Q.radical_strength = 0;
@@ -85,18 +120,27 @@ choose-if: resources >= 2
 unavailable-subtitle: Not enough resources.
 on-arrival: {!
 
-    let classes = Q.classes;
-    let nationalBleed = {
-        workers: 0.04,
-        middle_class: 0.07,
-        rural: 0.02,
-        freemen: 0.15,
-        immigrant_laborers: 0.03,
-        unemployed: 0.03
+    let classMultiplier = {
+        workers: 0.3,
+        middle_class: 0.5,
+        rural: 0.15,
+        freemen: 1.5,
+        immigrant_laborers: 0.2,
+        unemployed: 0.2
     };
 
+    let splitIntensity = 0.5; // outreach softens the break
+    let radFraction = (Q.radical_strength || 0) / 100;
+
+    function clamp(x) {
+        return Math.max(0, Math.min(0.9, x));
+    }
+
+    let classes = Q.classes;
+
     for (let cls of classes) {
-        let bleed = nationalBleed[cls] || 0.05;
+        let mult = classMultiplier[cls] || 0.3;
+        let bleed = clamp(radFraction * mult * splitIntensity);
         let transfer = Math.round(Q[cls + '_rep'] * bleed);
         Q[cls + '_rep'] -= transfer;
         Q[cls + '_rad'] = (Q[cls + '_rad'] || 0) + transfer;
@@ -104,7 +148,8 @@ on-arrival: {!
 
     for (let state of Q.states) {
         for (let cls of classes) {
-            let bleed = nationalBleed[cls] || 0.05;
+            let mult = classMultiplier[cls] || 0.3;
+            let bleed = clamp(radFraction * mult * splitIntensity);
             let stateKey = state + '_' + cls + '_rep';
             let radKey = state + '_' + cls + '_rad';
             let transfer = Math.round((Q[stateKey] || 0) * bleed);
@@ -113,9 +158,9 @@ on-arrival: {!
         }
     }
 
-    Q.rad_r = Math.round(Q.rep_r * (Q.radical_strength / 100) * 0.3);
+    Q.rad_r = Math.round(Q.rep_r * radFraction * splitIntensity);
     Q.rep_r -= Q.rad_r;
-    Q.rad_senate_r = Math.round(Q.rep_senate_r * (Q.radical_strength / 100) * 0.3);
+    Q.rad_senate_r = Math.round(Q.rep_senate_r * radFraction * splitIntensity);
     Q.rep_senate_r -= Q.rad_senate_r;
 
     Q.resources -= 2;
@@ -142,18 +187,27 @@ The remaining radicals within our party are mollified for now, but their patienc
 @condemn
 on-arrival: {!
 
-    let classes = Q.classes;
-    let nationalBleed = {
-        workers: 0.10,
-        middle_class: 0.18,
-        rural: 0.05,
-        freemen: 0.45,
-        immigrant_laborers: 0.06,
-        unemployed: 0.06
+    let classMultiplier = {
+        workers: 0.3,
+        middle_class: 0.5,
+        rural: 0.15,
+        freemen: 1.5,
+        immigrant_laborers: 0.2,
+        unemployed: 0.2
     };
 
+    let splitIntensity = 1.3; // public condemnation drives out even the wavering
+    let radFraction = (Q.radical_strength || 0) / 100;
+
+    function clamp(x) {
+        return Math.max(0, Math.min(0.9, x));
+    }
+
+    let classes = Q.classes;
+
     for (let cls of classes) {
-        let bleed = nationalBleed[cls] || 0.12;
+        let mult = classMultiplier[cls] || 0.3;
+        let bleed = clamp(radFraction * mult * splitIntensity);
         let transfer = Math.round(Q[cls + '_rep'] * bleed);
         Q[cls + '_rep'] -= transfer;
         Q[cls + '_rad'] = (Q[cls + '_rad'] || 0) + transfer;
@@ -161,7 +215,8 @@ on-arrival: {!
 
     for (let state of Q.states) {
         for (let cls of classes) {
-            let bleed = nationalBleed[cls] || 0.12;
+            let mult = classMultiplier[cls] || 0.3;
+            let bleed = clamp(radFraction * mult * splitIntensity);
             let stateKey = state + '_' + cls + '_rep';
             let radKey = state + '_' + cls + '_rad';
             let transfer = Math.round((Q[stateKey] || 0) * bleed);
@@ -170,9 +225,9 @@ on-arrival: {!
         }
     }
 
-    Q.rad_r = Math.round(Q.rep_r * (Q.radical_strength / 100) * 0.8);
+    Q.rad_r = Math.round(Q.rep_r * radFraction * splitIntensity);
     Q.rep_r -= Q.rad_r;
-    Q.rad_senate_r = Math.round(Q.rep_senate_r * (Q.radical_strength / 100) * 0.8);
+    Q.rad_senate_r = Math.round(Q.rep_senate_r * radFraction * splitIntensity);
     Q.rep_senate_r -= Q.rad_senate_r;
 
     Q.radical_strength = 0;

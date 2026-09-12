@@ -22,8 +22,12 @@ on-arrival: {!
     Q.rural_rep += 1;
     Q.middle_class_rep += 1;
     Q.working_rep += 1;
-    Q.radical_dissent -= 1;
-    Q.radical_strength += 1;
+    if (Q.radical_split == 1) {
+        Q.radical_relation += 1;
+    } else {
+        Q.radical_dissent -= 1;
+        Q.radical_strength += 1;
+    }
     Q.moderate_dissent -= 2;
     Q.moderate_strength += 2;
     Q.conservative_dissent += 1;
@@ -37,6 +41,7 @@ go-to: VP
 Ulysses S. Grant is chosen as our candidate for President. His war record, humble beginnings, and willingness to support the Freedmen make him a strong choice for the party.
 
 @Wade
+view-if: radical_split = 0
 subtitle: We need to convince the Party with 2 resources [? if president = "Wade": to continue his presidency?].
 choose-if: resources >= 2 and conservative_strength < 26
 unavailable-subtitle: [? if resources < 2: You're broke ?][? if conservative_strength >= 26: The <span style="color: #B5651D;">**Conservatives**</span> would never allow such a Radical candidate ?]
@@ -72,8 +77,12 @@ on-arrival: {!
     Q.rural_rep -= 1;
     Q.middle_class_rep += 2;
     Q.working_rep -= 1;
-    Q.radical_dissent += 3;
-    Q.radical_strength -= 1;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 4;
+    } else {
+        Q.radical_dissent += 3;
+        Q.radical_strength -= 1;
+    }
     Q.moderate_dissent -= 3;
     Q.moderate_strength += 3;
     Q.conservative_dissent -= 2;
@@ -82,7 +91,11 @@ on-arrival: {!
 face-image: img/portraits/Salmon-P-Chase.webp
 go-to: VP
 
-Salmon P. Chase is chosen as our candidate. He is supported by the Old Guard and the "Anti-Grant" faction, who fear nominating a military strongman. This choice upsets the <span style="color: #7A1F5C;">**Radicals**</span>, who resent Chase [? if president == "Johnson" and House_Impeach = 1: as they believe his impartial handling of Andrew Johnson's impeachment blocked their opportunity to "railroad" the President.?].
+Salmon P. Chase is chosen as our candidate. He is supported by the Old Guard and the "Anti-Grant" faction, who fear nominating a military strongman.
+
+[? if radical_split = 0 : This choice upsets the <span style="color: #7A1F5C;">**Radicals**</span>, who resent Chase [? if president == "Johnson" and House_Impeach = 1: as they believe his impartial handling of Andrew Johnson's impeachment blocked their opportunity to "railroad" the President.?] ?]
+
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> treats the pick as further proof they were right to leave, resenting Chase [? if president == "Johnson" and House_Impeach = 1: as they believe his impartial handling of Andrew Johnson's impeachment blocked their opportunity to "railroad" the President.?] ?]
 
 However, some fear that Chase's history of shifting party allegiances could make him an unreliable candidate for President.
 
@@ -90,7 +103,9 @@ However, some fear that Chase's history of shifting party allegiances could make
 
 It is time to choose a running mate for our presidential candidate. The VP choice can balance the ticket and appeal to different factions of the party.
 
-The options range from the <span style="color: #9D2933;">**Moderate**</span> choice Schuyler Colfax to more partisan candidates such as <span style="color: #7A1F5C;">**Radical**</span> Henry Wilson or <span style="color: #B5651D;">**Conservative**</span> Reuben Fenton.
+[? if radical_split = 0 : The options range from the <span style="color: #9D2933;">**Moderate**</span> choice Schuyler Colfax to more partisan candidates such as <span style="color: #7A1F5C;">**Radical**</span> Henry Wilson or <span style="color: #B5651D;">**Conservative**</span> Reuben Fenton. ?]
+
+[? if radical_split = 1 : With the <span style="color: #7A1F5C;">**Radical**</span> wing gone from the party entirely, the options run narrower than usual, from the <span style="color: #9D2933;">**Moderate**</span> choice Schuyler Colfax to the <span style="color: #B5651D;">**Conservative**</span> Reuben Fenton. ?]
 
 - @Colfax: Schuyler Colfax
 - @Wilson: Henry Wilson
@@ -100,13 +115,26 @@ The options range from the <span style="color: #9D2933;">**Moderate**</span> cho
 @Colfax
 subtitle: **<span style="color: #9D2933;">Moderate</span>**, safe choice
 face-image: img/portraits/Schuyler_Colfax,_photo_portrait_seated,_c1855-1865.jpg
-on-arrival: VPCandidate = "Colfax"; moderate_strength += 2; conservative_strength += 2; radical_dissent += 1; middle_class_rep += 2; rural_rep += 1; workers_rep += 1;
+on-arrival: {!
+    Q.VPCandidate = "Colfax";
+    Q.moderate_strength += 2;
+    Q.conservative_strength += 2;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 1;
+    } else {
+        Q.radical_dissent += 1;
+    }
+    Q.middle_class_rep += 2;
+    Q.rural_rep += 1;
+    Q.workers_rep += 1;
+!}
 
 Schuyler Colfax is chosen as Vice President. His **<span style="color: #9D2933;">moderate</span>** stances and Union loyalty appeal broadly to the party's mainstream and **<span style="color: #B5651D;">conservative</span>** wings, though <span style="color: #7A1F5C;">**Radicals**</span> are less enthused.
 
 His presence on the ticket reassures many Republicans that the party will remain united behind Reconstruction while avoiding unnecessary political confrontation.
 
 @Wilson
+view-if: radical_split = 0
 subtitle: Strong <span style="color: #7A1F5C;">**Radical**</span> support
 choose-if: radical_strength >= 30
 face-image: img/portraits/Henry_Wilson,_VP_of_the_United_States.jpg
@@ -118,7 +146,7 @@ Henry Wilson is chosen as Vice President. His <span style="color: #7A1F5C;">**Ra
 His nomination signals a greater willingness to pursue the goals of Reconstruction with renewed energy and determination.
 
 @WadeVP
-view-if: Candidate != "Wade" and president != "Wade"
+view-if: Candidate != "Wade" and president != "Wade" and radical_split = 0
 subtitle: Strong <span style="color: #7A1F5C;">**Radical**</span> support
 choose-if: radical_strength >= 30
 face-image: img/portraits/Benjamin_F_Wade.jpg

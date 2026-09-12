@@ -311,7 +311,7 @@ go-to: potus_menu_1872
 
 [? if liberal_split = 1 or greeley_fusion = 1 : {!<tr><td><div class="box" style="background-color:#DAA520; outline:2px solid;"></div> !}[? if greeley_fusion = 1 : <span style="color: #DAA520;">**Liberal Republican**</span>/<span style="color: #0015bc;">**Democrat**</span> (Greeley) ?][? if greeley_fusion = 0 : <span style="color: #DAA520;">**Liberal Republicans**</span> (Greeley) ?]{!</td><td>!}[+ libEVTotal +] votes{!</td></tr>!} ?]
 
-[? if radical_relation = 1: {!<tr><td><div class="box" style="background-color:#d73027; outline:2px solid;"></div> !}<span style="color: #7A1F5C;">**Radical Republicans ([+ radical_candidate +])**</span>{!</td><td>!}[+ radEVTotal +] votes{!</td></tr>!}?]
+[? if radical_relation = 1: {!<tr><td><div class="box" style="background-color:#7A1F5C; outline:2px solid;"></div> !}<span style="color: #7A1F5C;">**Radical Republicans ([+ radical_candidate +])**</span>{!</td><td>!}[+ radEVTotal +] votes{!</td></tr>!}?]
 
 {!</table>!}
 

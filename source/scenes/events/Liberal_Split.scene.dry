@@ -4,7 +4,21 @@ tags: event
 new-page: true
 view-if: liberal_strength >= 15 and liberal_dissent >= 25 and liberal_split = 0 and year >= 1871
 max-visits: 1
-on-arrival: liberal_split = 1; Greeley_Camp = 1;
+on-arrival: {! 
+
+    Q.liberal_split = 1; 
+    Q.Greeley_Camp = 1; 
+
+    Q.n_advisors_start = Q.n_advisors;
+    if (Q.schurz_advisor == 1) Q.n_advisors -= 1;
+    if (Q.cox_advisor == 1) Q.n_advisors -= 1;
+    if (Q.trumbull_advisor == 1) Q.n_advisors -= 1;
+    Q.schurz_advisor = 0; 
+    Q.cox_advisor = 0; 
+    Q.trumbull_advisor = 0;
+    if (Q.n_advisors < Q.n_advisors_start) Q.shuffle_leadership_timer = 0;
+
+!}
 
 = The Liberal Republican Split
 

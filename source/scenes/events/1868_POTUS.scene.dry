@@ -264,7 +264,7 @@ go-to: potus_menu
 
 {!<tr><td><div class="box" style="background-color:#4575b4; outline:2px solid;"></div> !}<span style="color: #0015bc;">**Democrats**</span>{!</td><td>!}[+ demEVTotal +] votes{!</td></tr>!}
 
-[? if radical_split = 1: {!<tr><td><div class="box" style="background-color:#4575b4; outline:2px solid;"></div> !}<span style="color: #7A1F5C;">**Radical Republicans**</span>{!</td><td>!}[+ radEVTotal +] votes{!</td></tr>!} ?]
+[? if radical_split = 1: {!<tr><td><div class="box" style="background-color:#7A1F5C; outline:2px solid;"></div> !}<span style="color: #7A1F5C;">**Radical Republicans**</span>{!</td><td>!}[+ radEVTotal +] votes{!</td></tr>!} ?]
 
 {!</table>!}
 

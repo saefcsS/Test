@@ -8,9 +8,13 @@ max-visits: 1
 
 [? if president = "Grant" : President Grant seeks a second term. With the prestige of the presidency behind him, no serious challenger has emerged from within the party. The nomination is his if he wants it. ?]
 
-[? if president = "Wade" : President Wade's **<span style="color: #7A1F5C;">radical</span>** tenure has energized the base but alarmed **<span style="color: #B5651D;">conservatives</span>** and **<span style="color: #9D2933;">moderates</span>** alike. Several challengers have emerged, sensing an opportunity to steer the party in a different direction. ?]
+[? if president = "Wade" and radical_split = 0 : President Wade's **<span style="color: #7A1F5C;">radical</span>** tenure has energized the base but alarmed **<span style="color: #B5651D;">conservatives</span>** and **<span style="color: #9D2933;">moderates</span>** alike. Several challengers have emerged, sensing an opportunity to steer the party in a different direction. ?]
 
-[? if president = "Chase" : President Chase's **<span style="color: #9D2933;">moderate</span>** presidency has frustrated the **<span style="color: #7A1F5C;">Radical Wing</span>**. His handling of Reconstruction has drawn criticism from both flanks, and challengers are lining up. ?]
+[? if president = "Wade" and radical_split = 1 : President Wade's tenure began with the **<span style="color: #7A1F5C;">Radical</span>** wing still inside the party, but that wing has since departed to form its own organization. Without it, his hold on the convention is far shakier, and several challengers have emerged, sensing an opportunity to steer the party in a different direction. ?]
+
+[? if president = "Chase" and radical_split = 0 : President Chase's **<span style="color: #9D2933;">moderate</span>** presidency has frustrated the **<span style="color: #7A1F5C;">Radical Wing</span>**. His handling of Reconstruction has drawn criticism from both flanks, and challengers are lining up. ?]
+
+[? if president = "Chase" and radical_split = 1 : President Chase's **<span style="color: #9D2933;">moderate</span>** presidency long ago drove the **<span style="color: #7A1F5C;">Radical Wing</span>** out of the party altogether. His handling of Reconstruction still draws criticism from what remains of the party's left, and challengers are lining up. ?]
 
 - @Grant_renominate: Ulysses S. Grant
 - @Wade_defend: Defend Wade's nomination
@@ -23,7 +27,11 @@ title: Renominate President Grant
 view-if: president = "Grant"
 on-arrival: {!
     Q.Candidate = "Grant";
-    Q.radical_dissent += 2;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 2;
+    } else {
+        Q.radical_dissent += 2;
+    }
     Q.moderate_dissent -= 3;
     Q.conservative_dissent -= 3;
     Q.liberal_dissent += 5;
@@ -38,7 +46,7 @@ Grant is unanimously renominated. The party rallies around the incumbent preside
 
 @Wade_defend
 title: Back Wade for renomination
-view-if: president = "Wade"
+view-if: president = "Wade" and radical_split = 0
 choose-if: radical_strength >= 35
 unavailable-subtitle: The **<span style="color: #7A1F5C;">Radical</span>** faction is not strong enough to hold off the challengers.
 on-arrival: {!
@@ -67,7 +75,11 @@ on-arrival: {!
     Q.Candidate = "Chase";
     Q.moderate_dissent -= 3;
     Q.conservative_dissent -= 3;
-    Q.radical_dissent += 8;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 8;
+    } else {
+        Q.radical_dissent += 8;
+    }
     Q.liberal_dissent -= 2;
     Q.middle_class_rep += 3;
     Q.rural_rep += 2;
@@ -77,7 +89,11 @@ on-arrival: {!
 face-image: img/portraits/Salmon-P-Chase.webp
 go-to: VP_1872
 
-Chase is renominated over **<span style="color: #7A1F5C;">Radical</span>** objections. The **<span style="color: #7A1F5C;">Radical</span>** wing is furious several prominent members publicly refuse to campaign for him. The <span style="color: #DAA520;">**Liberal Republicans**</span>, who had flirted with running their own candidate, are somewhat mollified but not fully satisfied.
+[? if radical_split = 0 : Chase is renominated over **<span style="color: #7A1F5C;">Radical</span>** objections. The **<span style="color: #7A1F5C;">Radical</span>** wing is furious several prominent members publicly refuse to campaign for him. ?]
+
+[? if radical_split = 1 : Chase is renominated without serious objection from inside the party, the **<span style="color: #7A1F5C;">Radical</span>** wing having already left to form its own organization. The breakaway **<span style="color: #7A1F5C;">Radical Republican Party**</span> declares it has no interest in campaigning for him either. ?]
+
+The <span style="color: #DAA520;">**Liberal Republicans**</span>, who had flirted with running their own candidate, are somewhat mollified but not fully satisfied.
 
 @Reno_challenge_Wade
 title: Support a challenger to unseat Wade
@@ -94,8 +110,12 @@ on-arrival: {!
         } else {
             Q.Candidate = "Blaine";
         }
-        Q.radical_dissent += 15;
-        Q.radical_strength -= 5;
+        if (Q.radical_split == 1) {
+            Q.radical_relation -= 15;
+        } else {
+            Q.radical_dissent += 15;
+            Q.radical_strength -= 5;
+        }
         Q.moderate_dissent -= 5;
         Q.conservative_dissent -= 5;
         Q.liberal_dissent -= 3;
@@ -107,8 +127,12 @@ on-arrival: {!
     } else {
         // Challenge fails, Wade holds
         Q.Candidate = "Wade";
-        Q.radical_strength += 3;
-        Q.radical_dissent -= 3;
+        if (Q.radical_split == 1) {
+            Q.radical_relation += 4;
+        } else {
+            Q.radical_strength += 3;
+            Q.radical_dissent -= 3;
+        }
         Q.moderate_dissent += 5;
         Q.conservative_dissent += 5;
         Q.liberal_dissent += 8;
@@ -133,7 +157,9 @@ go-to: VP_1872
 
 [? if Candidate = "Conkling" : <div class="face-figure"><img src="img/portraits/Roscoe_Conkling.jpg" alt="Roscoe Conkling" class="face-img"></div> ?][? if Candidate = "Blaine" : <div class="face-figure"><img src="img/portraits/James_G._Blaine.jpg" alt="James Blaine" class="face-img"></div> ?]
 
-[? if Candidate = "Conkling" : Roscoe Conkling of New York, backed by the **<span style="color: #B5651D;">conservative</span>** machine, defeats Wade on the convention floor. The **<span style="color: #7A1F5C;">Radicals</span>** are incandescent with rage. ?][? if Candidate = "Blaine" : James Blaine of Maine, the **<span style="color: #9D2933;">moderate</span>** favorite, outmaneuvers Wade's forces and secures the nomination. The **<span style="color: #7A1F5C;">Radicals</span>** feel betrayed. ?]
+[? if Candidate = "Conkling" and radical_split = 0 : Roscoe Conkling of New York, backed by the **<span style="color: #B5651D;">conservative</span>** machine, defeats Wade on the convention floor. The **<span style="color: #7A1F5C;">Radicals</span>** are incandescent with rage. ?][? if Candidate = "Blaine" and radical_split = 0 : James Blaine of Maine, the **<span style="color: #9D2933;">moderate</span>** favorite, outmaneuvers Wade's forces and secures the nomination. The **<span style="color: #7A1F5C;">Radicals</span>** feel betrayed. ?]
+
+[? if Candidate = "Conkling" and radical_split = 1 : Roscoe Conkling of New York, backed by the **<span style="color: #B5651D;">conservative</span>** machine, defeats Wade on the convention floor. The breakaway **<span style="color: #7A1F5C;">Radical Republican Party**</span> treats it as final proof the regular organization was never going to be worth staying in. ?][? if Candidate = "Blaine" and radical_split = 1 : James Blaine of Maine, the **<span style="color: #9D2933;">moderate</span>** favorite, outmaneuvers Wade's forces and secures the nomination. The breakaway **<span style="color: #7A1F5C;">Radical Republican Party**</span> treats it as final proof the regular organization was never going to be worth staying in. ?]
 
 @Reno_challenge_Chase
 title: Support a challenger to unseat Chase
@@ -145,8 +171,12 @@ on-arrival: {!
 
     if (challengerStrength > chaseStrength) {
         Q.Candidate = "Grant";
-        Q.radical_dissent -= 5;
-        Q.radical_strength += 4;
+        if (Q.radical_split == 1) {
+            Q.radical_relation += 6;
+        } else {
+            Q.radical_dissent -= 5;
+            Q.radical_strength += 4;
+        }
         Q.moderate_dissent += 8;
         Q.conservative_dissent += 6;
         Q.liberal_dissent += 5;
@@ -158,7 +188,11 @@ on-arrival: {!
         Q.Candidate = "Chase";
         Q.moderate_dissent -= 3;
         Q.conservative_dissent -= 3;
-        Q.radical_dissent += 8;
+        if (Q.radical_split == 1) {
+            Q.radical_relation -= 8;
+        } else {
+            Q.radical_dissent += 8;
+        }
         Q.challenger_beat_chase = 0;
     }
 !}
@@ -170,7 +204,11 @@ go-to: VP_1872 if challenger_beat_chase = 1; chase_holds if challenger_beat_chas
 @chase_holds
 face-image: img/portraits/Salmon-P-Chase.webp
 
-Chase's **<span style="color: #9D2933;">moderate</span>** and **<span style="color: #B5651D;">conservative</span>** coalition holds on the convention floor. The **<span style="color: #7A1F5C;">Radicals</span>** challenge is beaten back, though the bitterness will linger through the campaign.
+Chase's **<span style="color: #9D2933;">moderate</span>** and **<span style="color: #B5651D;">conservative</span>** coalition holds on the convention floor.
+
+[? if radical_split = 0 : The **<span style="color: #7A1F5C;">Radicals**</span> challenge is beaten back, though the bitterness will linger through the campaign. ?]
+
+[? if radical_split = 1 : What remains of the party's left flank makes one last push and is beaten back easily, a reminder of how much ground was lost when the **<span style="color: #7A1F5C;">Radical Republican Party**</span> departed. ?]
 
 - @VP_1872: Proceed to the Vice Presidential nomination.
 
@@ -188,6 +226,7 @@ Our candidate is **[+ Candidate +]**.
 - @Davis_VP: David Davis (Illinois)
 
 @Wilson_VP
+view-if: radical_split = 0
 subtitle: **<span style="color: #7A1F5C;">Radical Republican</span>**. Strong labor ties and abolitionist credentials.
 on-arrival: {!
     Q.VPCandidate = "Wilson";
@@ -212,7 +251,11 @@ on-arrival: {!
     Q.moderate_strength += 3;
     Q.moderate_dissent -= 3;
     Q.conservative_dissent -= 2;
-    Q.radical_dissent += 2;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 2;
+    } else {
+        Q.radical_dissent += 2;
+    }
     Q.middle_class_rep += 3;
     Q.rural_rep += 2;
     Q.workers_rep += 1;
@@ -220,7 +263,11 @@ on-arrival: {!
 face-image: img/portraits/Schuyler_Colfax,_photo_portrait_seated,_c1855-1865.jpg
 go-to: convention_end_1872
 
-Schuyler Colfax, the affable Speaker of the House, is a safe and familiar choice. His **<span style="color: #9D2933;">Moderate</span>** Republicanism and broad name recognition make him acceptable to most factions. The **<span style="color: #7A1F5C;">Radicals</span>** are not thrilled, but they will campaign for the ticket.
+Schuyler Colfax, the affable Speaker of the House, is a safe and familiar choice. His **<span style="color: #9D2933;">Moderate</span>** Republicanism and broad name recognition make him acceptable to most factions.
+
+[? if radical_split = 0 : The **<span style="color: #7A1F5C;">Radicals**</span> are not thrilled, but they will campaign for the ticket. ?]
+
+[? if radical_split = 1 : What remains of the party's left flank is not thrilled, and the breakaway **<span style="color: #7A1F5C;">Radical Republican Party**</span> is even less so, but neither is inclined to actively work against the ticket. ?]
 
 @Maynard_VP
 subtitle: <span style="color: #B22222;">**Southern Unionist**</span>. Could help carry border states and signal reconciliation.
@@ -229,7 +276,11 @@ on-arrival: {!
     Q.conservative_strength += 4;
     Q.conservative_dissent -= 3;
     Q.liberal_strength += 2;
-    Q.radical_dissent += 6;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 6;
+    } else {
+        Q.radical_dissent += 6;
+    }
     Q.rural_rep += 4;
     Q.freemen_rep -= 3;
     Q.middle_class_rep += 2;
@@ -240,7 +291,11 @@ on-arrival: {!
 go-to: convention_end_1872
 face-image: img/portraits/Horace_Maynard_-_Brady-Handy.jpg
 
-Horace Maynard of Tennessee is a <span style="color: #B22222;">**Southern Unionist**</span> whose nomination signals the party's desire to build a broader coalition in the upper South. His selection pleases **<span style="color: #B5651D;">conservatives</span>** and border-state <span style="color: #c00000;">**Republicans**</span>, but **<span style="color: #7A1F5C;">Radicals</span>** deeply distrust any overture toward Southern reconciliation.
+Horace Maynard of Tennessee is a <span style="color: #B22222;">**Southern Unionist**</span> whose nomination signals the party's desire to build a broader coalition in the upper South. His selection pleases **<span style="color: #B5651D;">conservatives</span>** and border-state <span style="color: #c00000;">**Republicans**</span>, but
+
+[? if radical_split = 0 : **<span style="color: #7A1F5C;">Radicals**</span> deeply distrust any overture toward Southern reconciliation. ?]
+
+[? if radical_split = 1 : the breakaway **<span style="color: #7A1F5C;">Radical Republican Party**</span> denounces any overture toward Southern reconciliation, exactly as it warned it would. ?]
 
 @Davis_VP
 subtitle: Independent. Lincoln's former campaign manager, pragmatic and broadly trusted.
@@ -251,7 +306,11 @@ on-arrival: {!
     Q.moderate_strength += 5;
     Q.liberal_strength += 3;
     Q.conservative_dissent -= 2;
-    Q.radical_dissent += 4;
+    if (Q.radical_split == 1) {
+        Q.radical_relation -= 4;
+    } else {
+        Q.radical_dissent += 4;
+    }
     Q.liberal_dissent -= 4;
     Q.middle_class_rep += 4;
     Q.rural_rep += 2;
@@ -261,7 +320,11 @@ on-arrival: {!
 go-to: convention_end_1872
 face-image: img/portraits/960px-David_Davis_Supreme_Court_justice_-_Brady-Handy.jpg
 
-David Davis, Lincoln's old friend and former campaign manager, brings a pragmatic independence that appeals to **<span style="color: #9D2933;">moderates</span>** and **<span style="color: #DAA520;">liberals</span>**. He is not a doctrinaire **<span style="color: #7A1F5C;">Radical</span>**, and his selection is seen as a gesture toward the <span style="color: #DAA520;">**Liberal Republicans**</span> dissidents. The **<span style="color: #7A1F5C;">Radical</span>** wing is displeased but not mutinous.
+David Davis, Lincoln's old friend and former campaign manager, brings a pragmatic independence that appeals to **<span style="color: #9D2933;">moderates</span>** and **<span style="color: #DAA520;">liberals</span>**. He is not a doctrinaire **<span style="color: #7A1F5C;">Radical</span>**, and his selection is seen as a gesture toward the <span style="color: #DAA520;">**Liberal Republicans**</span> dissidents.
+
+[? if radical_split = 0 : The **<span style="color: #7A1F5C;">Radical</span>** wing is displeased but not mutinous. ?]
+
+[? if radical_split = 1 : The breakaway **<span style="color: #7A1F5C;">Radical Republican Party**</span> is displeased, unsurprised, and entirely uninvolved in the decision. ?]
 
 @convention_end_1872
 
@@ -271,6 +334,10 @@ The <span style="color: #c00000;">**Republican Party**</span> will enter the 187
 
 [? if liberal_dissent >= 25 : The <span style="color: #DAA520;">**Liberal Republicans**</span> faction is threatening to bolt and run their own candidate. If they do, the anti-<span style="color: #0015bc;">**Democrat**</span> vote will be split. ?]
 
-[? if radical_dissent >= 25 : <span style="color: #7A1F5C;">**Radical Republicans**</span> are openly grumbling about the ticket. Their enthusiasm or lack of it could suppress turnout among freedmen and Northern reformers. ?]
+[? if radical_split = 0 and radical_dissent >= 25 : <span style="color: #7A1F5C;">**Radical Republicans**</span> are openly grumbling about the ticket. Their enthusiasm or lack of it could suppress turnout among freedmen and Northern reformers. ?]
 
-[? if liberal_dissent < 25 and radical_dissent < 25 : The party appears broadly unified behind the ticket. ?]
+[? if radical_split = 1 and radical_relation < 40 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> is openly hostile to the ticket. Their opposition, and the freedmen and Northern reformers who follow their lead, could cost the party dearly in November. ?]
+
+[? if radical_split = 0 and liberal_dissent < 25 and radical_dissent < 25 : The party appears broadly unified behind the ticket. ?]
+
+[? if radical_split = 1 and liberal_dissent < 25 and radical_relation >= 40 : The party appears broadly unified behind the ticket, and relations with the breakaway Radical Republican Party, while never warm, are at least not openly hostile. ?]
