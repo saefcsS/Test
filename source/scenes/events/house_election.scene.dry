@@ -96,7 +96,7 @@ let libShare = libVotes / totalVotes;
 let radShare = radVotes / totalVotes;
 let otherShare = otherVotes / totalVotes;
 
-let nth = Math.log(totalVotes) / Math.log(totalSeats);
+let nth = 2
 
 let repPower = Math.pow(repShare, nth);
 let demPower = Math.pow(demShare, nth);
