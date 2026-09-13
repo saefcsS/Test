@@ -1,0 +1,76 @@
+title: Restless Men in a Radical House
+subtitle: Conservative Republicans Look Elsewhere
+tags: event
+new-page: true
+view-if: conservative_dissent >= 40 and conservative_defection = 0 and year >= 1866
+max-visits: 1
+on-arrival: {!
+    let dissent = Q.conservative_dissent || 0;
+    let radicalPressure = (Q.radical_strength || 0) - (Q.moderate_strength || 0);
+    let landingSpot = Math.max(0, (Q.dem_reform_strength || 0) - 60) * 0.3;
+    let score = (dissent - 40) * 0.6 + Math.max(0, radicalPressure) * 0.4 + landingSpot;
+    Q.conservative_defection_score = Math.round(score);
+!}
+go-to: conservative_defection_major if conservative_defection_score >= 20; conservative_defection_minor if conservative_defection_score > 5 and conservative_defection_score < 20; conservative_defection_holds if conservative_defection_score <= 5
+
+= A Faction Without a Party
+
+The men who once called themselves the conservative wing of the <span style="color: #c00000;">**Republican Party**</span>, veterans, businessmen, and border-state moderates who backed the war and the Union but never much cared for military Reconstruction or radical experiments in the South, find themselves increasingly strangers in their own house. Every session brings fresh demands from the <span style="color: #7A1F5C;">**Radical**</span> benches, and every concession the leadership makes to hold the radical wing together comes at their expense.
+
+For years they had nowhere else to go. The <span style="color: #0015bc;">**Democratic Party**</span> remained, in the eyes of most, the party of Tammany corruption and unrepentant rebellion, an impossible home for men who fought to preserve the Union. [? if dem_reform_strength >= 60 : Lately, though, a reform-minded Democracy willing to talk about sound money, retrenchment, and honest government has complicated that calculation considerably. ?] [? if dem_reform_strength < 60 : Nothing about the Democracy as it currently stands has done much to change that calculation, but patience with their own party is wearing thin regardless. ?]
+
+Quiet conversations begin in club rooms and railway cars: not about principle, exactly, but about where a conservative man of business is actually welcome anymore.
+
+@conservative_defection_major
+title: A Significant Exodus
+on-arrival: {!
+    let seats = Math.round((Q.rep_r || 0) * 0.06);
+    let senateSeats = Math.round((Q.rep_senate_r || 0) * 0.05);
+
+    // Where the defectors land depends on whether the Democracy looks like a
+    // credible home. Otherwise most simply go independent.
+    let toDem = (Q.dem_reform_strength || 0) >= 60 ? 0.7 : 0.15;
+    let houseToDem = Math.round(seats * toDem);
+    let houseIndependent = seats - houseToDem;
+    let senateToDem = Math.round(senateSeats * toDem);
+    let senateIndependent = senateSeats - senateToDem;
+
+    Q.rep_r = Math.max(0, (Q.rep_r || 0) - seats);
+    Q.dem_r = (Q.dem_r || 0) + houseToDem;
+    Q.other_r = (Q.other_r || 0) + houseIndependent;
+    Q.rep_senate_r = Math.max(0, (Q.rep_senate_r || 0) - senateSeats);
+    Q.dem_senate_r = (Q.dem_senate_r || 0) + senateToDem;
+    Q.other_senate_r = (Q.other_senate_r || 0) + senateIndependent;
+
+    Q.conservative_defectors_house = houseToDem;
+    Q.conservative_defectors_senate = senateToDem;
+!}
+conservative_defection = 1; conservative_strength -= 8; conservative_dissent -= 10; moderate_strength += 2; middle_class_rep -= 4; {! if (Q.dem_reform_strength >= 60) { Q.middle_class_dem += 4; Q.dem_reform_strength += 6; } !}
+
+A sizable bloc of conservative Republicans in Congress and in the state parties simply leaves. Some cross the floor to the Democrats outright, others announce independent candidacies, and a few disappear from politics altogether rather than answer to a party they no longer recognize. It is the largest single defection the party has suffered since the war.
+
+[? if dem_reform_strength >= 60 : Most of those who do cross over land squarely with the reform Democracy, giving Tilden's wing a Northern, business-minded, unmistakably Unionist contingent it did not have before. ?]
+[? if dem_reform_strength < 60 : With no reform Democracy yet worth joining, most simply declare themselves independent rather than trade one party's discipline for another's corruption. ?]
+
+@conservative_defection_minor
+title: A Trickle, Not a Flood
+on-arrival: {!
+    let seats = Math.round((Q.rep_r || 0) * 0.02);
+    let toDem = (Q.dem_reform_strength || 0) >= 60 ? 0.6 : 0.2;
+    let houseToDem = Math.round(seats * toDem);
+    let houseIndependent = seats - houseToDem;
+
+    Q.rep_r = Math.max(0, (Q.rep_r || 0) - seats);
+    Q.dem_r = (Q.dem_r || 0) + houseToDem;
+    Q.other_r = (Q.other_r || 0) + houseIndependent;
+    Q.conservative_defectors_house = houseToDem;
+!}
+conservative_defection = 1; conservative_strength -= 3; conservative_dissent -= 4; middle_class_rep -= 1; {! if (Q.dem_reform_strength >= 60) { Q.middle_class_dem += 1; Q.dem_reform_strength += 2; } !}
+
+A handful of conservative Republicans, mostly men already halfway out the door, follow through. It is not a rupture, but it is a signal: the wall around the party's right flank is no longer quite as solid as it once looked.
+
+@conservative_defection_holds
+title: The Wall Holds, For Now
+on-arrival: conservative_dissent -= 2
+
+For all the grumbling, the conservative wing stays put. Old loyalties, uncertainty about where else to go, and no small amount of institutional inertia keep most conservative Republicans in the fold, muttering but present. The moment may come again; it has not come yet.

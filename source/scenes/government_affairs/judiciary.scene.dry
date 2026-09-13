@@ -25,22 +25,28 @@ The federal judiciary remains one of the greatest obstacles to Reconstruction. M
 subtitle: -1 budget
 unavailable-subtitle: Not enough budget.
 choose-if: budget >= 1
-on-arrival: judicial_reform += 1; budget -= 1; PoliticalCostPenalty += 1; radical_strength += 5; conservative_dissent += 5; moderate_dissent += 5; freemen_rep += 5;
+on-arrival: judicial_reform += 1; budget -= 1; PoliticalCostPenalty += 1; radical_strength += 5 if radical_split = 0; conservative_dissent += 5; moderate_dissent += 5; freemen_rep += 5; freemen_rad += 3 if radical_split = 1;
 
 <span style="color: #7A1F5C;">**Radical Republicans**</span> launch a full-scale campaign to overhaul the judiciary by impeaching obstructionist judges, appointing new justices, and passing legislation to expand the court's size. The move unleashes <span style="color: #B5651D;">**Conservative**</span> backlash but opens the door for ambitious reform.
+
+[? if radical_split = 1 : This is precisely the kind of court-packing campaign the Radical Republicans have demanded since they walked out, and they are quick to remind freedmen who first called for it. ?]
 
 @Act
 subtitle: -2 budget
 unavailable-subtitle: Not enough budget.
 choose-if: budget >= 2
-on-arrival: budget -= 2; PoliticalCostPenalty += 2; judicial_reform += 2; conservative_dissent += 5; moderate_dissent += 4; radical_strength += 3; freemen_rep += 4; middle_class_rep += 1;
+on-arrival: budget -= 2; PoliticalCostPenalty += 2; judicial_reform += 2; conservative_dissent += 5; moderate_dissent += 4; radical_strength += 3 if radical_split = 0; freemen_rep += 4; freemen_rad += 2 if radical_split = 1; middle_class_rep += 1;
 
 Congress passes the Judicial Circuits Act, dramatically expanding federal court districts and enabling the appointment of dozens of loyal judges. <span style="color: #B5651D;">**Conservative**</span> factions decry it as court-packing, but the legislation survives constitutional challenge and shifts the judiciary firmly in favor of Reconstruction.
 
+[? if radical_split = 1 : Radical Republican editors claim vindication, arguing the Act proves the regular party finally came around to their view, if only after they had already left it. ?]
+
 @minor_reforms
-on-arrival: judicial_reform += 0.5; moderate_dissent += 2; radical_strength += 2; judiciary_timer += 6
+on-arrival: judicial_reform += 0.5; moderate_dissent += 2; radical_strength += 2 if radical_split = 0; radical_dissent += 3 if radical_split = 0; judiciary_timer += 6
 
 We target the most blatantly hostile judges for removal and quietly promote loyal legal minds. While cautious, this reform begins shifting the judiciary’s balance over time.
+
+[? if radical_split = 1 : The Radical Republicans dismiss the effort as too little, too late, and use it to argue that only their party is serious about remaking the courts. ?]
 
 @as_is
 go-to: root

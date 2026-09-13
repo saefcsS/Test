@@ -135,7 +135,7 @@ if (Q.lib_r >= Q.rep_r && Q.lib_r >= Q.dem_r && Q.lib_r >= Q.other_r && Q.lib_r 
 if (Q.rad_r >= Q.rep_r && Q.rad_r >= Q.dem_r && Q.rad_r >= Q.other_r && Q.rad_r >= Q.lib_r) Q.largest_party_r = "rad";
 if (Q.other_r >= Q.rep_r && Q.other_r >= Q.dem_r && Q.other_r >= Q.lib_r && Q.other_r >= Q.rad_r) Q.largest_party_r = "other";
 
-if (Q.liberal_split === 1 && Q.liberal_reunion_seen !== 1) {
+if (Q.liberal_split === 1 && Q.liberal_reunion_seen !== 1 && liberal_survive = 0) {
  
     if (Q.lib_r <= (Q.old_lib_r * 0.5)) {
         Q.liberal_reunion_triggered = 1;
@@ -178,9 +178,9 @@ let totalHouse = Q.rep_r + Q.dem_r + Q.lib_r + Q.rad_r + Q.other_r;
 let repPctHouse = (Q.rep_r / totalHouse) * 100;
 
 if (repPctHouse >= 66.7) {
-    Q.house_majority = 3;
-} else if (repPctHouse >= 50) {
     Q.house_majority = 2;
+} else if (repPctHouse >= 50) {
+    Q.house_majority = 1;
 } else {
     Q.house_majority = 0;
 }
@@ -291,7 +291,7 @@ go-to: house_menu
 @house_simple_majority
 title: <span style="color: #c00000;">**Republicans**</span> gain a majority in the House
 subtitle: <span style="color: #c00000;">**Republicans**</span>: [+ rep_r +] seats
-view-if: house_majority = 2
+view-if: house_majority = 1
 on-arrival: speaker_election_needed = 1
 
 The <span style="color: #c00000;">**Republicans**</span> have secured a majority in the House of Representatives.
@@ -299,7 +299,7 @@ The <span style="color: #c00000;">**Republicans**</span> have secured a majority
 @house_super_majority
 title: <span style="color: #c00000;">**Republicans**</span> secure a supermajority
 subtitle: <span style="color: #c00000;">**Republicans**</span>: [+ rep_r +] seats
-view-if: house_majority = 3
+view-if: house_majority = 2
 on-arrival: speaker_election_needed = 1
 
 With two-thirds of the House, the <span style="color: #c00000;">**Republicans**</span> now wield veto-proof power.

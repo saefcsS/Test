@@ -29,7 +29,7 @@ A constitutional amendment requires either a two-thirds supermajority in Congres
 subtitle: Birthright Citizenship & Equal Protection
 view-if: fortheen_A = 0
 choose-if: amendmentResult = 1 and house_majority = 2 and sen_majority = 2 and limit = 1
-unavailable-subtitle: [? if limit < 1: We shouldn't pass too many amendments?][? if house_majority < 3: We do not have enough seats in the House ?][? if sen_majority < 3: We also do not have enough seats in the Senate ?][? if amendmentResult = 0: 3/4th of the States don't approve of the amendment?]
+unavailable-subtitle: [? if limit < 1: We shouldn't pass too many amendments?][? if house_majority < 2: We do not have enough seats in the House ?][? if sen_majority < 2: We also do not have enough seats in the Senate ?][? if amendmentResult = 0: 3/4th of the States don't approve of the amendment?]
 on-arrival: {!
     Q.limit -= 1;
     Q.kkk_militancy += 0.1;
@@ -63,7 +63,7 @@ The amendment passes! ' All persons born...are citizens' is now engraved in cons
 subtitle: Birthright Citizenship & Equal Protection
 view-if: fifthteen = 0
 choose-if: amendmentResult = 1 and house_majority = 2 and sen_majority = 2 and limit = 1
-unavailable-subtitle: [? if limit < 1: We shouldn't pass too many amendments?][? if house_majority < 3: We do not have enough seats in the House ?][? if sen_majority < 3: We also do not have enough seats in the Senate ?][? if amendmentResult = 0: 3/4th of the States don't approve of the amendment?]
+unavailable-subtitle: [? if limit < 1: We shouldn't pass too many amendments?][? if house_majority < 2: We do not have enough seats in the House ?][? if sen_majority < 2: We also do not have enough seats in the Senate ?][? if amendmentResult = 0: 3/4th of the States don't approve of the amendment?]
 on-arrival: {!
     Q.limit -= 1;
     Q.fifthteen = 1;
@@ -100,7 +100,7 @@ The amendment is ratified! 'The right to vote shall not be denied...on account o
 subtitle: Separation between Church and State
 view-if: Blain = 0
 choose-if: amendmentResult = 1 and house_majority = 2 and sen_majority = 2 and limit = 1
-unavailable-subtitle: [? if limit < 1: We shouldn't pass too many amendments?][? if house_majority < 3: We do not have enough seats in the House ?][? if sen_majority < 3: We also do not have enough seats in the Senate ?][? if amendmentResult = 0: 3/4th of the States don't approve of the amendment?]
+unavailable-subtitle: [? if limit < 1: We shouldn't pass too many amendments?][? if house_majority < 2: We do not have enough seats in the House ?][? if sen_majority < 2: We also do not have enough seats in the Senate ?][? if amendmentResult = 0: 3/4th of the States don't approve of the amendment?]
 on-arrival: limit -= 1; Blain = 1; middle_class_rep += 8; immigrant_laborers_dem += 12; reconstruction_support -= 5; liberal_strength += 4; Blain = 1
 
 The amendment passes! Public funds are now barred from 'sectarian' (Catholic) schools. While Protestant reformers cheer, Irish immigrants riot in Northern cities, seeing this as targeted persecution.
@@ -111,7 +111,7 @@ The amendment passes! Public funds are now barred from 'sectarian' (Catholic) sc
 subtitle: <span style="color: #7A1F5C;">**Radical**</span> Land Reform: Amend the 5th!
 view-if: fifth_A = 0
 choose-if: amendmentResult = 1 and house_majority = 2 and sen_majority = 2 and limit = 1
-unavailable-subtitle: [? if limit < 1: We shouldn't pass too many amendments?][? if house_majority < 3: We do not have enough seats in the House ?][? if sen_majority < 3: We also do not have enough seats in the Senate ?][? if amendmentResult = 0: 3/4th of the States don't approve of the amendment?]
+unavailable-subtitle: [? if limit < 1: We shouldn't pass too many amendments?][? if house_majority < 2: We do not have enough seats in the House ?][? if sen_majority < 2: We also do not have enough seats in the Senate ?][? if amendmentResult = 0: 3/4th of the States don't approve of the amendment?]
 on-arrival: {!
     Q.limit -= 1;
     Q.fifth_A = 1;

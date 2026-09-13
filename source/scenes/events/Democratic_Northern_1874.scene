@@ -1,0 +1,72 @@
+title: The Northern Democratic State Conventions
+subtitle: Reform or Redemption?
+tags: event
+new-page: true
+view-if: year = 1874 and month = 3 and dem_control = "" and dem_reform_strength >= 75
+on-arrival: {!
+    let reform = Q.dem_reform_strength || 0;
+    let bourbon = Q.dem_bourbon_strength || 0;
+    let base = reform - bourbon;
+    let liberalPull = 0;
+    if (Q.liberal_survive == 1 && (Q.liberal_reunion_seen || 0) == 0) {
+        liberalPull = 8 + ((Q.liberal_relation || 30) - 30) * 0.15;
+    }
+    let conservativeBleed = ((Q.conservative_dissent || 0) - 30) * 0.2;
+    let complacency = (Q.radical_split == 1) ? -6 : 0;
+    let tildenite = ((Q.NY_middle_class_dem || 25) - 25) * 0.3;
+    let demComposition = (((Q.middle_class_dem || 25) - 25) + ((Q.rural_dem || 60) - 60) * -0.3);
+    let margin = base + liberalPull + conservativeBleed + complacency + tildenite + demComposition;
+    Q.dem_convention_margin = Math.round(margin);
+!}
+go-to: dem_reform_wins if dem_convention_margin >= 15; dem_bourbon_wins if dem_convention_margin <= -15; dem_convention_contested if dem_convention_margin > -15 and dem_convention_margin < 15
+
+= The State Conventions
+
+Winter gives way to spring, and the <span style="color: #0015bc;">**Democratic**</span> Party can put off its internal fight no longer. Across the North, state conventions assemble in New York, Pennsylvania, Ohio, Indiana, Connecticut and New Jersey. They are supposed to settle candidates and platforms for the fall elections. Everyone in the halls knows the real question is larger.
+
+What kind of party will the Democracy be? Samuel Tilden's <span style="color: #4682B4;">**reformers**</span> arrive organized and confident after the collapse of the Tweed Ring. They call for honest government, civil service reform, sound currency and a retreat from the corruption that has made the <span style="color: #c00000;">**Republican**</span> administration an easy target. They believe the party can win back merchants, professionals and disaffected <span style="color: #DAA520;">**Liberal Republicans**</span> without returning to the politics of the old <span style="color: #0015bc;">**Democratic**</span> machine.
+
+The <span style="color: #002765;">**Bourbon Democrats**</span> have no intention of surrendering the party's machinery. Their strength lies in the rural counties, the urban organizations and the D<span style="color: #0015bc;">**Democrats**</span>emocrats who remain hostile to federal intervention in the South. They control credentials committees in several states and intend to use every advantage they have.
+
+[? if liberal_survive = 1 and liberal_reunion_seen = 0 : In the galleries, several <span style="color: #DAA520;">**Liberal Republican**</span> observers watch the proceedings closely. Tilden's campaign against the Tweed Ring has caught their attention, and some are beginning to wonder whether the Democracy could become the reform party they have been looking for. ?]
+
+[? if conservative_dissent >= 45 : Word has also reached the delegates of growing discontent among <span style="color: #c00000;">**Republican**</span> moderates in Washington. The <span style="color: #4682B4;">**reformers**</span> are quick to point to it as evidence that the Republican coalition is beginning to fracture. ?]
+
+@dem_reform_wins
+title: <span style="color: #4682B4;">**Reformers**</span> Take Control
+on-arrival: dem_control = "reform"; dem_reform_strength += 10; dem_bourbon_strength -= 4; liberal_strength += 3; liberal_dissent -= 5; middle_class_dem += 4; rural_dem -= 2; conservative_dissent += 2; radical_dissent -= 3 if radical_split = 0; {! if (Q.liberal_survive == 1 && (Q.liberal_reunion_seen || 0) == 0) { Q.liberal_courtship = (Q.liberal_courtship || 0) + 10; } !}
+
+State after state, the <span style="color: #4682B4;">**reformers**</span> win the credentials fights and the platform votes. New York falls in behind Tilden with little resistance. Ohio and Indiana require harder fights before the old guard gives way.
+
+The platforms that emerge mark a clear break with the party's recent past. Civil service reform, sound money and retrenchment take center stage. The old defenses of the Southern Democratic order are conspicuously absent.
+
+The <span style="color: #002765;">**Bourbon**</span> wing has not disappeared, but it has lost control of the party's direction. The <span style="color: #4682B4;">**reformers**</span> now control the machinery in the most important Northern states, the fall tickets and the party's public message.
+
+For the <span style="color: #c00000;">**Republicans**</span>, this changes the threat. A Democratic Party divided between machines and reformers was easier to dismiss. A Democracy that can claim Tilden's record while reaching beyond its traditional base could draw support from independents and disaffected <span style="color: #DAA520;">**Liberal Republicans**</span>.
+
+[? if liberal_survive = 1 and liberal_reunion_seen = 0 : Within days, quiet feelers arrive from Liberal Republican circles. They want to know what a working arrangement with Tilden's new Democracy might look like. ?]
+
+[? if radical_split = 1 : The <span style="color: #7A1F5C;">**Radical Republicans**</span> warn that the new Democracy deserves closer attention. Its reformers may have abandoned the old machines, but they have not abandoned their opposition to Republican Reconstruction. ?]
+
+@dem_bourbon_wins
+title: <span style="color: #002765;">**Bourbons**</span> Hold Control
+on-arrival: dem_control = "bourbon"; dem_bourbon_strength += 10; rural_dem += 4; workers_dem += 2; liberal_dissent += 5; liberal_strength -= 2; conservative_strength += 1
+
+The credentials committees hold. State after state, the old machines and <span style="color: #002765;">**Bourbon**</span> leaders beat back the <span style="color: #4682B4;">**reformers**</span>. In some conventions the margin is narrow. In others, the old guard simply refuses to seat contested delegations.
+
+Tilden's supporters leave with little to show for months of organizing. The platforms remain familiar: states' rights, opposition to federal intervention in the South and no serious challenge to the machine organizations that still dominate much of the party.
+
+The <span style="color: #4682B4;">**Reform Democrats**</span> are furious. Some begin talking openly about leaving the party, while others argue that abandoning the Democracy would hand the Bourbons permanent control.
+
+[? if liberal_survive = 1 and liberal_reunion_seen = 0 : Liberal Republican leaders who had begun sounding out the Democracy pull back. Tilden may have their attention, but his party remains under Bourbon control. ?]
+
+@dem_convention_contested
+on-arrival: dem_reform_strength += 4; dem_bourbon_strength += 4; liberal_dissent += 1; dem_convention_stalemate_count += 1
+go-to: dem_convention_forced if dem_convention_stalemate_count >= 2
+
+No single verdict emerges. New York and Connecticut fall in behind the <span style="color: #4682B4;">**reformers**</span>. Indiana and much of the rural Midwest remain with the <span style="color: #002765;">**Bourbons**</span>. Pennsylvania and Ohio split their delegations and settle for vague platform language that leaves both sides claiming victory.
+
+Tilden's faction has momentum, but the old guard still controls enough of the machinery to block a full takeover. The party leaves the spring conventions divided over its future.
+
+The question is no longer whether the Democracy needs reform. It is whether the <span style="color: #4682B4;">**reformers**</span> can seize control before the Bourbons close ranks.
+

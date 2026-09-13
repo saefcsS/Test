@@ -978,7 +978,7 @@ if (Q.month_actions >= 1) {
         Q.unemployed_lib += 1/12;
         Q.freemen_lib += 1/12
     }
-    if(Q.radical_split)
+    if(Q.radical_split == 1)
     {
         Q.freedmen_rep -= 3/12
         Q.freedmen_rad += 3/12

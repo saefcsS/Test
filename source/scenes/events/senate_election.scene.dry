@@ -192,9 +192,9 @@ on-arrival: {!
   let repPctSeats = (Q.rep_senate_r / totalSeats) * 100;
 
   if (repPctSeats >= 66.7) {
-    Q.sen_majority = 3;
-  } else if (repPctSeats >= 50) {
     Q.sen_majority = 2;
+  } else if (repPctSeats >= 50) {
+    Q.sen_majority = 1;
   } else {
     Q.sen_majority = 0;
   }
@@ -303,7 +303,7 @@ go-to: house_makeup
 @simple_majority
 title: <span style="color: #c00000;">**Republicans**</span> gain a simple majority in the Senate
 subtitle: <span style="color: #c00000;">**Republicans**</span>: [+ rep_senate_r +] seats
-view-if: sen_majority = 2
+view-if: sen_majority = 1
 on-arrival: lose_vote = 1
 
 The <span style="color: #c00000;">**Republicans**</span> have gained a simple majority in the Senate.
@@ -311,7 +311,7 @@ The <span style="color: #c00000;">**Republicans**</span> have gained a simple ma
 @super_majority
 title: <span style="color: #c00000;">**Republicans**</span> secure a supermajority in the Senate
 subtitle: <span style="color: #c00000;">**Republicans**</span>: [+ rep_senate_r +] seats
-view-if: sen_majority = 3
+view-if: sen_majority = 2
 on-arrival: lose_vote = 1
 
 The <span style="color: #c00000;">**Republicans**</span> have gained a supermajority in the Senate. They now possess enough seats to override presidential vetoes.

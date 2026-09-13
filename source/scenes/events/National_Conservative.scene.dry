@@ -1,0 +1,68 @@
+title: A New Party of the Right?
+subtitle: The <span style="color: #DAA520;">**Liberal**</span>-<span style="color: #0015bc;">**Democratic**</span> Consolidation
+tags: event
+new-page: true
+view-if: year = 1874 and month >= 6 and dem_control = "reform" and liberal_survive = 1 and liberal_reunion_seen = 0 and ncp_founded = 0 and liberal_courtship >= 10 and conservative_defection = 1
+face-img: img/portraits/tilden_schurz.jpg
+on-arrival: {!
+    // Enthusiasm for actually merging vs. staying loose allies
+    let reformStrength = Q.dem_reform_strength || 0;
+    let liberalStrength = Q.liberal_strength || 0;
+    let courtship = Q.liberal_courtship || 0;
+    let defectors = (Q.conservative_defection == 1) ? ((Q.conservative_defectors_house || 0) + (Q.conservative_defectors_senate || 0) * 2) : 0;
+
+    // Internal resistance: reformers and liberals both have factions that hate the idea
+    let friction = (Q.dem_bourbon_strength || 0) * 0.5 + (Q.liberal_dissent || 0) * 0.3 + (Q.dem_reform_dissent || 0) * 0.3;
+
+    let score = (reformStrength - 60) * 0.5 + (liberalStrength - 20) * 0.6 + courtship * 0.4 + defectors * 0.5 - friction * 0.4;
+    Q.ncp_consolidation_score = Math.round(score);
+!}
+go-to: ncp_full_merger if ncp_consolidation_score >= 25; ncp_electoral_fusion if ncp_consolidation_score > 5 and ncp_consolidation_score < 25; ncp_collapse if ncp_consolidation_score <= 5
+
+= Three Roads Converge
+
+By the summer of 1874, the political lines that once separated three different movements have begun to blur. Samuel Tilden's <span style="color: #4682B4;">reform Democracy</span> now controls much of the Northern party machinery. Carl Schurz's <span style="color: #DAA520;">Liberal Republicans</span>, still independent after Cincinnati, have watched Tilden turn the fight against corruption into a national Democratic cause. Meanwhile, <span style="color: #B5651D;">conservative</span> Republicans who broke with their party over Radicalism have found a place among the reform Democrats.
+
+Their reasons for crossing party lines differ, but their destination is increasingly the same. The defectors have already shown that Tilden's Democracy can absorb former Republicans without surrendering its new reform program. The Liberals now have to decide whether they should remain a separate party with a shrinking base or join a movement that is beginning to resemble their own.
+
+Delegates from the three camps begin meeting in New York. At first the gatherings are informal. By summer, they are negotiating platforms, organization and the question that would have been unthinkable a few years earlier: whether the old party lines have outlived their usefulness.
+
+@ncp_full_merger
+title: The National Conservative Party
+on-arrival: ncp_founded = 1; dem_control = "national_conservative"; liberal_split = 0; liberal_survive = 0; conservative_dissent -= 6; radical_dissent += 6; moderate_dissent += 3
+on-arrival: {!
+    this.achieve("national_conservative_party");
+    // Consolidate strength trackers into the new coalition
+    Q.national_conservative_strength = (Q.dem_reform_strength || 0) + (Q.liberal_strength || 0) + ((Q.conservative_defectors_house || 0) * 2);
+    Q.lib_r = 0;
+!}
+
+It happens. <span style="color: #4682B4;">Reformers</span>, <span style="color: #DAA520;">Liberals</span> and <span style="color: #B5651D;">conservative</span> defectors agree to dissolve their separate organizations and establish a new party: the <span style="color: #00AEEF;">National Conservative Party</span>.
+
+Its program is a curious mixture of the movements that created it: civil service reform, hard money, retrenchment and an end to military Reconstruction. The new party accepts the postwar constitutional settlement while rejecting both the old Democratic machine and the Radical Republican program. It presents itself as a national opposition party built around reform, economy and reconciliation.
+
+Samuel Tilden and Carl Schurz appear together before the delegates. The old <span style="color: #002765;">Bourbon Democrats</span> are left outside the new arrangement, forced to choose between accepting the new party's program and preserving an increasingly isolated organization of their own.
+
+The <span style="color: #c00000;">Republicans</span> now face a reorganized opposition. Former Republicans sit alongside Tilden Democrats and Liberal Republicans under one banner, while the old Democratic Party has effectively ceased to exist as an independent force.
+
+[? if radical_split = 1 : The <span style="color: #7A1F5C;">Radical Republicans</span> point to the merger as proof that their opponents have finally found common ground. ?]
+
+@ncp_electoral_fusion
+title: An Alliance, Not a Marriage
+on-arrival: liberal_courtship += 8; dem_reform_strength += 4; liberal_strength += 2
+
+No formal merger emerges. Too many <span style="color: #DAA520;">Liberal Republicans</span> still distrust the Democratic name, while some <span style="color: #4682B4;">reform Democrats</span> remain wary of sharing their party with men who spent years attacking it.
+
+They settle instead on an electoral alliance. Joint tickets appear in several Northern states, newspapers begin cooperating and both sides agree to avoid competing against one another where possible.
+
+The arrangement is temporary by design. For now, the <span style="color: #DAA520;">Liberals</span> remain independent and Tilden's <span style="color: #4682B4;">reform Democracy</span> remains a Democratic organization. But the boundary between the two movements is becoming harder to see.
+
+@ncp_collapse
+title: Three Camps, Still Separate
+on-arrival: liberal_dissent += 4; dem_reform_dissent += 3; liberal_courtship -= 5
+
+The conferences end without a settlement. Old grievances prove stronger than the prospect of a new party. <span style="color: #002765;">Bourbon Democrats</span> distrust the <span style="color: #DAA520;">Liberal Republicans</span>, the <span style="color: #DAA520;">Liberals</span> remain suspicious of the Democratic organization and the <span style="color: #B5651D;">conservative</span> defectors are too few to settle the argument.
+
+The three movements return to their separate organizations. Tilden's reformers still control the Democratic Party in the North, but the larger coalition has failed to form.
+
+For the moment, the old party lines survive.

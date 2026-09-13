@@ -61,7 +61,7 @@ view-if: french_mexico = 1
 choose-if: budget >= 1
 subtitle: -1 budget
 unavailable-subtitle: We lack the budget to sustain foreign pressure.
-on-arrival: uk_relation -= 2; budget -= 1; PoliticalCostPenalty += 1; french_mexico = 2; middle_class_rep += 3; radical_strength += 2; radical_dissent -= 2;
+on-arrival: uk_relation -= 2; budget -= 1; PoliticalCostPenalty += 1; french_mexico = 2; middle_class_rep += 3; radical_strength += 2 if radical_split = 0; radical_dissent -= 2 if radical_split = 0;
 
 Facing mounting pressure and lacking international support, the French military evacuates Mexico. The Republican forces seize the opportunity to strike, defeating Maximilian's regime and executing the would-be Emperor.
 
@@ -153,7 +153,7 @@ title: Normalize relations with Haiti.
 view-if: haiti_support = 0
 choose-if: conservative_strength < 30
 unavailable-subtitle: The <span style="color: #B5651D;">**Conservatives**</span> sway the party away from this
-on-arrival: freedmen_rep += 3; radical_strength += 1; economic_growth += 0.1; uk_relation -= 1; haiti_support += 1; conservative_dissent -= 10
+on-arrival: freedmen_rep += 3; radical_strength += 1 if radical_split = 0; economic_growth += 0.1; uk_relation -= 1; haiti_support += 1; conservative_dissent -= 10
 
 Though Haiti has been independent for decades, we have refused full diplomatic recognition, largely due to racial politics.
 
@@ -164,7 +164,7 @@ title: Continue relations with Haiti.
 view-if: haiti_support = 1
 choose-if: conservative_strength < 30
 unavailable-subtitle: The <span style="color: #B5651D;">**Conservatives**</span> sway the party away from this
-on-arrival: freedmen_rep += 3; radical_strength += 1; economic_growth += 0.1; uk_relation -= 1; conservative_dissent -= 5
+on-arrival: freedmen_rep += 3; radical_strength += 1 if radical_split = 0; economic_growth += 0.1; uk_relation -= 1; conservative_dissent -= 5
 
 We continue relations with Haiti, which is seen as a beacon of hope to the Freedmen of the party and the rest of the United States.
 
@@ -173,7 +173,7 @@ title: Deepen ties with Liberia.
 view-if: liberia_support = 0
 choose-if: conservative_strength < 30
 unavailable-subtitle: The <span style="color: #B5651D;">**Conservatives**</span> sway the party away from this
-on-arrival: freedmen_rep += 2; radical_strength += 1; liberia_support += 1; conservative_dissent -= 5
+on-arrival: freedmen_rep += 2; radical_strength += 1 if radical_split = 0; liberia_support += 1; conservative_dissent -= 5
 
 The American Colonization Society still promotes emigration to Liberia as an answer to the "Negro Question," an idea Frederick Douglass and most Black leaders reject outright as they insist reforming the United States rather than exile in a foreign land.
 
@@ -184,7 +184,7 @@ title: Continue building ties with Liberia.
 view-if: liberia_support = 1
 choose-if: conservative_strength < 30
 unavailable-subtitle: The <span style="color: #B5651D;">**Conservatives**</span> sway the party away from this
-on-arrival: freedmen_rep += 2; radical_strength += 1; conservative_dissent -= 2
+on-arrival: freedmen_rep += 2; radical_strength += 1 if radical_split = 0; conservative_dissent -= 2
 
 Trade in palm oil and coffee grows modestly, and mission schools continue their work. It is a small relationship, but a genuine one, and freedmen across the South take note of a Black republic treated as a diplomatic equal.
 
@@ -193,16 +193,16 @@ title: Crack down on the Fenian raids.
 view-if: year >= 1866
 choose-if: Us_police_strength > 10 and Us_police_loyalty >= 0.7
 unavailable-subtitle: [? if Us_police_strength < 10: The Police force is too weak to forcefully stop the Fenian Brotherhood. ?][? if Us_police_loyalty < 0.7: The Police are too disloyal to effectively execute the job.?]
-on-arrival: immigrant_laborers_rep -= 4; moderate_dissent -= 1; uk_relation += 1; fenian = 0;
+on-arrival: immigrant_laborers_rep -= 4; immigrant_laborers_rad += 4 if radical_split = 1; moderate_dissent -= 1; uk_relation += 1; fenian = 0;
 
 Irish nationalists, many Union veterans, have begun launching illegal raids into Canada from American soil. While popular among Irish Americans, these attacks threaten U.S.–British relations.
 
-We move to shut them down, seizing arms caches and arresting ringleaders, to reassure London that Washington doesn’t endorse chaos on the border.
+We move to shut them down, seizing arms caches and arresting ringleaders, to reassure London that Washington doesn’t endorse chaos on the border. [? if radical_split = 1 : Some Irish laborers who feel betrayed drift toward the Radical Republicans, who raise no objection to the raids. ?]
 
 @support_fenians
 title: Turn a blind eye to Fenian raids.
 view-if: year >= 1866
-on-arrival: immigrant_laborers_rep += 3; uk_relation -= 2; radical_strength += 1; conservative_dissent += 1; fenian += 1;
+on-arrival: immigrant_laborers_rep += 3; uk_relation -= 2; radical_strength += 1 if radical_split = 0; conservative_dissent += 1; fenian += 1;
 
 Irish-American war veterans organize cross-border raids into Canada, aiming to pressure Britain into freeing Ireland. Officially, we do nothing. Unofficially, we let it happen.
 
@@ -235,7 +235,7 @@ view-if: cuban_recognition = 0 and ten_years_war_started = 1
 on-arrival: {!
     Q.cuban_recognition = 1;
     Q.spain_relation -= 4;
-    Q.radical_strength += 2;
+    if (Q.radical_split != 1) Q.radical_strength += 2;
     Q.liberal_dissent -= 1;
     Q.conservative_dissent += 2;
     Q.mambise_strength += 5;

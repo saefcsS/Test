@@ -33,7 +33,7 @@ Lower-income tax rates: [+ lower_tax_rates : taxation +]
 @raise_progressive
 subtitle: Keeps revenue neutral. [? if lower_tax_rates < -5 : Poor tax rates are too low to cut. ?] [? if upper_tax_rates > 5 : Wealthy tax rates are too high to raise. ?]
 choose-if: lower_tax_rates >= -5 and upper_tax_rates <= 5
-on-arrival: freemen_rep += 6*(1-dissent); middle_class_rep -= 4; rural_rep -= 4; conservative_dissent += 1 if moderate_strength > 30; moderate_strength -= 4; upper_tax_rates += 1; lower_tax_rates -= 1; capital_strike_progress += 1; capital_strike_progress += 1 if upper_tax_rates > 1; radical_strength += 1
+on-arrival: freemen_rep += 6*(1-dissent); middle_class_rep -= 4; rural_rep -= 4; conservative_dissent += 1 if moderate_strength > 30; moderate_strength -= 4; upper_tax_rates += 1; lower_tax_rates -= 1; capital_strike_progress += 1; capital_strike_progress += 1 if upper_tax_rates > 1; radical_strength += 1 if radical_split = 0
 
 Progressive taxation builds support among freedmen and laborers, but threatens elite interests and may provoke economic retaliation.
 
@@ -41,7 +41,7 @@ Progressive taxation builds support among freedmen and laborers, but threatens e
 subtitle: +2 budget
 unavailable-subtitle: Tax ceiling reached.
 choose-if: upper_tax_rates <= 5
-on-arrival: upper_tax_rates += 1; capital_strike_progress += 1; capital_strike_progress += 1 if upper_tax_rates > 1; freemen_rep += 4*(1-dissent); middle_class_rep -= 4; rural_rep -= 4; conservative_dissent += 1 if capital_strike_progress >= 5; budget += 2; inflation -= 0.6; economic_growth -= 0.4; radical_strength += 1; moderate_strength -= 2
+on-arrival: upper_tax_rates += 1; capital_strike_progress += 1; capital_strike_progress += 1 if upper_tax_rates > 1; freemen_rep += 4*(1-dissent); middle_class_rep -= 4; rural_rep -= 4; conservative_dissent += 1 if capital_strike_progress >= 5; budget += 2; inflation -= 0.6; economic_growth -= 0.4; radical_strength += 1 if radical_split = 0; moderate_strength -= 2
 
 Raising taxes on elite funds government programs but reduces investment and angers the propertied classes.
 
@@ -50,9 +50,9 @@ title: Raise consumption taxes (hurts the poor)
 subtitle: +2 budget
 unavailable-subtitle: Consumption tax limit reached.
 choose-if: lower_tax_rates <= 5
-on-arrival: budget += 2; workers_rep -= 4; radical_dissent += 1; lower_tax_rates += 1; workers_rep -= 5 if lower_tax_rates >= 2; liberal_dissent += 3
+on-arrival: budget += 2; workers_rep -= 4; workers_rad += 4 if radical_split = 1; radical_dissent += 1 if radical_split = 0; lower_tax_rates += 1; workers_rep -= 5 if lower_tax_rates >= 2; workers_rad += 5 if lower_tax_rates >= 2 and radical_split = 1; liberal_dissent += 3
 
-Regressive taxes erode working-class support and stir unrest in Northern cities.
+Regressive taxes erode working-class support and stir unrest in Northern cities. [? if radical_split = 1 : Radical organizers seize on the burden placed on ordinary workers to make their case. ?]
 
 @cut_overall
 subtitle: -3 budget
@@ -67,7 +67,7 @@ title: Cut taxes on necessities
 subtitle: -2 budget
 unavailable-subtitle: Tax floor reached or insufficient funds.
 choose-if: budget >= 2 and lower_tax_rates >= -5
-on-arrival: budget -= 2; lower_tax_rates -= 1; workers_rep += 5*(1-dissent); inflation += 0.6; economic_growth += 0.4; radical_strength += 1
+on-arrival: budget -= 2; lower_tax_rates -= 1; workers_rep += 5*(1-dissent); inflation += 0.6; economic_growth += 0.4; radical_strength += 1 if radical_split = 0
 
 Cutting consumption taxes helps the poor, boosts support from labor, and strengthens the <span style="color: #7A1F5C;">**Radical**</span> coalition.
 
@@ -85,17 +85,17 @@ This tax relief pleases elites, but may spark unrest from those reliant on publi
 subtitle: +3 budget
 unavailable-subtitle: Tax ceiling reached.
 choose-if: upper_tax_rates <= 5 and lower_tax_rates <= 5
-on-arrival: budget += 3; middle_class_rep -= 4; rural_rep -= 4; workers_rep -= 4; unemployed_dem += 1; lower_tax_rates += 1; upper_tax_rates += 1; inflation -= 1.1; economic_growth -= 0.6
+on-arrival: budget += 3; middle_class_rep -= 4; rural_rep -= 4; workers_rep -= 4; workers_rad += 4 if radical_split = 1; unemployed_dem += 1; lower_tax_rates += 1; upper_tax_rates += 1; inflation -= 1.1; economic_growth -= 0.6
 
-A general tax hike funds Reconstruction but alienates taxpayers across classes.
+A general tax hike funds Reconstruction but alienates taxpayers across classes. [? if radical_split = 1 : Workers squeezed by the new burden find the Radical Republicans' critique of our administration increasingly persuasive. ?]
 
 @regressive
 title: Shift tax burden downward
 subtitle: Keeps revenue neutral. [? if upper_tax_rates < -5 : Elite tax floor reached. ?] [? if lower_tax_rates > 5 : Poor tax ceiling reached. ?]
 choose-if: lower_tax_rates <= 5 and upper_tax_rates >= -5
-on-arrival: workers_rep -= 6; middle_class_rep += 5*(1-dissent); rural_rep += 5*(1-dissent); conservative_strength += 2; upper_tax_rates -= 1; lower_tax_rates += 1; liberal_dissent += 5
+on-arrival: workers_rep -= 6; workers_rad += 6 if radical_split = 1; middle_class_rep += 5*(1-dissent); rural_rep += 5*(1-dissent); conservative_strength += 2; upper_tax_rates -= 1; lower_tax_rates += 1; liberal_dissent += 5
 
-A regressive tax shift pleases landowners and businesses but enrages urban workers and freedmen.
+A regressive tax shift pleases landowners and businesses but enrages urban workers and freedmen. [? if radical_split = 1 : Many of those workers now look to the Radical Republicans instead. ?]
 
 @tariffs
 title: Adjust tariffs instead
@@ -114,14 +114,14 @@ Current tariff level: [+ tariffs : taxation +]
 title: Raise import tariffs
 subtitle: +2 budget. May prompt retaliation or reduce trade.
 choose-if: tariffs <= 5
-on-arrival: tariffs += 1; inflation += 0.5; unemployed += 1.5; budget += 2; workers_rep += 4*(1-dissent); middle_class_rep += 5*(1-dissent); rural_rep -= 4; freemen_rep -= 3; conservative_strength += 1; economic_growth -= 0.4
+on-arrival: tariffs += 1; inflation += 0.5; unemployed += 1.5; budget += 2; workers_rep += 4*(1-dissent); middle_class_rep += 5*(1-dissent); rural_rep -= 4; freemen_rep -= 3; freemen_rad += 3 if radical_split = 1; conservative_strength += 1; economic_growth -= 0.4
 
-Higher tariffs protect Northern industry and manufacturing jobs but raise prices for farmers and freedmen who buy manufactured goods and sell into competitive world markets.
+Higher tariffs protect Northern industry and manufacturing jobs but raise prices for farmers and freedmen who buy manufactured goods and sell into competitive world markets. [? if radical_split = 1 : The Radical Republicans make inroads among freedmen who feel abandoned by the tariff's costs. ?]
 
 @lower_tariffs
 title: Lower import tariffs
 choose-if: budget >= 2 and tariffs > -5
 subtitle: -2 budget. [? if tariffs <= -5 : Already at free-trade baseline. ?]
-on-arrival: tariffs -= 1; budget -= 2; inflation -= 0.5; workers_rep -= 5; middle_class_rep -= 4; rural_rep += 4*(1-dissent); freemen_rep += 3*(1-dissent); economic_growth += 0.4; economic_expansion += 2
+on-arrival: tariffs -= 1; budget -= 2; inflation -= 0.5; workers_rep -= 5; workers_rad += 5 if radical_split = 1; middle_class_rep -= 4; rural_rep += 4*(1-dissent); freemen_rep += 3*(1-dissent); economic_growth += 0.4; economic_expansion += 2
 
-Lower tariffs cut costs for farmers and freedmen but threaten Northern factory jobs and industrial profits.
+Lower tariffs cut costs for farmers and freedmen but threaten Northern factory jobs and industrial profits. [? if radical_split = 1 : Displaced industrial workers find a home in the Radical Republican ranks. ?]

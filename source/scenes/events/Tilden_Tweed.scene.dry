@@ -1,0 +1,13 @@
+title: Tilden Crushes Tweed's Ring
+subtitle: A New Era for New York
+view-if: year = 1873 and month = 12
+on-arrival: dem_reform_strength += 10; dem_bourbon_strength -= 10; NY_middle_class_rep -= 5; NY_middle_class_dem += 5; NY_workers_rep -= 3; NY_workers_dem += 3; liberal_strength += 3; radical_dissent += 5;
+face-img: img/portraits/Samuel_Tilden._Portrait_of_the_American_politician,_who_served_as_the_25th_Governor_of_New_York,*Samuel_Jones_Tilden*(1814-1886),_by_José_María_Mora,_c._1870.jpg
+
+= Boss Tweed Convicted
+
+Boss Tweed, the man who built Tammany Hall into the most formidable political machine in the country has been convicted on 204 counts of fraud. For years his Ring siphoned millions from the city treasury through inflated contracts, padded payrolls, and a patronage system that turned New York's growing immigrant population into a captive voting bloc.
+
+The conviction sends shockwaves through the <span style="color: #0015bc;">**Democratic**</span> establishment. It was Samuel Tilden, working from within the party itself, who assembled the case that brought the Ring down, and his reputation as a reformer has grown enormously as a result. [? if liberal_survive = 1: The <span style="color: #DAA520;">**Liberal Republicans**</span> cheer the prosecution and spread the news through their newspapers, eager to claim reform as their own cause too. ?]
+
+Our <span style="color: #c00000;">**Republican Party**</span> watches the developments in New York with a wary eye. Tilden has dealt Tammany Hall a blow it may never fully recover from, but a Democratic Party remade in his image, purged of its most corrupt excesses, could prove a far more dangerous rival than the one we have grown used to fighting.

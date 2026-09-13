@@ -38,9 +38,6 @@ on-arrival: {!
     Q.liberal_dissent -= 2;
     Q.Forty_Acres += 1;
 
-    // Delivering a core Radical demand satisfies Radical-leaning voters
-    // with the regular party, undercutting the breakaway party's appeal
-    // even as its leadership is pleased.
     if (Q.radical_split == 1) {
         Q.freemen_rad -= 2;
         Q.rural_rad -= 1;
@@ -147,8 +144,6 @@ on-arrival: {!
     Q.conservative_dissent += 2;
     Q.liberal_dissent += 1;
 
-    // Helps freedmen farmers directly, so it pulls a little support
-    // back from the Radicals just as the land reform options do.
     if (Q.radical_split == 1) {
         Q.freemen_rad -= 1;
     }

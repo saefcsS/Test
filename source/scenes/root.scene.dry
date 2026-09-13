@@ -102,6 +102,16 @@ Q.dem_relation = 5;
 Q.liberal_relation = 50;
 Q.radical_relation = 50;
 
+Q.dem_control = "";
+Q.dem_convention_margin = 0;
+Q.dem_convention_stalemate_count = 0
+Q.liberal_courtship = 0;
+Q.conservative_defection = 0;
+
+Q.national_conservative_strength = 0;
+Q.ncp_founded = 0
+
+
 // paramilitary groups
 Q.kkk_strength = 1;
 Q.kkk_militancy = 0.01;
@@ -2070,6 +2080,8 @@ Q.radical_vp_candidate = "";
 
 Q.liberal_reunion_triggered = 0;
 Q.liberal_reunion_seen = 0;
+Q.liberal_survive = 0;
+
 Q.radical_reunion_triggered = 0;
 Q.radical_reunion_seen = 0;
 
