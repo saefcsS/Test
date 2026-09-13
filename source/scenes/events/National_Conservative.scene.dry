@@ -29,12 +29,29 @@ Delegates from the three camps begin meeting in New York. At first the gathering
 
 @ncp_full_merger
 title: The National Conservative Party
-on-arrival: ncp_founded = 1; dem_control = "national_conservative"; liberal_split = 0; liberal_survive = 0; conservative_dissent -= 6; radical_dissent += 6; moderate_dissent += 3
 on-arrival: {!
-    this.achieve("national_conservative_party");
-    // Consolidate strength trackers into the new coalition
-    Q.national_conservative_strength = (Q.dem_reform_strength || 0) + (Q.liberal_strength || 0) + ((Q.conservative_defectors_house || 0) * 2);
+    Q.ncp_founded = 1;
+    Q.dem_control = "national_conservative";
+    Q.liberal_split = 0;
+    Q.liberal_survive = 0;
+    radical_dissent += 6;
+    Q.moderate_dissent += 3
+
+    Q.dem_r += Q.lib_r;
     Q.lib_r = 0;
+    Q.workers_dem += Q.workers_lib;
+    Q.workers_lib = 0;
+    Q.rural_dem += Q.rural_lib;
+    Q.rural_lib = 0;
+    Q.middle_class_dem += Q.middle_class_lib;
+    Q.middle_class_lib = 0;
+    Q.freedmen_dem += Q.freedmen_lib;
+    Q.freedmen_lib = 0;
+    Q.immigrant_laborers_dem += Q.immigrant_laborers_lib;
+    Q.immigrant_laborers_lib = 0;
+    Q.unemployed_dem += Q.unemployed_lib;
+    Q.unemployed_lib = 0;
+
 !}
 
 It happens. <span style="color: #4682B4;">Reformers</span>, <span style="color: #DAA520;">Liberals</span> and <span style="color: #B5651D;">conservative</span> defectors agree to dissolve their separate organizations and establish a new party: the <span style="color: #00AEEF;">National Conservative Party</span>.
