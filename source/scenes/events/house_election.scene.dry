@@ -137,7 +137,7 @@ if (Q.other_r >= Q.rep_r && Q.other_r >= Q.dem_r && Q.other_r >= Q.lib_r && Q.ot
 
 if (Q.liberal_split === 1 && Q.liberal_reunion_seen !== 1) {
  
-    if (Q.lib_r <= Q.old_lib_r) {
+    if (Q.lib_r <= (Q.old_lib_r * 0.5)) {
         Q.liberal_reunion_triggered = 1;
     }
 }

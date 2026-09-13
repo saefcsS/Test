@@ -2049,8 +2049,8 @@ Q.vice_president = "Johnson";
 Q.vice_president_party = "dem";
 Q.speaker = "Colfax";
 Q.speaker_party = "Rep";
-Q.sen_majority = 3;
-Q.house_majority = 3;
+Q.sen_majority = 2;
+Q.house_majority = 2;
 Q.rep_majority = 1;
 Q.freedmens_bureau_active = 0;
 

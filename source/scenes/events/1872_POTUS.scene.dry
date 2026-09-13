@@ -220,6 +220,11 @@ else if (Q.libEVTotal >= majority) Q.potus_winner = "lib";
 else if (Q.radEVTotal >= majority) Q.potus_winner = "rad";
 else Q.potus_winner = "house";
 
+if((Q.libEVTotal <= 85) || (Q.rep.lib >= 60))
+{
+  Q.liberal_reunion_triggered = 1;
+}
+
 if(Q.demEVTotal == 0 && Q.libEVTotal == 0 && Q.radEVTotal)
 {
   this.achieve("washington");
