@@ -45,7 +45,6 @@ on-arrival: {!
     Q.conservative_defectors_house = houseToDem;
     Q.conservative_defectors_senate = senateToDem;
 !}
-conservative_defection = 1; conservative_strength -= 8; conservative_dissent -= 10; moderate_strength += 2; middle_class_rep -= 4; {! if (Q.dem_reform_strength >= 60) { Q.middle_class_dem += 4; Q.dem_reform_strength += 6; } !}
 
 A sizable bloc of conservative Republicans in Congress and in the state parties simply leaves. Some cross the floor to the Democrats outright, others announce independent candidacies, and a few disappear from politics altogether rather than answer to a party they no longer recognize. It is the largest single defection the party has suffered since the war.
 
@@ -65,7 +64,6 @@ on-arrival: {!
     Q.other_r = (Q.other_r || 0) + houseIndependent;
     Q.conservative_defectors_house = houseToDem;
 !}
-conservative_defection = 1; conservative_strength -= 3; conservative_dissent -= 4; middle_class_rep -= 1; {! if (Q.dem_reform_strength >= 60) { Q.middle_class_dem += 1; Q.dem_reform_strength += 2; } !}
 
 A handful of conservative Republicans, mostly men already halfway out the door, follow through. It is not a rupture, but it is a signal: the wall around the party's right flank is no longer quite as solid as it once looked.
 
