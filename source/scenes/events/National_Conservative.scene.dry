@@ -3,7 +3,6 @@ subtitle: The <span style="color: #DAA520;">**Liberal**</span>-<span style="colo
 tags: event
 new-page: true
 view-if: year = 1874 and month >= 6 and dem_control = "reform" and liberal_survive = 1 and liberal_reunion_seen = 0 and ncp_founded = 0 and liberal_courtship >= 10 and conservative_defection = 1
-face-img: img/portraits/tilden_schurz.jpg
 on-arrival: {!
     // Enthusiasm for actually merging vs. staying loose allies
     let reformStrength = Q.dem_reform_strength || 0;
