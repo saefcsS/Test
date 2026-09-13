@@ -2,7 +2,7 @@ title: Tilden Crushes Tweed's Ring
 subtitle: A New Era for New York
 view-if: year = 1873 and month = 12
 on-arrival: dem_reform_strength += 10; dem_bourbon_strength -= 10; NY_middle_class_rep -= 5; NY_middle_class_dem += 5; NY_workers_rep -= 3; NY_workers_dem += 3; liberal_strength += 3; radical_dissent += 5;
-face-img: img/portraits/Samuel_Tilden._Portrait_of_the_American_politician,_who_served_as_the_25th_Governor_of_New_York,*Samuel_Jones_Tilden*(1814-1886),_by_José_María_Mora,_c._1870.jpg
+face-image: img/portraits/Samuel_Tilden._Portrait_of_the_American_politician,_who_served_as_the_25th_Governor_of_New_York,*Samuel_Jones_Tilden*(1814-1886),_by_José_María_Mora,_c._1870.jpg
 
 = Boss Tweed Convicted
 
