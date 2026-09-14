@@ -35,7 +35,7 @@ view-if: ncp_consolidation_score >= 25
 on-arrival: {!
     Q.ncp_founded = 1;
     Q.dem_color = "#00AEEF";
-    Q.dem_control = "national_conservative";
+    Q.dem_name = "Nat'l Conservative";
     Q.liberal_split = 0;
     Q.liberal_survive = 0;
     radical_dissent += 6;
