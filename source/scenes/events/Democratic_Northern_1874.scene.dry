@@ -1,7 +1,6 @@
 title: The Northern Democratic State Conventions
 subtitle: Reform or Redemption?
 tags: event
-new-page: true
 view-if: year = 1874 and month = 3 and dem_control = "" and dem_reform_strength >= 75
 on-arrival: {!
     let reform = Q.dem_reform_strength || 0;
