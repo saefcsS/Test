@@ -109,8 +109,9 @@ Q.liberal_courtship = 0;
 Q.conservative_defection = 0;
 
 Q.national_conservative_strength = 0;
-Q.ncp_founded = 0
-
+Q.ncp_founded = 0;
+Q.dem_color = "#0015bc";
+Q.dem_name = "Democrats"
 
 // paramilitary groups
 Q.kkk_strength = 1;

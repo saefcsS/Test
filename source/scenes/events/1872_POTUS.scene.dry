@@ -585,7 +585,7 @@ title: No majority with the election going to the House!
 subtitle: Rep: [+ repEVTotal +] | Dem: [+ demEVTotal +] | Lib: [+ libEVTotal +]
 view-if: potus_winner = "house"
 on-arrival: {!
-  if (Q.house_majority >= 2) {
+  if (Q.house_majority >= 1) {
     Q.potus_winner = "rep";
     Q.president = Q.Candidate;
     Q.president_party = "rep";
@@ -827,8 +827,8 @@ on-arrival: {!
 
 No candidate has secured a majority of electoral votes. Under the Constitution, the election is thrown to the House of Representatives, where each state delegation casts a single vote.
 
-[? if house_majority >= 2 : With <span style="color: #c00000;">**Republicans**</span> controlling a majority of state delegations, the House elects [+ Candidate +] as President. ?]
-[? if house_majority < 2 : The <span style="color: #0015bc;">**Democratic**</span>-leaning delegations carry the day. [+ dem_candidate_1872 +] is elected President by the House. ?]
+[? if house_majority >= 1 : With <span style="color: #c00000;">**Republicans**</span> controlling a majority of state delegations, the House elects [+ Candidate +] as President. ?]
+[? if house_majority < 1 : The <span style="color: #0015bc;">**Democratic**</span>-leaning delegations carry the day. [+ dem_candidate_1872 +] is elected President by the House. ?]
 
 @defeat_rad_1872
 title: The <span style="color: #7A1F5C;">**Radicals**</span> have won the presidency.

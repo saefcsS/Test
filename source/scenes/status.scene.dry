@@ -21,7 +21,7 @@ var _house = [];
 _addP(_house, 'rad', 'Radical Republican', '#7A1F5C', '#7A1F5C', Q.rad_r);
 _addP(_house, 'rep', 'Republican', '#c00000', '#E3000F', Q.rep_r);
 _addP(_house, 'lib', 'Liberal Republican', '#DAA520', '#DAA520', Q.lib_r);
-_addP(_house, 'dem', 'Democrat', '#0015bc', '#0015bc', Q.dem_r);
+_addP(_house, 'dem', 'Democrat', 'Q.dem_color', 'Q.dem_color', Q.dem_r);
 _addP(_house, 'other', 'Other', '#00cc00', '#00cc00', Q.other_r);
 window._houseData = _house;
 
@@ -29,7 +29,7 @@ var _senate = [];
 _addP(_senate, 'rad', 'Radical Republican', '#7A1F5C', '#7A1F5C', Q.rad_senate_r);
 _addP(_senate, 'rep', 'Republican', '#c00000', '#c00000', Q.rep_senate_r);
 _addP(_senate, 'lib', 'Liberal Republican', '#DAA520', '#DAA520', Q.lib_senate_r);
-_addP(_senate, 'dem', 'Democrat', '#0015bc', '#0015bc', Q.dem_senate_r);
+_addP(_senate, 'dem', 'Democrat', 'Q.dem_color', 'Q.dem_color', Q.dem_senate_r);
 _addP(_senate, 'other', 'Other', '#00cc00', '#00cc00', Q.other_senate_r);
 window._senateData = _senate;
 !}
@@ -96,7 +96,7 @@ House of Representatives:
 
 [? if radical_split = 1 : <span class="tooltip-text" title="Radical Republican Party" style="color: #7A1F5C;">**Rad Republicans**</span>: [+ rad_r +] seats ?]
 <span class="tooltip-text" title="Republican Party" style="color: #c00000;">**Republicans**</span>: [+ rep_r +] seats
-<span class="tooltip-text" title="Democratic Party" style="color: #0015bc;">**Democrats**</span>: [+ dem_r +] seats
+<span class="tooltip-text" title="[? if ncp_founded = 0: Democratic Party ?][? if ncp_founded = 1: National Conservative Party ?]" style="color: [+ dem_color +];">**[+ dem_name +]**</span>: [+ dem_r +] seats
 [? if liberal_split = 1 : <span class="tooltip-text" title="Liberal Republican Party" style="color: #DAA520;">**Lib Republicans**</span>: [+ lib_r +] seats, ?]
 <span class="tooltip-text" title="Other" style="color: #00cc00;">**Other**</span>: [+ other_r +] seats
 
@@ -124,7 +124,7 @@ Senate Seats:
 
 [? if radical_split = 1 : <span class="tooltip-text" title="Radical Republican Party" style="color: #7A1F5C;">**Rad Republicans**</span>: [+ rad_senate_r +] seats ?]
 <span class="tooltip-text" title="Republican Party" style="color: #c00000;">**Republicans**</span>: [+ rep_senate_r +] seats 
-<span class="tooltip-text" title="Democratic Party" style="color: #0015bc;">**Democrats**</span>: [+ dem_senate_r +] seats 
+<span class="tooltip-text" title="[? if ncp_founded = 0: Democratic Party ?][? if ncp_founded = 1: National Conservative Party ?]" style="color: [+ dem_color +];">**[+ dem_name +]**</span>: [+ dem_senate_r +] seats
 [? if liberal_split = 1 : <span class="tooltip-text" title="Liberal Republican Party" style="color: #DAA520;">**Lib Republicans**</span>: [+ lib_senate_r +] seats, ?]
 <span class="tooltip-text" title="Other" style="color: #00cc00;">**Other**</span>: [+ other_senate_r +] seats
 
@@ -148,7 +148,7 @@ Economic growth: [+ economic_growth_2 +]%
 
 = Inter-party Relations
 
-**{!<span class="tooltip-text" title="Democratic Party" style="color: #0015bc;">Democrats</span>!}**: [+ dem_relation : relationships +]
+**{!<span class="tooltip-text" title="[? if ncp_founded = 0: Democratic Party ?][? if ncp_founded = 1: National Conservative Party ?]" style="color: [+ dem_color+];">[+ dem_name +]</span>!}**: [+ dem_relation : relationships +]
 
 [? if liberal_split = 1 : **{!<span class="tooltip-text" title="Liberal Republican Party" style="color: #DAA520;">Lib. Rep.</span>!}**: [+ liberal_relation : relationships +] ?]
 
@@ -210,7 +210,7 @@ Senate:
 
 <span style="color: #c00000;">**Republican**</span>: [+ rep_senate_pro +] seats
 
-<span style="color: #0015bc;">**Democrats**</span>: [+ dem_senate_pro +] seats
+<span style="color: [+ dem_color+];">**[+ dem_name +]**</span>: [+ dem_senate_pro +] seats
 
 [? if liberal_split = 1 : <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ lib_senate_pro +] seats ?]
 
@@ -222,7 +222,7 @@ House:
 
 <span style="color: #c00000;">**Republican**</span>: [+ rep_r_pro +] seats
 
-<span style="color: #0015bc;">**Democrats**</span>: [+ dem_r_pro +] seats
+<span style="color: [+ dem_color+];">**[+ dem_name +]**</span>: [+ dem_r_pro +] seats
 
 [? if radical_split = 1 : <span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ rad_r_pro +] seats ?]
 
@@ -232,17 +232,17 @@ House:
 
 **Detailed results for each demographic**
 
-Workers: <span style="color: #c00000;">**Republican**</span>: [+ workers_rep +]%, <span style="color: #0015bc;">**Democrats**</span>: [+ workers_dem +]%[? if liberal_split = 1 : , <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ workers_lib +]% ?], [? if radical_split = 1 :<span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ workers_rad +]% ?], <span style="color: #00cc00;">**Other**</span>: [+ workers_other +]%
+Workers: <span style="color: #c00000;">**Republican**</span>: [+ workers_rep +]%, <span style="color: [+ dem_color+];">**[+ dem_name +]**</span>: [+ workers_dem +]%[? if liberal_split = 1 : , <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ workers_lib +]% ?], [? if radical_split = 1 :<span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ workers_rad +]% ?], <span style="color: #00cc00;">**Other**</span>: [+ workers_other +]%
 
-Rural: <span style="color: #c00000;">**Republican**</span>: [+ rural_rep +]%, <span style="color: #0015bc;">**Democrats**</span>: [+ rural_dem +]%[? if liberal_split = 1 : , <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ rural_lib +]% ?], [? if radical_split = 1 :<span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ rural_rad +]% ?], <span style="color: #00cc00;">**Other**</span>: [+ rural_other +]%
+Rural: <span style="color: #c00000;">**Republican**</span>: [+ rural_rep +]%, <span style="color: [+ dem_color+];">**[+ dem_name +]**</span>: [+ rural_dem +]%[? if liberal_split = 1 : , <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ rural_lib +]% ?], [? if radical_split = 1 :<span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ rural_rad +]% ?], <span style="color: #00cc00;">**Other**</span>: [+ rural_other +]%
 
-Middle Class: <span style="color: #c00000;">**Republican**</span>: [+ middle_class_rep +]%, <span style="color: #0015bc;">**Democrats**</span>: [+ middle_class_dem +]%[? if liberal_split = 1 : , <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ middle_class_lib +]% ?], [? if radical_split = 1 :<span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ middle_class_rad +]% ?], <span style="color: #00cc00;">**Other**</span>: [+ middle_class_other +]%
+Middle Class: <span style="color: #c00000;">**Republican**</span>: [+ middle_class_rep +]%, <span style="color: [+ dem_color+];">**[+ dem_name +]**</span>: [+ middle_class_dem +]%[? if liberal_split = 1 : , <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ middle_class_lib +]% ?], [? if radical_split = 1 :<span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ middle_class_rad +]% ?], <span style="color: #00cc00;">**Other**</span>: [+ middle_class_other +]%
 
-Freedmen ([+ freedmen_turnout +]% turnout): <span style="color: #c00000;">**Republican**</span>: [+ freemen_rep +]%, <span style="color: #0015bc;">**Democrats**</span>: [+ freemen_dem +]%[? if liberal_split = 1 : , <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ freemen_lib +]% ?], [? if radical_split = 1 :<span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ freemen_rad +]% ?], <span style="color: #00cc00;">**Other**</span>: [+ freemen_other +]% 
+Freedmen ([+ freedmen_turnout +]% turnout): <span style="color: #c00000;">**Republican**</span>: [+ freemen_rep +]%, <span style="color: [+ dem_color+];">**[+ dem_name +]**</span>: [+ freemen_dem +]%[? if liberal_split = 1 : , <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ freemen_lib +]% ?], [? if radical_split = 1 :<span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ freemen_rad +]% ?], <span style="color: #00cc00;">**Other**</span>: [+ freemen_other +]% 
 
-Immigrant Laborers: <span style="color: #c00000;">**Republican**</span>: [+ immigrant_laborers_rep +]%, <span style="color: #0015bc;">**Democrats**</span>: [+ immigrant_laborers_dem +]%[? if liberal_split = 1 : , <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ immigrant_laborers_lib +]% ?], [? if radical_split = 1 :<span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ immigrant_laborers_rad +]% ?], <span style="color: #00cc00;">**Other**</span>: [+ immigrant_laborers_other +]%
+Immigrant Laborers: <span style="color: #c00000;">**Republican**</span>: [+ immigrant_laborers_rep +]%, <span style="color: [+ dem_color+];">**[+ dem_name +]**</span>: [+ immigrant_laborers_dem +]%[? if liberal_split = 1 : , <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ immigrant_laborers_lib +]% ?], [? if radical_split = 1 :<span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ immigrant_laborers_rad +]% ?], <span style="color: #00cc00;">**Other**</span>: [+ immigrant_laborers_other +]%
 
-Unemployed: <span style="color: #c00000;">**Republican**</span>: [+ unemployed_rep +]%, <span style="color: #0015bc;">**Democrats**</span>: [+ unemployed_dem +]%[? if liberal_split = 1 : , <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ unemployed_lib +]% ?], [? if radical_split = 1 :<span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ unemployed_rad +]% ?], <span style="color: #00cc00;">**Other**</span>: [+ unemployed_other +]%
+Unemployed: <span style="color: #c00000;">**Republican**</span>: [+ unemployed_rep +]%, <span style="color: [+ dem_color+];">**[+ dem_name +]**</span>: [+ unemployed_dem +]%[? if liberal_split = 1 : , <span style="color: #DAA520;">**Liberal Republicans**</span>: [+ unemployed_lib +]% ?], [? if radical_split = 1 :<span style="color: #7A1F5C;">**Radical Republicans**</span>: [+ unemployed_rad +]% ?], <span style="color: #00cc00;">**Other**</span>: [+ unemployed_other +]%
 
 @cabinet
 

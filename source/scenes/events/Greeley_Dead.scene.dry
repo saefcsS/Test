@@ -106,7 +106,7 @@ The attempt to intervene is now part of the story. <span style="color: #0015bc;"
 
 @push_congress
 on-arrival: {!
-    Q.congress_ruled_rep = (Q.house_majority >= 2) ? 1 : 0;
+    Q.congress_ruled_rep = (Q.house_majority >= 1) ? 1 : 0;
 !}
 go-to: congress_ruling_favorable if congress_ruled_rep = 1; congress_ruling_against if congress_ruled_rep = 0
 

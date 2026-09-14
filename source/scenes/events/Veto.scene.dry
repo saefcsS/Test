@@ -56,8 +56,8 @@ With the Radical base demanding action and the President daring Congress to resp
 
 @override
 subtitle: Requires 2/3 in both chambers.
-choose-if: house_majority = 3 and sen_majority = 3
-unavailable-subtitle: [? if house_majority < 3: We lack the supermajority in the House needed to override. ?][? if sen_majority < 3: We lack the supermajority in the Senate needed to override. ?]
+choose-if: house_majority = 2 and sen_majority = 2
+unavailable-subtitle: [? if house_majority < 2: We lack the supermajority in the House needed to override. ?][? if sen_majority < 2: We lack the supermajority in the Senate needed to override. ?]
 on-arrival: {!
 
     if (Q.veto_reason == "Civil Rights Act") {

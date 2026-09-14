@@ -17,7 +17,6 @@ on-arrival: {!
     let margin = base + liberalPull + conservativeBleed + complacency + tildenite + demComposition;
     Q.dem_convention_margin = Math.round(margin);
 !}
-go-to: dem_reform_wins if dem_convention_margin >= 15; dem_bourbon_wins if dem_convention_margin <= -15; dem_convention_contested if dem_convention_margin > -15 and dem_convention_margin < 15
 
 = The State Conventions
 
@@ -32,6 +31,7 @@ The <span style="color: #002765;">**Bourbon Democrats**</span> have no intention
 [? if conservative_dissent >= 45 : Word has also reached the delegates of growing discontent among <span style="color: #c00000;">**Republican**</span> moderates in Washington. The <span style="color: #4682B4;">**reformers**</span> are quick to point to it as evidence that the Republican coalition is beginning to fracture. ?]
 
 @dem_reform_wins
+view-if: dem_convention_margin >= 15
 title: <span style="color: #4682B4;">**Reformers**</span> Take Control
 on-arrival: dem_control = "reform"; dem_reform_strength += 10; dem_bourbon_strength -= 4; liberal_strength += 3; liberal_dissent -= 5; middle_class_dem += 4; rural_dem -= 2; conservative_dissent += 2; radical_dissent -= 3 if radical_split = 0; {! if (Q.liberal_survive == 1 && (Q.liberal_reunion_seen || 0) == 0) { Q.liberal_courtship = (Q.liberal_courtship || 0) + 10; } !}
 
@@ -48,6 +48,7 @@ For the <span style="color: #c00000;">**Republicans**</span>, this changes the t
 [? if radical_split = 1 : The <span style="color: #7A1F5C;">**Radical Republicans**</span> warn that the new Democracy deserves closer attention. Its reformers may have abandoned the old machines, but they have not abandoned their opposition to Republican Reconstruction. ?]
 
 @dem_bourbon_wins
+view-if: dem_convention_margin <= -15
 title: <span style="color: #002765;">**Bourbons**</span> Hold Control
 on-arrival: dem_control = "bourbon"; dem_bourbon_strength += 10; rural_dem += 4; workers_dem += 2; liberal_dissent += 5; liberal_strength -= 2; conservative_strength += 1
 
@@ -60,6 +61,7 @@ The <span style="color: #4682B4;">**Reform Democrats**</span> are furious. Some 
 [? if liberal_survive = 1 and liberal_reunion_seen = 0 : Liberal Republican leaders who had begun sounding out the Democracy pull back. Tilden may have their attention, but his party remains under Bourbon control. ?]
 
 @dem_convention_contested
+view-if: dem_convention_margin > -15 and dem_convention_margin < 15
 on-arrival: dem_reform_strength += 4; dem_bourbon_strength += 4; liberal_dissent += 1; dem_convention_stalemate_count += 1
 
 No single verdict emerges. New York and Connecticut fall in behind the <span style="color: #4682B4;">**reformers**</span>. Indiana and much of the rural Midwest remain with the <span style="color: #002765;">**Bourbons**</span>. Pennsylvania and Ohio split their delegations and settle for vague platform language that leaves both sides claiming victory.

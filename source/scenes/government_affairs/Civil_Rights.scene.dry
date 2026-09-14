@@ -32,8 +32,8 @@ What will we do???
 
 @pass_civil_rights
 subtitle: -2 budget & Congress majority
-unavailable-subtitle: [? if budget < 2: Not enough budget. ?][? if house_majority < 2: We don't have a House majority. ?][? if sen_majority < 2: We don't have a Senate majority. ?]
-choose-if: budget >= 2 and house_majority > 1 and sen_majority > 1
+unavailable-subtitle: [? if budget < 2: Not enough budget. ?][? if house_majority < 1: We don't have a House majority. ?][? if sen_majority < 1: We don't have a Senate majority. ?]
+choose-if: budget >= 2 and house_majority > 0 and sen_majority > 0
 view-if: civil_rights_act_passed = 0
 on-arrival: {!
     Q.civil_rights_act_passed = 1;

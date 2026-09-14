@@ -28,8 +28,8 @@ The proposal has powerful enemies. Senator Charles Sumner regards it as a scheme
 
 @push_hard
 subtitle: -2 resources. Requires Senate majority.
-choose-if: resources >= 2 and sen_majority >= 2
-unavailable-subtitle: [? if resources < 2: Not enough resources. ?][? if sen_majority < 2: We do not control the Senate. ?]
+choose-if: resources >= 2 and sen_majority >= 1
+unavailable-subtitle: [? if resources < 2: Not enough resources. ?][? if sen_majority < 1: We do not control the Senate. ?]
 on-arrival: {!
 
 Q.resources -= 2;

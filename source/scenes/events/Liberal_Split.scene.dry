@@ -79,9 +79,9 @@ on-arrival: {!
     let totalHouse = Q.rep_r + Q.dem_r + Q.lib_r + Q.other_r;
     let repPct = (Q.rep_r / totalHouse) * 100;
     if (repPct >= 66.7) {
-        Q.house_majority = 3;
-    } else if (repPct >= 50) {
         Q.house_majority = 2;
+    } else if (repPct >= 50) {
+        Q.house_majority = 1;
     } else {
         Q.house_majority = 0;
     }
@@ -141,9 +141,9 @@ on-arrival: {!
     let totalHouse = Q.rep_r + Q.dem_r + Q.lib_r + Q.other_r;
     let repPct = (Q.rep_r / totalHouse) * 100;
     if (repPct >= 66.7) {
-        Q.house_majority = 3;
-    } else if (repPct >= 50) {
         Q.house_majority = 2;
+    } else if (repPct >= 50) {
+        Q.house_majority = 1;
     } else {
         Q.house_majority = 0;
     }
@@ -199,9 +199,9 @@ on-arrival: {!
     let totalHouse = Q.rep_r + Q.dem_r + Q.lib_r + Q.other_r;
     let repPct = (Q.rep_r / totalHouse) * 100;
     if (repPct >= 66.7) {
-        Q.house_majority = 3;
-    } else if (repPct >= 50) {
         Q.house_majority = 2;
+    } else if (repPct >= 50) {
+        Q.house_majority = 1;
     } else {
         Q.house_majority = 0;
     }
