@@ -1,7 +1,8 @@
 title: The Cincinnati Banner Holds
 subtitle: The <span style="color: #DAA520;">**Liberal Republicans**</span> somehow march on
 tags: event
-view-if: liberal_reunion_triggered = 0 and liberal_split = 1 and year = 1873 and month = 2 and liberal_survive = 1
+view-if: liberal_reunion_triggered = 0 and liberal_split = 1 and year = 1873 and month = 2
+on-arrival: liberal_survive = 1
 
 = Willard Hotel Rally
 

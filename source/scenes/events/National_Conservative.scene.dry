@@ -26,8 +26,13 @@ Their reasons for crossing party lines differ, but their destination is increasi
 
 Delegates from the three camps begin meeting in New York. At first the gatherings are informal. By summer, they are negotiating platforms, organization and the question that would have been unthinkable a few years earlier: whether the old party lines have outlived their usefulness.
 
+- @ncp_full_merger
+- @ncp_electoral_fusion
+- @ncp_collapse
+
 @ncp_full_merger
 title: The National Conservative Party
+view-if: ncp_consolidation_score >= 25
 on-arrival: {!
     Q.ncp_founded = 1;
     Q.dem_control = "national_conservative";
@@ -64,6 +69,7 @@ The <span style="color: #c00000;">Republicans</span> now face a reorganized oppo
 [? if radical_split = 1 : The <span style="color: #7A1F5C;">Radical Republicans</span> point to the merger as proof that their opponents have finally found common ground. ?]
 
 @ncp_electoral_fusion
+view-if: ncp_consolidation_score > 5 and ncp_consolidation_score < 25
 title: An Alliance, Not a Marriage
 on-arrival: liberal_courtship += 8; dem_reform_strength += 4; liberal_strength += 2
 
@@ -74,6 +80,7 @@ They settle instead on an electoral alliance. Joint tickets appear in several No
 The arrangement is temporary by design. For now, the <span style="color: #DAA520;">Liberals</span> remain independent and Tilden's <span style="color: #4682B4;">reform Democracy</span> remains a Democratic organization. But the boundary between the two movements is becoming harder to see.
 
 @ncp_collapse
+view-if: ncp_consolidation_score <= 5
 title: Three Camps, Still Separate
 on-arrival: liberal_dissent += 4; dem_reform_dissent += 3; liberal_courtship -= 5
 

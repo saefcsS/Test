@@ -2,7 +2,7 @@ title: The Conservative Republican Defection
 subtitle: The party's right flank walks out.
 tags: event
 new-page: true
-view-if: conservative_strength >= 15 and conservative_dissent >= 25 and conservative_defection = 0 and year >= 1866
+view-if: conservative_strength >= 15 and conservative_dissent >= 50 and conservative_defection = 0 and year >= 1866
 max-visits: 1
 
 = The Conservative Republican Defection
