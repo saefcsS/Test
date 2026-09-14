@@ -16,6 +16,7 @@ on-arrival: {!
     let score = (reformStrength - 60) * 0.5 + (liberalStrength - 20) * 0.6 + courtship * 0.4 + defectors * 0.5 - friction * 0.4;
     Q.ncp_consolidation_score = Math.round(score);
 !}
+
 = Three Roads Converge
 
 By the summer of 1874, the political lines that once separated three different movements have begun to blur. Samuel Tilden's <span style="color: #4682B4;">**reform Democracy**</span> now controls much of the Northern party machinery. Carl Schurz's <span style="color: #DAA520;">**Liberal Republicans**</span>, still independent after Cincinnati, have watched Tilden turn the fight against corruption into a national Democratic cause. Meanwhile, <span style="color: #B5651D;">**conservative**</span> Republicans who broke with their party over Radicalism have found a place among the reform Democrats.
