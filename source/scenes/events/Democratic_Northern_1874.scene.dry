@@ -66,6 +66,7 @@ The <span style="color: #4682B4;">**Reform Democrats**</span> are furious. Some 
 
 @dem_convention_contested
 view-if: dem_convention_margin > -15 and dem_convention_margin < 15
+title: Democrats divided
 on-arrival: dem_reform_strength += 4; dem_bourbon_strength += 4; liberal_dissent += 1; dem_convention_stalemate_count += 1
 
 No single verdict emerges. New York and Connecticut fall in behind the <span style="color: #4682B4;">**reformers**</span>. Indiana and much of the rural Midwest remain with the <span style="color: #002765;">**Bourbons**</span>. Pennsylvania and Ohio split their delegations and settle for vague platform language that leaves both sides claiming victory.
