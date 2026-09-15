@@ -137,7 +137,7 @@ on-arrival: {!
     Q.term_improvements = 0;
     Q.term_patronage = 0;
 !}
-go-to: commission_negotiate
+go-to: commission_negotiate if ncp_founded = 0; commission_end if ncp_founded = 1;
 
 The Commission rules for [+ Candidate +]. But a ruling on paper is not the same as a peace the country will actually accept. Word reaches the White House that Southern <span style="color: #002765;">**Bourbon**</span> Democrats are prepared to let the ruling stand quietly for a price.
 

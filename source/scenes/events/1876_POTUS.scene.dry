@@ -6,9 +6,9 @@ max-visits: 1
 
 = Elections, [+ month +] [+ year +]
 
-The Presidential election is to be held now. <span style="color: #c00000;">**Republicans**</span> and <span style="color: #0015bc;">**Democrats**</span> face off[? if liberal_split = 0 and radical_split = 0 : in a straight two-party contest, the closest since the war began ?][? if liberal_split = 1 or radical_split = 1 : , with the opposition and the party both fractured ?].
+The Presidential election is to be held now. <span style="color: #c00000;">**Republicans**</span> and <span style="color: [+ dem_color+];">**[+ dem_name +]**</span> face off[? if liberal_split = 0 and radical_split = 0 : in a straight two-party contest, the closest since the war began ?][? if liberal_split = 1 or radical_split = 1 : , with the opposition and the party both fractured ?].
 
-[? if liberal_split = 1 : The <span style="color: #DAA520;">**Liberal Republicans**</span> have fielded their own candidate, threatening to split the anti-<span style="color: #0015bc;">**Democrat**</span> vote. ?]
+[? if liberal_split = 1 : The <span style="color: #DAA520;">**Liberal Republicans**</span> have fielded their own candidate, threatening to split the anti-<span style="color: [+ dem_color+];">**[+ dem_name +]**</span> vote. ?]
 
 [? if radical_split = 1 : The <span style="color: #7A1F5C;">**Radical Republicans**</span> have fielded their own candidate to counter our candidate for president. ?]
 
@@ -337,7 +337,7 @@ go-to: potus_menu_1876
 {!<table>!}
 {!<tr><td>Party</td><td>Electoral votes</td></tr>!}
 {!<tr><td><div class="box" style="background-color:#d73027; outline:2px solid;"></div> !}<span style="color: #c00000;">**Republicans ([+ Candidate +])**</span>{!</td><td>!}[+ repEVTotal +] votes{!</td></tr>!}
-{!<tr><td><div class="box" style="background-color:#4575b4; outline:2px solid;"></div> !}<span style="color: #0015bc;">**Democrats**</span> ([+ dem_candidate_1876 +]){!</td><td>!}[+ demEVTotal +] votes{!</td></tr>!}
+{!<tr><td><div class="box" style="background-color:#4575b4; outline:2px solid;"></div> !}<span style="color: [+ dem_color+];">**[+ dem_name +]**</span> ([+ dem_candidate_1876 +]){!</td><td>!}[+ demEVTotal +] votes{!</td></tr>!}
 [? if liberal_split = 1 : {!<tr><td><div class="box" style="background-color:#DAA520; outline:2px solid;"></div> !}<span style="color: #DAA520;">**Liberal Republicans**</span> (Greeley){!</td><td>!}[+ libEVTotal +] votes{!</td></tr>!} ?]
 [? if radical_split = 1 : {!<tr><td><div class="box" style="background-color:#7A1F5C; outline:2px solid;"></div> !}<span style="color: #7A1F5C;">**Radical Republicans ([+ radical_candidate +])**</span>{!</td><td>!}[+ radEVTotal +] votes{!</td></tr>!} ?]
 [? if Disputed_Yes == 1 : {!<tr><td><div class="box" style="background-color:#8E536E; outline:2px solid;"></div> !}<span style="color: #8E536E;">**Disputed Results**</span> {!</td><td>!}[+ disputedRepEV + disputedDemEV +] votes{!</td></tr>!} ?]
@@ -481,8 +481,8 @@ The <span style="color: #c00000;">**Republicans**</span> have carried a clear ma
 [? if third_term_bid = 1 and third_term_won = 1 : The third-term question, so feared by the party's managers, did not sink the ticket after all. ?]
 
 @defeat_dem_1876
-title: The <span style="color: #0015bc;">**Democrats**</span> have won the presidency.
-subtitle: <span style="color: #0015bc;">**Democrats**</span>: [+ demEVTotal +] electoral votes
+title: The <span style="color: [+ dem_color+];">**[+ dem_name +]**</span> have won the presidency.
+subtitle: <span style="color: [+ dem_color+];">**[+ dem_name +]**</span>: [+ demEVTotal +] electoral votes
 view-if: potus_winner = "dem"
 on-arrival: {!
     Q.president = Q.dem_candidate_1876;
@@ -570,7 +570,7 @@ on-arrival: {!
     }
 !}
 
-[+ dem_candidate_1876 +] and the <span style="color: #0015bc;">**Democratic Party**</span> have carried a clear majority of the electoral vote. For the first time since before the war, a <span style="color: #0015bc;">**Democrat**</span> will occupy the White House. The Redemption of the South, already well underway in statehouses across the region, now has a friend in Washington.
+[+ dem_candidate_1876 +] and the <span style="color: [+ dem_color+];">[+ dem_name +] Party</span> have carried a clear majority of the electoral vote. For the first time since before the war, a <span style="color: [+ dem_color+];">[+ dem_name +]</span> will occupy the White House.[? if ncp_founded = 0 : The Redemption of the South, already well underway in statehouses across the region, now has a friend in Washington. ?][? if ncp_founded = 1 : The new party has achieved what its founders hoped for: a national victory for its program of reform, reconciliation and an end to federal military intervention in the South. ?]
 
 @defeat_lib_1876
 title: The <span style="color: #DAA520;">**Liberal Republicans**</span> have won!
@@ -598,7 +598,7 @@ on-arrival: {!
     Q.sect_agriculture_party = "R";
 !}
 
-In a stunning upset, the <span style="color: #DAA520;">**Liberal Republicans**</span> have carried an electoral majority on their own, without any fusion with the <span style="color: #0015bc;">**Democrats**</span>. The regular <span style="color: #c00000;">**Republican**</span> organization is shattered, and Reconstruction's future is now in the hands of a movement that campaigned against continued federal intervention in the South.
+In a stunning upset, the <span style="color: #DAA520;">**Liberal Republicans**</span> have carried an electoral majority on their own, without any fusion with the <span style="color: [+ dem_color+];">**[+ dem_name +]**</span>. The regular <span style="color: #c00000;">**Republican**</span> organization is shattered, and Reconstruction's future is now in the hands of a movement that campaigned against continued federal intervention in the South.
 
 @defeat_rad_1876
 title: The <span style="color: #7A1F5C;">**Radicals**</span> have won the presidency.
@@ -636,7 +636,7 @@ go-to: Disputed
 
 = A Disputed Election
 
-Neither candidate has secured an undisputed majority. Returning boards in [+ disputed_states_1876 +] have submitted competing sets of electoral votes one certified by <span style="color: #002765;">**Bourbon Democrat**</span>-aligned officials, one by Republican-appointed returning boards backed by federal troops. Both candidates are claiming victory. The Constitution offers no clear mechanism for resolving a dispute of this kind, and the nation has not faced one before.
+Neither candidate has secured an undisputed majority. Returning boards in [+ disputed_states_1876 +] have submitted competing sets of electoral votes: one certified by <span style="color: #002765;">**Bourbon Democrat**</span>-aligned officials, the other by Republican-appointed returning boards backed by federal troops. Both candidates claim victory. The Constitution offers no clear mechanism for resolving a dispute of this kind, and the nation has never faced one before.
 
 How does the administration proceed?
 
@@ -771,7 +771,7 @@ on-arrival: {!
     }
 !}
 
-The Republicans in Congress officially certify the electoral votes, allowing [+ Candidate +] to be declared President of the United States. The decision inflames Democratic members and Northern newspapers, but a majority holds. For now, constitutional order prevails, even if barely.
+The Republicans in Congress officially certify the electoral votes, allowing [+ Candidate +] to be declared President of the United States. The decision inflames [? if ncp_founded = 0 : Democratic members and Northern newspapers ?][? if ncp_founded = 1 : members of the National Conservative Party and Northern newspapers ?], but a majority holds. For now, constitutional order prevails, even if barely.
 
 @concede_disputed
 on-arrival: {!
@@ -862,7 +862,7 @@ on-arrival: {!
     }
 !}
 
-Rather than contest returning boards openly aligned with armed Redeemer organizations, the administration accepts the Democratic certifications. [+ dem_candidate_1876 +] will be the next President. It avoids a constitutional crisis, but it hands the <span style="color: #002765;">**Bourbon**</span> wing of the Democratic Party exactly the validation it wanted, in exactly the states where the ballot was least free.
+Rather than contest returning boards openly aligned with armed Redeemer organizations, the administration accepts the [? if ncp_founded = 0 : Democratic certifications. [+ dem_candidate_1876 +] will be the next President. It avoids a constitutional crisis, but it hands the <span style="color: #002765;">**Bourbon**</span> wing of the Democratic Party exactly the validation it wanted, in exactly the states where the ballot was least free. ?][? if ncp_founded = 1 : certifications submitted by the former Democratic machine. [+ dem_candidate_1876 +] will be the next President. It avoids a constitutional crisis, but it gives the remaining <span style="color: #002765;">**Bourbon**</span> organizations a major victory in the states where the ballot was least free. ?]
 
 @broker_compromise
 on-arrival: {!

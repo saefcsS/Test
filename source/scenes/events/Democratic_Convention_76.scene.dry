@@ -1,7 +1,7 @@
 title: 1876 <span style="color: #0015bc;">**Democratic Party**</span> National Convention
 subtitle: Redeemers or Reformers?
 tags: event
-view-if: year = 1876 and month = 7
+view-if: year = 1876 and month = 7 and ncp_founded = 0
 max-visits: 1
 face-image: img/1876_Democratic_National_Convention_-_Missouri.jpg
 
