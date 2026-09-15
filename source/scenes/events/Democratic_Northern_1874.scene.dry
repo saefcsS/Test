@@ -30,6 +30,10 @@ The <span style="color: #002765;">**Bourbon Democrats**</span> have no intention
 
 [? if conservative_dissent >= 45 : Word has also reached the delegates of growing discontent among <span style="color: #c00000;">**Republican**</span> moderates in Washington. The <span style="color: #4682B4;">**reformers**</span> are quick to point to it as evidence that the Republican coalition is beginning to fracture. ?]
 
+- @dem_reform_wins
+- @dem_bourbon_wins
+- @dem_convention_contested
+
 @dem_reform_wins
 view-if: dem_convention_margin >= 15
 title: <span style="color: #4682B4;">**Reformers**</span> Take Control

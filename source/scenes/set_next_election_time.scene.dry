@@ -6,3 +6,6 @@ on-arrival:
   next_senate_election_time = time + time_to_senate_election if next_senate_election_time <= time;
   next_senate_election_month = 11 if next_senate_election_time <= time;
   next_senate_election_year += 2 if next_senate_election_time <= time;
+  next_dixie_election_time = time + time_to_dixie_election if next_dixie_election_time <= time;
+  next_dixie_election_month = 11 if next_dixie_election_time <= time;
+  next_dixie_election_year += 2 if next_dixie_election_time <= time;
