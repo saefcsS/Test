@@ -6,6 +6,7 @@ frequency: 300
 is-card: true
 card-image: img/money.png
 tags: party_affairs
+go-to: monies_menu
 
 = Fundraising
 
