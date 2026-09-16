@@ -38,10 +38,10 @@ Q.use_decimals = 0;
 Q.resources = 2;
 
 // party income
-Q.dues = 2;
-Q.patronage = 0;
+Q.dues = 1.5;
+Q.patronage = 2;
 Q.corruption = 0;
-Q.salary_cut = 0;
+Q.salary_cut = 0.1;
 Q.salary_cut_disp = 0;
 Q.big_monies = 0;
 
