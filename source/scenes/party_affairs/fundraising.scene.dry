@@ -86,6 +86,10 @@ on-arrival: big_monies += 1; corruption -= 1
 We discourage wealthy individuals and businesses to donate to our cause.
 
 @collect
-on-arrival: resources += Math.min(10, Math.round(dues + ((patronage + 10) / 20) * 2 + salary_cut * 3 + ((big_monies + 10) / 20) * 3))
+on-arrival: {! 
+
+    Q.resources += Math.min(10, Math.round(dues + ((patronage + 10) / 20) * 2 + salary_cut * 3 + ((big_monies + 10) / 20) * 3));
+    
+!}
 
 We cashed out big time!
