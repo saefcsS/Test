@@ -42,6 +42,7 @@ Q.dues = 2;
 Q.patronage = 0;
 Q.corruption = 0;
 Q.salary_cut = 0;
+Q.salary_cut_disp = 0;
 Q.big_monies = 0;
 
 // the state of the party

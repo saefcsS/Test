@@ -20,7 +20,7 @@ For better or for worse, the party cannot exist without money.
 - @business_donations: Encourage Business Donations
 - @business_donations_no: Discourage Business Donations
 - @collect: Collect our cash
-
+tj
 @decrease_dues
 subtitle: [+ dues - 1 +] resources gained.
 choose-if: dues > 0.5
@@ -54,18 +54,18 @@ unavailable-subtitle: Our system is a total meritocracy
 We decrease the amount of patronage within the government in the state and federal government.
 
 @increase_assessments
-subtitle: [+ (salary_cut + 0.1) * 100 +]%
+subtitle: [+ salary_cut_disp + 1 +]%
 choose-if: salary_cut < 0.75
 unavailable-subtitle: We can't expect to demand more from there salary
-on-arrival: salary_cut + 0.1; corruption += 2
+on-arrival: salary_cut += 0.1; salary_cut_disp += 1; corruption += 2
 
 We increase the precentage that our government employees have to pay to the party.
 
 @decrease_assessments
-subtitle: [+ (salary_cut - 0.1) * 100 +]%
+subtitle: [+ salary_cut_disp - 1 +]%
 choose-if: salary_cut > 0
 unavailable-subtitle: We are currently assessment free
-on-arrival: salary_cut - 0.1; corruption -= 2
+on-arrival: salary_cut -= 0.1; salary_cut_disp -= 1; corruption -= 2
 
 We increase the precentage that our government employees have to pay to the party.
 
@@ -86,7 +86,6 @@ on-arrival: big_monies += 1; corruption -= 1
 We discourage wealthy individuals and businesses to donate to our cause.
 
 @collect
-subtitle: [+ Math.min(10, Math.round(dues + ((patronage + 10) / 20) * 2 + salary_cut * 3 + ((big_monies + 10) / 20) * 3))  +]
 on-arrival: resources += Math.min(10, Math.round(dues + ((patronage + 10) / 20) * 2 + salary_cut * 3 + ((big_monies + 10) / 20) * 3))
 
 We cashed out big time!
