@@ -20,7 +20,7 @@ For better or for worse, the party cannot exist without money.
 - @business_donations: Encourage Business Donations
 - @business_donations_no: Discourage Business Donations
 - @collect: Collect our cash
-tj
+
 @decrease_dues
 subtitle: [+ dues - 1 +] resources gained.
 choose-if: dues > 0.5
