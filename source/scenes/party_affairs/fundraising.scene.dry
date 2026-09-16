@@ -11,29 +11,82 @@ tags: party_affairs
 
 For better or for worse, the party cannot exist without money.
 
-- @maintain: Maintain our current dues.
-- @reduce: Reduce dues.
-- @increase: Increase dues.
+- @increase_dues: Increase Party Dues
+- @decrease_dues: Decrease Party Dues
+- @increase_patronage: Hand Out More Federal Jobs
+- @decrease_patronage: Reduce Federal Patronage
+- @increase_assessments: Increase Salary Assessments
+- @decrease_assessments: Decrease Salary Assessments
+- @business_donations: Encourage Business Donations
+- @business_donations_no: Discourage Business Donations
+- @collect: Collect our cash
 
-@maintain
-subtitle: [+ dues +] resources gained.
-on-arrival: resources += dues;
-
-We maintain our current dues.
-
-@reduce
+@decrease_dues
 subtitle: [+ dues - 1 +] resources gained.
-choose-if: dues > 1
-on-arrival: dues -= 1; resources += dues; left_dissent -= 8; center_dissent -= 8; reformist_dissent -= 8; labor_dissent -= 8
+choose-if: dues > 0.5
+on-arrival: dues -= 0.5;
 
 Our current members appreciate this, but no one decides to join a party because of the low dues.
 
-@increase
-subtitle: [+ dues + 1 +] resources gained. [? if unemployed >= 15 : Given the present economic situation, this may be painful. ?][? if dues >= 4 : Dues are already rather high; increasing them might reduce our membership. ?]
-on-arrival: dues += 1; resources += dues; workers_rep -= 3; unemployed_rep -= 3; workers_rep -= 10 if unemployed >= 15; unemployed_rep -= 10 if unemployed >= 15; workers_rep -= 3*dues if dues >= 5; unemployed_rep -= 3*dues if dues >= 5
+@increase_dues
+subtitle: [+ dues + 0.5 +] resources gained. [? if unemployed >= 15 : Given the present economic situation, this may be painful. ?][? if dues >= 4 : Dues are already rather high; increasing them might reduce our membership. ?]
+on-arrival: dues += 0.5; workers_rep -= 3; unemployed_rep -= 3; workers_rep -= 10 if unemployed >= 15; unemployed_rep -= 10 if unemployed >= 15; workers_rep -= 3*dues if dues >= 5; unemployed_rep -= 3*dues if dues >= 5
 view-if: dues <= 4
 
 Our members grumble at this, and some of the less committed members leave. But now, we have access to additional resources. 
 
 [? if unemployed >= 15 : Because of the presently high unemployment, our members are feeling the extra burden hard. ?]
 
+@increase_patronage
+subtitle: [? if patronage < -7: <span style="color: #66BB6A;">**Extremely low**</span> ?][? if patronage = -7 : <span style="color: #66BB6A;">**Extremely low**</span> -> <span style="color: #81C784;">**low**</span> ?][? if patronage < -3 and patronage > -7: <span style="color: #81C784;">low</span> ?][? if patronage = -3 : <span style="color: #81C784;">**low**</span> -> <span style="color: #FFD54F;">**medium**</span> ?][? if patronage < 2 and patronage > -3: <span style="color: #FFD54F;">medium</span> ?][? if patronage = 2 : <span style="color: #FFD54F;">**medium**</span> -> <span style="color: #FFB74D;">**high**</span> ?][? if patronage < 6 and patronage > 2: <span style="color: #FFD54F;">medium</span> ?][? if patronage = 6 : <span style="color: #FFB74D;">**high**</span> -> <span style="color: #d42f2f;">Extremely high</span> ?][? if patronage > 6: <span style="color: #d42f2f;">Extremely high</span> ?]
+on-arrival: patronage += 1; corruption += 3
+choose-if: patronage < 10
+unavailable-subtitle: DUDE! STOP HANDING OUT Jobs
+
+We increase patronage within the government in the state and federal government.
+
+@decrease_patronage
+subtitle: [? if patronage < -7: <span style="color: #66BB6A;">**Extremely low**</span> ?][? if patronage = -7 : <span style="color: #66BB6A;">**Extremely low**</span> <- <span style="color: #81C784;">**low**</span> ?][? if patronage < -3 and patronage > -7: <span style="color: #81C784;">low</span> ?][? if patronage = -3 : <span style="color: #81C784;">**low**</span> <- <span style="color: #FFD54F;">**medium**</span> ?][? if patronage < 2 and patronage > -3: <span style="color: #FFD54F;">medium</span> ?][? if patronage = 2 : <span style="color: #FFD54F;">**medium**</span> <- <span style="color: #FFB74D;">**high**</span> ?][? if patronage < 6 and patronage > 2: <span style="color: #FFD54F;">medium</span> ?][? if patronage = 6 : <span style="color: #FFB74D;">**high**</span> <- <span style="color: #d42f2f;">Extremely high</span> ?][? if patronage > 6: <span style="color: #d42f2f;">Extremely high</span> ?]
+on-arrival: patronage -= 1; corruption -= 2
+choose-if: patronage > -10
+unavailable-subtitle: Our system is a total meritocracy
+
+We decrease the amount of patronage within the government in the state and federal government.
+
+@increase_assessments
+subtitle: [+ (salary_cut + 0.1) * 100 +]%
+choose-if: salary_cut < 0.75
+unavailable-subtitle: We can't expect to demand more from there salary
+on-arrival: salary_cut + 0.1; corruption += 2
+
+We increase the precentage that our government employees have to pay to the party.
+
+@decrease_assessments
+subtitle: [+ (salary_cut - 0.1) * 100 +]%
+choose-if: salary_cut > 0
+unavailable-subtitle: We are currently assessment free
+on-arrival: salary_cut - 0.1; corruption -= 2
+
+We increase the precentage that our government employees have to pay to the party.
+
+@business_donations
+subtitle: [+ big_monies + 1 : big_monies +]
+choose-if: big_monies < 10
+unavailable-subtitle: They are already giving us there all
+on-arrival: big_monies += 1; corruption += 3
+
+We encourage wealthy individuals and businesses to donate to our cause.
+
+@business_donations_no
+subtitle: [+ big_monies - 1 : big_monies +]
+choose-if: big_monies > -10
+unavailable-subtitle: Business fundraising in the party is minimal
+on-arrival: big_monies += 1; corruption -= 1
+
+We discourage wealthy individuals and businesses to donate to our cause.
+
+@collect
+subtitle: [+ Math.min(10, Math.round(dues + ((patronage + 10) / 20) * 2 + salary_cut * 3 + ((big_monies + 10) / 20) * 3))  +]
+on-arrival: resources += Math.min(10, Math.round(dues + ((patronage + 10) / 20) * 2 + salary_cut * 3 + ((big_monies + 10) / 20) * 3))
+
+We cashed out big time!

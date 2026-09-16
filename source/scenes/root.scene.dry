@@ -36,8 +36,13 @@ Q.use_decimals = 0;
 
 // party resources
 Q.resources = 2;
-// party dues
+
+// party income
 Q.dues = 2;
+Q.patronage = 0;
+Q.corruption = 0;
+Q.salary_cut = 0;
+Q.big_monies = 0;
 
 // the state of the party
 Q.dissent = 0.05;
