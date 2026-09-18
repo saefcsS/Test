@@ -13,6 +13,11 @@ go-to: monies_menu
 For better or for worse, the party cannot exist without money.
 
 @monies_menu
+on-arrival: {! 
+
+    Q.monies_disp = Math.min(6, Math.max(0, Math.round(Q.dues * 1.0 + (Math.max(0, Q.patronage) / 10) * 2 + Q.salary_cut * 3 + (Math.max(0, Q.big_monies) / 10) * 3)));
+
+!}
 
 - @increase_dues: Increase Party Dues
 - @decrease_dues: Decrease Party Dues
@@ -113,15 +118,7 @@ go-to: monies_menu
 We discourage wealthy individuals and businesses from donating to our cause.
 
 @collect
-on-arrival: {!
-
-    Q.monies_disp = Math.min(6, Math.max(0, Math.round(Q.dues * 1.0 + (Math.max(0, Q.patronage) / 10) * 2 + Q.salary_cut * 3 + (Math.max(0, Q.big_monies) / 10) * 3)));
-
-!}
-subtitle: + [+ monies_disp +] resources
-go-to: collect2
-
-@collect2
+subtitle: + [+ monies_disp +]
 on-arrival: {!
 
     let monies = Math.min(6, Math.max(0, Math.round(Q.dues * 1.0 + (Math.max(0, Q.patronage) / 10) * 2 + Q.salary_cut * 3 + (Math.max(0, Q.big_monies) / 10) * 3)));
