@@ -85,6 +85,7 @@ Ever since the beginning of Anglo-American rule in North America, we have had to
 - @military_action: Deploy the army to forcibly remove tribes from disputed territories.
 - @assimilation_policies: Advance policies to assimilate Native Americans into American society.
 
+
 @peaceful_negotiations
 view-if: Sioux_Treaty = 0
 on-arrival: Sioux_Treaty += 1; native_relations += 1
