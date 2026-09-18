@@ -40,7 +40,7 @@ Q.resources = 2;
 // party income
 Q.dues = 0.5;
 Q.patronage = 3;
-Q.corruption = 0;
+Q.corruption = 35;
 Q.salary_cut = 0.1;
 Q.salary_cut_disp = 10;
 Q.monies_disp = 0;
@@ -2290,11 +2290,11 @@ For more information on the politics of Reconstruction, see the "Library" page o
 - @1928_historical: Begin (historical mode)
 
 @1928_easy
-on-arrival: difficulty = -1; resources = 4; dues = 3; Union_League_strength = 75; budget = 5;
+on-arrival: difficulty = -1; resources = 4; dues = 1.5; Union_League_strength = 75; budget = 5;
 go-to: 1928_main
 
 @1928_hard
-on-arrival: difficulty = 1; resources = 0; dues = 1; Union_League_strength = 30; radical_dissent = 25; conservative_dissent = 30; liberal_dissent = 25; moderate_dissent = 25; budget = 3;
+on-arrival: difficulty = 1; resources = 0; dues = 0; Union_League_strength = 30; radical_dissent = 25; conservative_dissent = 30; liberal_dissent = 25; moderate_dissent = 25; budget = 3;
 go-to: 1928_main
 
 @1928_historical
@@ -2303,7 +2303,7 @@ on-arrival: {!
 Q.difficulty = 2;
 Q.historical_mode = 1;
 Q.resources = 2;
-Q.dues = 1;
+Q.dues = 0.5;
 Q.Union_League_strength = 60;
 Q.radical_dissent = 25;
 Q.conservative_dissent = 30;

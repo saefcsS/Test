@@ -1,43 +1,86 @@
-title: Postal Service
+title: Interior Policy
 new-page: true
 is-card: true
 tags: potus_affairs, cabinet
-card-image: img/Post.webp
-on-arrival: postmaster_policy_timer += 6; month_actions += 1
-view-if: sect_postmaster_party = "R" and postmaster_policy_timer <= 0
-go-to: postmaster_policy
+on-arrival: interior_policy_timer += 6; month_actions += 1
+view-if: sect_interior_party = "R" and interior_policy_timer <= 0
+card-image: img/portraits/James_Harlan.jpg
+go-to: policy
 
-= Postmaster General
+= Interior Policy
 
-The Post Office is the largest arm of the federal bureaucracy and the most politically lucrative. With tens of thousands of postal jobs to award, the Postmaster General wields extraordinary patronage power.
+The Department of the Interior governs the bones of the Republic: land, peoples, and resources. Its reach stretches across the Reconstruction South, the Native-held West, and the expanding territories of the Union. In this fragile postwar moment, control over land and law could determine the shape of the nation's soul.
 
-@postmaster_policy
+With millions of acres to administer, railroads demanding subsidy, freedmen petitioning for land, and Native nations resisting dispossession, Interior policy stands at the crossroads of justice, exploitation, and expansion.
 
-- @southern_patronage: Fill Southern postal jobs with loyal Unionists and Black <span style="color: #c00000;">**Republican**</span>.
-- @machine_loyalty: Reward Northern party men and fundraisers with plum appointments.
-- @civil_service_reform: Begin removing patronage and professionalizing the postal service.
-- @root: Leave the Post Office on autopilot for now.
+@policy
+
+- @railroad_subsidies: Negoitate with major railroad companies to help build out the west.
+- @Indian_Affairs: Deal with the Indians that live in the western land.
+- @Land_Purchase: Sell land out west to settlers and corporations.
+- @natural_resources_management: Begin conservation efforts to manage public lands and natural resources responsibly.
+- @root: Take no action for now.
 - @easy_discard
 - @cancel_advisor_action
 
-@southern_patronage
-subtitle: -1 Budget
-on-arrival: freemen_rep += 3; rural_dem -= 2; radical_strength += 1; conservative_dissent += 1; budget -= 1; PoliticalCostPenalty += 1; kkk_strength += 2
 
-Thousands of postal appointments across the South are handed to Black <span style="color: #c00000;">**Republican**</span>, Union loyalists, and carpetbaggers. This expands federal presence in the region but inflames local opposition and fuels accusations of corruption.
+@railroad_subsidies
+on-arrival: middle_class_rep += 5; workers_rep += 3; workers_dem -= 2; rural_dem += 1; freemen_rep -= 2; freemen_rad += 2 if radical_split = 1; rural_dem -= 1; economic_growth += 0.3; economic_expansion += 8; corruption += 2
 
-@machine_loyalty
+Land grants and subsidies will be prioritized for the expansion of major railroad companies. While this accelerates economic growth and connectivity, it risks fostering corporate influence and resentment among rural populations.
+
+[? if radical_split = 1 : Freedmen who see their land claims pushed aside for the railroads find a more sympathetic ear among the Radical Republicans. ?]
+
+@Indian_Affairs
+go-to: Indian
+
+@Land_Purchase
+go-to: purchase
+
+@natural_resources_management
+on-arrival: middle_class_rep += 1; rural_other += 1; liberal_strength += 1; conservative_dissent += 1; economic_growth -= 0.3; corruption -= 1
+
+The Interior Department begins efforts to manage the nation's vast public lands more responsibly. While still in its infancy, the idea of conservation gains support among reformers and scientists. We expand geological surveys, set aside some forest lands, and regulate mining claims more strictly. These measures face opposition from powerful corporate interests but appeal to <span style="color: #9D2933;">**moderates**</span> and progressives concerned about long-term national prosperity.
+
+@purchase
+
+We open large swaths of federal land in the West for sale, a key step in raising revenue and encouraging settlement. But who shall we favor in distributing this land: The formerly enslaved, poor white homesteaders, or wealthy corporations?
+
+-@Freemen: Prioritize land access for freedmen and black families.
+-@White: Prioritize small land sales to white homesteaders and Union veterans.
+-@Corporations: Prioritize bulk land sales to railroads and corporate land syndicates.
+
+@Freemen
 subtitle: +1 Budget
-choose-if: civil_service_reform < 4
-unavailable-subtitle: We have abolished such corruption with the Civil Serive Reform Act
-on-arrival: middle_class_rep += 2; moderate_strength += 1; budget += 1
+on-arrival: reemen_rep += 2; freemen_rad += 1 if radical_split = 1; rural_dem -= 1; conservative_dissent += 1; liberal_strength += 1; budget += 1; corruption -= 1
 
-We funnel high-paying postal appointments to loyal party operators and fundraisers. While it strengthens internal discipline and fundraising, it risks backlash from reformers and independents.
+We move to ensure freedmen have access to land ownership out west, helping black families build economic independence. This angers white Southerners and conservative factions, but boosts support among reformers and black communities.
 
-@civil_service_reform
-subtitle: -1 Budget
-view-if: civil_service_reform < 4
-on-arrival: liberal_strength += 1; civil_service_reform += 1; conservative_dissent += 1; budget -= 1
+[? if radical_split = 1 : "Forty acres" talk has long been a Radical rallying cry, and some freedmen credit the Radical Republicans as much as us for finally acting on it. ?]
 
-We move to de-politicize the Post Office and institute merit hiring. Though it earns praise from reformers, it angers loyal partisans who expect rewards for service.
+@White
+subtitle: +1 Budget
+on-arrival: rural_rep += 1; rural_dem += 1; moderate_strength += 1; freemen_other += 1; budget += 1
 
+Land is sold in small parcels primarily to white homesteaders, Union veterans, and yeoman farmers. It's a <span style="color: #9D2933;">**moderate**</span> policy that satisfies many but fails to address racial land inequities.
+
+[? if radical_split = 1 : The Radical Republicans loudly note that freedmen were passed over yet again. ?]
+
+@Corporations
+subtitle: +2 Budget
+on-arrival: middle_class_rep += 1; conservative_strength += 1; radical_dissent += 1 if radical_split = 0; inflation += 0.1; budget += 2; economic_growth += 0.2; corruption += 3
+
+We auction large tracts of land to powerful railroad companies and land syndicates. This generates short-term economic gains and investment but angers <span style="color: #7A1F5C;">**radicals**</span> and populists who see it as corruption and exploitation.
+
+[? if radical_split = 1 : Having already broken with us, the Radical Republicans seize on the sale as proof they were right to leave. ?]
+
+@Indian
+
+Ever since the beginning of Anglo-American rule in North America, we have had to contend with the native peoples of this land. Today, many of the tribes formerly east of the Mississippi reside in the Indian Territory. But as we continue westward, new conflicts arise with the Native nations who still inhabit those lands.
+
+- @peaceful_negotiations: Begin negotiations to avoid further conflict with the western tribes.
+- @peaceful_negotiations2: Continue diplomacy to resolve tensions with the Plains tribes.
+- @peaceful_negotiations3: Finalize treaty talks with the tribes of the northern plains.
+- @Sioux_Treaty: Sign a treaty with the Sioux Nation to end Red Cloud's War.
+- @military_action: Deploy the army to forcibly remove tribes from disputed territories.
+- @assimilation_policies: Advance policies to assimilate Native Americans into American society.

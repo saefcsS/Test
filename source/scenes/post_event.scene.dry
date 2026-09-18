@@ -991,6 +991,45 @@ if (Q.month_actions >= 1) {
 
 }
 
+if (Q.corruption === undefined) Q.corruption = 0;
+
+let corr = Q.corruption;
+let corrTier = 0;
+let corrSeverity = 0;
+
+if (corr < 10) {
+    corrTier = 0;
+    corrSeverity = 0;
+} else if (corr < 25) {
+    corrTier = 1;
+    corrSeverity = (corr - 10) / 15;
+} else if (corr < 40) {
+    corrTier = 2;
+    corrSeverity = 1 + (corr - 25) / 15;
+} else if (corr < 60) {
+    corrTier = 3;
+    corrSeverity = 2 + (corr - 40) / 20;
+} else {
+    corrTier = 4;
+    corrSeverity = 3 + (corr - 60) / 20;
+}
+
+if (corrSeverity > 0) {
+    Q.middle_class_rep -= 0.4 * corrSeverity;
+    Q.rural_rep        -= 0.3 * corrSeverity;
+    Q.workers_rep       -= 0.3 * corrSeverity;
+    Q.liberal_dissent += 0.6 * corrSeverity;
+}
+
+// Conservatives only start meaningfully capitalizing on it once corruption is a real scandal risk (tier 3+)
+if (corrTier >= 3) {
+    Q.conservative_strength += 0.3 * (corrSeverity - 2);
+}
+if (corrTier >= 4) {
+    // Borderline Criminal - conservatives smell blood, this compounds beyond the linear rate above
+    Q.conservative_strength += 0.2 * (corrSeverity - 3);
+}
+
 Q.has_event = 0;
 // check if there are any cards in #event, and then go to main if not.
 var scene = this.game.scenes['post_event.events_choice'];
