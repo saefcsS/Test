@@ -48,8 +48,8 @@ for (let state of Q.southern_states) {
     let nationalRep = Q[cls + "_rep"] || 0;
     let nationalDem = Q[cls + "_dem"] || 0;
 
-    let adjRep = 0.50 * localRep + 0.50 * nationalRep;
-    let adjDem = 0.50 * localDem + 0.50 * nationalDem;
+    let adjRep = 0.75 * localRep + 0.25 * nationalRep;
+    let adjDem = 0.75 * localDem + 0.25 * nationalDem;
 
     let total = adjRep + adjDem;
     if (total === 0) continue;
@@ -62,6 +62,9 @@ for (let state of Q.southern_states) {
   if (totalVotes === 0) continue;
 
   let repPct = (repVotes / totalVotes) * 100;
+
+  repPct += ((Q[state + "_loyalty"] || 50) - 50) * 0.3;
+  repPct += (Q[state + "_gub_winner"] === "rep") ? 2 : (Q[state + "_gub_winner"] === "dem" ? -2 : 0);
 
   // election-day noise
   repPct += (Math.random() * 8) - 4;

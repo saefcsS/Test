@@ -1,7 +1,7 @@
 title: Constitutional Reform
 new-page: true
 is-card: true
-view-if: rep_majority = 1 and limit = 1 and (fortheen_A = 0 or fifthteen = 0 or Blain = 0 or fifth_A = 0)
+view-if: rep_majority = 1 and limit = 1 and constitutional_reform_timer <= 0 and (fortheen_A = 0 or fifthteen = 0 or Blain = 0 or fifth_A = 0)
 tags: cotus_affairs
 on-arrival: month_actions += 1; constitutional_reform_timer += 12;
 card-image: img/portraits/Thaddeus_Stevens.jpg

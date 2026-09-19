@@ -34,6 +34,7 @@ tags: remove_advisor
 
 @remove_stevens
 title: Remove Stevens
+subtitle: Leader of the Radical Republicans in the House. [? if difficulty = -1: Clear Agenda, Constitutional Reform, and Radicalizing the Party?]
 view-if: stevens_advisor = 1 and stevens_dead = 0
 on-arrival: stevens_advisor = 0; radical_dissent += 5; n_advisors -= 1
 tags: remove_advisor
@@ -43,6 +44,7 @@ Stevens has been removed as an advisor. The <span style="color: #7A1F5C;">**Radi
 
 @remove_sumner
 title: Remove Sumner
+subtitle: Senate leader of the Radical Republicans. {!<br><br>!} [? if difficulty = -1: Champion the Freedmen, Push for Civil Rights Legislation, and Apply Pressure in the Senate?]
 view-if: sumner_advisor = 1
 on-arrival: sumner_advisor = 0; radical_dissent += 4; n_advisors -= 1
 tags: remove_advisor
@@ -52,6 +54,7 @@ Sumner has been removed as an advisor. The <span style="color: #7A1F5C;">**Radic
 
 @remove_wade
 title: Remove Wade
+subtitle: Senate President Pro Tempore and Radical firebrand. {!<br><br>!} [? if difficulty = -1: Mobilize the Ohio Machine and Reach Out to Workers?]
 view-if: wade_advisor = 1 and president != "Wade"
 on-arrival: wade_advisor = 0; radical_dissent += 3; n_advisors -= 1
 tags: remove_advisor
@@ -61,6 +64,7 @@ Wade has been removed as an advisor. The <span style="color: #7A1F5C;">**Radical
 
 @remove_chandler
 title: Remove Chandler
+subtitle: Michigan senator and aggressive Radical party organizer. {!<br><br>!} [? if difficulty = -1: Enforce Party Discipline, Strengthen the Michigan Base, and Emergency Party Fundraising?]
 view-if: chandler_advisor = 1
 on-arrival: chandler_advisor = 0; radical_dissent += 3; n_advisors -= 1
 tags: remove_advisor
@@ -70,6 +74,7 @@ Chandler has been removed as an advisor. The <span style="color: #7A1F5C;">**Rad
 
 @remove_morton
 title: Remove Morton
+subtitle: Indiana governor and Radical party boss. {!<br><br>!} [? if difficulty = -1: Activate the Indiana Machine, Rally the Veterans, and Support Southern Republicans?]
 view-if: morton_advisor = 1
 on-arrival: morton_advisor = 0; radical_dissent += 3; n_advisors -= 1
 tags: remove_advisor
@@ -79,6 +84,7 @@ Morton has been removed as an advisor. The <span style="color: #7A1F5C;">**Radic
 
 @remove_butler
 title: Remove Butler
+subtitle: Controversial Massachusetts Radical. {!<br><br>!} [? if difficulty = -1: Apply Impeachment Pressure, Appeal to Labor, and Dig Up Opposition Research?]
 view-if: butler_advisor = 1
 on-arrival: butler_advisor = 0; radical_dissent += 4; n_advisors -= 1
 tags: remove_advisor
@@ -88,6 +94,7 @@ Butler has been removed as an advisor. The <span style="color: #7A1F5C;">**Radic
 
 @remove_garfield
 title: Remove Garfield
+subtitle: Ohio war hero and rising Moderate star. {!<br><br>!} [? if difficulty = -1: Bridge Party Divisions, Appeal to the Middle Class, and Focus on Economic Policy?]
 view-if: garfield_advisor = 1
 on-arrival: garfield_advisor = 0; moderate_dissent += 3; n_advisors -= 1
 tags: remove_advisor
@@ -97,6 +104,7 @@ Garfield has been removed as an advisor. The <span style="color: #9D2933;">**Mod
 
 @remove_sherman
 title: Remove Sherman
+subtitle: Ohio senator and fiscal Moderate. {!<br><br>!} [? if difficulty = -1: Improve Agricultural Policy, Advance Fiscal Reform, and Invoke the Legacy of William Tecumseh Sherman?]
 view-if: sherman_advisor = 1
 on-arrival: sherman_advisor = 0; moderate_dissent += 3; n_advisors -= 1
 tags: remove_advisor
@@ -106,6 +114,7 @@ Sherman has been removed as an advisor. The <span style="color: #9D2933;">**Mode
 
 @remove_blaine
 title: Remove Blaine
+subtitle: Maine congressman, ambitious and broadly popular. {!<br><br>!} [? if difficulty = -1: Unify the Radicals and Moderates?]
 view-if: blaine_advisor = 1
 on-arrival: blaine_advisor = 0; moderate_dissent += 3; n_advisors -= 1
 tags: remove_advisor
@@ -115,6 +124,7 @@ Blaine has been removed as an advisor. The <span style="color: #9D2933;">**Moder
 
 @remove_hayes
 title: Remove Hayes
+subtitle: Ohioan Moderate, honest and broadly trusted. {!<br><br>!} [? if difficulty = -1: Appeal to Border State Unionists, Use Library Committee Influence, and Strengthen Army Officer Loyalty?]
 view-if: hayes_advisor = 1
 on-arrival: hayes_advisor = 0; moderate_dissent += 3; n_advisors -= 1
 tags: remove_advisor
@@ -124,6 +134,7 @@ Hayes has been removed as an advisor. The <span style="color: #9D2933;">**Modera
 
 @remove_fish
 title: Remove Fish
+subtitle: New York Moderate, a steady hand on foreign policy. {!<br><br>!} [? if difficulty = -1: Strengthen International Relations, Consolidate the New York Organization, and Conduct Foreign Policy?]
 view-if: fish_advisor = 1
 on-arrival: fish_advisor = 0; moderate_dissent += 2; n_advisors -= 1
 tags: remove_advisor
@@ -133,6 +144,7 @@ Fish has been removed as an advisor. The <span style="color: #9D2933;">**Moderat
 
 @remove_conkling
 title: Remove Conkling
+subtitle: New York machine boss, controls the Custom House. {!<br><br>!} [? if difficulty = -1: Leverage Custom House Patronage, Dominate Post Office Appointments, and Strengthen Immigrant Networks?]
 view-if: conkling_advisor = 1
 on-arrival: conkling_advisor = 0; conservative_dissent += 4; n_advisors -= 1
 tags: remove_advisor
@@ -142,6 +154,7 @@ Conkling has been removed as an advisor. The <span style="color: #B5651D;">**Con
 
 @remove_cameron
 title: Remove Cameron
+subtitle: Pennsylvania party boss and former Secretary of War. {!<br><br>!} [? if difficulty = -1: Draw on War Department Experience, Mobilize the Cameron Machine, and Strengthen the Conservative Wing?]
 view-if: cameron_advisor = 1
 on-arrival: cameron_advisor = 0; conservative_dissent += 3; n_advisors -= 1
 tags: remove_advisor
@@ -151,6 +164,7 @@ Cameron has been removed as an advisor. The <span style="color: #B5651D;">**Cons
 
 @remove_seward
 title: Remove Seward
+subtitle: Secretary of State and former Whig leader. {!<br><br>!} [? if difficulty = -1: Shape American Foreign Policy, Expand American Commerce, and Promote American Expansion?]
 view-if: seward_advisor = 1
 on-arrival: seward_advisor = 0; conservative_dissent += 3; n_advisors -= 1
 tags: remove_advisor
@@ -160,6 +174,7 @@ Seward has been removed as an advisor. The <span style="color: #B5651D;">**Conse
 
 @remove_schurz
 title: Remove Schurz
+subtitle: Missouri senator, intellectual leader of the Liberal Republicans. {!<br><br>!} [? if difficulty = -1: Rally German Immigrant Communities, Strengthen Missouri Republicans, and Advise on Interior Policy?]
 view-if: schurz_advisor = 1
 on-arrival: schurz_advisor = 0; liberal_dissent += 4; n_advisors -= 1
 tags: remove_advisor
@@ -169,6 +184,7 @@ Schurz has been removed as an advisor. The <span style="color: #DAA520;">**liber
 
 @remove_trumbull
 title: Remove Trumbull
+subtitle: Illinois senator drifting toward the Liberal Republicans. {!<br><br>!} [? if difficulty = -1: Advise on Judicial Affairs, Strengthen Illinois Republicans, and Reassure the Liberal Republicans?]
 view-if: trumbull_advisor = 1
 on-arrival: trumbull_advisor = 0; liberal_dissent += 3; n_advisors -= 1
 tags: remove_advisor
@@ -178,6 +194,7 @@ Trumbull has been removed as an advisor. The <span style="color: #DAA520;">**lib
 
 @remove_cox
 title: Remove Cox
+subtitle: Ohio politician and committed reformer. {!<br><br>!} [? if difficulty = -1: Strengthen the Liberal Republicans and Strengthen Ohio Republicans?]
 view-if: cox_advisor = 1
 on-arrival: cox_advisor = 0; liberal_dissent += 3; n_advisors -= 1
 tags: remove_advisor
@@ -187,6 +204,7 @@ Cox has been removed as an advisor. The <span style="color: #DAA520;">**liberal*
 
 @remove_douglass
 title: Remove Douglass
+subtitle: The most prominent Black leader in America.{!<br><br>!} [? if difficulty = -1: Mobilize the Freedmen, Northern Moral Appeal, and Leverage International Reputation?]
 view-if: douglass_advisor = 1
 on-arrival: douglass_advisor = 0; radical_dissent += 5; freemen_rep -= 3; n_advisors -= 1
 tags: remove_advisor
@@ -245,7 +263,7 @@ view-if: (difficulty = -1 and n_advisors < 4) or (difficulty > -1 and n_advisors
 
 @add_stevens
 title: Thaddeus Stevens
-subtitle: Leader of the <span style="color: #7A1F5C;">**Radical Republicans**</span> in the House. Uncompromising champion of equality.
+subtitle: Leader of the <span style="color: #7A1F5C;">**Radical Republicans**</span> in the House. Uncompromising champion of equality. {!<br><br>!} [? if difficulty = -1: Clear Agenda, Constitutional Reform, and Radicalizing the Party?] 
 is-card: true
 card-image: img/portraits/Thaddeus_Stevens.jpg
 tags: radical_advisor
@@ -257,7 +275,7 @@ Thaddeus Stevens is now an advisor.
 
 @add_sumner
 title: Charles Sumner
-subtitle: Senate leader of the <span style="color: #7A1F5C;">**Radical Republicans**</span>. Passionate abolitionist and champion of Black civil rights.
+subtitle: Senate leader of the <span style="color: #7A1F5C;">**Radical Republicans**</span>. Passionate abolitionist and champion of Black civil rights. {!<br><br>!} [? if difficulty = -1: Champion the Freedmen, Push for Civil Rights Legislation, and Apply Pressure in the Senate?]
 is-card: true
 card-image: img/portraits/Charles_Sumner.jpg
 tags: radical_advisor
@@ -269,7 +287,7 @@ Charles Sumner is now an advisor. His moral authority on questions of equality i
 
 @add_wade
 title: Benjamin Wade
-subtitle: Senate President Pro Tempore. <span style="color: #7A1F5C;">**Radical**</span> firebrand and potential president.
+subtitle: Senate President Pro Tempore. <span style="color: #7A1F5C;">**Radical**</span> firebrand. {!<br><br>!} [? if difficulty = -1: Mobilize the Ohio Machine and Reach Out to Workers?]
 is-card: true
 card-image: img/portraits/Benjamin_F_Wade.jpg
 tags: radical_advisor
@@ -281,7 +299,7 @@ Benjamin Wade is now an advisor. His blunt radicalism energizes the party's left
 
 @add_chandler
 title: Zachariah Chandler
-subtitle: Michigan senator and aggressive <span style="color: #7A1F5C;">**Radical**</span> party organizer.
+subtitle: Michigan senator and aggressive <span style="color: #7A1F5C;">**Radical**</span> party organizer. {!<br><br>!} [? if difficulty = -1: Enforce Party Discipline, Strengthen the Michigan Base, and Emergency Party Fundraising?]
 is-card: true
 card-image: img/portraits/Zachariah_Chandler.jpg
 tags: radical_advisor
@@ -293,7 +311,7 @@ Zachariah Chandler is now an advisor. He lacks Stevens's philosophical depth but
 
 @add_morton
 title: Oliver Morton
-subtitle: Indiana governor and senator. One of the most powerful <span style="color: #7A1F5C;">**Radical**</span> party bosses in the country.
+subtitle: Indiana governor and senator. One of the most powerful <span style="color: #7A1F5C;">**Radical**</span> party bosses in the country. {!<br><br>!} [? if difficulty = -1: Activate the Indiana Machine, Rally the Veterans, and Support Southern Republicans?]
 is-card: true
 card-image: img/portraits/Oliver_Hazard_Perry_Morton.jpg
 tags: radical_advisor
@@ -305,7 +323,7 @@ Oliver Morton is now an advisor. His iron grip on Indiana Republican politics is
 
 @add_butler
 title: Benjamin Butler
-subtitle: Controversial Massachusetts <span style="color: #7A1F5C;">**Radical**</span>. Ruthless and effective.
+subtitle: Controversial Massachusetts <span style="color: #7A1F5C;">**Radical**</span>. Ruthless and effective. {!<br><br>!} [? if difficulty = -1: Apply Impeachment Pressure, Appeal to Labor, and Dig Up Opposition Research?]
 is-card: true
 card-image: img/portraits/Benjamin_Butler.jpg
 tags: radical_advisor
@@ -319,7 +337,7 @@ Benjamin Butler is now an advisor. His methods are controversial but his results
 
 @add_garfield
 title: James Garfield
-subtitle: Ohio war hero and rising <span style="color: #9D2933;">**Moderates**</span> star. Skilled master debater.
+subtitle: Ohio war hero and rising <span style="color: #9D2933;">**Moderates**</span> star. Skilled master debater. {!<br><br>!} [? if difficulty = -1: Bridge Party Divisions, Appeal to the Middle Class, and Focus on Economic Policy?]
 is-card: true
 card-image: img/portraits/James_Abram_Garfield.jpg
 tags: moderate_advisor
@@ -331,7 +349,7 @@ James Garfield is now an advisor. His broad appeal across factions makes him a v
 
 @add_sherman
 title: John Sherman
-subtitle: Ohio senator and fiscal <span style="color: #9D2933;">**Moderates**</span>. Brother of the general. The party's leading voice on economic policy.
+subtitle: Ohio senator and fiscal <span style="color: #9D2933;">**Moderates**</span>. Brother of the general. The party's leading voice on economic policy. {!<br><br>!} [? if difficulty = -1: Improve Agricultural Policy, Advance Fiscal Reform, and Invoke the Legacy of William Tecumseh Sherman?]
 is-card: true
 card-image: img/portraits/John-Sherman.jpg
 tags: moderate_advisor
@@ -339,11 +357,11 @@ view-if: sherman_advisor = 0 and ((difficulty = -1 and n_advisors < 4) or (diffi
 on-arrival: sherman_advisor = 1; n_advisors += 1; moderate_strength += 3; moderate_dissent -= 2; middle_class_rep += 3; conservative_dissent -= 2
 go-to: advisor_menu
 
-John Sherman is now an advisor. His command of financial policy gives us credibility with the business community.
+John Sherman is now an advisor. His command of financial policy gives us credibility with the business community. 
 
 @add_blaine
 title: James Blaine
-subtitle: Maine congressman. Ambitious, skilled, and broadly popular.
+subtitle: Maine congressman. Ambitious, skilled, and broadly popular. {!<br><br>!} [? if difficulty = -1: Unify the Radicals and Moderates?]
 is-card: true
 card-image: img/portraits/James_G._Blaine.jpg
 tags: moderate_advisor
@@ -355,7 +373,7 @@ James Blaine is now an advisor. His national profile and political skill are con
 
 @add_hayes
 title: Rutherford Hayes
-subtitle: Ohioian. <span style="color: #9D2933;">**Moderates**</span>, honest, and broadly trusted.
+subtitle: Ohioian. <span style="color: #9D2933;">**Moderates**</span>, honest, and broadly trusted. {!<br><br>!} [? if difficulty = -1: Appeal to Border State Unionists, Use Library Committee Influence, and Strengthen Army Officer Loyalty?]
 is-card: true
 card-image: img/portraits/Rutherford_Hayes.jpg
 tags: moderate_advisor
@@ -367,7 +385,7 @@ Rutherford Hayes is now an advisor. His reputation for integrity is a useful cou
 
 @add_fish
 title: Hamilton Fish
-subtitle: New York <span style="color: #9D2933;">**Moderates**</span>. A steady hand on foreign policy.
+subtitle: New York <span style="color: #9D2933;">**Moderates**</span>. A steady hand on foreign policy. {!<br><br>!} [? if difficulty = -1: Strengthen International Relations, Consolidate the New York Organization, and Conduct Foreign Policy?]
 is-card: true
 card-image: img/portraits/Hamilton_Fish.jpg
 tags: moderate_advisor
@@ -381,7 +399,7 @@ Hamilton Fish is now an advisor. His diplomatic experience opens doors abroad th
 
 @add_conkling
 title: Roscoe Conkling
-subtitle: New York machine boss and dominant <span style="color: #B5651D;">**Conservative**</span> figure. Controls the Custom House.
+subtitle: New York machine boss and dominant <span style="color: #B5651D;">**Conservative**</span> figure. Controls the Custom House. {!<br><br>!} [? if difficulty = -1: Leverage Custom House Patronage, Dominate Post Office Appointments, and Strengthen Immigrant Networks?]
 is-card: true
 card-image: img/portraits/Roscoe_Conkling.jpg
 tags: conservative_advisor
@@ -393,7 +411,7 @@ Roscoe Conkling is now an advisor. His machine delivers votes and money at a pri
 
 @add_cameron
 title: Simon Cameron
-subtitle: Pennsylvania party boss and former Secretary of War. Old-guard patronage politician.
+subtitle: Pennsylvania party boss and former Secretary of War. Old-guard patronage politician. {!<br><br>!} [? if difficulty = -1: Draw on War Department Experience, Mobilize the Cameron Machine, and Strengthen the Conservative Wing?]
 is-card: true
 card-image: img/portraits/Smn_Cameron.jpg
 tags: conservative_advisor
@@ -405,7 +423,7 @@ Simon Cameron is now an advisor. His Pennsylvania machine is a formidable asset,
 
 @add_seward
 title: William Seward
-subtitle: Secretary of State and former Whig leader. Pragmatic <span style="color: #B5651D;">**Conservative**</span>.
+subtitle: Secretary of State and former Whig leader. Pragmatic <span style="color: #B5651D;">**Conservative**</span>. {!<br><br>!} [? if difficulty = -1: Shape American Foreign Policy, Expand American Commerce, and Promote American Expansion?]
 is-card: true
 card-image: img/portraits/Seward.jpg
 tags: conservative_advisor
@@ -419,7 +437,7 @@ William Seward is now an advisor. His long experience in government is valuable,
 
 @add_schurz
 title: Carl Schurz
-subtitle: Missouri senator and intellectual leader of the <span style="color: #DAA520;">**Liberal Republicans**</span> movement. Champion of civil service reform.
+subtitle: Missouri senator and intellectual leader of the <span style="color: #DAA520;">**Liberal Republicans**</span> movement. Champion of civil service reform. {!<br><br>!} [? if difficulty = -1: Rally German Immigrant Communities, Strengthen Missouri Republicans, and Advise on Interior Policy?]
 is-card: true
 card-image: img/portraits/Schurz,_Hon._Carl.jpg
 tags: liberal_advisor
@@ -431,7 +449,7 @@ Carl Schurz is now an advisor. His reform credentials and German-American connec
 
 @add_trumbull
 title: Lyman Trumbull
-subtitle: Illinois senator. Drifting steadily toward the <span style="color: #DAA520;">**Liberal Republicans**</span>.
+subtitle: Illinois senator. Drifting steadily toward the <span style="color: #DAA520;">**Liberal Republicans**</span>. {!<br><br>!} [? if difficulty = -1: Advise on Judicial Affairs, Strengthen Illinois Republicans, and Reassure the Liberal Republicans?]
 is-card: true
 card-image: img/portraits/Lyman_Trumbull.jpg
 tags: liberal_advisor
@@ -443,7 +461,7 @@ Lyman Trumbull is now an advisor. His legal expertise is valuable.
 
 @add_cox
 title: Jacob Cox
-subtitle: Ohio politician and Committed reformer.
+subtitle: Ohio politician and Committed reformer. {!<br><br>!} [? if difficulty = -1: Strengthen the Liberal Republicans and Strengthen Ohio Republicans?]
 is-card: true
 card-image: img/portraits/Jacob_Cox.jpg
 tags: liberal_advisor
@@ -457,7 +475,7 @@ Jacob Cox is now an advisor. His reform credentials are genuine, and his Ohio co
 
 @add_douglass
 title: Frederick Douglass
-subtitle: The most prominent Black leader in America. His endorsement carries enormous weight with the freedmen community.
+subtitle: The most prominent Black leader in America. His endorsement carries enormous weight with the freedmen community. {!<br><br>!} [? if difficulty = -1: Mobilize the Freedmen, Northern Moral Appeal, and Leverage International Reputation?]
 is-card: true
 card-image: img/portraits/Frederick_Douglass.jpg
 tags: nonfactional_advisor
