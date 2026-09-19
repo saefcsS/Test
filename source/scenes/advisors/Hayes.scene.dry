@@ -30,7 +30,7 @@ title: Use Library Committee Influence
 subtitle: Hayes directs Library of Congress patronage and resources toward Republican cultural institutions.
 choose-if: advisor_action_timer = 0
 unavailable-subtitle: [? if advisor_action_timer > 0 : [+ advisor_action_timer +] months before next advisor action. ?]
-on-arrival: advisor_action_timer = 6; last_advisor_action = 1;
+on-arrival: advisor_action_timer = 6; last_advisor_action = 1; corruption += 1;
 go-to: media
 
 As Chairman of the Joint Committee on the Library of Congress, Hayes controls significant cultural patronage sich as library acquisitions, manuscript collections, and appointments. He directs funds toward <span style="color: #c00000;">**Republican**</span> newspapers' archives, supports loyal historians and scholars, and ensures that the narrative of the war and Reconstruction is told favorably. The Library becomes a tool of <span style="color: #c00000;">**Republican**</span> cultural influence. **<span style="color: #B5651D;">Conservatives</span>** grumble about intellectual waste while **<span style="color: #DAA520;">Liberals</span>** appreciate the support for learning.

@@ -19,7 +19,7 @@ title: Enforce Party Discipline
 subtitle: Chandler cracks down on dissent and brings wavering members back into line.
 choose-if: advisor_action_timer = 0
 unavailable-subtitle: [? if advisor_action_timer > 0 : [+ advisor_action_timer +] months before next advisor action. ?]
-on-arrival: advisor_action_timer = 6; last_advisor_action = 1; radical_dissent -= 4; moderate_dissent -= 2; conservative_dissent -= 1; liberal_dissent -= 2;
+on-arrival: advisor_action_timer = 6; last_advisor_action = 1; radical_dissent -= 4; moderate_dissent -= 2; conservative_dissent -= 1; liberal_dissent -= 2; corruption += 1;
 
 Chandler works the back rooms with characteristic bluntness, reminding members of favors owed, patronage pending, and the consequences of disloyalty. The methods are not pretty but the results are undeniable.
 
@@ -37,6 +37,6 @@ title: Emergency Party Fundraising
 subtitle: Chandler leverages his business connections to raise emergency funds.
 choose-if: advisor_action_timer = 0
 unavailable-subtitle: [? if advisor_action_timer > 0 : [+ advisor_action_timer +] months before next advisor action. ?]
-on-arrival: advisor_action_timer = 6; last_advisor_action = 1; resources += dues;
+on-arrival: advisor_action_timer = 6; last_advisor_action = 1; resources += 2; corruption += 1;
 
 Chandler calls in favors from the Detroit business community and beyond. The money arrives without ceremony or public acknowledgment, as Chandler prefers.

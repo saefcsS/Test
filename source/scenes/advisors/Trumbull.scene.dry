@@ -38,6 +38,6 @@ title: Reassure the Liberal Republicans
 subtitle: Appeal to the party's reform-minded wing.
 choose-if: advisor_action_timer = 0
 unavailable-subtitle: [? if advisor_action_timer > 0 : [+ advisor_action_timer +] months before next advisor action. ?]
-on-arrival: advisor_action_timer = 6; last_advisor_action = 1; liberal_dissent -= 4;
+on-arrival: advisor_action_timer = 6; last_advisor_action = 1; liberal_dissent -= 4; corruption -= 1;
 
 Trumbull meets with prominent reformers and independent-minded legislators, reassuring the <span style="color: #DAA520;">**Liberal Republicans**</span> that the administration remains committed to constitutional government, civil service reform, and honest public administration.

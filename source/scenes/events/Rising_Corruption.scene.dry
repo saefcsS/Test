@@ -1,0 +1,35 @@
+title: Rising Corruption
+tags: event
+view-if: flag_rising_corruption = 1
+on-arrival: flag_rising_corruption = 0; rising_corruption_ticker_timer = 8 if corruption < 60 else 4
+
+= Corruption is Rising
+
+Whispers in the press and on the floor of Congress grow louder: the party's dealings with patronage, contracts, and party financiers are drawing scrutiny. [? if corruption >= 60 : What began as murmurs has curdled into open accusation even allies concede the administration looks the part of a machine bought and paid for. ?][? if corruption < 60 : Nothing has broken into open scandal yet, but reformers and rivals alike sense an opening. ?]
+
+How do we respond?
+
+- @investigate: Order an internal investigation and clean house.
+- @scapegoat: Quietly remove a minor official and call it accountability.
+- @downplay: Deny there is any problem.
+
+@investigate
+subtitle: -2 Budget
+choose-if: budget >= 2
+unavailable-subtitle: We do not have the budget for a real investigation.
+on-arrival: budget -= 2; corruption -= 6; conservative_dissent += 3; liberal_strength += 2; PoliticalCostPenalty += 1
+
+We order a genuine internal review, removing officials and renegotiating contracts tied to the worst abuses. It costs us allies among the machine's beneficiaries, but reformers and the press take notice.
+
+@scapegoat
+subtitle: -1 Budget
+choose-if: budget >= 1
+unavailable-subtitle: We do not have the budget.
+on-arrival: budget -= 1; corruption -= 2; liberal_dissent -= 1; rising_corruption_ticker_timer = 4
+
+A minor official is quietly shown the door. It buys a news cycle of "action taken," but everyone in Washington understands the machine itself is untouched. [+ (corruption >= 60 ? "The respite will not last long." : "") +]
+
+@downplay
+on-arrival: liberal_dissent += 3; conservative_strength += 1
+
+We dismiss the reporting as partisan noise and change the subject. Reformers seethe, but nothing costs us today - only later.

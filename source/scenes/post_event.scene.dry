@@ -724,6 +724,10 @@ if (Q.month_actions >= 1) {
     if (Q.economic_growth >= 6 && (Q.boom_ticker_timer || 0) <= 0) {
         Q.flag_boom = 1;
     }
+    if (Q.corruption >= 40 && (Q.rising_corruption_ticker_timer || 0) <= 0) {
+        Q.flag_rising_corruption = 1;
+    }
+    Q.rising_corruption_ticker_timer = Math.max(0, (Q.rising_corruption_ticker_timer || 0) - 1);
 
     // Decrement all cooldown timers
     Q.high_inflation_ticker_timer = Math.max(0, (Q.high_inflation_ticker_timer || 0) - 1);

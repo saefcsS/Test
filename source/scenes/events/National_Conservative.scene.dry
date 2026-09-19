@@ -30,7 +30,7 @@ Delegates from the three camps begin meeting in New York. At first the gathering
 - @ncp_collapse
 
 @ncp_full_merger
-title: The National Conservative Party
+title: A National Conservative Party is formed
 view-if: ncp_consolidation_score >= 25
 on-arrival: {!
     Q.ncp_founded = 1;
