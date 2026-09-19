@@ -40,7 +40,7 @@ choose-if: budget >= 1
 unavailable-subtitle: We do not have the budget.
 on-arrival: budget -= 1; corruption -= 2; liberal_dissent -= 1; rising_corruption_ticker_timer = 4
 
-A minor official is quietly shown the door. It buys a news cycle of "action taken," but everyone in Washington understands the machine itself is untouched. [+ (corruption >= 60 ? "The respite will not last long." : "") +]
+A minor official is quietly shown the door. It buys a news cycle of "action taken," but everyone in Washington understands the machine itself is untouched. [? if corruption >= 60 : The respite will not last long. ?]
 
 @downplay
 on-arrival: liberal_dissent += 3; conservative_strength += 1
