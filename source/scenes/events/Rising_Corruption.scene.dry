@@ -1,11 +1,11 @@
 title: Rising Corruption
 tags: event
 view-if: flag_rising_corruption = 1
-on-arrival: flag_rising_corruption = 0; rising_corruption_ticker_timer = 8 if corruption < 60 else 4
+on-arrival: flag_rising_corruption = 0; rising_corruption_ticker_timer = 8 if corruption < 60; rising_corruption_ticker_timer = 4 if corruption >= 60;
 
 = Corruption is Rising
 
-Whispers in the press and on the floor of Congress grow louder: the party's dealings with patronage, contracts, and party financiers are drawing scrutiny. [? if corruption >= 60 : What began as murmurs has curdled into open accusation even allies concede the administration looks the part of a machine bought and paid for. ?][? if corruption < 60 : Nothing has broken into open scandal yet, but reformers and rivals alike sense an opening. ?]
+Whispers in the press and on the floor of Congress grow louder: the party's dealings with patronage, contracts, and party financiers are drawing scrutiny. [? if corruption >= 60 : What began as murmurs has curdled into open accusation -== even allies concede the administration looks the part of a machine bought and paid for. ?][? if corruption < 60 : Nothing has broken into open scandal yet, but reformers and rivals alike sense an opening. ?]
 
 How do we respond?
 
