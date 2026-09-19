@@ -4,6 +4,30 @@ on-arrival: {!
 Q.last_advisor_action = 0;
 Q.last_cabinet_action = 0;
 
+// === Corruption tier (computed early so it's available everywhere in this scene) ===
+if (Q.corruption === undefined) Q.corruption = 0;
+
+let corr = Q.corruption;
+let corrTier = 0;
+let corrSeverity = 0;
+
+if (corr < 10) {
+    corrTier = 0;
+    corrSeverity = 0;
+} else if (corr < 25) {
+    corrTier = 1;
+    corrSeverity = (corr - 10) / 15;
+} else if (corr < 40) {
+    corrTier = 2;
+    corrSeverity = 1 + (corr - 25) / 15;
+} else if (corr < 60) {
+    corrTier = 3;
+    corrSeverity = 2 + (corr - 40) / 20;
+} else {
+    corrTier = 4;
+    corrSeverity = 3 + (corr - 60) / 20;
+}
+
 // Clamp out of bound class-party values
 for (let c of Q.classes) {
 
@@ -306,7 +330,7 @@ if (Q.dissent < 0) {
 let radicalPressure = Math.max(2, (Q.radical_strength - 25) / 25);
 let liberalPull = Math.max(0, (Q.liberal_strength - 10) / 10);
 let gopDissentPressure = Math.max(0, ((Q.dissent_percent || 0) - 30) / 30);
-let redeemerMuscle = ((Q.kkk_strength || 0) + (Q.whiteL_strength || 0)) / 400;
+let redeemerMuscle  = ((Q.kkk_strength || 0) + (Q.whiteL_strength || 0)) / 400;
 let economicCrisis = Math.max(0, (2 - Q.economic_growth) / 2);
 let corruptionPressure = Math.max(0, ((Q.corruption || 0) - 25) / 40);
 let moderatePresidentialBoost = (Q.president_party === "rep" && Q.moderate_strength >= 40) ? 0.08 : 0;
@@ -607,9 +631,11 @@ if (Q.month_actions >= 1) {
     if ((Q.tariffs || 0) <= 0) expansionDrift += 0.1;
     if (Q.GreenBacks == 0) expansionDrift -= 0.3; // hard money bleeds off speculation
 
+    // Corruption-fueled speculation: graft-heavy administrations inflate the bubble faster
     let corruptionFueledExpansion = corrTier >= 2 ? 0.05 * corrSeverity : 0;
-    Q.economic_expansion = Math.max(0, Q.economic_expansion + expansionDrift);
+    Q.economic_expansion = Math.max(0, Q.economic_expansion + expansionDrift + corruptionFueledExpansion);
 
+    // rather than a hard date-based tripwire
     if (Q.economic_expansion >= 60 && Q.panic_triggered != 1) {
         let corruptionRisk = corrTier >= 3 ? 0.01 * (corrSeverity - 2) : 0;
         let panicChance = ((Q.economic_expansion - 60) * 0.015) + corruptionRisk;
@@ -1017,28 +1043,10 @@ if (Q.month_actions >= 1) {
 
 }
 
-if (Q.corruption === undefined) Q.corruption = 0;
+// === Corruption effects (tier/severity computed at top of this block) ===
 
-let corr = Q.corruption;
-let corrTier = 0;
-let corrSeverity = 0;
-
-if (corr < 10) {
-    corrTier = 0;
-    corrSeverity = 0;
-} else if (corr < 25) {
-    corrTier = 1;
-    corrSeverity = (corr - 10) / 15;
-} else if (corr < 40) {
-    corrTier = 2;
-    corrSeverity = 1 + (corr - 25) / 15;
-} else if (corr < 60) {
-    corrTier = 3;
-    corrSeverity = 2 + (corr - 40) / 20;
+if (corrTier >= 3) {
     Q.PoliticalCostPenalty += 0.05 * (corrSeverity - 2);
-} else {
-    corrTier = 4;
-    corrSeverity = 3 + (corr - 60) / 20;
 }
 
 if (corrSeverity > 0) {

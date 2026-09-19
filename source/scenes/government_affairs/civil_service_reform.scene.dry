@@ -4,7 +4,7 @@ is-card: true
 view-if: civil_service_act_available = 1 and civil_service_reform = 0
 tags: cotus_affairs
 on-arrival: month_actions += 1; civil_service_act_timer += 12;
-card-image: img/portraits/Curtis_Commission.jpg
+card-image: img/Civil_Service_Act.jpg
 go-to: act_menu
 
 = Making It Permanent

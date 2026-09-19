@@ -14,6 +14,8 @@ on-arrival:{!
 
 = The Freedmen's Bureau
 
+The Freedmen's Bureau is a government agency established after the Civil War to support formerly enslaved people in the South and expand their access to education, legal protection, and economic opportunity.
+
 General Oliver Howard's Bureau operates schools, labor offices, and makeshift courts across the South but its agents work under constant threat. Every dollar spent in hostile territory costs more than it would in peacetime.
 
 [? if kkk_strength + whiteL_strength >= 400 : Paramilitary violence is severe. Bureau operations are costly and dangerous causing each action will require [+ bureau_cost +] budget. ?]
@@ -81,21 +83,20 @@ on-arrival: bureau_target = "Virginia"
 
 Bureau agents are on the ground in [+ bureau_target +]. What should they prioritize this season?
 
-- @schools: Open new Bureau schoolhouses and hire local teachers.
-- @courts: Station Bureau agents in local courthouses to assist freedmen with labor disputes.
-- @registration: Send agents door to door to register freedmen voters and explain their rights.
-- @outreach: Expand Bureau offices and build relationships with local <span style="color: #c00000;">**Republican**</span> leaders and freedmen communities.
-- @soldiers: Request a detachment of federal soldiers to protect Bureau headquarters and agents.
+- @schools: Education: Build schoolhouses to raise long-term Freedmen literacy and opportunity.
+- @courts: Justice: Station agents in courts to enforce fair labor contracts and wages.
+- @registration: Voter Rights: Register freedmen voters and raise turnout.
+- @outreach: Political Organizing: Build lasting Republican networks and community trust.
+- @soldiers: Security: Deploy federal troops to suppress Klan activity and protect agents.
 - @easy_discard
 - @cancel_advisor_action
 
 
 @schools
-subtitle: -[+ bureau_cost +] budget
+subtitle: -[+ bureau_cost +] Budget | +2 Freedmen Education
 choose-if: budget >= bureau_cost
 unavailable-subtitle: Not enough budget.
 on-arrival:{!
-
     Q.freedmen_education += 2;
     Q.budget -= bureau_cost;
     let s = Q.bureau_target;
@@ -107,15 +108,16 @@ on-arrival:{!
         Q[s + "_freemen_rad"] = Math.min(100, (Q[s + "_freemen_rad"] || 0) + 2);
         Q[s + "_workers_rad"] = Math.min(100, (Q[s + "_workers_rad"] || 0) + 1);
     }
-
 !}
 
-New schoolhouses open across [+ bureau_target +]. Freedmen of all ages attend in the evenings after fieldwork. Planters pressure landlords to evict teachers, and night riders burn two buildings before the month is out but enrollment keeps climbing.
+New schoolhouses open across [+ bureau_target +]. Freedmen of all ages attend in the evenings after fieldwork. Planters pressure landlords to evict teachers, and night riders burn two buildings before the month is out — but enrollment keeps climbing.
+
+Long-term investment: Freedmen Education compounds into voter registration effectiveness, civil rights support, and Southern state Reconstruction scores over time.
 
 [? if radical_split = 1 : Radical organizers, no less enthusiastic about freedmen's education than we are, share some of the credit for the new schoolhouses. ?]
 
 @courts
-subtitle: -[+ bureau_cost +] budget
+subtitle: -[+ bureau_cost +] Budget | +0.25 Judicial Reform
 choose-if: budget >= bureau_cost
 unavailable-subtitle: Not enough budget.
 on-arrival: {!
@@ -130,12 +132,14 @@ on-arrival: {!
     }
 !}
 
-Bureau agents begin adjudicating labor disputes in [+ bureau_target +], voiding exploitative sharecropping agreements and ruling in favor of freedmen owed back wages. It is a small improvement the courts remain hostile but freedmen learn they have somewhere to turn.
+Bureau agents begin adjudicating labor disputes in [+ bureau_target +], voiding exploitative sharecropping agreements and ruling in favor of freedmen owed back wages. It is a small improvement — the courts remain hostile — but freedmen learn they have somewhere to turn.
+
+Long-term investment: Judicial Reform feeds directly into state Reconstruction scores and helps counter Klan-driven suppression.
 
 [? if radical_split = 1 : The Radical Republicans, who have made such labor rulings a centerpiece of their platform, draw a share of the goodwill as well. ?]
 
 @registration
-subtitle: -[+ bureau_cost +] budget
+subtitle: -[+ bureau_cost +] Budget | +Freedmen Turnout, +Freedmen Education
 choose-if: budget >= bureau_cost and fifthteen = 1
 unavailable-subtitle: [? if budget < bureau_cost : Not enough budget. ?][? if fifthteen != 1 : Requires the Fifteenth Amendment to be ratified. ?]
 on-arrival:{!
@@ -154,12 +158,14 @@ on-arrival:{!
 
 Agents move through [+ bureau_target +] registering freedmen voters and distributing pamphlets explaining the new amendment. The Klan responds with targeted intimidation, but hundreds of new names appear on the rolls before the season ends.
 
+Immediate election impact: raises turnout directly ahead of upcoming elections, but provokes the Klan — expect increased militancy in response.
+
 [? if ViolencePenalty >= 20 : Heavy paramilitary presence limited how many registrations agents could safely complete. ?][? if ViolencePenalty < 10 : With little violent resistance, agents were able to work freely and registration numbers surged. ?]
 
 [? if radical_split = 1 : Voter registration is exactly the kind of enforcement work the Radical Republicans accuse us of neglecting elsewhere, and some newly registered freedmen sign up with them instead of us. ?]
 
 @outreach
-subtitle: -[+ bureau_cost +] budget
+subtitle: -[+ bureau_cost +] Budget | +Union League Strength, +Republican Networks
 choose-if: budget >= bureau_cost
 unavailable-subtitle: Not enough budget.
 on-arrival: {!
@@ -178,12 +184,14 @@ on-arrival: {!
     }
 !}
 
-Bureau officers meet with Black ministers, freedmen community leaders, and Southern <span style="color: #c00000;">**Republican**</span> organizers in [+ bureau_target +]. Trust is slow to build, but the network grows, and these connections will matter come election time.
+Bureau officers meet with Black ministers, freedmen community leaders, and Southern Republican organizers in [+ bureau_target +]. Trust is slow to build, but the network grows, and these connections will matter come election time.
+
+Broad, moderate investment: smaller individual gains than the other options, but spreads modestly across turnout, education, and multiple demographic groups at once — and strengthens the Union League, which helps counter Klan growth over time.
 
 [? if radical_split = 1 : Not every organizer we meet stays loyal to us alone; some of the Union League's local leadership leans Radical these days. ?]
 
 @soldiers
-subtitle: -[+ bureau_cost +] budget
+subtitle: -[+ bureau_cost +] Budget | -10 KKK Strength, -5 White League Strength
 choose-if: budget >= bureau_cost and occupation >= 1
 unavailable-subtitle: [? if budget < bureau_cost : Not enough budget. ?][? if occupation < 1 : Requires at least minimal federal occupation. ?]
 on-arrival: {!
@@ -199,6 +207,8 @@ on-arrival: {!
     }
 !}
 
-A detachment of federal infantry takes up position around Bureau headquarters in [+ bureau_target +]. Night raids on Bureau offices drop sharply. With less violence in the air, agents report being able to move and register voters more freely at least for now.
+A detachment of federal infantry takes up position around Bureau headquarters in [+ bureau_target +]. Night raids on Bureau offices drop sharply. With less violence in the air, agents report being able to move and register voters more freely — at least for now.
+
+Direct security response: the only option that actively suppresses Klan/White League strength rather than building something new — best used when violence is already high enough to be blocking your other Bureau work.
 
 [? if radical_split = 1 : The Radical Republicans, who have long demanded exactly this kind of federal enforcement, claim vindication and pick up some of the credit. ?]
