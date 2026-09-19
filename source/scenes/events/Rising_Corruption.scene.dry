@@ -1,6 +1,6 @@
 title: Rising Corruption
 tags: event
-view-if: flag_rising_corruption = 1
+view-if: flag_rising_corruption = 1 and rising_corruption_ticker_timer <= 0
 on-arrival: {! 
 
     Q.flag_rising_corruption = 0; 
