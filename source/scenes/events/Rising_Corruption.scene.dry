@@ -4,13 +4,13 @@ view-if: flag_rising_corruption = 1
 on-arrival: {! 
 
     Q.flag_rising_corruption = 0; 
-    if (corruption < 60)
+    if (Q.corruption < 60)
     {
-        Q.rising_corruption_ticker_timer = 8
+        Q.rising_corruption_ticker_timer = 8;
     }  
     else
     {
-        Q.rising_corruption_ticker_timer = 4
+        Q.rising_corruption_ticker_timer = 4;
     }
 
 !}
