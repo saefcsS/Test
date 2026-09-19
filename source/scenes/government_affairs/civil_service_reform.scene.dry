@@ -1,0 +1,41 @@
+title: The Civil Service Reform Act
+new-page: true
+is-card: true
+view-if: civil_service_act_available = 1 and civil_service_reform = 0
+tags: cotus_affairs
+on-arrival: month_actions += 1; civil_service_act_timer += 12;
+card-image: img/portraits/Curtis_Commission.jpg
+go-to: act_menu
+
+= Making It Permanent
+
+The Civil Service Commission has done what it could without the force of law. Curtis and the reformers now press for something Congress cannot simply defund: a statute mandating competitive examinations for federal appointments, ending the practice of turning over the government's payroll with every change of administration.
+
+It will not be easy. Every member who owes their seat to patronage jobs in their district has reason to vote no, and the party's own machine wants this to fail quietly in committee.
+
+@act_menu
+
+- @pass_act: Bring the Civil Service Reform Act to a vote.
+- @root: Wait for a better moment.
+- @easy_discard
+
+@pass_act
+subtitle: -3 Budget
+choose-if: budget >= 3 and (liberal_strength + moderate_strength) >= 50 and house_majority >= 1 and sen_majority >= 1
+unavailable-subtitle: [? if budget < 3 : We do not have the budget to run this campaign. ?][? if (liberal_strength + moderate_strength) < 50 : We do not yet have the votes as reformers and moderates together aren't enough to overcome the machine's resistance. ?][? if house_majority < 1 or sen_majority < 1 : We do not control enough of Congress to bring this to the floor. ?]
+on-arrival: {!
+    Q.budget -= 3;
+    Q.civil_service_reform = 1;
+    Q.liberal_strength += 5;
+    Q.liberal_dissent -= 5;
+    Q.conservative_strength -= 3;
+    Q.conservative_dissent += 6;
+    Q.middle_class_rep += 6;
+    Q.workers_rep -= 3;
+    Q.immigrant_laborers_rep -= 4;
+    Q.PoliticalCostPenalty += 2;
+!}
+
+The Act passes. Federal hiring will now run through competitive examination rather than the say-so of a ward boss or a Senator's patronage list. Reformers call it the most important structural change of the era. The party's own machine men call it a betrayal, and more than a few privately hope it can be quietly gutted the way the Commission itself nearly was.
+
+Every future generation of officeholders will owe their job to a test score rather than a favor. It is a smaller government machine than the one you built to get here, and considerably harder to fund a campaign with.

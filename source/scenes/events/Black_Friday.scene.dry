@@ -187,6 +187,7 @@ on-arrival: {!
     // We control the outcome but it looks partisan
     Q.dem_relation -= 4;
     Q.reconstruction_support -= 1;
+    Q.corruption += 2;
 
     // If we protected Grant earlier, the investigation is more effective cover
     if (Q.protect_grant_chosen) {
@@ -219,6 +220,10 @@ on-arrival: {!
     Q.middle_class_rep += 5;
     Q.rural_rep += 2;
     Q.dem_relation += 2;
+    Q.corruption -= 3;
+    if (Q.civil_service_commission == 1) {
+        Q.civil_service_act_available = 1;
+    }
 
     // Independent investigation is more credible but less controllable
     Q.moderate_dissent += 3;    // findings may hurt us
@@ -249,6 +254,7 @@ on-arrival: {!
     Q.middle_class_dem += 5;
     Q.rural_dem += 3;
     Q.workers_dem += 2;
+    Q.corruption += 3;
 
     // Liberal split becomes more likely if already teetering
     if (Q.liberal_dissent > 25) {
@@ -279,6 +285,7 @@ on-arrival: {!
     }
 
     Q.middle_class_rep += 3;
+    Q.corruption += 1;
 
     // Distancing from Grant has long-term cost to party unity
     Q.moderate_dissent += 2;

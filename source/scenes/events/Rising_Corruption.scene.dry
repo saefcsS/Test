@@ -30,7 +30,7 @@ How do we respond?
 subtitle: -2 Budget
 choose-if: budget >= 2
 unavailable-subtitle: We do not have the budget for a real investigation.
-on-arrival: budget -= 2; corruption -= 6; conservative_dissent += 3; liberal_strength += 2; PoliticalCostPenalty += 1
+on-arrival: budget -= 2; corruption -= 6; conservative_dissent += 3; liberal_strength += 2; PoliticalCostPenalty += 1; civil_service_act_available = 1 if civil_service_commission = 1
 
 We order a genuine internal review, removing officials and renegotiating contracts tied to the worst abuses. It costs us allies among the machine's beneficiaries, but reformers and the press take notice.
 

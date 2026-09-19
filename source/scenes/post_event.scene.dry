@@ -729,6 +729,25 @@ if (Q.month_actions >= 1) {
     }
     Q.rising_corruption_ticker_timer = Math.max(0, (Q.rising_corruption_ticker_timer || 0) - 1);
 
+    // === Civil Service Reform Act unlock tracking ===
+
+    if (Q.flag_corruption_crisis_seen === undefined) Q.flag_corruption_crisis_seen = 0;
+    if (Q.corruption >= 40) {
+        Q.flag_corruption_crisis_seen = 1;
+    }
+
+    if (Q.reform_momentum_months === undefined) Q.reform_momentum_months = 0;
+    if (Q.liberal_strength >= 40) {
+        Q.reform_momentum_months += 1;
+    } else {
+        Q.reform_momentum_months = 0;
+    }
+
+    if (Q.civil_service_act_available === undefined) Q.civil_service_act_available = 0;
+    if (Q.reform_momentum_months >= 24 && Q.civil_service_commission == 1) {
+        Q.civil_service_act_available = 1;
+    }
+
     // Decrement all cooldown timers
     Q.high_inflation_ticker_timer = Math.max(0, (Q.high_inflation_ticker_timer || 0) - 1);
     Q.deflation_ticker_timer = Math.max(0, (Q.deflation_ticker_timer || 0) - 1);

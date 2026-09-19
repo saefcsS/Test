@@ -46,6 +46,7 @@ Q.salary_cut_disp = 10;
 Q.monies_disp = 0;
 Q.big_monies = 1;
 Q.resource_monthly_limit = 1;
+Q.civil_service_commission = 0;
 
 // the state of the party
 Q.dissent = 0.05;

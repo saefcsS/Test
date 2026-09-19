@@ -55,6 +55,7 @@ on-arrival: {!
     Q.immigrant_laborers_lib = 0;
     Q.unemployed_dem += Q.unemployed_lib;
     Q.unemployed_lib = 0;
+    
 
 !}
 

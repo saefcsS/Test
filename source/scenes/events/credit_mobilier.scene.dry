@@ -50,6 +50,7 @@ on-arrival: {!
     Q.rural_dem += 2;
     Q.dem_relation -= 4;
     Q.dem_reform_strength += 7;
+    Q.corruption += 2;
 !}
 
 We instruct party newspapers to dismiss the story as a partisan attack timed to damage us before the election. Friendly editors question the documents and the motives of those who published them. The implicated members are told to keep quiet.
@@ -74,6 +75,7 @@ on-arrival: {!
     Q.middle_class_dem += 2;
     Q.dem_relation += 3;
     Q.resources -= 1;
+    Q.corruption -= 1;
 !}
 
 We move quickly. Several of the most visibly implicated members are encouraged to step away from public office or decline to seek reelection. The administration calls for a full accounting rather than waiting for the <span style="color: #0015bc;">**Democrats**</span> to set the terms of the debate.
@@ -100,6 +102,7 @@ on-arrival: {!
     Q.middle_class_rep += 3;
     Q.dem_relation += 4;
     Q.resources -= 1;
+    Q.corruption -= 1;
 !}
 go-to: kick_out
 
@@ -122,6 +125,10 @@ on-arrival: {!
     Q.middle_class_dem -= 2;
     Q.dem_relation += 4;
     Q.budget -= 1;
+    Q.corruption -= 3;
+    if (Q.civil_service_commission == 1) {
+        Q.civil_service_act_available = 1;
+    }
 !}
 
 We call for an immediate independent congressional investigation with full subpoena power. The administration acknowledges that the documents appear credible and that Congress must be allowed to examine the allegations without interference.

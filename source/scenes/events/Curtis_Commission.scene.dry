@@ -1,0 +1,27 @@
+title: A Commission on the Civil Service
+tags: event
+max-visits: 1
+view-if: flag_corruption_crisis_seen = 1 and (cox_advisor + trumbull_advisor + schurz_advisor) >= 2 and liberal_strength >= 15 and civil_service_commission = 0
+face-image: img/portraits/George_William_Curtis_-_Brady-Handy.jpg
+
+= A Commission on the Civil Service
+
+Reformers within the party, Cox, Trumbull, and Schurz chief among them have pressed for months that the spoils system is rotting the government from within. With reports of graft in the departments now impossible to ignore entirely, they propose a modest first step: an advisory commission, led by the reformer George William Curtis, to study and recommend rules for hiring on merit rather than favor.
+
+It has no force of law. Congress can defund it whenever it likes. But it would be the first crack in the patronage system since the war.
+
+- @fund_commission: Establish and fund the Commission.
+- @ignore_commission: Corruption? What Corruption?
+
+@fund_commission
+subtitle: -1 Budget
+choose-if: budget >= 1
+unavailable-subtitle: We do not have the budget to establish it.
+on-arrival: budget -= 1; civil_service_commission = 1; liberal_strength += 2; conservative_dissent += 2; corruption -= 1; middle_class_rep += 3; workers_rep -= 2; immigrant_laborers_rep -= 3; freemen_rep -= 1
+
+We establish the Civil Service Commission by executive order. Curtis and his fellow reformers begin drafting rules for competitive examinations and merit hiring. Middle-class reformers and the respectable press are delighted. But immigrant political clubs and workingmen who depend on ward patronage for jobs see a threat to their livelihoods, and some freedmen officeholders in the South - appointed through the very patronage networks now under scrutiny - worry merit exams favor the already-educated.
+
+@ignore_commission
+on-arrival: liberal_dissent += 3; conservative_strength += 1; middle_class_rep -= 1; workers_rep += 1; immigrant_laborers_rep += 1; corruption += 1
+
+We decline. The party's fundraising and patronage networks are too valuable to risk disrupting now, whatever the reformers say. Cox, Trumbull, and Schurz are visibly frustrated, and reform-minded voters take note. Ward bosses and the immigrant political machines they run breathe easier.
