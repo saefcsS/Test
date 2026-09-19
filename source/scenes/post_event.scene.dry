@@ -308,10 +308,11 @@ let liberalPull = Math.max(0, (Q.liberal_strength - 10) / 10);
 let gopDissentPressure = Math.max(0, ((Q.dissent_percent || 0) - 30) / 30);
 let redeemerMuscle = ((Q.kkk_strength || 0) + (Q.whiteL_strength || 0)) / 400;
 let economicCrisis = Math.max(0, (2 - Q.economic_growth) / 2);
+let corruptionPressure = Math.max(0, ((Q.corruption || 0) - 25) / 40);
 let moderatePresidentialBoost = (Q.president_party === "rep" && Q.moderate_strength >= 40) ? 0.08 : 0;
 
 let bourbonMonthlyGain = (0.15 * radicalPressure) + (0.06 * redeemerMuscle);
-let reformMonthlyGain = (0.10 * liberalPull) + (0.08 * gopDissentPressure) + (0.12 * economicCrisis) + moderatePresidentialBoost;
+let reformMonthlyGain = (0.10 * liberalPull) + (0.08 * gopDissentPressure) + (0.12 * economicCrisis) + (0.10 * corruptionPressure) + moderatePresidentialBoost;
 
 Q.dem_bourbon_strength += bourbonMonthlyGain;
 Q.dem_reform_strength += reformMonthlyGain;
@@ -605,11 +606,13 @@ if (Q.month_actions >= 1) {
     if (Q.GreenBacks == 1) expansionDrift += 0.2;
     if ((Q.tariffs || 0) <= 0) expansionDrift += 0.1;
     if (Q.GreenBacks == 0) expansionDrift -= 0.3; // hard money bleeds off speculation
+
+    let corruptionFueledExpansion = corrTier >= 2 ? 0.05 * corrSeverity : 0;
     Q.economic_expansion = Math.max(0, Q.economic_expansion + expansionDrift);
 
-    // rather than a hard date-based tripwire
     if (Q.economic_expansion >= 60 && Q.panic_triggered != 1) {
-        let panicChance = (Q.economic_expansion - 60) * 0.015;
+        let corruptionRisk = corrTier >= 3 ? 0.01 * (corrSeverity - 2) : 0;
+        let panicChance = ((Q.economic_expansion - 60) * 0.015) + corruptionRisk;
         if (Math.random() < panicChance) {
             Q.panic_triggered = 1;
             Q.panic_pending = 1;
@@ -993,8 +996,8 @@ if (Q.month_actions >= 1) {
     }
     if(Q.liberal_split == 1)
     {
-        Q.middle_class_rep -= 3/12;
-        Q.middle_class_lib += 3/12;
+        Q.middle_class_rep -= 2/12;
+        Q.middle_class_lib += 2/12;
         Q.rural_lib += 1/12;
         Q.immigrant_laborers_lib += 1/12;
         Q.workers_lib += 1/12;
@@ -1003,8 +1006,8 @@ if (Q.month_actions >= 1) {
     }
     if(Q.radical_split == 1)
     {
-        Q.freedmen_rep -= 3/12
-        Q.freedmen_rad += 3/12
+        Q.freedmen_rep -= 2/12
+        Q.freedmen_rad += 2/12
         Q.rural_rad += 1/12;
         Q.immigrant_laborers_rad += 1/12;
         Q.workers_rad += 1/12;
@@ -1032,6 +1035,7 @@ if (corr < 10) {
 } else if (corr < 60) {
     corrTier = 3;
     corrSeverity = 2 + (corr - 40) / 20;
+    Q.PoliticalCostPenalty += 0.05 * (corrSeverity - 2);
 } else {
     corrTier = 4;
     corrSeverity = 3 + (corr - 60) / 20;

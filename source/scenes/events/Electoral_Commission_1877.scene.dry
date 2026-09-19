@@ -231,8 +231,8 @@ go-to: commission_negotiate
 We commit federal money to levees, harbors, and river improvements across the South - real spending, if modest next to a railroad.
 
 @term_patronage
-choose-if: commission_leverage >= 6 and term_patronage = 0
-unavailable-subtitle: We don't have the standing left to offer this.
+choose-if: commission_leverage >= 6 and term_patronage = 0 and civil_service_reform = 0
+unavailable-subtitle: [? if commission_leverage < 6: We don't have the standing left to offer this. ?][? if civil_service_reform = 1: We abolished political patronage. ?]
 on-arrival: {!
     Q.commission_leverage -= 6;
     Q.concession_value += 6;

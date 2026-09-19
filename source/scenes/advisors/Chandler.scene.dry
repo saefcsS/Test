@@ -17,8 +17,8 @@ Zachariah Chandler of Michigan is a party organizer of ferocious energy. Chandle
 @chandler_party_discipline
 title: Enforce Party Discipline
 subtitle: Chandler cracks down on dissent and brings wavering members back into line.
-choose-if: advisor_action_timer = 0
-unavailable-subtitle: [? if advisor_action_timer > 0 : [+ advisor_action_timer +] months before next advisor action. ?]
+choose-if: advisor_action_timer = 0 and civil_service_reform = 0
+unavailable-subtitle: [? if civil_service_reform = 1: We outlawed such forms of fundraising ?][? if advisor_action_timer > 0 : [+ advisor_action_timer +] months before next advisor action. ?]
 on-arrival: advisor_action_timer = 6; last_advisor_action = 1; radical_dissent -= 4; moderate_dissent -= 2; conservative_dissent -= 1; liberal_dissent -= 2; corruption += 1;
 
 Chandler works the back rooms with characteristic bluntness, reminding members of favors owed, patronage pending, and the consequences of disloyalty. The methods are not pretty but the results are undeniable.

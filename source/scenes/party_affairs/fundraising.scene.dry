@@ -65,8 +65,8 @@ Our members grumble at this, and some of the less committed members leave. But n
 
 @increase_patronage
 subtitle: [? if patronage < -7: <span style="color: #66BB6A;">**Extremely low**</span> Patronage ?][? if patronage = -7 : <span style="color: #66BB6A;">**Extremely low**</span> Patronage -> <span style="color: #81C784;">**low**</span> Patronage ?][? if patronage < -3 and patronage > -7: <span style="color: #81C784;">**low**</span> Patronage ?][? if patronage = -3 : <span style="color: #81C784;">**low**</span> Patronage -> <span style="color: #FFD54F;">**medium**</span> Patronage ?][? if patronage < 2 and patronage > -3: <span style="color: #FFD54F;">**medium**</span> Patronage ?][? if patronage = 2 : <span style="color: #FFD54F;">**medium**</span> Patronage -> <span style="color: #FFB74D;">**high**</span> Patronage ?][? if patronage < 6 and patronage > 2: <span style="color: #FFD54F;">**medium**</span> Patronage ?][? if patronage = 6 : <span style="color: #FFB74D;">**high**</span> Patronage -> <span style="color: #d42f2f;">**Extremely high**</span> Patronage ?][? if patronage > 6: <span style="color: #d42f2f;">**Extremely high**</span> Patronage ?]
-choose-if: patronage < 10 and resource_monthly_limit >= 1
-unavailable-subtitle: [? if patronage >= 10: DUDE! STOP HANDING OUT Jobs ?][? if resource_monthly_limit < 1: We can't change the system all at once. ?]
+choose-if: patronage < 10 and resource_monthly_limit >= 1 and civil_service_reform = 0
+unavailable-subtitle: [? if civil_service_reform = 1: We outlawed such forms of fundraising ?][? if patronage >= 10: DUDE! STOP HANDING OUT Jobs ?][? if resource_monthly_limit < 1: We can't change the system all at once. ?]
 on-arrival: patronage += 1; corruption += 3; middle_class_dissent += 2; reform_dissent += 3; conservative_dissent += 1; resource_monthly_limit -= 1
 go-to: monies_menu
 
@@ -74,8 +74,8 @@ We expand our use of patronage in state and federal government.
 
 @decrease_patronage
 subtitle: [? if patronage < -7: <span style="color: #66BB6A;">**Extremely low**</span> Patronage ?][? if patronage = -7 : <span style="color: #66BB6A;">**Extremely low**</span> Patronage <- <span style="color: #81C784;">**low**</span> Patronage ?][? if patronage < -3 and patronage > -7: <span style="color: #81C784;">**low**</span> Patronage ?][? if patronage = -3 : <span style="color: #81C784;">**low**</span> Patronage <- <span style="color: #FFD54F;">**medium**</span> Patronage ?][? if patronage < 2 and patronage > -3: <span style="color: #FFD54F;">**medium**</span> Patronage ?][? if patronage = 2 : <span style="color: #FFD54F;">**medium**</span> Patronage <- <span style="color: #FFB74D;">**high**</span> Patronage ?][? if patronage < 6 and patronage > 2: <span style="color: #FFD54F;">**medium**</span> Patronage ?][? if patronage = 6 : <span style="color: #FFB74D;">**high**</span> Patronage <- <span style="color: #d42f2f;">**Extremely high**</span> Patronage ?][? if patronage > 6: <span style="color: #d42f2f;">**Extremely high**</span> Patronage ?]
-choose-if: patronage > -10 and resource_monthly_limit >= 1
-unavailable-subtitle: [? if patronage <= -10: Our system is a total meritocracy. ?][? if resource_monthly_limit < 1: We can't change the system all at once. ?]
+choose-if: patronage > -10 and resource_monthly_limit >= 1 and civil_service_reform = 0
+unavailable-subtitle: [? if civil_service_reform = 1: We outlawed such forms of fundraising ?][? if patronage <= -10: Our system is a total meritocracy. ?][? if resource_monthly_limit < 1: We can't change the system all at once. ?]
 on-arrival: patronage -= 1; corruption -= 2; middle_class_dissent -= 1; reform_dissent -= 2; workers_rep -= 1; resource_monthly_limit -= 1
 go-to: monies_menu
 
@@ -83,8 +83,8 @@ We reduce our use of patronage in state and federal government.
 
 @increase_assessments
 subtitle: [+ salary_cut_disp + 10 +]%
-choose-if: salary_cut < 0.70 and resource_monthly_limit >= 1
-unavailable-subtitle: [? if salary_cut >= 0.70: We can't expect to demand more from their salary. ?][? if resource_monthly_limit < 1: We can't change the system all at once. ?]
+choose-if: salary_cut < 0.70 and resource_monthly_limit >= 1 and civil_service_reform = 0
+unavailable-subtitle: [? if civil_service_reform = 1: We outlawed such forms of fundraising ?][? if salary_cut >= 0.70: We can't expect to demand more from their salary. ?][? if resource_monthly_limit < 1: We can't change the system all at once. ?]
 on-arrival: salary_cut += 0.1; salary_cut_disp += 10; corruption += 2; middle_class_dissent += 1; reform_dissent += 2; resource_monthly_limit -= 1
 go-to: monies_menu
 
@@ -92,8 +92,8 @@ We increase the percentage that our government employees have to pay to the part
 
 @decrease_assessments
 subtitle: [+ salary_cut_disp - 10 +]%
-choose-if: salary_cut > 0 and resource_monthly_limit >= 1
-unavailable-subtitle: [? if salary_cut <= 0: We are currently assessment free. ?][? if resource_monthly_limit < 1: We can't change the system all at once. ?]
+choose-if: salary_cut > 0 and resource_monthly_limit >= 1 and civil_service_reform = 0
+unavailable-subtitle: [? if civil_service_reform = 1: We outlawed such forms of fundraising ?][? if salary_cut <= 0: We are currently assessment free. ?][? if resource_monthly_limit < 1: We can't change the system all at once. ?]
 on-arrival: salary_cut -= 0.1; salary_cut_disp -= 10; corruption -= 2; reform_dissent -= 1; middle_class_rep += 1; resource_monthly_limit -= 1
 go-to: monies_menu
 

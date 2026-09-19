@@ -23,7 +23,7 @@ on-arrival: {!
     Q.dem_reform_strength += 5;
 !}
 tags: event
-view-if: year = 1869 and month >= 9 and president = "Grant"
+view-if: year = 1869 and month >= 9 and president = "Grant" and corruption >= 25
 max-visits: 1
 face-image: img/Gold_room_scene_on_Black_Friday.jpg
 
@@ -35,7 +35,7 @@ For months, financiers Jay Gould and James Fisk have been buying gold in an atte
 
 When Treasury Secretary George Boutwell releases $4 million in gold forcing prices to collapse within minute. The Gold Room on Broad Street descends into chaos as traders scramble to escape their losses.
 
-Grant was in Pennsylvania when the crash began. He has returned to Washington furious, insisting that he knew nothing of the scheme. Corbin's involvement has made that claim harder to defend.
+Grant was in Pennsylvania when the crash began. He has returned to Washington furious, insisting that he knew nothing of the scheme. Corbin's involvement has made that claim harder to defend. [? if corruption >= 40 : It is the kind of scheme that thrives around an administration already known for trading favors - Corbin found the access far too easy to buy. ?][? if corruption >= 10 and corruption < 40 : Corbin's scheme should not have worked as well as it did, and questions are already being asked about how he got so close. ?]
 
 - @treasury_intervention: Support Treasury intervention to stabilize the gold market.
 - @demand_resignation: Demand Corbin's removal from government affairs.
