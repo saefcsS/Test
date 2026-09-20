@@ -27,14 +27,18 @@ let stateSeats = {
   FL: 76,  MS: 115, AR: 100, TX: 90,  LA: 105, TN: 75,
 };
 
-// Confederate disenfranchisement under the Ironclad Oath.
-// Johnson's lenient plan never barred ex-Confederates, so no suppression applies there.
-// Under Radical/Moderate plans, a large share of white ex-Confederate voters (concentrated
-// in the rural and middle-class demographic columns) were barred until the Amnesty Act
-// restored their political rights.
 let confederateSuppression = 0;
-if (Q.Johnson_plan != 1) {
+if (Q.Johnson_plan != 1) 
+{
     confederateSuppression = (Q.amnesty_act == 1) ? 0 : 0.45;
+}
+else if (Q.Radical_plan == 1) 
+{
+    confederateSuppression = (Q.amnesty_act == 1) ? 0 : 0.55;
+} 
+else (Q.Moderate_plan == 1) 
+{
+    confederateSuppression = (Q.amnesty_act == 1) ? 0 : 0.30;
 }
 
 for (let state of Q.southern_states) {
