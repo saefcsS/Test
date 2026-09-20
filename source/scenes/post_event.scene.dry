@@ -1045,23 +1045,23 @@ if (Q.month_actions >= 1) {
 // === Corruption effects (tier/severity computed at top of this block) ===
 
 if (corrTier >= 3) {
-    Q.PoliticalCostPenalty += 0.05 * (corrSeverity - 2);
+    Q.PoliticalCostPenalty += (0.05 / 12) * (corrSeverity - 2);
 }
 
 if (corrSeverity > 0) {
-    Q.middle_class_rep -= 0.4 * corrSeverity;
-    Q.rural_rep        -= 0.3 * corrSeverity;
-    Q.workers_rep       -= 0.3 * corrSeverity;
-    Q.liberal_dissent += 0.6 * corrSeverity;
+    Q.middle_class_rep -= (0.4 / 12) * corrSeverity;
+    Q.rural_rep        -= (0.3 / 12) * corrSeverity;
+    Q.workers_rep       -= (0.3 / 12) * corrSeverity;
+    Q.liberal_dissent += (0.6 / 12) * corrSeverity;
 }
 
 // Conservatives only start meaningfully capitalizing on it once corruption is a real scandal risk (tier 3+)
 if (corrTier >= 3) {
-    Q.conservative_strength += 0.3 * (corrSeverity - 2);
+    Q.conservative_strength += (0.3 / 12) * (corrSeverity - 2);
 }
 if (corrTier >= 4) {
     // Borderline Criminal - conservatives smell blood, this compounds beyond the linear rate above
-    Q.conservative_strength += 0.2 * (corrSeverity - 3);
+    Q.conservative_strength += (0.2 / 12) * (corrSeverity - 3);
 }
 
 Q.has_event = 0;
