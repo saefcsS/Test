@@ -13,6 +13,8 @@ on-departure: next_dixie_election_year += 2; next_dixie_election_time = time + 2
 
 [? if Radical_plan = 1 or Moderate_plan = 1 : Klan violence and economic intimidation are already working to suppress the freedmen vote in some districts, even as Union League organizers push registration in others. ?]
 
+[? if amnesty_act = 1 : The Amnesty Act has restored political rights to nearly all former Confederates. Their votes now count in full - and the political balance of the South is shifting accordingly. ?]
+
 - @Dixie: Lets see the results
 
 @Dixie
@@ -24,6 +26,16 @@ let stateSeats = {
   VA: 132, NC: 170, SC: 124, GA: 175, AL: 100,
   FL: 76,  MS: 115, AR: 100, TX: 90,  LA: 105, TN: 75,
 };
+
+// Confederate disenfranchisement under the Ironclad Oath.
+// Johnson's lenient plan never barred ex-Confederates, so no suppression applies there.
+// Under Radical/Moderate plans, a large share of white ex-Confederate voters (concentrated
+// in the rural and middle-class demographic columns) were barred until the Amnesty Act
+// restored their political rights.
+let confederateSuppression = 0;
+if (Q.Johnson_plan != 1) {
+    confederateSuppression = (Q.amnesty_act == 1) ? 0 : 0.45;
+}
 
 for (let state of Q.southern_states) {
 
@@ -54,8 +66,15 @@ for (let state of Q.southern_states) {
     let total = adjRep + adjDem;
     if (total === 0) continue;
 
-    repVotes += pop * (adjRep / total);
-    demVotes += pop * (adjDem / total);
+    let clsPop = pop;
+    // Ex-Confederates were disproportionately rural landowners and the old
+    // middle-class professional/planter set - not workers, not freedmen.
+    if ((cls === "rural" || cls === "middle_class") && confederateSuppression > 0) {
+        clsPop = pop * (1 - confederateSuppression);
+    }
+
+    repVotes += clsPop * (adjRep / total);
+    demVotes += clsPop * (adjDem / total);
   }
 
   let totalVotes = repVotes + demVotes;
@@ -63,7 +82,11 @@ for (let state of Q.southern_states) {
 
   let repPct = (repVotes / totalVotes) * 100;
 
+  // State loyalty (occupation, judicial reform, violence, amendments) pulls the
+  // result toward or away from Republican strength, on top of the raw demographic math.
   repPct += ((Q[state + "_loyalty"] || 50) - 50) * 0.3;
+
+  // Incumbency/momentum - states don't flip from scratch every cycle
   repPct += (Q[state + "_gub_winner"] === "rep") ? 2 : (Q[state + "_gub_winner"] === "dem" ? -2 : 0);
 
   // election-day noise

@@ -93,7 +93,7 @@ Bureau agents are on the ground in [+ bureau_target +]. What should they priorit
 
 
 @schools
-subtitle: -[+ bureau_cost +] Budget | +2 Freedmen Education
+subtitle: -[+ bureau_cost +] Budget
 choose-if: budget >= bureau_cost
 unavailable-subtitle: Not enough budget.
 on-arrival:{!
@@ -117,7 +117,7 @@ Long-term investment: Freedmen Education compounds into voter registration effec
 [? if radical_split = 1 : Radical organizers, no less enthusiastic about freedmen's education than we are, share some of the credit for the new schoolhouses. ?]
 
 @courts
-subtitle: -[+ bureau_cost +] Budget | +0.25 Judicial Reform
+subtitle: -[+ bureau_cost +] Budget
 choose-if: budget >= bureau_cost
 unavailable-subtitle: Not enough budget.
 on-arrival: {!
@@ -139,7 +139,7 @@ Long-term investment: Judicial Reform feeds directly into state Reconstruction s
 [? if radical_split = 1 : The Radical Republicans, who have made such labor rulings a centerpiece of their platform, draw a share of the goodwill as well. ?]
 
 @registration
-subtitle: -[+ bureau_cost +] Budget | +Freedmen Turnout, +Freedmen Education
+subtitle: -[+ bureau_cost +] Budget
 choose-if: budget >= bureau_cost and fifthteen = 1
 unavailable-subtitle: [? if budget < bureau_cost : Not enough budget. ?][? if fifthteen != 1 : Requires the Fifteenth Amendment to be ratified. ?]
 on-arrival:{!
@@ -165,7 +165,7 @@ Immediate election impact: raises turnout directly ahead of upcoming elections, 
 [? if radical_split = 1 : Voter registration is exactly the kind of enforcement work the Radical Republicans accuse us of neglecting elsewhere, and some newly registered freedmen sign up with them instead of us. ?]
 
 @outreach
-subtitle: -[+ bureau_cost +] Budget | +Union League Strength, +Republican Networks
+subtitle: -[+ bureau_cost +] Budget
 choose-if: budget >= bureau_cost
 unavailable-subtitle: Not enough budget.
 on-arrival: {!
@@ -191,7 +191,7 @@ Broad, moderate investment: smaller individual gains than the other options, but
 [? if radical_split = 1 : Not every organizer we meet stays loyal to us alone; some of the Union League's local leadership leans Radical these days. ?]
 
 @soldiers
-subtitle: -[+ bureau_cost +] Budget | -10 KKK Strength, -5 White League Strength
+subtitle: -[+ bureau_cost +] Budget
 choose-if: budget >= bureau_cost and occupation >= 1
 unavailable-subtitle: [? if budget < bureau_cost : Not enough budget. ?][? if occupation < 1 : Requires at least minimal federal occupation. ?]
 on-arrival: {!

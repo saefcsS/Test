@@ -4,7 +4,6 @@ on-arrival: {!
 Q.last_advisor_action = 0;
 Q.last_cabinet_action = 0;
 
-// === Corruption tier (computed early so it's available everywhere in this scene) ===
 if (Q.corruption === undefined) Q.corruption = 0;
 
 let corr = Q.corruption;

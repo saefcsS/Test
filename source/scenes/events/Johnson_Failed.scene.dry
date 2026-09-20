@@ -116,8 +116,8 @@ on-arrival: {!
     
     let totalSenate = Q.rep_senate_r + Q.dem_senate_r + (Q.rad_senate_r || 0) + (Q.other_senate_r || 0);
     let repSenPct = (Q.rep_senate_r / totalSenate) * 100;
-    if (repSenPct >= 66.7) { Q.sen_majority = 3; }
-    else if (repSenPct >= 50) { Q.sen_majority = 2; }
+    if (repSenPct >= 66.7) { Q.sen_majority = 2; }
+    else if (repSenPct >= 50) { Q.sen_majority = 1; }
     else { Q.sen_majority = 0; }
     
     if (Q.radical_split == 1) {
