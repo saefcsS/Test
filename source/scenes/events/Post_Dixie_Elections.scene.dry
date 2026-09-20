@@ -48,8 +48,9 @@ for (let state of Q.southern_states) {
 
   for (let cls of Q.classes) {
 
-    if (cls === "freemen" && Q.fifthteen == 0) {
-      continue;
+    if (cls === "freemen") {
+      if (!(Q.Radical_plan == 1 || Q.Moderate_plan == 1)) continue;
+      pop = pop * ((Q[state + '_freedmen_turnout'] || 0) / 100);
     }
 
     let pop = Q[state + "_" + cls] || 0;
