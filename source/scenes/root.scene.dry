@@ -1543,22 +1543,22 @@ Q.WI_unemployed_other = 10;
 
 // === TENNESSEE ===
 Q.TN_workers = 46280;
-Q.TN_workers_rep = 50;
-Q.TN_workers_dem = 40;
+Q.TN_workers_rep = 30;
+Q.TN_workers_dem = 60;
 Q.TN_workers_lib = 0;
 Q.TN_workers_rad = 0;
 Q.TN_workers_other = 10;
 
 Q.TN_middle_class = 28925;
-Q.TN_middle_class_rep = 45;
-Q.TN_middle_class_dem = 45;
+Q.TN_middle_class_rep = 22;
+Q.TN_middle_class_dem = 68;
 Q.TN_middle_class_lib = 0;
 Q.TN_middle_class_rad = 0;
 Q.TN_middle_class_other = 10;
 
 Q.TN_rural = 809900;
-Q.TN_rural_rep = 40;
-Q.TN_rural_dem = 50;
+Q.TN_rural_rep = 20;
+Q.TN_rural_dem = 70;
 Q.TN_rural_lib = 0;
 Q.TN_rural_rad = 0;
 Q.TN_rural_other = 10;

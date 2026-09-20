@@ -2,7 +2,7 @@ title: Civil Rights
 new-page: true
 is-card: true
 tags: cotus_affairs, cabinet
-view-if: rep_majority = 1 and civil_rights_timer = 0
+view-if: rep_majority = 1 and civil_rights_timer = 0 and civil_service_act_available = 1
 card-image: img/Freedmen.jpg
 on-arrival: civil_rights_timer += 6; month_actions += 1
 
@@ -46,10 +46,8 @@ on-arrival: {!
     Q.conservative_dissent += 4;
     Q.liberal_dissent += 3;
     Q.civil_rights += 5;
+    Q.corruption /= 2;
 
-    // Delivering the Radicals' central demand pulls freedmen support
-    // back toward the regular party, even as the breakaway leadership
-    // is pleased that the demand was met at all.
     if (Q.radical_split == 1) {
         Q.radical_relation += 6;
         Q.freemen_rad -= 3;

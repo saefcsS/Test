@@ -27,7 +27,6 @@ if (corr < 10) {
     corrSeverity = 3 + (corr - 60) / 20;
 }
 
-// Clamp out of bound class-party values
 for (let c of Q.classes) {
 
     // Step 1: clamp each party
@@ -36,25 +35,50 @@ for (let c of Q.classes) {
         if (Q[c + '_' + party] > 100) Q[c + '_' + party] = 100;
     }
 
-    // Step 2: calculate total
-    let total =
-        Q[c + '_rep'] +
-        Q[c + '_dem'] +
-        Q[c + '_other'];
+    let partyKeys = ['rep', 'dem', 'other'];
+    if (Q.liberal_split) partyKeys.push('lib');
+    if (Q.radical_split) partyKeys.push('rad');
 
-    // Step 3: scale down if over 100
-    if (total > 100) {
-        let scale = 100 / total;
-
-        Q[c + '_rep'] *= scale;
-        Q[c + '_dem'] *= scale;
-        Q[c + '_other'] *= scale;
+    let total = 0;
+    for (let party of partyKeys) {
+        total += Q[c + '_' + party] || 0;
     }
 
-    // Optional: round to whole numbers
-    Q[c + '_rep'] = Math.round(Q[c + '_rep']);
-    Q[c + '_dem'] = Math.round(Q[c + '_dem']);
-    Q[c + '_other'] = Math.round(Q[c + '_other']);
+    if (total > 0) {
+        let scale = 100 / total;
+        for (let party of partyKeys) {
+            Q[c + '_' + party] *= scale;
+        }
+    }
+
+    // Step 4: round while preserving the sum to exactly 100 (largest-remainder
+    // method). Rounding each party independently can land on 99 or 101 due to
+    // accumulated rounding error - this distributes the leftover/deficit to
+    // whichever parties had the largest fractional remainder.
+    let floors = {};
+    let remainders = [];
+    let flooredSum = 0;
+
+    for (let party of partyKeys) {
+        let val = Q[c + '_' + party];
+        let f = Math.floor(val);
+        floors[party] = f;
+        remainders.push({ party: party, remainder: val - f });
+        flooredSum += f;
+    }
+
+    let leftover = 100 - flooredSum;
+    remainders.sort((a, b) => b.remainder - a.remainder);
+
+    for (let i = 0; i < remainders.length; i++) {
+        floors[remainders[i].party] += (i < leftover) ? 1 : 0;
+    }
+
+    for (let party of partyKeys) {
+        Q[c + '_' + party] = floors[party];
+    }
+    // A party not active this game (e.g. lib/rad before any split) is
+    // excluded from partyKeys entirely, so it's left untouched (typically 0).
 }
 
 // Clamp pro_republic
