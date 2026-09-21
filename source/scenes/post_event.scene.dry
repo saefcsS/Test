@@ -573,49 +573,6 @@ else {
     Q.rep_majority = 0;
 }
 
-let reconstructionActive = (Q.Radical_plan == 1 || Q.Moderate_plan == 1);
-
-for (let state of Q.southern_states) {
-
-    if (Q[state + '_disenfranchised'] === undefined) Q[state + '_disenfranchised'] = 0;
-    if (Q[state + '_disenfranchisement_months'] === undefined) Q[state + '_disenfranchisement_months'] = 0;
-
-    if (!reconstructionActive) {
-        Q[state + '_freedmen_turnout'] = 0;
-        continue;
-    }
-
-    let stateViolence = Math.min(1,
-        (((Q.kkk_strength || 0) + (Q.whiteL_strength || 0)) / 2000) *
-        (Q.whiteL_formed ? Q.whiteL_militancy : (Q.kkk_militancy || 0.5))
-    );
-
-    let occupation = Q.occupation || 0;
-    let baseTurnout = 20 + (occupation * 15) + ((Q.freedmen_education || 0) * 0.5);
-    let suppressed = baseTurnout * (1 - stateViolence);
-
-    let floor = (Q.fifthteen == 1) ? 25 : 0;
-    suppressed = Math.max(floor, suppressed);
-
-    if (occupation == 0 && stateViolence > 0.5) {
-        let ratchetRate = (Q.fifthteen == 1) ? 1 : 3;
-        Q[state + '_disenfranchisement_months'] += ratchetRate;
-    } else if (occupation >= 1) {
-        Q[state + '_disenfranchisement_months'] = Math.max(0, Q[state + '_disenfranchisement_months'] - 2);
-    }
-
-    if (Q[state + '_disenfranchisement_months'] >= 36 && Q[state + '_disenfranchised'] == 0) {
-        Q[state + '_disenfranchised'] = 1;
-    }
-
-    if (Q[state + '_disenfranchised'] == 1) {
-        let clawback = (occupation >= 2) ? 5 : 0;
-        Q[state + '_freedmen_turnout'] = Math.min(15, (Q[state + '_freedmen_turnout'] || 0) + clawback * 0.1);
-    } else {
-        Q[state + '_freedmen_turnout'] = Math.max(0, Math.min(100, Math.round(suppressed)));
-    }
-}
-
 if (Q.fifthteen == 0) {
     Q.freedmen_turnout = 0;
 } else {
