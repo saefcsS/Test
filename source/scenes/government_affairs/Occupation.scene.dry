@@ -63,8 +63,8 @@ We managed to reform the Military Occupation Act of 1867 to allow full military 
 
 @expand_union_league
 title: Expand the Union League
-choose-if: resource >= 1
-unavailable-subtitle: [? if resource < 1: We lack the funds. ?]
+choose-if: resources >= 1
+unavailable-subtitle: [? if resources < 1: We lack the funds. ?]
 on-arrival: {!
     Q.Union_League_strength += Q.enforcement_acts ? 28 : 20;
     Q.Union_League_militancy += Q.enforcement_acts ? 0.07 : 0.05;
@@ -73,7 +73,7 @@ on-arrival: {!
     Q.middle_class_rep += 1;
     Q.rural_dem += 1;
     Q.dem_relation -= 3;
-    Q.resource -= 1;
+    Q.resources -= 1;
 !}
 
 We direct new resources into expanding the Union League, organizing freedmen, loyal whites, and veterans into pro-Republican grassroots defense groups.[? if enforcement_acts = 1 : With federal backing now legally established, League organizers are able to operate more openly than before. ?]
