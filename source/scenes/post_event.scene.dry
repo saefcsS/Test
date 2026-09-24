@@ -860,87 +860,101 @@ if (Q.month_actions >= 1) {
 
         Q[state + "_unemployed"] = Math.max(0, Math.round(current_unemployed + change));
     }
-
-    // === OCCUPATION SYSTEM (per-state posture, upkeep, fatigue, redemption) ===
+ 
+    let nationalOccupationLevel = Q.occupation || 0;
 
     let avgPostureTotal = 0;
-    for (let state of Q.southern_states) avgPostureTotal += (Q[state + '_occupation_posture'] || 0);
+    for (let state of Q.southern_states) {
+        // Clamp in case a state's posture was set above what's currently authorized
+        // (e.g. the national Act level was rolled back after posture was set higher).
+        if ((Q[state + '_occupation_posture'] || 0) > nationalOccupationLevel) {
+            Q[state + '_occupation_posture'] = nationalOccupationLevel;
+        }
+        avgPostureTotal += (Q[state + '_occupation_posture'] || 0);
+    }
     let avgPosture = Q.southern_states.length ? avgPostureTotal / Q.southern_states.length : 0;
 
-    // BASELINE GROWTH / SUPPRESSION (monthly) - now driven by average posture
-    // across occupied states rather than a single national dial.
-    if (avgPosture < 0.67) {
-        Q.kkk_strength += 5;
-        if (Q.whiteL_formed == 1){ Q.whiteL_strength += 5; }
-    } else if (avgPosture < 1.34) {
-        Q.kkk_strength += 3;
-        if (Q.whiteL_formed == 1){ Q.whiteL_strength += 4; }
+    if (nationalOccupationLevel === 0) {
+        // No Reconstruction Act passed - occupation mechanics stay fully dormant
+        Q.occupation_month_total = 0;
+        Q.occupation_upkeep_total = 0;
+        Q.occupation_scandal_penalty = Math.max(0, (Q.occupation_scandal_penalty || 0) - 0.5);
     } else {
-        Q.kkk_strength -= 1;
-        if (Q.whiteL_formed == 1){ Q.whiteL_strength += 0.5; }
-    }
-
-    // --- Per-state occupation months, upkeep ---
-    Q.occupation_month_total = 0;
-    Q.occupation_upkeep_total = 0;
-    for (let state of Q.southern_states) {
-        let posture = Q[state + '_occupation_posture'] || 0;
-        Q[state + '_occupation_months'] = posture > 0 ? (Q[state + '_occupation_months'] || 0) + 1 : 0;
-        Q.occupation_month_total += Q[state + '_occupation_months'];
-
-        // TUNE: placeholder upkeep formula, needs balancing against Q.budget scale
-        let troops = Q[state + '_garrison_troops'] || 0;
-        let upkeep = posture === 0 ? 0 : (posture === 1 ? 0.5 + troops * 0.02 : 1.5 + troops * 0.04);
-        Q[state + '_occupation_upkeep'] = upkeep;
-        Q.occupation_upkeep_total += upkeep;
-    }
-    Q.budget -= Q.occupation_upkeep_total; // TUNE: confirm this is the right scale before shipping
-
-    // --- Scandal penalty decay (generator lives in future scandal/atrocity events) ---
-    Q.occupation_scandal_penalty = Math.max(0, (Q.occupation_scandal_penalty || 0) - 0.5);
-
-    // --- Redemption strength drift (placeholder pending full design pass) ---
-    for (let state of Q.southern_states) {
-        let posture = Q[state + '_occupation_posture'] || 0;
-        let drift = posture === 0 ? 0.4 : (posture === 1 ? 0.15 : -0.1);
-        if (Q[state + '_gub_winner'] === 'dem') drift += 0.2;
-        Q[state + '_redemption_strength'] = Math.max(0, (Q[state + '_redemption_strength'] || 0) + drift);
-    }
-
-    // --- Propagate national kkk/whiteL delta to states, scaled by local conditions ---
-    let kkkDelta = Q.kkk_strength - (Q.kkk_strength_last || Q.kkk_strength);
-    let whiteLDelta = Q.whiteL_strength - (Q.whiteL_strength_last || Q.whiteL_strength);
-    for (let state of Q.southern_states) {
-        let posture = Q[state + '_occupation_posture'] || 0;
-        let gub = Q[state + '_gub_winner'];
-
-        let kkkMult = 1.0;
-        if (kkkDelta >= 0) {
-            kkkMult *= posture === 2 ? 0.5 : (posture === 1 ? 0.8 : 1.0);
-            kkkMult *= gub === 'dem' ? 1.3 : (gub === 'rep' ? 0.8 : 1.0);
-            kkkMult *= Q.enforcement_acts == 1 ? 0.85 : 1.0;
+        // BASELINE GROWTH / SUPPRESSION (monthly) - driven by average posture
+        // across occupied states rather than a single national dial.
+        if (avgPosture < 0.67) {
+            Q.kkk_strength += 5;
+            if (Q.whiteL_formed == 1){ Q.whiteL_strength += 5; }
+        } else if (avgPosture < 1.34) {
+            Q.kkk_strength += 3;
+            if (Q.whiteL_formed == 1){ Q.whiteL_strength += 4; }
         } else {
-            kkkMult *= posture === 2 ? 1.4 : (posture === 1 ? 1.15 : 1.0);
-            kkkMult *= gub === 'dem' ? 0.7 : (gub === 'rep' ? 1.25 : 1.0);
-            kkkMult *= Q.enforcement_acts == 1 ? 1.2 : 1.0;
+            Q.kkk_strength -= 1;
+            if (Q.whiteL_formed == 1){ Q.whiteL_strength += 0.5; }
         }
 
-        let whiteLMult = 1.0;
-        if (whiteLDelta >= 0) {
-            whiteLMult *= posture === 2 ? 0.5 : (posture === 1 ? 0.8 : 1.0);
-            whiteLMult *= gub === 'dem' ? 1.3 : (gub === 'rep' ? 0.8 : 1.0);
-            whiteLMult *= Q.enforcement_acts == 1 ? 0.85 : 1.0;
-        } else {
-            whiteLMult *= posture === 2 ? 1.4 : (posture === 1 ? 1.15 : 1.0);
-            whiteLMult *= gub === 'dem' ? 0.7 : (gub === 'rep' ? 1.25 : 1.0);
-            whiteLMult *= Q.enforcement_acts == 1 ? 1.2 : 1.0;
+        // --- Per-state occupation months, upkeep ---
+        Q.occupation_month_total = 0;
+        Q.occupation_upkeep_total = 0;
+        for (let state of Q.southern_states) {
+            let posture = Q[state + '_occupation_posture'] || 0;
+            Q[state + '_occupation_months'] = posture > 0 ? (Q[state + '_occupation_months'] || 0) + 1 : 0;
+            Q.occupation_month_total += Q[state + '_occupation_months'];
+
+            // TUNE: placeholder upkeep formula, needs balancing against Q.budget scale
+            let troops = Q[state + '_garrison_troops'] || 0;
+            let upkeep = posture === 0 ? 0 : (posture === 1 ? 0.5 + troops * 0.02 : 1.5 + troops * 0.04);
+            Q[state + '_occupation_upkeep'] = upkeep;
+            Q.occupation_upkeep_total += upkeep;
+        }
+        Q.budget -= Q.occupation_upkeep_total; // TUNE: confirm this is the right scale before shipping
+
+        // --- Scandal penalty decay (generator lives in future scandal/atrocity events) ---
+        Q.occupation_scandal_penalty = Math.max(0, (Q.occupation_scandal_penalty || 0) - 0.5);
+
+        // --- Redemption strength drift (placeholder pending full design pass) ---
+        for (let state of Q.southern_states) {
+            let posture = Q[state + '_occupation_posture'] || 0;
+            let drift = posture === 0 ? 0.4 : (posture === 1 ? 0.15 : -0.1);
+            if (Q[state + '_gub_winner'] === 'dem') drift += 0.2;
+            Q[state + '_redemption_strength'] = Math.max(0, (Q[state + '_redemption_strength'] || 0) + drift);
         }
 
-        Q[state + '_kkk_strength'] = Math.max(0, (Q[state + '_kkk_strength'] || 0) + kkkDelta * kkkMult);
-        Q[state + '_whiteL_strength'] = Math.max(0, (Q[state + '_whiteL_strength'] || 0) + whiteLDelta * whiteLMult);
+        // --- Propagate national kkk/whiteL delta to states, scaled by local conditions ---
+        let kkkDelta = Q.kkk_strength - (Q.kkk_strength_last || Q.kkk_strength);
+        let whiteLDelta = Q.whiteL_strength - (Q.whiteL_strength_last || Q.whiteL_strength);
+        for (let state of Q.southern_states) {
+            let posture = Q[state + '_occupation_posture'] || 0;
+            let gub = Q[state + '_gub_winner'];
+
+            let kkkMult = 1.0;
+            if (kkkDelta >= 0) {
+                kkkMult *= posture === 2 ? 0.5 : (posture === 1 ? 0.8 : 1.0);
+                kkkMult *= gub === 'dem' ? 1.3 : (gub === 'rep' ? 0.8 : 1.0);
+                kkkMult *= Q.enforcement_acts == 1 ? 0.85 : 1.0;
+            } else {
+                kkkMult *= posture === 2 ? 1.4 : (posture === 1 ? 1.15 : 1.0);
+                kkkMult *= gub === 'dem' ? 0.7 : (gub === 'rep' ? 1.25 : 1.0);
+                kkkMult *= Q.enforcement_acts == 1 ? 1.2 : 1.0;
+            }
+
+            let whiteLMult = 1.0;
+            if (whiteLDelta >= 0) {
+                whiteLMult *= posture === 2 ? 0.5 : (posture === 1 ? 0.8 : 1.0);
+                whiteLMult *= gub === 'dem' ? 1.3 : (gub === 'rep' ? 0.8 : 1.0);
+                whiteLMult *= Q.enforcement_acts == 1 ? 0.85 : 1.0;
+            } else {
+                whiteLMult *= posture === 2 ? 1.4 : (posture === 1 ? 1.15 : 1.0);
+                whiteLMult *= gub === 'dem' ? 0.7 : (gub === 'rep' ? 1.25 : 1.0);
+                whiteLMult *= Q.enforcement_acts == 1 ? 1.2 : 1.0;
+            }
+
+            Q[state + '_kkk_strength'] = Math.max(0, (Q[state + '_kkk_strength'] || 0) + kkkDelta * kkkMult);
+            Q[state + '_whiteL_strength'] = Math.max(0, (Q[state + '_whiteL_strength'] || 0) + whiteLDelta * whiteLMult);
+        }
+        Q.kkk_strength_last = Q.kkk_strength;
+        Q.whiteL_strength_last = Q.whiteL_strength;
     }
-    Q.kkk_strength_last = Q.kkk_strength;
-    Q.whiteL_strength_last = Q.whiteL_strength;
     
     // POLICE LOYALTY EFFECT
     if (Q.Us_police_loyalty < 0.41) {
@@ -979,7 +993,7 @@ if (Q.month_actions >= 1) {
     }
 
     // WEAK ENFORCEMENT RADICALIZES
-    if (avgPosture < 0.67 && Q.Us_police_loyalty < 0.41) {
+    if (nationalOccupationLevel === 0 && Q.Us_police_loyalty < 0.41) {
         Q.kkk_militancy += 0.003;
         if (Q.whiteL_formed == 1){
             Q.whiteL_militancy += 0.06;
