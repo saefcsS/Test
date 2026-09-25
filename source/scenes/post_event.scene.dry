@@ -583,9 +583,16 @@ if (Q.fifthteen == 0) {
     );
 
     let rawSuppression = Math.min(1, (Q.ViolencePenalty || 0) / 30);
+
+    let turnoutAvgPostureTotal = 0;
+    for (let state of Q.southern_states) {
+        turnoutAvgPostureTotal += (Q[state + '_occupation_posture'] || 0);
+    }
+    let turnoutAvgPosture = Q.southern_states.length ? turnoutAvgPostureTotal / Q.southern_states.length : 0;
+
     let suppressionResistance = Math.min(0.5,
         (Q.freedmen_education / 100) * 0.25
-        + (avgOccupationPosture() / 2) * 0.25
+        + (turnoutAvgPosture / 2) * 0.25
     );
     let effectiveSuppression = Math.max(0, rawSuppression - suppressionResistance);
 
