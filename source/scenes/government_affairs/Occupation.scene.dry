@@ -364,72 +364,76 @@ Fifty thousand soldiers are mobilized for the South, the largest federal deploym
 
 [? if radical_split = 1 : Even at this scale, Radical Republican leaders argue this is what they demanded all along, and that a united party would have acted sooner. ?]
 
-@AL_posture
+@AR_posture
+title: Arkansas
 
-- @Occ_AL_Increase: Increase presence in Alabama
-- @Occ_AL_Reduce: Reduce Occupation Level
-- @Occ_AL_Send: Send Troops
-- @Occ_AL_Crack: Crack Down on Local Paramilitaries
+Arkansas currently has [+ AR_garrison_troops +] thousand federal troops stationed, at [? if AR_occupation_posture = 0 : no federal presence ?][? if AR_occupation_posture = 1 : a light federal presence ?][? if AR_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ AR_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ AR_whiteL_strength +] ?].
 
-@Occ_AL_Increase
-choose-if: AL_occupation_posture < occupation and army_strength >= 3
-unavailable-subtitle: [? if AL_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
+- @Occ_AR_Increase: Increase presence in Arkansas
+- @Occ_AR_Reduce: Reduce occupation level
+- @Occ_AR_Send: Send additional troops
+- @Occ_AR_Crack: Crack down on local paramilitaries
+
+@Occ_AR_Increase
+title: Increase presence in Arkansas
+choose-if: AR_occupation_posture < occupation and army_strength >= 3
+unavailable-subtitle: [? if AR_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
-    Q.AL_occupation_posture += 1;
+    Q.AR_occupation_posture += 1;
     Q.army_strength -= 3;
-    Q.AL_garrison_troops += 3;
+    Q.AR_garrison_troops += 3;
     Q.South_army_strength += 3;
     Q.dem_relation -= 1;
     Q.rural_dem += 1;
 !}
 
-More federal troops move into Alabama, and Reconstruction officials' writ now runs further into the countryside.[? if AL_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
+More federal troops move into Arkansas, and Reconstruction officials' writ now runs further into the countryside.[? if AR_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
 
-@Occ_AL_Reduce
-choose-if: AL_occupation_posture > 0
-unavailable-subtitle: [? if AL_occupation_posture <= 0 : Alabama is already free from federal oversight. ?]
+@Occ_AR_Reduce
+title: Reduce occupation level in Arkansas
+choose-if: AR_occupation_posture > 0
+unavailable-subtitle: [? if AR_occupation_posture <= 0 : Arkansas is already free from federal oversight. ?]
 on-arrival: {!
-    let returning = Math.min(3, Q.AL_garrison_troops || 0);
-    Q.AL_occupation_posture -= 1;
-    Q.AL_garrison_troops -= returning;
+    let returning = Math.min(3, Q.AR_garrison_troops || 0);
+    Q.AR_occupation_posture -= 1;
+    Q.AR_garrison_troops -= returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
     Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
 !}
 
-Federal troops pull back from Alabama. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
+Federal troops pull back from Arkansas. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
 
-@Occ_AL_Send
-choose-if: army_strength > 5 and AL_occupation_posture > 0
-unavailable-subtitle: [? if army_strength <= 5 : We have no troops to spare to send to Alabama ?][? if AL_occupation_posture <= 0 : Alabama is currently under civilian control. We would need to adopt military rule to do this. ?]
+@Occ_AR_Send
+title: Send additional troops to Arkansas
+choose-if: army_strength >= 5 and AR_occupation_posture > 0
+unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to Arkansas. ?][? if AR_occupation_posture <= 0 : Arkansas is currently under civilian control. We would need to establish a federal presence first. ?]
 on-arrival: {!
-    Q.AL_garrison_troops += 5;
+    Q.AR_garrison_troops += 5;
     Q.army_strength -= 5;
     Q.South_army_strength += 5;
     Q.dem_relation -= 2;
-    Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) + 1);
+    Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
 !}
 
-We send another regiment to the state of Alabama to enforce federal authority across the state.
+We send another regiment to the state of Arkansas to enforce federal authority across the state.
 
-@Occ_AL_Crack
-choose-if: AL_kkk_strength > 0 or AL_whiteL_strength > 0
-unavailable-subtitle: [? if AL_kkk_strength < 0: The Alabama Klu Klux Klan has been eradicated. ?][? if AL_whiteL_strength < 0 and whiteL_formed = 1: The Alabama White League has been eradicated. ?]
+@Occ_AR_Crack
+title: Crack down on local paramilitaries in Arkansas
+choose-if: AR_kkk_strength > 0 or AR_whiteL_strength > 0
+unavailable-subtitle: [? if AR_kkk_strength <= 0 and (whiteL_formed = 0 or AR_whiteL_strength <= 0) : The Klan and White League have both been eradicated in Arkansas. ?]
 on-arrival: {!
-    if(whiteL_formed = 1)
-    {
-        Q.AL_kkk_strength -= 5;
-        Q.AL_whiteL_strength -= 2;
+    if (Q.whiteL_formed == 1) {
+        Q.AR_kkk_strength = Math.max(0, Q.AR_kkk_strength - 5);
+        Q.AR_whiteL_strength = Math.max(0, Q.AR_whiteL_strength - 2);
         Q.South_army_strength -= 3;
         Q.dem_relation -= 3;
         Q.radical_strength += 3;
         Q.conservative_strength -= 3;
         Q.conservative_dissent += 2;
-    }
-    else
-    {
-        Q.AL_kkk_strength -= 5;
+    } else {
+        Q.AR_kkk_strength = Math.max(0, Q.AR_kkk_strength - 5);
         Q.South_army_strength -= 1;
         Q.dem_relation -= 3;
         Q.radical_strength += 3;
@@ -438,5 +442,734 @@ on-arrival: {!
     }
 !}
 
-The United States forces along with Union League and Police begin to arrest and stop KKK [? if whiteL_formed = 1: and White League ?] forces. 
+United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Arkansas.
+
+
+@FL_posture
+title: Florida
+
+Florida currently has [+ FL_garrison_troops +] thousand federal troops stationed, at [? if FL_occupation_posture = 0 : no federal presence ?][? if FL_occupation_posture = 1 : a light federal presence ?][? if FL_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ FL_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ FL_whiteL_strength +] ?].
+
+- @Occ_FL_Increase: Increase presence in Florida
+- @Occ_FL_Reduce: Reduce occupation level
+- @Occ_FL_Send: Send additional troops
+- @Occ_FL_Crack: Crack down on local paramilitaries
+
+@Occ_FL_Increase
+title: Increase presence in Florida
+choose-if: FL_occupation_posture < occupation and army_strength >= 3
+unavailable-subtitle: [? if FL_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
+on-arrival: {!
+    Q.FL_occupation_posture += 1;
+    Q.army_strength -= 3;
+    Q.FL_garrison_troops += 3;
+    Q.South_army_strength += 3;
+    Q.dem_relation -= 1;
+    Q.rural_dem += 1;
+!}
+
+More federal troops move into Florida, and Reconstruction officials' writ now runs further into the countryside.[? if FL_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
+
+@Occ_FL_Reduce
+title: Reduce occupation level in Florida
+choose-if: FL_occupation_posture > 0
+unavailable-subtitle: [? if FL_occupation_posture <= 0 : Florida is already free from federal oversight. ?]
+on-arrival: {!
+    let returning = Math.min(3, Q.FL_garrison_troops || 0);
+    Q.FL_occupation_posture -= 1;
+    Q.FL_garrison_troops -= returning;
+    Q.army_strength += returning;
+    Q.South_army_strength -= returning;
+    Q.dem_relation += 2;
+    Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+!}
+
+Federal troops pull back from Florida. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
+
+@Occ_FL_Send
+title: Send additional troops to Florida
+choose-if: army_strength >= 5 and FL_occupation_posture > 0
+unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to Florida. ?][? if FL_occupation_posture <= 0 : Florida is currently under civilian control. We would need to establish a federal presence first. ?]
+on-arrival: {!
+    Q.FL_garrison_troops += 5;
+    Q.army_strength -= 5;
+    Q.South_army_strength += 5;
+    Q.dem_relation -= 2;
+    Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+!}
+
+We send another regiment to the state of Florida to enforce federal authority across the state.
+
+@Occ_FL_Crack
+title: Crack down on local paramilitaries in Florida
+choose-if: FL_kkk_strength > 0 or FL_whiteL_strength > 0
+unavailable-subtitle: [? if FL_kkk_strength <= 0 and (whiteL_formed = 0 or FL_whiteL_strength <= 0) : The Klan and White League have both been eradicated in Florida. ?]
+on-arrival: {!
+    if (Q.whiteL_formed == 1) {
+        Q.FL_kkk_strength = Math.max(0, Q.FL_kkk_strength - 5);
+        Q.FL_whiteL_strength = Math.max(0, Q.FL_whiteL_strength - 2);
+        Q.South_army_strength -= 3;
+        Q.dem_relation -= 3;
+        Q.radical_strength += 3;
+        Q.conservative_strength -= 3;
+        Q.conservative_dissent += 2;
+    } else {
+        Q.FL_kkk_strength = Math.max(0, Q.FL_kkk_strength - 5);
+        Q.South_army_strength -= 1;
+        Q.dem_relation -= 3;
+        Q.radical_strength += 3;
+        Q.conservative_strength -= 3;
+        Q.conservative_dissent += 2;
+    }
+!}
+
+United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Florida.
+
+
+@GA_posture
+title: Georgia
+
+Georgia currently has [+ GA_garrison_troops +] thousand federal troops stationed, at [? if GA_occupation_posture = 0 : no federal presence ?][? if GA_occupation_posture = 1 : a light federal presence ?][? if GA_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ GA_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ GA_whiteL_strength +] ?].
+
+- @Occ_GA_Increase: Increase presence in Georgia
+- @Occ_GA_Reduce: Reduce occupation level
+- @Occ_GA_Send: Send additional troops
+- @Occ_GA_Crack: Crack down on local paramilitaries
+
+@Occ_GA_Increase
+title: Increase presence in Georgia
+choose-if: GA_occupation_posture < occupation and army_strength >= 3
+unavailable-subtitle: [? if GA_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
+on-arrival: {!
+    Q.GA_occupation_posture += 1;
+    Q.army_strength -= 3;
+    Q.GA_garrison_troops += 3;
+    Q.South_army_strength += 3;
+    Q.dem_relation -= 1;
+    Q.rural_dem += 1;
+!}
+
+More federal troops move into Georgia, and Reconstruction officials' writ now runs further into the countryside.[? if GA_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
+
+@Occ_GA_Reduce
+title: Reduce occupation level in Georgia
+choose-if: GA_occupation_posture > 0
+unavailable-subtitle: [? if GA_occupation_posture <= 0 : Georgia is already free from federal oversight. ?]
+on-arrival: {!
+    let returning = Math.min(3, Q.GA_garrison_troops || 0);
+    Q.GA_occupation_posture -= 1;
+    Q.GA_garrison_troops -= returning;
+    Q.army_strength += returning;
+    Q.South_army_strength -= returning;
+    Q.dem_relation += 2;
+    Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+!}
+
+Federal troops pull back from Georgia. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
+
+@Occ_GA_Send
+title: Send additional troops to Georgia
+choose-if: army_strength >= 5 and GA_occupation_posture > 0
+unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to Georgia. ?][? if GA_occupation_posture <= 0 : Georgia is currently under civilian control. We would need to establish a federal presence first. ?]
+on-arrival: {!
+    Q.GA_garrison_troops += 5;
+    Q.army_strength -= 5;
+    Q.South_army_strength += 5;
+    Q.dem_relation -= 2;
+    Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+!}
+
+We send another regiment to the state of Georgia to enforce federal authority across the state.
+
+@Occ_GA_Crack
+title: Crack down on local paramilitaries in Georgia
+choose-if: GA_kkk_strength > 0 or GA_whiteL_strength > 0
+unavailable-subtitle: [? if GA_kkk_strength <= 0 and (whiteL_formed = 0 or GA_whiteL_strength <= 0) : The Klan and White League have both been eradicated in Georgia. ?]
+on-arrival: {!
+    if (Q.whiteL_formed == 1) {
+        Q.GA_kkk_strength = Math.max(0, Q.GA_kkk_strength - 5);
+        Q.GA_whiteL_strength = Math.max(0, Q.GA_whiteL_strength - 2);
+        Q.South_army_strength -= 3;
+        Q.dem_relation -= 3;
+        Q.radical_strength += 3;
+        Q.conservative_strength -= 3;
+        Q.conservative_dissent += 2;
+    } else {
+        Q.GA_kkk_strength = Math.max(0, Q.GA_kkk_strength - 5);
+        Q.South_army_strength -= 1;
+        Q.dem_relation -= 3;
+        Q.radical_strength += 3;
+        Q.conservative_strength -= 3;
+        Q.conservative_dissent += 2;
+    }
+!}
+
+United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Georgia.
+
+
+@LA_posture
+title: Louisiana
+
+Louisiana currently has [+ LA_garrison_troops +] thousand federal troops stationed, at [? if LA_occupation_posture = 0 : no federal presence ?][? if LA_occupation_posture = 1 : a light federal presence ?][? if LA_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ LA_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ LA_whiteL_strength +] ?].
+
+- @Occ_LA_Increase: Increase presence in Louisiana
+- @Occ_LA_Reduce: Reduce occupation level
+- @Occ_LA_Send: Send additional troops
+- @Occ_LA_Crack: Crack down on local paramilitaries
+
+@Occ_LA_Increase
+title: Increase presence in Louisiana
+choose-if: LA_occupation_posture < occupation and army_strength >= 3
+unavailable-subtitle: [? if LA_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
+on-arrival: {!
+    Q.LA_occupation_posture += 1;
+    Q.army_strength -= 3;
+    Q.LA_garrison_troops += 3;
+    Q.South_army_strength += 3;
+    Q.dem_relation -= 1;
+    Q.rural_dem += 1;
+!}
+
+More federal troops move into Louisiana, and Reconstruction officials' writ now runs further into the countryside.[? if LA_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
+
+@Occ_LA_Reduce
+title: Reduce occupation level in Louisiana
+choose-if: LA_occupation_posture > 0
+unavailable-subtitle: [? if LA_occupation_posture <= 0 : Louisiana is already free from federal oversight. ?]
+on-arrival: {!
+    let returning = Math.min(3, Q.LA_garrison_troops || 0);
+    Q.LA_occupation_posture -= 1;
+    Q.LA_garrison_troops -= returning;
+    Q.army_strength += returning;
+    Q.South_army_strength -= returning;
+    Q.dem_relation += 2;
+    Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+!}
+
+Federal troops pull back from Louisiana. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
+
+@Occ_LA_Send
+title: Send additional troops to Louisiana
+choose-if: army_strength >= 5 and LA_occupation_posture > 0
+unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to Louisiana. ?][? if LA_occupation_posture <= 0 : Louisiana is currently under civilian control. We would need to establish a federal presence first. ?]
+on-arrival: {!
+    Q.LA_garrison_troops += 5;
+    Q.army_strength -= 5;
+    Q.South_army_strength += 5;
+    Q.dem_relation -= 2;
+    Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+!}
+
+We send another regiment to the state of Louisiana to enforce federal authority across the state.
+
+@Occ_LA_Crack
+title: Crack down on local paramilitaries in Louisiana
+choose-if: LA_kkk_strength > 0 or LA_whiteL_strength > 0
+unavailable-subtitle: [? if LA_kkk_strength <= 0 and (whiteL_formed = 0 or LA_whiteL_strength <= 0) : The Klan and White League have both been eradicated in Louisiana. ?]
+on-arrival: {!
+    if (Q.whiteL_formed == 1) {
+        Q.LA_kkk_strength = Math.max(0, Q.LA_kkk_strength - 5);
+        Q.LA_whiteL_strength = Math.max(0, Q.LA_whiteL_strength - 2);
+        Q.South_army_strength -= 3;
+        Q.dem_relation -= 3;
+        Q.radical_strength += 3;
+        Q.conservative_strength -= 3;
+        Q.conservative_dissent += 2;
+    } else {
+        Q.LA_kkk_strength = Math.max(0, Q.LA_kkk_strength - 5);
+        Q.South_army_strength -= 1;
+        Q.dem_relation -= 3;
+        Q.radical_strength += 3;
+        Q.conservative_strength -= 3;
+        Q.conservative_dissent += 2;
+    }
+!}
+
+United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Louisiana.
+
+
+@MS_posture
+title: Mississippi
+
+Mississippi currently has [+ MS_garrison_troops +] thousand federal troops stationed, at [? if MS_occupation_posture = 0 : no federal presence ?][? if MS_occupation_posture = 1 : a light federal presence ?][? if MS_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ MS_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ MS_whiteL_strength +] ?].
+
+- @Occ_MS_Increase: Increase presence in Mississippi
+- @Occ_MS_Reduce: Reduce occupation level
+- @Occ_MS_Send: Send additional troops
+- @Occ_MS_Crack: Crack down on local paramilitaries
+
+@Occ_MS_Increase
+title: Increase presence in Mississippi
+choose-if: MS_occupation_posture < occupation and army_strength >= 3
+unavailable-subtitle: [? if MS_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
+on-arrival: {!
+    Q.MS_occupation_posture += 1;
+    Q.army_strength -= 3;
+    Q.MS_garrison_troops += 3;
+    Q.South_army_strength += 3;
+    Q.dem_relation -= 1;
+    Q.rural_dem += 1;
+!}
+
+More federal troops move into Mississippi, and Reconstruction officials' writ now runs further into the countryside.[? if MS_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
+
+@Occ_MS_Reduce
+title: Reduce occupation level in Mississippi
+choose-if: MS_occupation_posture > 0
+unavailable-subtitle: [? if MS_occupation_posture <= 0 : Mississippi is already free from federal oversight. ?]
+on-arrival: {!
+    let returning = Math.min(3, Q.MS_garrison_troops || 0);
+    Q.MS_occupation_posture -= 1;
+    Q.MS_garrison_troops -= returning;
+    Q.army_strength += returning;
+    Q.South_army_strength -= returning;
+    Q.dem_relation += 2;
+    Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+!}
+
+Federal troops pull back from Mississippi. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
+
+@Occ_MS_Send
+title: Send additional troops to Mississippi
+choose-if: army_strength >= 5 and MS_occupation_posture > 0
+unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to Mississippi. ?][? if MS_occupation_posture <= 0 : Mississippi is currently under civilian control. We would need to establish a federal presence first. ?]
+on-arrival: {!
+    Q.MS_garrison_troops += 5;
+    Q.army_strength -= 5;
+    Q.South_army_strength += 5;
+    Q.dem_relation -= 2;
+    Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+!}
+
+We send another regiment to the state of Mississippi to enforce federal authority across the state.
+
+@Occ_MS_Crack
+title: Crack down on local paramilitaries in Mississippi
+choose-if: MS_kkk_strength > 0 or MS_whiteL_strength > 0
+unavailable-subtitle: [? if MS_kkk_strength <= 0 and (whiteL_formed = 0 or MS_whiteL_strength <= 0) : The Klan and White League have both been eradicated in Mississippi. ?]
+on-arrival: {!
+    if (Q.whiteL_formed == 1) {
+        Q.MS_kkk_strength = Math.max(0, Q.MS_kkk_strength - 5);
+        Q.MS_whiteL_strength = Math.max(0, Q.MS_whiteL_strength - 2);
+        Q.South_army_strength -= 3;
+        Q.dem_relation -= 3;
+        Q.radical_strength += 3;
+        Q.conservative_strength -= 3;
+        Q.conservative_dissent += 2;
+    } else {
+        Q.MS_kkk_strength = Math.max(0, Q.MS_kkk_strength - 5);
+        Q.South_army_strength -= 1;
+        Q.dem_relation -= 3;
+        Q.radical_strength += 3;
+        Q.conservative_strength -= 3;
+        Q.conservative_dissent += 2;
+    }
+!}
+
+United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Mississippi.
+
+
+@NC_posture
+title: North Carolina
+
+North Carolina currently has [+ NC_garrison_troops +] thousand federal troops stationed, at [? if NC_occupation_posture = 0 : no federal presence ?][? if NC_occupation_posture = 1 : a light federal presence ?][? if NC_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ NC_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ NC_whiteL_strength +] ?].
+
+- @Occ_NC_Increase: Increase presence in North Carolina
+- @Occ_NC_Reduce: Reduce occupation level
+- @Occ_NC_Send: Send additional troops
+- @Occ_NC_Crack: Crack down on local paramilitaries
+
+@Occ_NC_Increase
+title: Increase presence in North Carolina
+choose-if: NC_occupation_posture < occupation and army_strength >= 3
+unavailable-subtitle: [? if NC_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
+on-arrival: {!
+    Q.NC_occupation_posture += 1;
+    Q.army_strength -= 3;
+    Q.NC_garrison_troops += 3;
+    Q.South_army_strength += 3;
+    Q.dem_relation -= 1;
+    Q.rural_dem += 1;
+!}
+
+More federal troops move into North Carolina, and Reconstruction officials' writ now runs further into the countryside.[? if NC_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
+
+@Occ_NC_Reduce
+title: Reduce occupation level in North Carolina
+choose-if: NC_occupation_posture > 0
+unavailable-subtitle: [? if NC_occupation_posture <= 0 : North Carolina is already free from federal oversight. ?]
+on-arrival: {!
+    let returning = Math.min(3, Q.NC_garrison_troops || 0);
+    Q.NC_occupation_posture -= 1;
+    Q.NC_garrison_troops -= returning;
+    Q.army_strength += returning;
+    Q.South_army_strength -= returning;
+    Q.dem_relation += 2;
+    Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+!}
+
+Federal troops pull back from North Carolina. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
+
+@Occ_NC_Send
+title: Send additional troops to North Carolina
+choose-if: army_strength >= 5 and NC_occupation_posture > 0
+unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to North Carolina. ?][? if NC_occupation_posture <= 0 : North Carolina is currently under civilian control. We would need to establish a federal presence first. ?]
+on-arrival: {!
+    Q.NC_garrison_troops += 5;
+    Q.army_strength -= 5;
+    Q.South_army_strength += 5;
+    Q.dem_relation -= 2;
+    Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+!}
+
+We send another regiment to the state of North Carolina to enforce federal authority across the state.
+
+@Occ_NC_Crack
+title: Crack down on local paramilitaries in North Carolina
+choose-if: NC_kkk_strength > 0 or NC_whiteL_strength > 0
+unavailable-subtitle: [? if NC_kkk_strength <= 0 and (whiteL_formed = 0 or NC_whiteL_strength <= 0) : The Klan and White League have both been eradicated in North Carolina. ?]
+on-arrival: {!
+    if (Q.whiteL_formed == 1) {
+        Q.NC_kkk_strength = Math.max(0, Q.NC_kkk_strength - 5);
+        Q.NC_whiteL_strength = Math.max(0, Q.NC_whiteL_strength - 2);
+        Q.South_army_strength -= 3;
+        Q.dem_relation -= 3;
+        Q.radical_strength += 3;
+        Q.conservative_strength -= 3;
+        Q.conservative_dissent += 2;
+    } else {
+        Q.NC_kkk_strength = Math.max(0, Q.NC_kkk_strength - 5);
+        Q.South_army_strength -= 1;
+        Q.dem_relation -= 3;
+        Q.radical_strength += 3;
+        Q.conservative_strength -= 3;
+        Q.conservative_dissent += 2;
+    }
+!}
+
+United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in North Carolina.
+
+
+@SC_posture
+title: South Carolina
+
+South Carolina currently has [+ SC_garrison_troops +] thousand federal troops stationed, at [? if SC_occupation_posture = 0 : no federal presence ?][? if SC_occupation_posture = 1 : a light federal presence ?][? if SC_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ SC_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ SC_whiteL_strength +] ?].
+
+- @Occ_SC_Increase: Increase presence in South Carolina
+- @Occ_SC_Reduce: Reduce occupation level
+- @Occ_SC_Send: Send additional troops
+- @Occ_SC_Crack: Crack down on local paramilitaries
+
+@Occ_SC_Increase
+title: Increase presence in South Carolina
+choose-if: SC_occupation_posture < occupation and army_strength >= 3
+unavailable-subtitle: [? if SC_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
+on-arrival: {!
+    Q.SC_occupation_posture += 1;
+    Q.army_strength -= 3;
+    Q.SC_garrison_troops += 3;
+    Q.South_army_strength += 3;
+    Q.dem_relation -= 1;
+    Q.rural_dem += 1;
+!}
+
+More federal troops move into South Carolina, and Reconstruction officials' writ now runs further into the countryside.[? if SC_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
+
+@Occ_SC_Reduce
+title: Reduce occupation level in South Carolina
+choose-if: SC_occupation_posture > 0
+unavailable-subtitle: [? if SC_occupation_posture <= 0 : South Carolina is already free from federal oversight. ?]
+on-arrival: {!
+    let returning = Math.min(3, Q.SC_garrison_troops || 0);
+    Q.SC_occupation_posture -= 1;
+    Q.SC_garrison_troops -= returning;
+    Q.army_strength += returning;
+    Q.South_army_strength -= returning;
+    Q.dem_relation += 2;
+    Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+!}
+
+Federal troops pull back from South Carolina. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
+
+@Occ_SC_Send
+title: Send additional troops to South Carolina
+choose-if: army_strength >= 5 and SC_occupation_posture > 0
+unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to South Carolina. ?][? if SC_occupation_posture <= 0 : South Carolina is currently under civilian control. We would need to establish a federal presence first. ?]
+on-arrival: {!
+    Q.SC_garrison_troops += 5;
+    Q.army_strength -= 5;
+    Q.South_army_strength += 5;
+    Q.dem_relation -= 2;
+    Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+!}
+
+We send another regiment to the state of South Carolina to enforce federal authority across the state.
+
+@Occ_SC_Crack
+title: Crack down on local paramilitaries in South Carolina
+choose-if: SC_kkk_strength > 0 or SC_whiteL_strength > 0
+unavailable-subtitle: [? if SC_kkk_strength <= 0 and (whiteL_formed = 0 or SC_whiteL_strength <= 0) : The Klan and White League have both been eradicated in South Carolina. ?]
+on-arrival: {!
+    if (Q.whiteL_formed == 1) {
+        Q.SC_kkk_strength = Math.max(0, Q.SC_kkk_strength - 5);
+        Q.SC_whiteL_strength = Math.max(0, Q.SC_whiteL_strength - 2);
+        Q.South_army_strength -= 3;
+        Q.dem_relation -= 3;
+        Q.radical_strength += 3;
+        Q.conservative_strength -= 3;
+        Q.conservative_dissent += 2;
+    } else {
+        Q.SC_kkk_strength = Math.max(0, Q.SC_kkk_strength - 5);
+        Q.South_army_strength -= 1;
+        Q.dem_relation -= 3;
+        Q.radical_strength += 3;
+        Q.conservative_strength -= 3;
+        Q.conservative_dissent += 2;
+    }
+!}
+
+United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in South Carolina.
+
+
+@TN_posture
+title: Tennessee
+
+Tennessee currently has [+ TN_garrison_troops +] thousand federal troops stationed, at [? if TN_occupation_posture = 0 : no federal presence ?][? if TN_occupation_posture = 1 : a light federal presence ?][? if TN_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ TN_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ TN_whiteL_strength +] ?].
+
+- @Occ_TN_Increase: Increase presence in Tennessee
+- @Occ_TN_Reduce: Reduce occupation level
+- @Occ_TN_Send: Send additional troops
+- @Occ_TN_Crack: Crack down on local paramilitaries
+
+@Occ_TN_Increase
+title: Increase presence in Tennessee
+choose-if: TN_occupation_posture < occupation and army_strength >= 3
+unavailable-subtitle: [? if TN_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
+on-arrival: {!
+    Q.TN_occupation_posture += 1;
+    Q.army_strength -= 3;
+    Q.TN_garrison_troops += 3;
+    Q.South_army_strength += 3;
+    Q.dem_relation -= 1;
+    Q.rural_dem += 1;
+!}
+
+More federal troops move into Tennessee, and Reconstruction officials' writ now runs further into the countryside.[? if TN_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
+
+@Occ_TN_Reduce
+title: Reduce occupation level in Tennessee
+choose-if: TN_occupation_posture > 0
+unavailable-subtitle: [? if TN_occupation_posture <= 0 : Tennessee is already free from federal oversight. ?]
+on-arrival: {!
+    let returning = Math.min(3, Q.TN_garrison_troops || 0);
+    Q.TN_occupation_posture -= 1;
+    Q.TN_garrison_troops -= returning;
+    Q.army_strength += returning;
+    Q.South_army_strength -= returning;
+    Q.dem_relation += 2;
+    Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+!}
+
+Federal troops pull back from Tennessee. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
+
+@Occ_TN_Send
+title: Send additional troops to Tennessee
+choose-if: army_strength >= 5 and TN_occupation_posture > 0
+unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to Tennessee. ?][? if TN_occupation_posture <= 0 : Tennessee is currently under civilian control. We would need to establish a federal presence first. ?]
+on-arrival: {!
+    Q.TN_garrison_troops += 5;
+    Q.army_strength -= 5;
+    Q.South_army_strength += 5;
+    Q.dem_relation -= 2;
+    Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+!}
+
+We send another regiment to the state of Tennessee to enforce federal authority across the state.
+
+@Occ_TN_Crack
+title: Crack down on local paramilitaries in Tennessee
+choose-if: TN_kkk_strength > 0 or TN_whiteL_strength > 0
+unavailable-subtitle: [? if TN_kkk_strength <= 0 and (whiteL_formed = 0 or TN_whiteL_strength <= 0) : The Klan and White League have both been eradicated in Tennessee. ?]
+on-arrival: {!
+    if (Q.whiteL_formed == 1) {
+        Q.TN_kkk_strength = Math.max(0, Q.TN_kkk_strength - 5);
+        Q.TN_whiteL_strength = Math.max(0, Q.TN_whiteL_strength - 2);
+        Q.South_army_strength -= 3;
+        Q.dem_relation -= 3;
+        Q.radical_strength += 3;
+        Q.conservative_strength -= 3;
+        Q.conservative_dissent += 2;
+    } else {
+        Q.TN_kkk_strength = Math.max(0, Q.TN_kkk_strength - 5);
+        Q.South_army_strength -= 1;
+        Q.dem_relation -= 3;
+        Q.radical_strength += 3;
+        Q.conservative_strength -= 3;
+        Q.conservative_dissent += 2;
+    }
+!}
+
+United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Tennessee.
+
+
+@TX_posture
+title: Texas
+
+Texas currently has [+ TX_garrison_troops +] thousand federal troops stationed, at [? if TX_occupation_posture = 0 : no federal presence ?][? if TX_occupation_posture = 1 : a light federal presence ?][? if TX_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ TX_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ TX_whiteL_strength +] ?].
+
+- @Occ_TX_Increase: Increase presence in Texas
+- @Occ_TX_Reduce: Reduce occupation level
+- @Occ_TX_Send: Send additional troops
+- @Occ_TX_Crack: Crack down on local paramilitaries
+
+@Occ_TX_Increase
+title: Increase presence in Texas
+choose-if: TX_occupation_posture < occupation and army_strength >= 3
+unavailable-subtitle: [? if TX_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
+on-arrival: {!
+    Q.TX_occupation_posture += 1;
+    Q.army_strength -= 3;
+    Q.TX_garrison_troops += 3;
+    Q.South_army_strength += 3;
+    Q.dem_relation -= 1;
+    Q.rural_dem += 1;
+!}
+
+More federal troops move into Texas, and Reconstruction officials' writ now runs further into the countryside.[? if TX_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
+
+@Occ_TX_Reduce
+title: Reduce occupation level in Texas
+choose-if: TX_occupation_posture > 0
+unavailable-subtitle: [? if TX_occupation_posture <= 0 : Texas is already free from federal oversight. ?]
+on-arrival: {!
+    let returning = Math.min(3, Q.TX_garrison_troops || 0);
+    Q.TX_occupation_posture -= 1;
+    Q.TX_garrison_troops -= returning;
+    Q.army_strength += returning;
+    Q.South_army_strength -= returning;
+    Q.dem_relation += 2;
+    Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+!}
+
+Federal troops pull back from Texas. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
+
+@Occ_TX_Send
+title: Send additional troops to Texas
+choose-if: army_strength >= 5 and TX_occupation_posture > 0
+unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to Texas. ?][? if TX_occupation_posture <= 0 : Texas is currently under civilian control. We would need to establish a federal presence first. ?]
+on-arrival: {!
+    Q.TX_garrison_troops += 5;
+    Q.army_strength -= 5;
+    Q.South_army_strength += 5;
+    Q.dem_relation -= 2;
+    Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+!}
+
+We send another regiment to the state of Texas to enforce federal authority across the state.
+
+@Occ_TX_Crack
+title: Crack down on local paramilitaries in Texas
+choose-if: TX_kkk_strength > 0 or TX_whiteL_strength > 0
+unavailable-subtitle: [? if TX_kkk_strength <= 0 and (whiteL_formed = 0 or TX_whiteL_strength <= 0) : The Klan and White League have both been eradicated in Texas. ?]
+on-arrival: {!
+    if (Q.whiteL_formed == 1) {
+        Q.TX_kkk_strength = Math.max(0, Q.TX_kkk_strength - 5);
+        Q.TX_whiteL_strength = Math.max(0, Q.TX_whiteL_strength - 2);
+        Q.South_army_strength -= 3;
+        Q.dem_relation -= 3;
+        Q.radical_strength += 3;
+        Q.conservative_strength -= 3;
+        Q.conservative_dissent += 2;
+    } else {
+        Q.TX_kkk_strength = Math.max(0, Q.TX_kkk_strength - 5);
+        Q.South_army_strength -= 1;
+        Q.dem_relation -= 3;
+        Q.radical_strength += 3;
+        Q.conservative_strength -= 3;
+        Q.conservative_dissent += 2;
+    }
+!}
+
+United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Texas.
+
+
+@VA_posture
+title: Virginia
+
+Virginia currently has [+ VA_garrison_troops +] thousand federal troops stationed, at [? if VA_occupation_posture = 0 : no federal presence ?][? if VA_occupation_posture = 1 : a light federal presence ?][? if VA_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ VA_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ VA_whiteL_strength +] ?].
+
+- @Occ_VA_Increase: Increase presence in Virginia
+- @Occ_VA_Reduce: Reduce occupation level
+- @Occ_VA_Send: Send additional troops
+- @Occ_VA_Crack: Crack down on local paramilitaries
+
+@Occ_VA_Increase
+title: Increase presence in Virginia
+choose-if: VA_occupation_posture < occupation and army_strength >= 3
+unavailable-subtitle: [? if VA_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
+on-arrival: {!
+    Q.VA_occupation_posture += 1;
+    Q.army_strength -= 3;
+    Q.VA_garrison_troops += 3;
+    Q.South_army_strength += 3;
+    Q.dem_relation -= 1;
+    Q.rural_dem += 1;
+!}
+
+More federal troops move into Virginia, and Reconstruction officials' writ now runs further into the countryside.[? if VA_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
+
+@Occ_VA_Reduce
+title: Reduce occupation level in Virginia
+choose-if: VA_occupation_posture > 0
+unavailable-subtitle: [? if VA_occupation_posture <= 0 : Virginia is already free from federal oversight. ?]
+on-arrival: {!
+    let returning = Math.min(3, Q.VA_garrison_troops || 0);
+    Q.VA_occupation_posture -= 1;
+    Q.VA_garrison_troops -= returning;
+    Q.army_strength += returning;
+    Q.South_army_strength -= returning;
+    Q.dem_relation += 2;
+    Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+!}
+
+Federal troops pull back from Virginia. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
+
+@Occ_VA_Send
+title: Send additional troops to Virginia
+choose-if: army_strength >= 5 and VA_occupation_posture > 0
+unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to Virginia. ?][? if VA_occupation_posture <= 0 : Virginia is currently under civilian control. We would need to establish a federal presence first. ?]
+on-arrival: {!
+    Q.VA_garrison_troops += 5;
+    Q.army_strength -= 5;
+    Q.South_army_strength += 5;
+    Q.dem_relation -= 2;
+    Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+!}
+
+We send another regiment to the state of Virginia to enforce federal authority across the state.
+
+@Occ_VA_Crack
+title: Crack down on local paramilitaries in Virginia
+choose-if: VA_kkk_strength > 0 or VA_whiteL_strength > 0
+unavailable-subtitle: [? if VA_kkk_strength <= 0 and (whiteL_formed = 0 or VA_whiteL_strength <= 0) : The Klan and White League have both been eradicated in Virginia. ?]
+on-arrival: {!
+    if (Q.whiteL_formed == 1) {
+        Q.VA_kkk_strength = Math.max(0, Q.VA_kkk_strength - 5);
+        Q.VA_whiteL_strength = Math.max(0, Q.VA_whiteL_strength - 2);
+        Q.South_army_strength -= 3;
+        Q.dem_relation -= 3;
+        Q.radical_strength += 3;
+        Q.conservative_strength -= 3;
+        Q.conservative_dissent += 2;
+    } else {
+        Q.VA_kkk_strength = Math.max(0, Q.VA_kkk_strength - 5);
+        Q.South_army_strength -= 1;
+        Q.dem_relation -= 3;
+        Q.radical_strength += 3;
+        Q.conservative_strength -= 3;
+        Q.conservative_dissent += 2;
+    }
+!}
+
+United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Virginia. 
 
