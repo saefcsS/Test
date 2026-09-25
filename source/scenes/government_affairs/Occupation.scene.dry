@@ -12,7 +12,7 @@ var DixieOccupationMap = {
     var container = document.querySelector(opts.container);
     if (!container) return;
 
-    container.innerHTML = \`
+    container.innerHTML = `
       <svg version="1.2"
            viewBox="0 0 284 184"
            width="284"
@@ -77,7 +77,7 @@ var DixieOccupationMap = {
 
         </g>
       </svg>
-    \`;
+    `;
 
     var paths = container.querySelectorAll("path[id]");
 
