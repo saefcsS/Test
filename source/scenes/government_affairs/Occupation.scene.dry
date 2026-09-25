@@ -104,6 +104,8 @@ DixieOccupationMap.draw({
 
 = Dealing with Southern Occupation
 
+{!<div id="Dixie-map"></div>!}
+
 With <span style="color: #c00000;">**Republican**</span> control of Congress, we can take a more assertive role in managing Reconstruction. Loyal officials and local defense groups can be supported, hostile organizations challenged, and the army deployed where needed.
 
 [? if enforcement_acts = 1 : The Enforcement Acts are in effect. Federal courts and marshals now have expanded authority to act against organized violence in the South. ?]
