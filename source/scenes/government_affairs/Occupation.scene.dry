@@ -7,7 +7,7 @@ new-page: true
 tags: cotus_affairs, cabinet
 on-display: {!
 
-var DixieOccupationMap = {
+window.DixieOccupationMap = {
   paths: {},
   data: {},
   mode: 'posture',
@@ -37,6 +37,14 @@ var DixieOccupationMap = {
   setMode: function(mode) {
     this.mode = mode;
     this.recolor();
+    var buttons = document.querySelectorAll('.map-btn');
+    buttons.forEach(function(btn) {
+        if (btn.getAttribute('data-mode') === mode) {
+            btn.classList.add('active')
+        } else {
+            btn.classList.remove('active')
+        }
+    });
   },
 
   draw: function(opts, stateData) {
@@ -143,8 +151,11 @@ DixieOccupationMap.draw({ container: "#Dixie-map" }, {
 
 = Dealing with Southern Occupation
 
-<button onclick="DixieOccupationMap.setMode('posture')">Occupation Level</button>
-<button onclick="DixieOccupationMap.setMode('danger')">Paramilitary Danger</button>
+{!<div class="map-controls">!}
+  <button class="map-btn active" data-mode="posture" onclick="window.DixieOccupationMap.setMode('posture')">Occupation Level</button>
+  <button class="map-btn" data-mode="danger" onclick="window.DixieOccupationMap.setMode('danger')">Paramilitary Danger</button>
+{!</div>!}
+
 {!<div id="Dixie-map"></div>!}
 
 With <span style="color: #c00000;">**Republican**</span> control of Congress, we can take a more assertive role in managing Reconstruction. Loyal officials and local defense groups can be supported, hostile organizations challenged, and the army deployed where needed.

@@ -806,3 +806,37 @@ video {
   width: 75%; 
   outline: 3px solid #991616; 
 }
+
+.cabinet_jump {
+  font-family: inherit;
+  font-size: 0.9em;
+  color: #f7ebd3;
+  background-color: #6d4c2a;
+  border: 1px solid #3d2711;
+  border-radius: 3px;
+  padding: 2px 8px;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 1px 1px 2px rgba(0, 0, 0, 0.15);
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.cabinet_jump:hover {
+  background-color: #805a33;
+  color: #ffffff;
+}
+
+.cabinet_jump:active {
+  background-color: #54391d;
+  box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .cabinet_jump {
+  background-color: #4a321a;
+  border-color: #777;
+  color: #efefef;
+}
+
+body.dark-mode .cabinet_jump:hover {
+  background-color: #5e4022;
+}
