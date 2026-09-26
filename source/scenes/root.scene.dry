@@ -147,10 +147,6 @@ AL_kkk_strength = 0;
 AL_whiteL_strength = 0;
 AL_redemption_strength = 0;
 AL_redemption_momentum = 0;
-AL_engagement_outcome = 0;
-AL_engagement_casualties = 0;
-AL_occupation_preview_kkk_delta = 0;
-AL_occupation_preview_redemption_delta = 0;
 
 // --- AR ---
 AR_occupation_posture = 0;
@@ -161,10 +157,6 @@ AR_kkk_strength = 0;
 AR_whiteL_strength = 0;
 AR_redemption_strength = 0;
 AR_redemption_momentum = 0;
-AR_engagement_outcome = 0;
-AR_engagement_casualties = 0;
-AR_occupation_preview_kkk_delta = 0;
-AR_occupation_preview_redemption_delta = 0;
 
 // --- FL ---
 FL_occupation_posture = 0;
@@ -175,10 +167,6 @@ FL_kkk_strength = 0;
 FL_whiteL_strength = 0;
 FL_redemption_strength = 0;
 FL_redemption_momentum = 0;
-FL_engagement_outcome = 0;
-FL_engagement_casualties = 0;
-FL_occupation_preview_kkk_delta = 0;
-FL_occupation_preview_redemption_delta = 0;
 
 // --- GA ---
 GA_occupation_posture = 0;
@@ -189,10 +177,6 @@ GA_kkk_strength = 0;
 GA_whiteL_strength = 0;
 GA_redemption_strength = 0;
 GA_redemption_momentum = 0;
-GA_engagement_outcome = 0;
-GA_engagement_casualties = 0;
-GA_occupation_preview_kkk_delta = 0;
-GA_occupation_preview_redemption_delta = 0;
 
 // --- LA ---
 LA_occupation_posture = 0;
@@ -203,10 +187,6 @@ LA_kkk_strength = 0;
 LA_whiteL_strength = 0;
 LA_redemption_strength = 0;
 LA_redemption_momentum = 0;
-LA_engagement_outcome = 0;
-LA_engagement_casualties = 0;
-LA_occupation_preview_kkk_delta = 0;
-LA_occupation_preview_redemption_delta = 0;
 
 // --- MS ---
 MS_occupation_posture = 0;
@@ -217,10 +197,6 @@ MS_kkk_strength = 0;
 MS_whiteL_strength = 0;
 MS_redemption_strength = 0;
 MS_redemption_momentum = 0;
-MS_engagement_outcome = 0;
-MS_engagement_casualties = 0;
-MS_occupation_preview_kkk_delta = 0;
-MS_occupation_preview_redemption_delta = 0;
 
 // --- NC ---
 NC_occupation_posture = 0;
@@ -231,10 +207,6 @@ NC_kkk_strength = 0;
 NC_whiteL_strength = 0;
 NC_redemption_strength = 0;
 NC_redemption_momentum = 0;
-NC_engagement_outcome = 0;
-NC_engagement_casualties = 0;
-NC_occupation_preview_kkk_delta = 0;
-NC_occupation_preview_redemption_delta = 0;
 
 // --- SC ---
 SC_occupation_posture = 0;
@@ -245,10 +217,6 @@ SC_kkk_strength = 0;
 SC_whiteL_strength = 0;
 SC_redemption_strength = 0;
 SC_redemption_momentum = 0;
-SC_engagement_outcome = 0;
-SC_engagement_casualties = 0;
-SC_occupation_preview_kkk_delta = 0;
-SC_occupation_preview_redemption_delta = 0;
 
 // --- TN ---
 TN_occupation_posture = 0;
@@ -259,10 +227,6 @@ TN_kkk_strength = 0;
 TN_whiteL_strength = 0;
 TN_redemption_strength = 0;
 TN_redemption_momentum = 0;
-TN_engagement_outcome = 0;
-TN_engagement_casualties = 0;
-TN_occupation_preview_kkk_delta = 0;
-TN_occupation_preview_redemption_delta = 0;
 
 // --- TX ---
 TX_occupation_posture = 0;
@@ -273,10 +237,6 @@ TX_kkk_strength = 0;
 TX_whiteL_strength = 0;
 TX_redemption_strength = 0;
 TX_redemption_momentum = 0;
-TX_engagement_outcome = 0;
-TX_engagement_casualties = 0;
-TX_occupation_preview_kkk_delta = 0;
-TX_occupation_preview_redemption_delta = 0;
 
 // --- VA ---
 VA_occupation_posture = 0;
@@ -287,10 +247,6 @@ VA_kkk_strength = 0;
 VA_whiteL_strength = 0;
 VA_redemption_strength = 0;
 VA_redemption_momentum = 0;
-VA_engagement_outcome = 0;
-VA_engagement_casualties = 0;
-VA_occupation_preview_kkk_delta = 0;
-VA_occupation_preview_redemption_delta = 0;
 
 Q.state_militia_strength = 0;
 Q.state_militia_formed = 0;

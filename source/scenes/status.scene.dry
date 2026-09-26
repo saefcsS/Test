@@ -150,7 +150,7 @@ Economic growth: [+ economic_growth_2 +]%
 
 = Inter-party Relations
 
-**{!<span class="tooltip-text" title= [? if ncp_founded = 0: "Democratic Party" ?][? if ncp_founded = 1: "National Conservative Party" ?] style="color: [+ dem_color +];">[+ dem_name +]</span>!}**: [+ dem_relation : relationships +]
+**<span class="tooltip-text" title="[? if ncp_founded = 0: Democratic Party ?][? if ncp_founded = 1: National Conservative Party ?]" style="color: [+ dem_color +];">**[+ dem_name +]**</span>**: [+ dem_relation : relationships +]
 
 [? if liberal_split = 1 : **{!<span class="tooltip-text" title="Liberal Republican Party" style="color: #DAA520;">Lib. Rep.</span>!}**: [+ liberal_relation : relationships +] ?]
 

@@ -928,15 +928,23 @@ if (Q.month_actions >= 1) {
         }
 
         // --- Propagate national kkk/whiteL delta to states, scaled by local conditions ---
+        // Garrison troops only ever suppress GROWTH, and only within the ceiling
+        // the state's own occupation posture allows (posture gates, garrison
+        // modifies within the gate - never crosses into another posture tier's
+        // range). Decline is untouched by garrison, per design call.
         let kkkDelta = Q.kkk_strength - (Q.kkk_strength_last || Q.kkk_strength);
         let whiteLDelta = Q.whiteL_strength - (Q.whiteL_strength_last || Q.whiteL_strength);
         for (let state of Q.southern_states) {
             let posture = Q[state + '_occupation_posture'] || 0;
             let gub = Q[state + '_gub_winner'];
+            let troops = Q[state + '_garrison_troops'] || 0;
 
             let kkkMult = 1.0;
             if (kkkDelta >= 0) {
-                kkkMult *= posture === 2 ? 0.5 : (posture === 1 ? 0.8 : 1.0);
+                let kkkBaseMult = posture === 2 ? 0.5 : (posture === 1 ? 0.8 : 1.0);
+                let kkkFloorMult = posture === 2 ? 0.35 : (posture === 1 ? 0.65 : 0.9);
+                let kkkGarrisonSuppression = troops / (troops + 20);
+                kkkMult *= kkkBaseMult - (kkkBaseMult - kkkFloorMult) * kkkGarrisonSuppression;
                 kkkMult *= gub === 'dem' ? 1.3 : (gub === 'rep' ? 0.8 : 1.0);
                 kkkMult *= Q.enforcement_acts == 1 ? 0.85 : 1.0;
             } else {
@@ -947,7 +955,10 @@ if (Q.month_actions >= 1) {
 
             let whiteLMult = 1.0;
             if (whiteLDelta >= 0) {
-                whiteLMult *= posture === 2 ? 0.5 : (posture === 1 ? 0.8 : 1.0);
+                let whiteLBaseMult = posture === 2 ? 0.5 : (posture === 1 ? 0.8 : 1.0);
+                let whiteLFloorMult = posture === 2 ? 0.35 : (posture === 1 ? 0.65 : 0.9);
+                let whiteLGarrisonSuppression = troops / (troops + 45);
+                whiteLMult *= whiteLBaseMult - (whiteLBaseMult - whiteLFloorMult) * whiteLGarrisonSuppression;
                 whiteLMult *= gub === 'dem' ? 1.3 : (gub === 'rep' ? 0.8 : 1.0);
                 whiteLMult *= Q.enforcement_acts == 1 ? 0.85 : 1.0;
             } else {

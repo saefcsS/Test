@@ -17,6 +17,7 @@ on-arrival: {!
     let margin = base + liberalPull + conservativeBleed + complacency + tildenite + demComposition;
     Q.dem_convention_margin = Math.round(margin);
 !}
+max-visits: 1
 
 = The State Conventions
 
