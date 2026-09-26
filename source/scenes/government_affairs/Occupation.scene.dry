@@ -474,7 +474,7 @@ title: Increase presence in Florida
 choose-if: FL_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if FL_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
-    Q.FL_occupation_posture += 1;
+    Q.FL_occupation_posture = (Q.FL_occupation_posture || 0) + 1;
     Q.army_strength -= 3;
     Q.FL_garrison_troops += 3;
     Q.South_army_strength += 3;
@@ -490,7 +490,7 @@ choose-if: FL_occupation_posture > 0
 unavailable-subtitle: [? if FL_occupation_posture <= 0 : Florida is already free from federal oversight. ?]
 on-arrival: {!
     let returning = Math.min(Q.FL_garrison_troops || 0, Math.max(3, Math.round((Q.FL_garrison_troops || 0) * 0.5)));
-    Q.FL_occupation_posture -= 1;
+    Q.FL_occupation_posture = (Q.FL_occupation_posture || 0) - 1;
     Q.FL_garrison_troops -= returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
@@ -555,7 +555,7 @@ title: Increase presence in Georgia
 choose-if: GA_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if GA_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
-    Q.GA_occupation_posture += 1;
+    Q.GA_occupation_posture = (Q.GA_occupation_posture || 0) + 1;
     Q.army_strength -= 3;
     Q.GA_garrison_troops += 3;
     Q.South_army_strength += 3;
@@ -571,7 +571,7 @@ choose-if: GA_occupation_posture > 0
 unavailable-subtitle: [? if GA_occupation_posture <= 0 : Georgia is already free from federal oversight. ?]
 on-arrival: {!
     let returning = Math.min(Q.GA_garrison_troops || 0, Math.max(3, Math.round((Q.GA_garrison_troops || 0) * 0.5)));
-    Q.GA_occupation_posture -= 1;
+    Q.GA_occupation_posture = (Q.GA_occupation_posture || 0) - 1;
     Q.GA_garrison_troops -= returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
@@ -641,7 +641,7 @@ title: Increase presence in Louisiana
 choose-if: LA_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if LA_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
-    Q.LA_occupation_posture += 1;
+    Q.LA_occupation_posture = (Q.LA_occupation_posture || 0) + 1;
     Q.army_strength -= 3;
     Q.LA_garrison_troops += 3;
     Q.South_army_strength += 3;
@@ -657,7 +657,7 @@ choose-if: LA_occupation_posture > 0
 unavailable-subtitle: [? if LA_occupation_posture <= 0 : Louisiana is already free from federal oversight. ?]
 on-arrival: {!
     let returning = Math.min(Q.LA_garrison_troops || 0, Math.max(3, Math.round((Q.LA_garrison_troops || 0) * 0.5)));
-    Q.LA_occupation_posture -= 1;
+    Q.LA_occupation_posture = (Q.LA_occupation_posture || 0) - 1;
     Q.LA_garrison_troops -= returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
@@ -727,7 +727,7 @@ title: Increase presence in Mississippi
 choose-if: MS_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if MS_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
-    Q.MS_occupation_posture += 1;
+    Q.MS_occupation_posture = (Q.MS_occupation_posture || 0) + 1;
     Q.army_strength -= 3;
     Q.MS_garrison_troops += 3;
     Q.South_army_strength += 3;
@@ -743,7 +743,7 @@ choose-if: MS_occupation_posture > 0
 unavailable-subtitle: [? if MS_occupation_posture <= 0 : Mississippi is already free from federal oversight. ?]
 on-arrival: {!
     let returning = Math.min(Q.MS_garrison_troops || 0, Math.max(3, Math.round((Q.MS_garrison_troops || 0) * 0.5)));
-    Q.MS_occupation_posture -= 1;
+    Q.MS_occupation_posture = (Q.MS_occupation_posture || 0) - 1;
     Q.MS_garrison_troops -= returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
@@ -779,7 +779,7 @@ on-arrival: {!
         Q.MS_kkk_strength = Math.max(0, Q.MS_kkk_strength - kkkReduction);
         Q.MS_whiteL_strength = Math.max(0, Q.MS_whiteL_strength - whiteLReduction);
         Q.South_army_strength -= 3;
-        Q.dem_reMStion -= 3;
+        Q.dem_relation -= 3;
         Q.radical_strength += 3;
         Q.conservative_strength -= 3;
         Q.conservative_dissent += 2;
@@ -813,7 +813,7 @@ title: Increase presence in North Carolina
 choose-if: NC_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if NC_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
-    Q.NC_occupation_posture += 1;
+    Q.NC_occupation_posture = (Q.NC_occupation_posture || 0) + 1;
     Q.army_strength -= 3;
     Q.NC_garrison_troops += 3;
     Q.South_army_strength += 3;
@@ -829,7 +829,7 @@ choose-if: NC_occupation_posture > 0
 unavailable-subtitle: [? if NC_occupation_posture <= 0 : North Carolina is already free from federal oversight. ?]
 on-arrival: {!
     let returning = Math.min(Q.NC_garrison_troops || 0, Math.max(3, Math.round((Q.NC_garrison_troops || 0) * 0.5)));
-    Q.NC_occupation_posture -= 1;
+    Q.NC_occupation_posture = (Q.NC_occupation_posture || 0) - 1;
     Q.NC_garrison_troops -= returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
@@ -899,7 +899,7 @@ title: Increase presence in South Carolina
 choose-if: SC_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if SC_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
-    Q.SC_occupation_posture += 1;
+    Q.SC_occupation_posture = (Q.SC_occupation_posture || 0) + 1;
     Q.army_strength -= 3;
     Q.SC_garrison_troops += 3;
     Q.South_army_strength += 3;
@@ -915,7 +915,7 @@ choose-if: SC_occupation_posture > 0
 unavailable-subtitle: [? if SC_occupation_posture <= 0 : South Carolina is already free from federal oversight. ?]
 on-arrival: {!
     let returning = Math.min(Q.SC_garrison_troops || 0, Math.max(3, Math.round((Q.SC_garrison_troops || 0) * 0.5)));
-    Q.SC_occupation_posture -= 1;
+    Q.SC_occupation_posture = (Q.SC_occupation_posture || 0) - 1;
     Q.SC_garrison_troops -= returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
@@ -985,7 +985,7 @@ title: Increase presence in Tennessee
 choose-if: TN_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if TN_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
-    Q.TN_occupation_posture += 1;
+    Q.TN_occupation_posture = (Q.TN_occupation_posture || 0) + 1;
     Q.army_strength -= 3;
     Q.TN_garrison_troops += 3;
     Q.South_army_strength += 3;
@@ -1001,7 +1001,7 @@ choose-if: TN_occupation_posture > 0
 unavailable-subtitle: [? if TN_occupation_posture <= 0 : Tennessee is already free from federal oversight. ?]
 on-arrival: {!
     let returning = Math.min(Q.TN_garrison_troops || 0, Math.max(3, Math.round((Q.TN_garrison_troops || 0) * 0.5)));
-    Q.TN_occupation_posture -= 1;
+    Q.TN_occupation_posture = (Q.TN_occupation_posture || 0) - 1;
     Q.TN_garrison_troops -= returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
@@ -1071,7 +1071,7 @@ title: Increase presence in Texas
 choose-if: TX_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if TX_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
-    Q.TX_occupation_posture += 1;
+    Q.TX_occupation_posture = (Q.TX_occupation_posture || 0) + 1;
     Q.army_strength -= 3;
     Q.TX_garrison_troops += 3;
     Q.South_army_strength += 3;
@@ -1087,7 +1087,7 @@ choose-if: TX_occupation_posture > 0
 unavailable-subtitle: [? if TX_occupation_posture <= 0 : Texas is already free from federal oversight. ?]
 on-arrival: {!
     let returning = Math.min(Q.TX_garrison_troops || 0, Math.max(3, Math.round((Q.TX_garrison_troops || 0) * 0.5)));
-    Q.TX_occupation_posture -= 1;
+    Q.TX_occupation_posture = (Q.TX_occupation_posture || 0) - 1;
     Q.TX_garrison_troops -= returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
@@ -1157,7 +1157,7 @@ title: Increase presence in Virginia
 choose-if: VA_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if VA_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
-    Q.VA_occupation_posture += 1;
+    Q.VA_occupation_posture = (Q.VA_occupation_posture || 0) + 1;
     Q.army_strength -= 3;
     Q.VA_garrison_troops += 3;
     Q.South_army_strength += 3;
@@ -1173,7 +1173,7 @@ choose-if: VA_occupation_posture > 0
 unavailable-subtitle: [? if VA_occupation_posture <= 0 : Virginia is already free from federal oversight. ?]
 on-arrival: {!
     let returning = Math.min(Q.VA_garrison_troops || 0, Math.max(3, Math.round((Q.VA_garrison_troops || 0) * 0.5)));
-    Q.VA_occupation_posture -= 1;
+    Q.VA_occupation_posture = (Q.VA_occupation_posture || 0) - 1;
     Q.VA_garrison_troops -= returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
