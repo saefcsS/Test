@@ -1054,6 +1054,20 @@ if (Q.month_actions >= 1) {
     {
         Q.kkk_rise = 2;
     }
+    if (Q.enforcement_acts == 0 && Q.gov_appeal_active != 1) {
+        for (let state of Q.southern_states) {
+            let danger = (Q[state + '_kkk_strength'] || 0) + (Q[state + '_whiteL_strength'] || 0);
+            if (Q[state + '_gub_winner'] === 'rep' && danger >= 80) {
+                Q.gov_appeal_active = 1;
+                Q.gov_appeal_state = state;
+                break;
+            }
+        }
+    }
+    if (Q.gov_appeal_active == 1 && Q[Q.gov_appeal_state + '_gub_winner'] !== 'rep') {
+        Q.gov_appeal_active = 0;
+        Q.gov_appeal_state = '';
+    }
     
     let demReformDominant = (Q.dem_reform_strength > Q.dem_bourbon_strength) && (Q.dem_reform_dissent < Q.dem_bourbon_dissent);
     let demGrowthStates = demReformDominant ? Q.states : Q.southern_states;

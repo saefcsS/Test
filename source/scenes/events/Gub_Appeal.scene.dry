@@ -1,0 +1,36 @@
+title: Governor's Appeal for Federal Help
+priority: -1
+view-if: gov_appeal_active = 1 and enforcement_acts = 0
+tags: event
+
+A letter arrives from the Governor of [+ gov_appeal_state +]. Nightriders have been busy in their state burning schoolhouses, dragging men from their homes, and putting Republican poll-watchers in the ground or scaring them off entirely. The state government and existing federal enforcement are outgunned, outnumbered, and in some counties too frightened of reprisal to leave the courthouse. He is asking Washington for stronger federal enforcement in his state to fend off this insurgency.
+
+- @new: Give the courts real teeth
+- @nah: The state must handle its own affairs
+
+@new
+subtitle: Fight fire with fire
+choose-if: radical_strength >= 35
+unavailable-subtitle: The bulk of the party isn't behind this yet.
+on-arrival: {!
+    Q.enforcement_acts_available = 1;
+    Q.gov_appeal_active = 0;
+    Q.gov_appeal_state = '';
+    Q.radical_strength += 1;
+    Q.conservative_dissent += 4;
+    Q.liberal_dissent += 2;
+!}
+
+Word goes out that new legislation is coming - something with federal marshals, federal courts, and none of the local sympathies that have let men walk free after burning a man's barn or worse. The Governor will have his answer soon enough.
+
+@nah
+subtitle: Let the state handle it
+choose-if: radical_strength < 35
+unavailable-subtitle: The Radicals won't let this one go quietly.
+on-arrival: {!
+    Q.gov_appeal_active = 0;
+    Q.gov_appeal_state = '';
+    Q.radical_dissent += 5;
+!}
+
+Governor of [+ gov_appeal_state +]...we'll look into it.

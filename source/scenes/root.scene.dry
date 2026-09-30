@@ -2239,6 +2239,8 @@ Q.freedmen_turnout = 0;
 Q.bureau_cost = 1;
 Q.bureau_target = "";
 Q.enforcement_acts = 0;
+Q.gov_appeal_active = 0;
+Q.enforcement_acts_available = 0;
 Q.habeas_suspended = 0;
 Q.March_DC = 0;
 

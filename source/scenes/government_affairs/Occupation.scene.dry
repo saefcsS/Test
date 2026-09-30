@@ -174,9 +174,9 @@ With <span style="color: #c00000;">**Republican**</span> control of Congress, we
 
 @enforcement_acts_btn
 title: Pass the Enforcement Acts
-view-if: enforcement_acts = 0 and kkk_strength + whiteL_strength >= 275
-choose-if: rep_majority >= 1 and radical_strength + moderate_strength >= 50
-unavailable-subtitle: [? if rep_majority < 1: We do not control Congress. ?][? if radical_strength + moderate_strength < 50: The <span style="color: #7A1F5C;">**Radical**</span> and <span style="color: #9D2933;">**Moderate**</span> factions are not strong enough to push this through. ?]
+view-if: enforcement_acts = 0
+choose-if: rep_majority >= 1 and radical_strength + moderate_strength >= 50 and enforcement_acts = 0 and enforcement_acts_available = 1
+unavailable-subtitle: [? if enforcement_acts_available = 0: We don't have the reason do to so. ?][? if rep_majority < 1: We do not control Congress. ?][? if radical_strength + moderate_strength < 50: The <span style="color: #7A1F5C;">**Radical**</span> and <span style="color: #9D2933;">**Moderate**</span> factions are not strong enough to push this through. ?]
 on-arrival: {!
     Q.enforcement_acts = 1;
     Q.judicial_reform += 1;
@@ -304,6 +304,7 @@ Alabama currently has [+ AL_garrison_troops +] thousand federal troops stationed
 
 @Occ_AL_Increase
 title: Increase presence in Alabama
+view-if: AL_occupation_posture < 2
 choose-if: AL_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if AL_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
@@ -387,6 +388,7 @@ Arkansas currently has [+ AR_garrison_troops +] thousand federal troops statione
 
 @Occ_AR_Increase
 title: Increase presence in Arkansas
+view-if: AR_occupation_posture < 2
 choose-if: AR_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if AR_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
@@ -471,6 +473,7 @@ Florida currently has [+ FL_garrison_troops +] thousand federal troops stationed
 
 @Occ_FL_Increase
 title: Increase presence in Florida
+view-if: FL_occupation_posture < 2
 choose-if: FL_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if FL_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
@@ -552,6 +555,7 @@ Georgia currently has [+ GA_garrison_troops +] thousand federal troops stationed
 
 @Occ_GA_Increase
 title: Increase presence in Georgia
+view-if: GA_occupation_posture < 2
 choose-if: GA_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if GA_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
@@ -638,6 +642,7 @@ Louisiana currently has [+ LA_garrison_troops +] thousand federal troops station
 
 @Occ_LA_Increase
 title: Increase presence in Louisiana
+view-if: LA_occupation_posture < 2
 choose-if: LA_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if LA_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
@@ -724,6 +729,7 @@ Mississippi currently has [+ MS_garrison_troops +] thousand federal troops stati
 
 @Occ_MS_Increase
 title: Increase presence in Mississippi
+view-if: MS_occupation_posture < 2
 choose-if: MS_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if MS_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
@@ -810,6 +816,7 @@ North Carolina currently has [+ NC_garrison_troops +] thousand federal troops st
 
 @Occ_NC_Increase
 title: Increase presence in North Carolina
+view-if: NC_occupation_posture < 2
 choose-if: NC_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if NC_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
@@ -896,6 +903,7 @@ South Carolina currently has [+ SC_garrison_troops +] thousand federal troops st
 
 @Occ_SC_Increase
 title: Increase presence in South Carolina
+view-if: SC_occupation_posture < 2
 choose-if: SC_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if SC_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
@@ -982,6 +990,7 @@ Tennessee currently has [+ TN_garrison_troops +] thousand federal troops station
 
 @Occ_TN_Increase
 title: Increase presence in Tennessee
+view-if: TN_occupation_posture < 2
 choose-if: TN_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if TN_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
@@ -1068,6 +1077,7 @@ Texas currently has [+ TX_garrison_troops +] thousand federal troops stationed, 
 
 @Occ_TX_Increase
 title: Increase presence in Texas
+view-if: TX_occupation_posture < 2
 choose-if: TX_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if TX_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
@@ -1154,6 +1164,7 @@ Virginia currently has [+ VA_garrison_troops +] thousand federal troops statione
 
 @Occ_VA_Increase
 title: Increase presence in Virginia
+view-if: VA_occupation_posture < 2
 choose-if: VA_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if VA_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
