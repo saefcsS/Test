@@ -2,6 +2,7 @@ title: Governor's Appeal for Federal Help
 priority: -1
 view-if: gov_appeal_active = 1 and enforcement_acts = 0
 tags: event
+max-visits: 1
 
 A letter arrives from the Governor of [+ gov_appeal_state +]. Nightriders have been busy in their state burning schoolhouses, dragging men from their homes, and putting Republican poll-watchers in the ground or scaring them off entirely. The state government and existing federal enforcement are outgunned, outnumbered, and in some counties too frightened of reprisal to leave the courthouse. He is asking Washington for stronger federal enforcement in his state to fend off this insurgency.
 

@@ -2,6 +2,7 @@ title: A New Party of the Right?
 subtitle: The <span style="color: #DAA520;">**Liberal**</span>-<span style="color: #0015bc;">**Democratic**</span> Consolidation
 tags: event
 new-page: true
+max-visits: 1
 view-if: year = 1874 and month >= 6 and dem_control = "reform" and liberal_survive = 1 and liberal_reunion_seen = 0 and ncp_founded = 0 and liberal_courtship >= 10 and conservative_defection = 1
 on-arrival: {!
     // Enthusiasm for actually merging vs. staying loose allies

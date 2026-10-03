@@ -230,8 +230,8 @@ We direct new resources into expanding the Union League, organizing freedmen, lo
 @suspend_habeas
 title: Suspend habeas corpus in the worst-affected counties
 view-if: enforcement_acts = 1
-choose-if: occupation >= 2 and kkk_strength + whiteL_strength >= 500 and army_loyalty >= 0.65
-unavailable-subtitle: [? if enforcement_acts = 0: The Enforcement Acts are required before this step can be taken. ?][? if occupation < 2: Full federal occupation is required. ?][? if kkk_strength + whiteL_strength < 500: Conditions are not yet severe enough to justify this measure. ?][? if army_loyalty < 0.65: The army cannot be relied upon for this operation. ?]
+choose-if: occupation >= 2 and army_loyalty >= 0.65
+unavailable-subtitle: [? if occupation < 2: Full federal occupation is required. ?][? if army_loyalty < 0.65: The army cannot be relied upon for this operation. ?]
 on-arrival: {!
     Q.habeas_suspended = 1;
     Q.kkk_strength *= 0.55;

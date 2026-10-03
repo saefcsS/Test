@@ -419,4 +419,6 @@ The terms are carried south by intermediaries, and word comes back within days: 
 
 @commission_end
 
+[? if ncp_founded = 1:  ?]
+
 - @return: Continue.
