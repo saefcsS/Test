@@ -132,11 +132,12 @@ Q.whiteL_militancy = 0;
 Q.whiteL_formed = 0;
 Q.white_league_trigger = 0;
 
-occupation_month_total = 0;
-occupation_scandal_penalty = 0;
-occupation_upkeep_total = 0;
-kkk_strength_last = 0;
-whiteL_strength_last = 0;
+Q.occupation_month_total = 0;
+Q.occupation_scandal_penalty = 0;
+Q.occupation_upkeep_total = 0;
+Q.occupation_upkeep_display = 0;
+Q.kkk_strength_last = 0;
+Q.whiteL_strength_last = 0;
 
 // --- AL ---
 AL_occupation_posture = 0;

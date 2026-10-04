@@ -918,12 +918,12 @@ if (Q.month_actions >= 1) {
 
             // TUNE: placeholder upkeep formula, needs balancing against Q.budget scale
             let troops = Q[state + '_garrison_troops'] || 0;
-            let upkeep = posture === 0 ? 0 : (posture === 1 ? 0.5 + troops * 0.02 : 1.5 + troops * 0.04);
+            let upkeep = posture === 0 ? 0 : (posture === 1 ? 0.003 + troops * 0.0008 : 0.005 + troops * 0.0008);
             Q[state + '_occupation_upkeep'] = upkeep;
             Q.occupation_upkeep_total += upkeep;
         }
         Q.budget -= Q.occupation_upkeep_total; // TUNE: confirm this is the right scale before shipping
-
+        Q.occupation_upkeep_display = Math.round(Q.occupation_upkeep_total * 12 * 10) / 10;
         // --- Scandal penalty decay (generator lives in future scandal/atrocity events) ---
         Q.occupation_scandal_penalty = Math.max(0, (Q.occupation_scandal_penalty || 0) - 0.5);
 

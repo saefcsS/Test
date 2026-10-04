@@ -163,6 +163,8 @@ With <span style="color: #c00000;">**Republican**</span> control of Congress, we
 [? if enforcement_acts = 1 : The Enforcement Acts are in effect. Federal courts and marshals now have expanded authority to act against organized violence in the South. ?]
 [? if enforcement_acts = 0 and kkk_strength + whiteL_strength >= 400 : Paramilitary violence across the South is reaching a point where our current legal tools are no longer adequate. Congress has begun discussing whether new legislation is needed. ?]
 
+[? if occupation_upkeep_display > 0 : Maintaining the occupation costs about [+ occupation_upkeep_display +] budget per year. ?]
+
 - @enforcement_acts_btn: Pass the Enforcement Acts
 - @Reform
 - @expand_union_league
