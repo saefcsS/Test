@@ -194,7 +194,7 @@ on-arrival: {!
         Q.radical_strength += 4;
     }
     Q.moderate_strength += 2; 
-    Q.freedmen_rep += 2; 
+    Q.freemen_rep += 2; 
     Q.rural_rep -= 1; 
     Q.kkk_strength += 5; 
     Q.kkk_militancy += 0.2;
@@ -225,7 +225,7 @@ on-arrival: {!
         Q.radical_strength -= 4;
     }
     Q.moderate_strength += 2; 
-    Q.freedmen_rep += 1; 
+    Q.freemen_rep += 1; 
     Q.rural_rep += 1; 
     Q.conservative_strength += 1; 
     Q.liberal_strength += 1; 

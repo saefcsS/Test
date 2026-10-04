@@ -315,7 +315,7 @@ Q.laissez_faire = 0;
 Q.classes = ['workers', 'middle_class', 'rural', 'freemen', 'immigrant_laborers', 'unemployed'];
 Q.parties = ['rep', 'dem', 'lib', 'rad', 'other'];
 
-Q.southern_states = ['VA', 'NC', 'SC', 'GA', 'AL', 'FL', 'MS', 'AR', 'TX', 'LA'];
+Q.southern_states = ['VA', 'NC', 'SC', 'GA', 'AL', 'FL', 'MS', 'AR', 'TX', 'LA', 'TN'];
 
 Q.VA_reconstructionScore = 0;
 Q.NC_reconstructionScore = 0;

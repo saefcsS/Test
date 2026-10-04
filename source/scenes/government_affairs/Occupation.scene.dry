@@ -215,8 +215,8 @@ unavailable-subtitle: [? if resources < 1: We lack the funds. ?]
 on-arrival: {!
     Q.Union_League_strength += Q.enforcement_acts ? 28 : 20;
     Q.Union_League_militancy += Q.enforcement_acts ? 0.07 : 0.05;
-    Q.freedmen_rep += Q.enforcement_acts ? 2 : 1;
-    if (Q.radical_split == 1) Q.freedmen_rad += 1;
+    Q.freemen_rep += Q.enforcement_acts ? 2 : 1;
+    if (Q.radical_split == 1) Q.freemen_rad += 1;
     Q.middle_class_rep += 1;
     Q.rural_dem += 1;
     Q.dem_relation -= 3;
@@ -273,8 +273,8 @@ on-arrival: {!
     Q.state_militia_strength = Q.enforcement_acts ? 55 : 40;
     Q.Union_League_strength += Q.enforcement_acts ? 28 : 20;
     Q.Us_police_strength += Q.enforcement_acts ? 15 : 10;
-    Q.freedmen_rep += 1;
-    if (Q.radical_split == 1) Q.freedmen_rad += 1;
+    Q.freemen_rep += 1;
+    if (Q.radical_split == 1) Q.freemen_rad += 1;
     Q.rural_dem += 2;
     Q.dem_relation -= 3;
 !}
@@ -286,7 +286,7 @@ title: Demobilize Southern Republican State Militias
 view-if: state_militia_formed = 1
 choose-if: occupation >= 1
 unavailable-subtitle: [? if occupation < 1: There is no federal presence to manage the transition. ?]
-on-arrival: state_militia_formed = 0; state_militia_strength = 0; Union_League_strength -= 10; Us_police_strength -= 5; moderate_support += 1; dem_relation += 3; rural_dem -= 1; resource += 1; freemen_rep -= 2; freemen_rad += 2 if radical_split = 1
+on-arrival: state_militia_formed = 0; state_militia_strength = 0; Union_League_strength -= 10; Us_police_strength -= 5; moderate_strength += 1; dem_relation += 3; rural_dem -= 1; resources += 1; freemen_rep -= 2; freemen_rad += 2 if radical_split = 1
 
 To avoid further escalation, we order the demobilization of <span style="color: #c00000;">**Republican**</span>-aligned militias in the South. This eases tensions but leaves our allies more exposed.
 
@@ -308,7 +308,7 @@ view-if: AL_occupation_posture < 2
 choose-if: AL_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if AL_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
-    Q.AL_occupation_posture += 1;
+    Q.AL_occupation_posture = (Q.AL_occupation_posture || 0) + 1;
     Q.army_strength -= 3;
     Q.AL_garrison_troops += 3;
     Q.South_army_strength += 3;
@@ -323,9 +323,17 @@ title: Reduce occupation level in Alabama
 choose-if: AL_occupation_posture > 0
 unavailable-subtitle: [? if AL_occupation_posture <= 0 : Alabama is already free from federal oversight. ?]
 on-arrival: {!
-    let returning = Math.min(Q.AL_garrison_troops || 0, Math.max(3, Math.round((Q.AL_garrison_troops || 0) * 0.5)));
-    Q.AL_occupation_posture -= 1;
-    Q.AL_garrison_troops -= returning;
+    let garrison = Q.AL_garrison_troops || 0;
+    let newPosture = Math.max(0, (Q.AL_occupation_posture || 0) - 1);
+    let returning;
+    if (newPosture === 0) {
+        returning = garrison;
+    } else {
+        returning = Math.min(garrison, Math.max(3, Math.round(garrison * 0.5)));
+        returning = Math.max(returning, garrison - 15);
+    }
+    Q.AL_occupation_posture = newPosture;
+    Q.AL_garrison_troops = garrison - returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
@@ -356,22 +364,14 @@ on-arrival: {!
     let troops = Q.AL_garrison_troops || 0;
     let kkkReduction = Math.min(20, 3 + troops * 0.3);
     let whiteLReduction = Math.min(10, 1 + troops * 0.12);
+    Q.AL_kkk_strength = Math.max(0, (Q.AL_kkk_strength || 0) - kkkReduction);
     if (Q.whiteL_formed == 1) {
-        Q.AL_kkk_strength = Math.max(0, Q.AL_kkk_strength - kkkReduction);
-        Q.AL_whiteL_strength = Math.max(0, Q.AL_whiteL_strength - whiteLReduction);
-        Q.South_army_strength -= 3;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
-    } else {
-        Q.AL_kkk_strength = Math.max(0, Q.AL_kkk_strength - kkkReduction);
-        Q.South_army_strength -= 1;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
+        Q.AL_whiteL_strength = Math.max(0, (Q.AL_whiteL_strength || 0) - whiteLReduction);
     }
+    Q.dem_relation -= 3;
+    Q.radical_strength += 3;
+    Q.conservative_strength -= 3;
+    Q.conservative_dissent += 2;
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Alabama.
@@ -392,7 +392,7 @@ view-if: AR_occupation_posture < 2
 choose-if: AR_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if AR_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
-    Q.AR_occupation_posture += 1;
+    Q.AR_occupation_posture = (Q.AR_occupation_posture || 0) + 1;
     Q.army_strength -= 3;
     Q.AR_garrison_troops += 3;
     Q.South_army_strength += 3;
@@ -407,9 +407,17 @@ title: Reduce occupation level in Arkansas
 choose-if: AR_occupation_posture > 0
 unavailable-subtitle: [? if AR_occupation_posture <= 0 : Arkansas is already free from federal oversight. ?]
 on-arrival: {!
-    let returning = Math.min(Q.AR_garrison_troops || 0, Math.max(3, Math.round((Q.AR_garrison_troops || 0) * 0.5)));
-    Q.AR_occupation_posture -= 1;
-    Q.AR_garrison_troops -= returning;
+    let garrison = Q.AR_garrison_troops || 0;
+    let newPosture = Math.max(0, (Q.AR_occupation_posture || 0) - 1);
+    let returning;
+    if (newPosture === 0) {
+        returning = garrison;
+    } else {
+        returning = Math.min(garrison, Math.max(3, Math.round(garrison * 0.5)));
+        returning = Math.max(returning, garrison - 15);
+    }
+    Q.AR_occupation_posture = newPosture;
+    Q.AR_garrison_troops = garrison - returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
@@ -440,22 +448,14 @@ on-arrival: {!
     let troops = Q.AR_garrison_troops || 0;
     let kkkReduction = Math.min(20, 3 + troops * 0.3);
     let whiteLReduction = Math.min(10, 1 + troops * 0.12);
+    Q.AR_kkk_strength = Math.max(0, (Q.AR_kkk_strength || 0) - kkkReduction);
     if (Q.whiteL_formed == 1) {
-        Q.AR_kkk_strength = Math.max(0, Q.AR_kkk_strength - kkkReduction);
-        Q.AR_whiteL_strength = Math.max(0, Q.AR_whiteL_strength - whiteLReduction);
-        Q.South_army_strength -= 3;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
-    } else {
-        Q.AR_kkk_strength = Math.max(0, Q.AR_kkk_strength - kkkReduction);
-        Q.South_army_strength -= 1;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
+        Q.AR_whiteL_strength = Math.max(0, (Q.AR_whiteL_strength || 0) - whiteLReduction);
     }
+    Q.dem_relation -= 3;
+    Q.radical_strength += 3;
+    Q.conservative_strength -= 3;
+    Q.conservative_dissent += 2;
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Arkansas.
@@ -492,9 +492,17 @@ title: Reduce occupation level in Florida
 choose-if: FL_occupation_posture > 0
 unavailable-subtitle: [? if FL_occupation_posture <= 0 : Florida is already free from federal oversight. ?]
 on-arrival: {!
-    let returning = Math.min(Q.FL_garrison_troops || 0, Math.max(3, Math.round((Q.FL_garrison_troops || 0) * 0.5)));
-    Q.FL_occupation_posture = (Q.FL_occupation_posture || 0) - 1;
-    Q.FL_garrison_troops -= returning;
+    let garrison = Q.FL_garrison_troops || 0;
+    let newPosture = Math.max(0, (Q.FL_occupation_posture || 0) - 1);
+    let returning;
+    if (newPosture === 0) {
+        returning = garrison;
+    } else {
+        returning = Math.min(garrison, Math.max(3, Math.round(garrison * 0.5)));
+        returning = Math.max(returning, garrison - 15);
+    }
+    Q.FL_occupation_posture = newPosture;
+    Q.FL_garrison_troops = garrison - returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
@@ -522,22 +530,17 @@ title: Crack down on local paramilitaries in Florida
 choose-if: FL_kkk_strength > 0 or FL_whiteL_strength > 0
 unavailable-subtitle: [? if FL_kkk_strength <= 0 and (whiteL_formed = 0 or FL_whiteL_strength <= 0) : The Klan and White League have both been eradicated in Florida. ?]
 on-arrival: {!
+    let troops = Q.FL_garrison_troops || 0;
+    let kkkReduction = Math.min(20, 3 + troops * 0.3);
+    let whiteLReduction = Math.min(10, 1 + troops * 0.12);
+    Q.FL_kkk_strength = Math.max(0, (Q.FL_kkk_strength || 0) - kkkReduction);
     if (Q.whiteL_formed == 1) {
-        Q.FL_kkk_strength = Math.max(0, Q.FL_kkk_strength - 5);
-        Q.FL_whiteL_strength = Math.max(0, Q.FL_whiteL_strength - 2);
-        Q.South_army_strength -= 3;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
-    } else {
-        Q.FL_kkk_strength = Math.max(0, Q.FL_kkk_strength - 5);
-        Q.South_army_strength -= 1;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
+        Q.FL_whiteL_strength = Math.max(0, (Q.FL_whiteL_strength || 0) - whiteLReduction);
     }
+    Q.dem_relation -= 3;
+    Q.radical_strength += 3;
+    Q.conservative_strength -= 3;
+    Q.conservative_dissent += 2;
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Florida.
@@ -574,9 +577,17 @@ title: Reduce occupation level in Georgia
 choose-if: GA_occupation_posture > 0
 unavailable-subtitle: [? if GA_occupation_posture <= 0 : Georgia is already free from federal oversight. ?]
 on-arrival: {!
-    let returning = Math.min(Q.GA_garrison_troops || 0, Math.max(3, Math.round((Q.GA_garrison_troops || 0) * 0.5)));
-    Q.GA_occupation_posture = (Q.GA_occupation_posture || 0) - 1;
-    Q.GA_garrison_troops -= returning;
+    let garrison = Q.GA_garrison_troops || 0;
+    let newPosture = Math.max(0, (Q.GA_occupation_posture || 0) - 1);
+    let returning;
+    if (newPosture === 0) {
+        returning = garrison;
+    } else {
+        returning = Math.min(garrison, Math.max(3, Math.round(garrison * 0.5)));
+        returning = Math.max(returning, garrison - 15);
+    }
+    Q.GA_occupation_posture = newPosture;
+    Q.GA_garrison_troops = garrison - returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
@@ -607,24 +618,14 @@ on-arrival: {!
     let troops = Q.GA_garrison_troops || 0;
     let kkkReduction = Math.min(20, 3 + troops * 0.3);
     let whiteLReduction = Math.min(10, 1 + troops * 0.12);
+    Q.GA_kkk_strength = Math.max(0, (Q.GA_kkk_strength || 0) - kkkReduction);
     if (Q.whiteL_formed == 1) {
-        Q.GA_kkk_strength = Math.max(0, Q.GA_kkk_strength - kkkReduction);
-        Q.GA_whiteL_strength = Math.max(0, Q.GA_whiteL_strength - whiteLReduction);
-        Q.South_army_strength -= 3;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
+        Q.GA_whiteL_strength = Math.max(0, (Q.GA_whiteL_strength || 0) - whiteLReduction);
     }
-    else 
-    {
-        Q.GA_kkk_strength = Math.max(0, Q.GA_kkk_strength - kkkReduction);
-        Q.South_army_strength -= 1;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
-    }
+    Q.dem_relation -= 3;
+    Q.radical_strength += 3;
+    Q.conservative_strength -= 3;
+    Q.conservative_dissent += 2;
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Georgia.
@@ -661,9 +662,17 @@ title: Reduce occupation level in Louisiana
 choose-if: LA_occupation_posture > 0
 unavailable-subtitle: [? if LA_occupation_posture <= 0 : Louisiana is already free from federal oversight. ?]
 on-arrival: {!
-    let returning = Math.min(Q.LA_garrison_troops || 0, Math.max(3, Math.round((Q.LA_garrison_troops || 0) * 0.5)));
-    Q.LA_occupation_posture = (Q.LA_occupation_posture || 0) - 1;
-    Q.LA_garrison_troops -= returning;
+    let garrison = Q.LA_garrison_troops || 0;
+    let newPosture = Math.max(0, (Q.LA_occupation_posture || 0) - 1);
+    let returning;
+    if (newPosture === 0) {
+        returning = garrison;
+    } else {
+        returning = Math.min(garrison, Math.max(3, Math.round(garrison * 0.5)));
+        returning = Math.max(returning, garrison - 15);
+    }
+    Q.LA_occupation_posture = newPosture;
+    Q.LA_garrison_troops = garrison - returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
@@ -694,24 +703,14 @@ on-arrival: {!
     let troops = Q.LA_garrison_troops || 0;
     let kkkReduction = Math.min(20, 3 + troops * 0.3);
     let whiteLReduction = Math.min(10, 1 + troops * 0.12);
+    Q.LA_kkk_strength = Math.max(0, (Q.LA_kkk_strength || 0) - kkkReduction);
     if (Q.whiteL_formed == 1) {
-        Q.LA_kkk_strength = Math.max(0, Q.LA_kkk_strength - kkkReduction);
-        Q.LA_whiteL_strength = Math.max(0, Q.LA_whiteL_strength - whiteLReduction);
-        Q.South_army_strength -= 3;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
+        Q.LA_whiteL_strength = Math.max(0, (Q.LA_whiteL_strength || 0) - whiteLReduction);
     }
-    else 
-    {
-        Q.LA_kkk_strength = Math.max(0, Q.LA_kkk_strength - kkkReduction);
-        Q.South_army_strength -= 1;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
-    }
+    Q.dem_relation -= 3;
+    Q.radical_strength += 3;
+    Q.conservative_strength -= 3;
+    Q.conservative_dissent += 2;
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Louisiana.
@@ -748,9 +747,17 @@ title: Reduce occupation level in Mississippi
 choose-if: MS_occupation_posture > 0
 unavailable-subtitle: [? if MS_occupation_posture <= 0 : Mississippi is already free from federal oversight. ?]
 on-arrival: {!
-    let returning = Math.min(Q.MS_garrison_troops || 0, Math.max(3, Math.round((Q.MS_garrison_troops || 0) * 0.5)));
-    Q.MS_occupation_posture = (Q.MS_occupation_posture || 0) - 1;
-    Q.MS_garrison_troops -= returning;
+    let garrison = Q.MS_garrison_troops || 0;
+    let newPosture = Math.max(0, (Q.MS_occupation_posture || 0) - 1);
+    let returning;
+    if (newPosture === 0) {
+        returning = garrison;
+    } else {
+        returning = Math.min(garrison, Math.max(3, Math.round(garrison * 0.5)));
+        returning = Math.max(returning, garrison - 15);
+    }
+    Q.MS_occupation_posture = newPosture;
+    Q.MS_garrison_troops = garrison - returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
@@ -781,24 +788,14 @@ on-arrival: {!
     let troops = Q.MS_garrison_troops || 0;
     let kkkReduction = Math.min(20, 3 + troops * 0.3);
     let whiteLReduction = Math.min(10, 1 + troops * 0.12);
+    Q.MS_kkk_strength = Math.max(0, (Q.MS_kkk_strength || 0) - kkkReduction);
     if (Q.whiteL_formed == 1) {
-        Q.MS_kkk_strength = Math.max(0, Q.MS_kkk_strength - kkkReduction);
-        Q.MS_whiteL_strength = Math.max(0, Q.MS_whiteL_strength - whiteLReduction);
-        Q.South_army_strength -= 3;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
+        Q.MS_whiteL_strength = Math.max(0, (Q.MS_whiteL_strength || 0) - whiteLReduction);
     }
-    else 
-    {
-        Q.MS_kkk_strength = Math.max(0, Q.MS_kkk_strength - kkkReduction);
-        Q.South_army_strength -= 1;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
-    }
+    Q.dem_relation -= 3;
+    Q.radical_strength += 3;
+    Q.conservative_strength -= 3;
+    Q.conservative_dissent += 2;
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Mississippi.
@@ -835,9 +832,17 @@ title: Reduce occupation level in North Carolina
 choose-if: NC_occupation_posture > 0
 unavailable-subtitle: [? if NC_occupation_posture <= 0 : North Carolina is already free from federal oversight. ?]
 on-arrival: {!
-    let returning = Math.min(Q.NC_garrison_troops || 0, Math.max(3, Math.round((Q.NC_garrison_troops || 0) * 0.5)));
-    Q.NC_occupation_posture = (Q.NC_occupation_posture || 0) - 1;
-    Q.NC_garrison_troops -= returning;
+    let garrison = Q.NC_garrison_troops || 0;
+    let newPosture = Math.max(0, (Q.NC_occupation_posture || 0) - 1);
+    let returning;
+    if (newPosture === 0) {
+        returning = garrison;
+    } else {
+        returning = Math.min(garrison, Math.max(3, Math.round(garrison * 0.5)));
+        returning = Math.max(returning, garrison - 15);
+    }
+    Q.NC_occupation_posture = newPosture;
+    Q.NC_garrison_troops = garrison - returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
@@ -868,24 +873,14 @@ on-arrival: {!
     let troops = Q.NC_garrison_troops || 0;
     let kkkReduction = Math.min(20, 3 + troops * 0.3);
     let whiteLReduction = Math.min(10, 1 + troops * 0.12);
+    Q.NC_kkk_strength = Math.max(0, (Q.NC_kkk_strength || 0) - kkkReduction);
     if (Q.whiteL_formed == 1) {
-        Q.NC_kkk_strength = Math.max(0, Q.NC_kkk_strength - kkkReduction);
-        Q.NC_whiteL_strength = Math.max(0, Q.NC_whiteL_strength - whiteLReduction);
-        Q.South_army_strength -= 3;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
+        Q.NC_whiteL_strength = Math.max(0, (Q.NC_whiteL_strength || 0) - whiteLReduction);
     }
-    else 
-    {
-        Q.NC_kkk_strength = Math.max(0, Q.NC_kkk_strength - kkkReduction);
-        Q.South_army_strength -= 1;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
-    }
+    Q.dem_relation -= 3;
+    Q.radical_strength += 3;
+    Q.conservative_strength -= 3;
+    Q.conservative_dissent += 2;
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in North Carolina.
@@ -922,9 +917,17 @@ title: Reduce occupation level in South Carolina
 choose-if: SC_occupation_posture > 0
 unavailable-subtitle: [? if SC_occupation_posture <= 0 : South Carolina is already free from federal oversight. ?]
 on-arrival: {!
-    let returning = Math.min(Q.SC_garrison_troops || 0, Math.max(3, Math.round((Q.SC_garrison_troops || 0) * 0.5)));
-    Q.SC_occupation_posture = (Q.SC_occupation_posture || 0) - 1;
-    Q.SC_garrison_troops -= returning;
+    let garrison = Q.SC_garrison_troops || 0;
+    let newPosture = Math.max(0, (Q.SC_occupation_posture || 0) - 1);
+    let returning;
+    if (newPosture === 0) {
+        returning = garrison;
+    } else {
+        returning = Math.min(garrison, Math.max(3, Math.round(garrison * 0.5)));
+        returning = Math.max(returning, garrison - 15);
+    }
+    Q.SC_occupation_posture = newPosture;
+    Q.SC_garrison_troops = garrison - returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
@@ -955,24 +958,14 @@ on-arrival: {!
     let troops = Q.SC_garrison_troops || 0;
     let kkkReduction = Math.min(20, 3 + troops * 0.3);
     let whiteLReduction = Math.min(10, 1 + troops * 0.12);
+    Q.SC_kkk_strength = Math.max(0, (Q.SC_kkk_strength || 0) - kkkReduction);
     if (Q.whiteL_formed == 1) {
-        Q.SC_kkk_strength = Math.max(0, Q.SC_kkk_strength - kkkReduction);
-        Q.SC_whiteL_strength = Math.max(0, Q.SC_whiteL_strength - whiteLReduction);
-        Q.South_army_strength -= 3;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
+        Q.SC_whiteL_strength = Math.max(0, (Q.SC_whiteL_strength || 0) - whiteLReduction);
     }
-    else 
-    {
-        Q.SC_kkk_strength = Math.max(0, Q.SC_kkk_strength - kkkReduction);
-        Q.South_army_strength -= 1;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
-    }
+    Q.dem_relation -= 3;
+    Q.radical_strength += 3;
+    Q.conservative_strength -= 3;
+    Q.conservative_dissent += 2;
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in South Carolina.
@@ -1009,9 +1002,17 @@ title: Reduce occupation level in Tennessee
 choose-if: TN_occupation_posture > 0
 unavailable-subtitle: [? if TN_occupation_posture <= 0 : Tennessee is already free from federal oversight. ?]
 on-arrival: {!
-    let returning = Math.min(Q.TN_garrison_troops || 0, Math.max(3, Math.round((Q.TN_garrison_troops || 0) * 0.5)));
-    Q.TN_occupation_posture = (Q.TN_occupation_posture || 0) - 1;
-    Q.TN_garrison_troops -= returning;
+    let garrison = Q.TN_garrison_troops || 0;
+    let newPosture = Math.max(0, (Q.TN_occupation_posture || 0) - 1);
+    let returning;
+    if (newPosture === 0) {
+        returning = garrison;
+    } else {
+        returning = Math.min(garrison, Math.max(3, Math.round(garrison * 0.5)));
+        returning = Math.max(returning, garrison - 15);
+    }
+    Q.TN_occupation_posture = newPosture;
+    Q.TN_garrison_troops = garrison - returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
@@ -1042,24 +1043,14 @@ on-arrival: {!
     let troops = Q.TN_garrison_troops || 0;
     let kkkReduction = Math.min(20, 3 + troops * 0.3);
     let whiteLReduction = Math.min(10, 1 + troops * 0.12);
+    Q.TN_kkk_strength = Math.max(0, (Q.TN_kkk_strength || 0) - kkkReduction);
     if (Q.whiteL_formed == 1) {
-        Q.TN_kkk_strength = Math.max(0, Q.TN_kkk_strength - kkkReduction);
-        Q.TN_whiteL_strength = Math.max(0, Q.TN_whiteL_strength - whiteLReduction);
-        Q.South_army_strength -= 3;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
+        Q.TN_whiteL_strength = Math.max(0, (Q.TN_whiteL_strength || 0) - whiteLReduction);
     }
-    else 
-    {
-        Q.TN_kkk_strength = Math.max(0, Q.TN_kkk_strength - kkkReduction);
-        Q.South_army_strength -= 1;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
-    }
+    Q.dem_relation -= 3;
+    Q.radical_strength += 3;
+    Q.conservative_strength -= 3;
+    Q.conservative_dissent += 2;
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Tennessee.
@@ -1096,9 +1087,17 @@ title: Reduce occupation level in Texas
 choose-if: TX_occupation_posture > 0
 unavailable-subtitle: [? if TX_occupation_posture <= 0 : Texas is already free from federal oversight. ?]
 on-arrival: {!
-    let returning = Math.min(Q.TX_garrison_troops || 0, Math.max(3, Math.round((Q.TX_garrison_troops || 0) * 0.5)));
-    Q.TX_occupation_posture = (Q.TX_occupation_posture || 0) - 1;
-    Q.TX_garrison_troops -= returning;
+    let garrison = Q.TX_garrison_troops || 0;
+    let newPosture = Math.max(0, (Q.TX_occupation_posture || 0) - 1);
+    let returning;
+    if (newPosture === 0) {
+        returning = garrison;
+    } else {
+        returning = Math.min(garrison, Math.max(3, Math.round(garrison * 0.5)));
+        returning = Math.max(returning, garrison - 15);
+    }
+    Q.TX_occupation_posture = newPosture;
+    Q.TX_garrison_troops = garrison - returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
@@ -1129,24 +1128,14 @@ on-arrival: {!
     let troops = Q.TX_garrison_troops || 0;
     let kkkReduction = Math.min(20, 3 + troops * 0.3);
     let whiteLReduction = Math.min(10, 1 + troops * 0.12);
+    Q.TX_kkk_strength = Math.max(0, (Q.TX_kkk_strength || 0) - kkkReduction);
     if (Q.whiteL_formed == 1) {
-        Q.TX_kkk_strength = Math.max(0, Q.TX_kkk_strength - kkkReduction);
-        Q.TX_whiteL_strength = Math.max(0, Q.TX_whiteL_strength - whiteLReduction);
-        Q.South_army_strength -= 3;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
+        Q.TX_whiteL_strength = Math.max(0, (Q.TX_whiteL_strength || 0) - whiteLReduction);
     }
-    else 
-    {
-        Q.TX_kkk_strength = Math.max(0, Q.TX_kkk_strength - kkkReduction);
-        Q.South_army_strength -= 1;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
-    }
+    Q.dem_relation -= 3;
+    Q.radical_strength += 3;
+    Q.conservative_strength -= 3;
+    Q.conservative_dissent += 2;
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Texas.
@@ -1183,9 +1172,17 @@ title: Reduce occupation level in Virginia
 choose-if: VA_occupation_posture > 0
 unavailable-subtitle: [? if VA_occupation_posture <= 0 : Virginia is already free from federal oversight. ?]
 on-arrival: {!
-    let returning = Math.min(Q.VA_garrison_troops || 0, Math.max(3, Math.round((Q.VA_garrison_troops || 0) * 0.5)));
-    Q.VA_occupation_posture = (Q.VA_occupation_posture || 0) - 1;
-    Q.VA_garrison_troops -= returning;
+    let garrison = Q.VA_garrison_troops || 0;
+    let newPosture = Math.max(0, (Q.VA_occupation_posture || 0) - 1);
+    let returning;
+    if (newPosture === 0) {
+        returning = garrison;
+    } else {
+        returning = Math.min(garrison, Math.max(3, Math.round(garrison * 0.5)));
+        returning = Math.max(returning, garrison - 15);
+    }
+    Q.VA_occupation_posture = newPosture;
+    Q.VA_garrison_troops = garrison - returning;
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
@@ -1216,25 +1213,14 @@ on-arrival: {!
     let troops = Q.VA_garrison_troops || 0;
     let kkkReduction = Math.min(20, 3 + troops * 0.3);
     let whiteLReduction = Math.min(10, 1 + troops * 0.12);
+    Q.VA_kkk_strength = Math.max(0, (Q.VA_kkk_strength || 0) - kkkReduction);
     if (Q.whiteL_formed == 1) {
-        Q.VA_kkk_strength = Math.max(0, Q.VA_kkk_strength - kkkReduction);
-        Q.VA_whiteL_strength = Math.max(0, Q.VA_whiteL_strength - whiteLReduction);
-        Q.South_army_strength -= 3;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
+        Q.VA_whiteL_strength = Math.max(0, (Q.VA_whiteL_strength || 0) - whiteLReduction);
     }
-    else 
-    {
-        Q.VA_kkk_strength = Math.max(0, Q.VA_kkk_strength - kkkReduction);
-        Q.South_army_strength -= 1;
-        Q.dem_relation -= 3;
-        Q.radical_strength += 3;
-        Q.conservative_strength -= 3;
-        Q.conservative_dissent += 2;
-    }
+    Q.dem_relation -= 3;
+    Q.radical_strength += 3;
+    Q.conservative_strength -= 3;
+    Q.conservative_dissent += 2;
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Virginia. 
-

@@ -50,8 +50,8 @@ on-arrival: {!
     Q.rural_lib = 0;
     Q.middle_class_dem += Q.middle_class_lib;
     Q.middle_class_lib = 0;
-    Q.freedmen_dem += Q.freedmen_lib;
-    Q.freedmen_lib = 0;
+    Q.freemen_dem += Q.freemen_lib;
+    Q.freemen_lib = 0;
     Q.immigrant_laborers_dem += Q.immigrant_laborers_lib;
     Q.immigrant_laborers_lib = 0;
     Q.unemployed_dem += Q.unemployed_lib;

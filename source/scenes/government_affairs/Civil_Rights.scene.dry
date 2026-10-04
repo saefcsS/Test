@@ -41,7 +41,7 @@ on-arrival: {!
     Q.PoliticalCostPenalty += 2;
     Q.veto += 1;
     Q.veto_reason = "Civil Rights Act";
-    Q.freedmen_rep += 5;
+    Q.freemen_rep += 5;
     Q.moderate_dissent += 3;
     Q.conservative_dissent += 4;
     Q.liberal_dissent += 3;
@@ -86,7 +86,7 @@ We continue to enforce the civil rights act across the country to ensure the fre
 subtitle: <span style="color: #9D2933;">**Moderate**</span> Stability
 on-arrival: {!
     Q.moderate_strength += 3;
-    Q.freedmen_rep -= 3;
+    Q.freemen_rep -= 3;
 
     // Refusing to act drives disillusioned freedmen and reformers toward
     // the breakaway Radicals, the opposite of the pass/enforce direction.

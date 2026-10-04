@@ -65,7 +65,7 @@ on-arrival: {!
     Q.mambise_strength += 12;
     Q.spain_relation -= 2;
     Q.radical_strength += 2;
-    Q.freedmen_rep += 1;
+    Q.freemen_rep += 1;
 !}
 
 Under cover of darkness, fast steamers and blockade-runners ferry rifles, ammunition, medicine, and volunteers to the Mambise insurgents operating throughout Oriente and Camagüey. Every successful landing strengthens the Cuban resistance and forces Spain to divert valuable troops away from the coast and into an increasingly frustrating guerrilla campaign. Each crate of rifles delivered to the rebels is one fewer Spanish battalion available to oppose an eventual American landing.

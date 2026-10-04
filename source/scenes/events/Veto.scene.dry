@@ -9,7 +9,7 @@ on-arrival: {!
 
     if (Q.veto_reason == "Civil Rights Act") {
         Q.civil_rights_act_passed = 0;
-        Q.freedmen_rep -= 3;
+        Q.freemen_rep -= 3;
         Q.radical_strength -= 3;
         Q.moderate_dissent -= 3;
         Q.conservative_dissent -= 2;
@@ -29,7 +29,7 @@ on-arrival: {!
         Q.occupation = 0;
         Q.radical_strength -= 3;
         Q.moderate_strength -= 2;
-        Q.freedmen_rep -= 2;
+        Q.freemen_rep -= 2;
         Q.kkk_strength += 5;
         Q.kkk_militancy += 0.2;
 
@@ -62,7 +62,7 @@ on-arrival: {!
 
     if (Q.veto_reason == "Civil Rights Act") {
         Q.civil_rights_act_passed = 1;
-        Q.freedmen_rep += 3;
+        Q.freemen_rep += 3;
         Q.radical_strength += 3;
         Q.moderate_dissent += 3;
         Q.conservative_dissent += 2;
@@ -82,7 +82,7 @@ on-arrival: {!
         Q.occupation = 2;
         Q.radical_strength += 3;
         Q.moderate_strength += 2;
-        Q.freedmen_rep += 2;
+        Q.freemen_rep += 2;
         for (let state of Q.southern_states) {
             Q[state + "_admitted"] = 0;
         }
@@ -98,7 +98,7 @@ subtitle: Political caution.
 on-arrival: {!
     Q.moderate_strength += 2;
     Q.radical_dissent += 4;
-    Q.freedmen_rep -= 2;
+    Q.freemen_rep -= 2;
     Q.veto_reason = "";
     Q.veto_success = 1;
     Q.lose_vote = 1;

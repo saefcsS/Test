@@ -153,7 +153,7 @@ title: Normalize relations with Haiti.
 view-if: haiti_support = 0
 choose-if: conservative_strength < 30
 unavailable-subtitle: The <span style="color: #B5651D;">**Conservatives**</span> sway the party away from this
-on-arrival: freedmen_rep += 3; radical_strength += 1 if radical_split = 0; economic_growth += 0.1; uk_relation -= 1; haiti_support += 1; conservative_dissent -= 10
+on-arrival: freemen_rep += 3; radical_strength += 1 if radical_split = 0; economic_growth += 0.1; uk_relation -= 1; haiti_support += 1; conservative_dissent -= 10
 
 Though Haiti has been independent for decades, we have refused full diplomatic recognition, largely due to racial politics.
 
@@ -164,7 +164,7 @@ title: Continue relations with Haiti.
 view-if: haiti_support = 1
 choose-if: conservative_strength < 30
 unavailable-subtitle: The <span style="color: #B5651D;">**Conservatives**</span> sway the party away from this
-on-arrival: freedmen_rep += 3; radical_strength += 1 if radical_split = 0; economic_growth += 0.1; uk_relation -= 1; conservative_dissent -= 5
+on-arrival: freemen_rep += 3; radical_strength += 1 if radical_split = 0; economic_growth += 0.1; uk_relation -= 1; conservative_dissent -= 5
 
 We continue relations with Haiti, which is seen as a beacon of hope to the Freedmen of the party and the rest of the United States.
 
@@ -173,7 +173,7 @@ title: Deepen ties with Liberia.
 view-if: liberia_support = 0
 choose-if: conservative_strength < 30
 unavailable-subtitle: The <span style="color: #B5651D;">**Conservatives**</span> sway the party away from this
-on-arrival: freedmen_rep += 2; radical_strength += 1 if radical_split = 0; liberia_support += 1; conservative_dissent -= 5
+on-arrival: freemen_rep += 2; radical_strength += 1 if radical_split = 0; liberia_support += 1; conservative_dissent -= 5
 
 The American Colonization Society still promotes emigration to Liberia as an answer to the "Negro Question," an idea Frederick Douglass and most Black leaders reject outright as they insist reforming the United States rather than exile in a foreign land.
 
@@ -184,7 +184,7 @@ title: Continue building ties with Liberia.
 view-if: liberia_support = 1
 choose-if: conservative_strength < 30
 unavailable-subtitle: The <span style="color: #B5651D;">**Conservatives**</span> sway the party away from this
-on-arrival: freedmen_rep += 2; radical_strength += 1 if radical_split = 0; conservative_dissent -= 2
+on-arrival: freemen_rep += 2; radical_strength += 1 if radical_split = 0; conservative_dissent -= 2
 
 Trade in palm oil and coffee grows modestly, and mission schools continue their work. It is a small relationship, but a genuine one, and freedmen across the South take note of a Black republic treated as a diplomatic equal.
 

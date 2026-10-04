@@ -18,7 +18,7 @@ Yet the cause is far from lost. The <span style="color: #c00000;">**Republican P
 subtitle: [? if president = "Johnson": Grant is our default candidate ?]
 on-arrival: {! 
     Q.Candidate = "Grant";
-    Q.freedmen_rep += 2;
+    Q.freemen_rep += 2;
     Q.rural_rep += 1;
     Q.middle_class_rep += 1;
     Q.working_rep += 1;
@@ -48,7 +48,7 @@ unavailable-subtitle: [? if resources < 2: You're broke ?][? if conservative_str
 on-arrival: {! 
     Q.resources -= 2; 
     Q.Candidate = "Wade";
-    Q.freedmen_rep += 2;
+    Q.freemen_rep += 2;
     Q.rural_rep += 1;
     Q.middle_class_rep += 1;
     Q.working_rep += 1;
@@ -73,7 +73,7 @@ unavailable-subtitle: [? if resources < 2: You're broke ?][? if radical_strength
 on-arrival: {! 
     Q.resources -= 2; 
     Q.Candidate = "Chase";
-    Q.freedmen_rep += 2;
+    Q.freemen_rep += 2;
     Q.rural_rep -= 1;
     Q.middle_class_rep += 2;
     Q.working_rep -= 1;

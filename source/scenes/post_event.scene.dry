@@ -830,7 +830,7 @@ if (Q.month_actions >= 1) {
     {
         this.achieve("shermanposting");
     }
-    if(Q.freedmen_rep >= 75 && Q.workers_rep >= 75 && Q.middle_class_rep >= 75 && Q.rural_rep >= 75 && Q.immigrant_laborers_rep >= 75 && Q.unemployed_rep >= 75)
+    if(Q.freemen_rep >= 75 && Q.workers_rep >= 75 && Q.middle_class_rep >= 75 && Q.rural_rep >= 75 && Q.immigrant_laborers_rep >= 75 && Q.unemployed_rep >= 75)
     {
         this.achieve("party_of_lincoln");
     }
@@ -877,7 +877,15 @@ if (Q.month_actions >= 1) {
         if ((Q[state + '_occupation_posture'] || 0) > nationalOccupationLevel) {
             Q[state + '_occupation_posture'] = nationalOccupationLevel;
         }
-        avgPostureTotal += (Q[state + '_occupation_posture'] || 0);
+        let pst = Q[state + '_occupation_posture'] || 0;
+        let garrisonCap = pst === 0 ? 0 : (pst === 1 ? 15 : Infinity);
+        let garrison = Q[state + '_garrison_troops'] || 0;
+        if (garrison > garrisonCap) {
+            let excess = garrison - garrisonCap;
+            Q[state + '_garrison_troops'] = garrisonCap;
+            Q.army_strength += excess;
+            Q.South_army_strength = Math.max(0, (Q.South_army_strength || 0) - excess);
+        }
     }
     let avgPosture = Q.southern_states.length ? avgPostureTotal / Q.southern_states.length : 0;
 
@@ -932,8 +940,8 @@ if (Q.month_actions >= 1) {
         // the state's own occupation posture allows (posture gates, garrison
         // modifies within the gate - never crosses into another posture tier's
         // range). Decline is untouched by garrison, per design call.
-        let kkkDelta = Q.kkk_strength - (Q.kkk_strength_last || Q.kkk_strength);
-        let whiteLDelta = Q.whiteL_strength - (Q.whiteL_strength_last || Q.whiteL_strength);
+        let kkkDelta = Q.kkk_strength - (Q.kkk_strength_last || 0);
+        let whiteLDelta = Q.whiteL_strength - (Q.whiteL_strength_last || 0);
         for (let state of Q.southern_states) {
             let posture = Q[state + '_occupation_posture'] || 0;
             let gub = Q[state + '_gub_winner'];
@@ -1037,7 +1045,7 @@ if (Q.month_actions >= 1) {
 
     if (Q.kkk_history && Q.kkk_history.length >= 75) {
         let l = Q.kkk_history.length;
-        if (Q.kkk_history[l-1] < Q.kkk_history[l-2] && Q.kkk_history[l-1] < Q.kkk_history[l-2]) {
+        if (Q.kkk_history[l-1] < Q.kkk_history[l-2] && Q.kkk_history[l-2] < Q.kkk_history[l-3]) {
             Q.white_league_trigger = 1;
         }
     }
@@ -1163,8 +1171,8 @@ if (Q.month_actions >= 1) {
     }
     if(Q.radical_split == 1)
     {
-        Q.freedmen_rep -= 2/12
-        Q.freedmen_rad += 2/12
+        Q.freemen_rep -= 2/12
+        Q.freemen_rad += 2/12
         Q.rural_rad += 1/12;
         Q.immigrant_laborers_rad += 1/12;
         Q.workers_rad += 1/12;

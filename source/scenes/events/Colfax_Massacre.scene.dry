@@ -69,7 +69,7 @@ Federal troops move into Grant Parish to restore order and prevent further repri
 @local_authorities
 on-arrival: {!
     Q.LA_total_pop = Q.LA_workers + Q.LA_middle_class + Q.LA_rural + Q.LA_freemen + Q.LA_immigrant_laborers + Q.LA_unemployed;
-    Q.LA_freedmen_share = Q.LA_freemen / Q.LA_total_pop;
+    Q.LA_freemen_share = Q.LA_freemen / Q.LA_total_pop;
 
     if (Q.local_justice_score >= 60) {
     Q.colfax_local_outcome = "convictions";
