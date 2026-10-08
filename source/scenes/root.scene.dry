@@ -2435,7 +2435,7 @@ this.state.disableSaves = true;
 go-to: 1928_main
 
 @1928_main
-audio: shuffle music/BattleCryofFreedom.mp3 music/BattleHymnoftheRepublic-RareInstrumental.mp3 music/GoodOldRebel.mp3 music/WeAreComing,FatherAbr'am!.mp3 music/Union_Dixie.mp3
+audio: shuffle music/BattleCryofFreedom.mp3 music/BattleHymnoftheRepublic-RareInstrumental.mp3 music/GoodOldRebel.mp3 music/WeAreComing,FatherAbr'am!.mp3 music/Union_Dixie.mp3 music/Lorena.mp3 music/When_Johnny_Comes_Marching_Home,_U.S._Military_Academy_Band.mp3 music/Marian_Anderson_-_Nobody_Knows_de_Trouble_I've_Seen.mp3 music/Wade_In_The_Water.mp3 music/Any_Old_Place_In_Yankee_Land_Is_Good_Enough_For_Me.mp3 music/01_-_Go_down_Moses_(Negro_Spiritual).mp3 music/John_Brown's_body_(1902_recording)_(mp3cut.net)[rebalanced].mp3 music/_Marching_Through_Georgia__by_Henry_C._Work_–_sung_by_Harlan_&_Stanley_(1904).mp3
 new-page: true
 go-to: main if difficulty >= 0; main.main_easy if difficulty < 0
 

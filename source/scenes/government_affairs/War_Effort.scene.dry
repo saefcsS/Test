@@ -29,7 +29,11 @@ on-arrival: {!
     Q.budget -= 2;
     Q.invasion_force_strength = (Q.army_strength * 0.4) + (Q.South_army_strength * 0.25);
     Q.army_strength *= 0.6;
-    Q.South_army_strength *= 0.75
+    Q.South_army_strength *= 0.75;
+    for (let s of Q.southern_states) {
+        let g = Q[s + '_garrison_troops'] || 0;
+        Q[s + '_garrison_troops'] = g - Math.ceil(g * 0.25);
+    }
     Q.PoliticalCostPenalty += 2;
     Q.radical_strength += 2;
     Q.conservative_dissent += 2;

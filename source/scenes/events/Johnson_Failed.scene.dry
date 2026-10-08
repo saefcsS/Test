@@ -201,6 +201,15 @@ on-arrival: {!
     for (let state of Q.southern_states) {
         Q[state + "_admitted"] = 0;
     }
+
+    let districts = Q.southern_states.filter(s => s !== 'TN');
+    let per = Math.min(3, Math.floor((Q.army_strength || 0) / districts.length));
+    for (let s of districts) {
+        Q[s + '_occupation_posture'] = Math.max(1, Q[s + '_occupation_posture'] || 0);
+        Q[s + '_garrison_troops'] = (Q[s + '_garrison_troops'] || 0) + per;
+        Q.army_strength -= per;
+        Q.South_army_strength += per;
+    }
 !}
 
 Congress passes the **Military Reconstruction Act of 1867**.
@@ -233,6 +242,16 @@ on-arrival: {!
     Q.kkk_militancy += 0.1;
     for (let state of Q.southern_states) {
         Q[state + "_admitted"] = 0;
+    }
+
+    // Lighter district garrisons than the full plan
+    let districts = Q.southern_states.filter(s => s !== 'TN');
+    let per = Math.min(2, Math.floor((Q.army_strength || 0) / districts.length));
+    for (let s of districts) {
+        Q[s + '_occupation_posture'] = Math.max(1, Q[s + '_occupation_posture'] || 0);
+        Q[s + '_garrison_troops'] = (Q[s + '_garrison_troops'] || 0) + per;
+        Q.army_strength -= per;
+        Q.South_army_strength += per;
     }
 !}
 

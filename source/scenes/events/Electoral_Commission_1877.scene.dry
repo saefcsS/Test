@@ -177,6 +177,7 @@ on-arrival: {!
     Q.commission_leverage -= 15;
     Q.concession_value += 15;
     Q.term_troops = "partial";
+
 !}
 go-to: commission_negotiate
 
@@ -255,7 +256,17 @@ on-arrival: {!
         Q.radical_dissent += 15;
     } else if (Q.term_troops === "partial") {
         Q.occupation = Math.max(0, (Q.occupation || 0) - 1);
-        Q.South_army_strength = Math.round((Q.South_army_strength || 0) * 0.5);
+        let garrisonBefore = 0, drawn = 0;
+        for (let s of Q.southern_states) {
+            let g = Q[s + '_garrison_troops'] || 0;
+            let out = Math.floor(g * 0.5);
+            garrisonBefore += g;
+            drawn += out;
+            Q[s + '_garrison_troops'] = g - out;
+        }
+        Q.army_strength += drawn;
+        let legacy = Math.max(0, (Q.South_army_strength || 0) - garrisonBefore);
+        Q.South_army_strength = Math.round(legacy * 0.5) + (garrisonBefore - drawn);
         Q.whiteL_militancy = Math.max(0, Q.whiteL_militancy - 0.04);
         Q.freemen_rep -= 4;
         Q.radical_dissent += 6;

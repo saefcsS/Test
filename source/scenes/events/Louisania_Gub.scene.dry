@@ -20,10 +20,16 @@ How does the administration respond?
 - @recognize_mcenery: Recognize the McEnery fusion government instead
 
 @full_backing
-choose-if: occupation >= 1 and budget >= 2
-unavailable-subtitle: [? if occupation < 1: Federal occupation is not established enough to project force into Louisiana. ?][? if budget < 2: The budget cannot support a troop deployment. ?]
+choose-if: occupation >= 1 and budget >= 2 and army_strength >= 5
+unavailable-subtitle: [? if occupation < 1: Federal occupation is not established enough to project force into Louisiana. ?][? if budget < 2: The budget cannot support a troop deployment. ?][? if army_strength < 5: There are no troops to spare for the deployment. ?]
 on-arrival: {!
     Q.budget -= 2;
+    let g = Q.LA_garrison_troops || 0;
+    Q.LA_occupation_posture = Math.max(1, Q.LA_occupation_posture || 0);
+    let sent = Q.LA_occupation_posture >= 2 ? 5 : Math.max(0, Math.min(5, 15 - g));
+    Q.LA_garrison_troops = g + sent;
+    Q.army_strength -= sent;
+    Q.South_army_strength += sent;
     Q.Us_police_strength += 3;
     Q.Union_League_strength += 5;
     Q.whiteL_militancy += 0.10;

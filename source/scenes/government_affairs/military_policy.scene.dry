@@ -50,13 +50,11 @@ The decision to increase funding for the Army reassures <span style="color: #B56
 
 @decrease_funding
 subtitle: +1 budget
-unavailable-subtitle: We still need some kind of standing army to protect the republic.
-choose-if: reichswehr_strength < 5
+unavailable-subtitle: [? if army_strength >= 5 : We still need some kind of standing army to protect the republic. ?][? if army_strength < 20 : Too much of the army is deployed to cut it further. ?]
+choose-if: reichswehr_strength < 5 and army_strength >= 20
 on-arrival: budget += 1; dem_relation += 8; army_militancy -= 1; army_strength -= 20; kkk_strength += 15; kkk_militancy += 0.05; army_loyalty -= 0.05 if army_loyalty > 0; economic_growth -= 0.1; freemen_rep -= 3; freemen_rad += 3 if radical_split = 1
 
 With reduced funds, the Army scales back operations across the South. Though budget savings are welcomed, demobilization leads to arms disappearing and discharged soldiers joining violent ex-Confederate militias. Our grip on Southern states may weaken unless other enforcement measures are taken.
-
-[? if radical_split = 1 : Freedmen left exposed by the withdrawal turn to the Radical Republicans, the one party still promising federal protection. ?]
 
 @reform
 subtitle: -1 budget

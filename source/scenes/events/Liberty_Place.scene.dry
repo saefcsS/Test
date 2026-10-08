@@ -133,12 +133,13 @@ The defense collapses within hours. The White League storms the statehouse and t
 - @accept_status_quo: Accept the new arrangement rather than risk further bloodshed.
 
 @call_federal_troops
-choose-if: occupation >= 1 and budget >= 2
-unavailable-subtitle: [? if occupation < 1: Federal presence in the region is too limited to intervene quickly. ?][? if budget < 2: The budget cannot support an emergency deployment. ?]
+choose-if: occupation >= 1 and budget >= 2 and (LA_occupation_posture >= 1 or army_strength >= 5)
+unavailable-subtitle: [? if occupation < 1: Federal presence in the region is too limited to intervene quickly. ?][? if budget < 2: The budget cannot support an emergency deployment. ?][? if occupation >= 1 and LA_occupation_posture < 1 and army_strength < 5: There are no troops nearby to send. ?]
 on-arrival: {!
     Q.budget -= 2;
     Q.Us_police_strength += 5;
     Q.whiteL_strength = Math.max(0, Q.whiteL_strength - 30);
+    Q.LA_whiteL_strength = Math.max(0, (Q.LA_whiteL_strength || 0) - 30);
     Q.whiteL_militancy = Math.max(0, Q.whiteL_militancy - 0.1);
     Q.conservative_dissent += 3;
 !}

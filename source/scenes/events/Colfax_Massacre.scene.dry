@@ -52,14 +52,16 @@ Federal marshals arrest dozens of participants and bring charges under the Enfor
 [? if WhiteL_formed = 1: The White Leagues and ?] <span style="color: #0015bc;">**Democrats**</span> denounce the prosecutions as federal tyranny imposed on a local dispute. They vow to fight the charges in every court available to them.
 
 @troop_deployment
-choose-if: occupation >= 1 and army_loyalty >= 0.5
-unavailable-subtitle: [? if occupation < 1: Federal occupation is not established enough to garrison the parish. ?][? if army_loyalty < 0.5: The Army cannot be relied on for this deployment. ?]
+choose-if: LA_occupation_posture >= 1 and army_loyalty >= 0.5
+unavailable-subtitle: [? if LA_occupation_posture < 1: There is no federal presence in Louisiana to garrison the parish. ?][? if army_loyalty < 0.5: The Army cannot be relied on for this deployment. ?]
 on-arrival: {!
     Q.budget -= 2;
     Q.Us_police_strength += 4;
     Q.Union_League_strength += 3;
     Q.whiteL_strength -= 2;
     Q.kkk_strength -= 1;
+    Q.LA_kkk_strength = Math.max(0, (Q.LA_kkk_strength || 0) - 3);
+    Q.LA_whiteL_strength = Math.max(0, (Q.LA_whiteL_strength || 0) - 3);
     Q.moderate_strength += 1;
     Q.conservative_dissent += 2;
 !}
