@@ -2,7 +2,7 @@ title: The Colfax Massacre
 subtitle: Easter Sunday, Grant Parish
 tags: event
 new-page: true
-view-if: year >= 1867 and colfax_pending = 
+view-if: year >= 1867 and colfax_pending = 1
 max-visits: 1
 on-arrival: {!
     Q.colfax_massacre = 1;
