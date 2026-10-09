@@ -2,7 +2,7 @@ title: The Battle of Liberty Place
 subtitle: New Orleans braces for an armed uprising.
 tags: event
 new-page: true
-view-if: year = 1874 and month = 9 and whiteL_strength >= 200 and colfax_massacre = 1
+view-if: year >= 1868 and whiteL_formed = 1 and LA_whiteL_strength >= 60 and LA_kkk_strength + LA_whiteL_strength >= 150 and colfax_massacre = 1
 max-visits: 1
 on-arrival: {!
     Q.liberty_war_choices = 0;
@@ -65,10 +65,11 @@ unavailable-subtitle: Gather more forces before committing to a fight you cannot
 on-arrival: {!
     Q.defender_power = (Q.Us_police_strength * Q.Us_police_militancy * Q.Us_police_loyalty * 2)
         + (Q.Union_League_strength * Q.Union_League_militancy)
-        + (Q.state_militia_formed ? Q.state_militia_strength * 3 : 0);
+        + (Q.state_militia_formed ? Q.state_militia_strength * 3 : 0)
+        + ((Q.LA_garrison_troops || 0) * 2);
 
-    Q.attacker_power = (Q.whiteL_strength * Q.whiteL_militancy * 1.5)
-        + (Q.kkk_strength * Q.kkk_militancy * 0.25);
+    Q.attacker_power = ((Q.LA_whiteL_strength || 0) * Q.whiteL_militancy * 1.5)
+        + ((Q.LA_kkk_strength || 0) * Q.kkk_militancy * 0.25);
 
     if (Q.defender_power > Q.attacker_power * 1.1) {
         Q.liberty_place_outcome = "victory";
@@ -88,6 +89,7 @@ The White League advances on Canal Street. [+ Us_police_strength +] police, [+ U
 @lp_victory
 on-arrival: {!
     Q.whiteL_strength = Math.max(0, Q.whiteL_strength - 60);
+    Q.LA_whiteL_strength = Math.max(0, (Q.LA_whiteL_strength || 0) - 60);
     Q.whiteL_militancy = Math.max(0, Q.whiteL_militancy - 0.15);
     Q.Union_League_strength += 15;
     Q.radical_strength += 3;
@@ -104,6 +106,7 @@ The White League will not soon forget the defeat. But neither will anyone else w
 @lp_holdout
 on-arrival: {!
     Q.whiteL_strength = Math.max(0, Q.whiteL_strength - 15);
+    Q.LA_whiteL_strength = Math.max(0, (Q.LA_whiteL_strength || 0) - 15);
     Q.Union_League_strength -= 10;
     Q.radical_dissent += 4;
 !}
@@ -116,6 +119,7 @@ The fighting is brutal and the lines hold only just. By the second day, the Whit
 @lp_defeat
 on-arrival: {!
     Q.whiteL_strength += 10;
+    Q.LA_whiteL_strength = (Q.LA_whiteL_strength || 0) + 10;
     Q.Union_League_strength -= 25;
     Q.Us_police_strength = Math.max(0, Q.Us_police_strength - 10);
     Q.LA_reconstructionScore -= 15;
