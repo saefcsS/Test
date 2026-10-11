@@ -1,0 +1,117 @@
+title: The Camilla Massacre
+subtitle: A Republican rally meets gunfire in a small Georgia county seat.
+tags: event
+new-page: true
+view-if: GA_admitted = 1 and GA_kkk_strength + GA_whiteL_strength >= 60
+max-visits: 1
+on-arrival: {!
+    Q.GA_kkk_strength = (Q.GA_kkk_strength || 0) + 4;
+    Q.kkk_strength += 1;
+    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 6);
+    Q.GA_freemen_rep -= 2;
+    Q.GA_rural_dem += 2;
+!}
+
+= The Camilla Massacre
+
+A column of Black <span style="color: #c00000;">**Republicans**</span> and a handful of white allies marches into a small county seat for a political rally. They carry a banner, a band, and little else. The town's white leaders have told them to turn back, but the ralliers refuse.
+
+Shots ring out from the courthouse square as the marchers scatter into the fields and swamps, and armed whites ride them down over the next day. When it ends, many are dead and wounded, and no one can say how many are still missing.
+
+Within hours, the county's authorities announced that the <span style="color: #c00000;">**Republicans**</span> had arrived armed and bent on insurrection. Northern papers carry survivors' accounts that say otherwise. 
+
+[? if GA_occupation_posture >= 1 : There are [+ GA_garrison_troops +] thousand federal troops in Georgia, but none were near enough to Camilla to matter. ?][? if GA_occupation_posture < 1 : There are no federal troops stationed in Georgia to send. ?]
+
+- @military_commission: Convene a military commission to take testimony
+- @congress_inquiry: Ask Congress for a formal investigation
+- @state_courts: Leave the matter to the courts
+
+@military_commission
+choose-if: GA_occupation_posture >= 1 and budget >= 1
+unavailable-subtitle: [? if GA_occupation_posture < 1 : There is no federal presence in Georgia to convene one. ?][? if budget < 1 : We cannot afford to put an inquiry in the field. ?]
+on-arrival: {!
+    let troops = Q.GA_garrison_troops || 0;
+    Q.budget -= 1;
+    Q.GA_kkk_strength = Math.max(0, (Q.GA_kkk_strength || 0) - Math.min(15, 4 + troops * 0.5));
+    Q.GA_whiteL_strength = Math.max(0, (Q.GA_whiteL_strength || 0) - Math.min(5, troops * 0.2));
+    Q.GA_freemen_rep += 3;
+    Q.GA_rural_dem += 2;
+    Q.radical_strength += 2;
+    Q.freemen_rep += 2;
+    Q.dem_relation -= 4;
+    Q.conservative_dissent += 2;
+!}
+
+A panel of officers is convened to take testimony. [? if GA_garrison_troops >= 8 : With soldiers camped nearby, survivors come forward in numbers, and the commission names the men who led the posse. ?][? if GA_garrison_troops < 8 : Too few soldiers are in the district to guard the witnesses, and many survivors refuse to speak while the men who hunted them still live down the road. The commission names fewer men than it should. ?]
+
+Arrests follow, and so does a furious reaction from <span style="color: #0015bc;">**Democrats**</span> across the state. The commission's authority is only as strong as the Reconstruction Acts that created it, and everyone knows it.
+
+@congress_inquiry
+choose-if: rep_majority >= 1
+unavailable-subtitle: [? if rep_majority < 1 : We do not control Congress. ?]
+on-arrival: {!
+    Q.radical_strength += 3;
+    Q.freemen_rep += 3;
+    Q.Union_League_strength += 4;
+    Q.GA_freemen_rep += 2;
+    Q.GA_middle_class_rep += 2;
+    Q.GA_rural_dem += 1;
+    Q.dem_relation -= 3;
+    Q.conservative_dissent += 1;
+!}
+
+A committee takes testimony from survivors far from Camilla, where the witnesses are safe even if the dead are not avenged. <span style="color: #7A1F5C;">Radicals</span> call the inquiry long overdue, while <span style="color: #0015bc;">Democrats</span> denounce it as a fabrication.
+
+Nothing changes in Georgia itself for months, but the testimony fills Northern newspapers and helps invigorate the reconstruction cause in the north.
+
+@state_courts
+go-to: courts_remade if judicial_reform >= 3; courts_divided if judicial_reform >= 2 and judicial_reform < 3; courts_closed if judicial_reform < 2
+
+@courts_remade
+on-arrival: {!
+    Q.GA_kkk_strength = Math.max(0, (Q.GA_kkk_strength || 0) - 10);
+    Q.GA_whiteL_strength = Math.max(0, (Q.GA_whiteL_strength || 0) - 3);
+    Q.GA_freemen_rep += 3;
+    Q.GA_middle_class_rep += 2;
+    Q.GA_rural_dem += 3;
+    Q.freemen_rep += 3;
+    Q.dem_relation -= 3;
+    Q.conservative_dissent += 1;
+!}
+
+Prosecutors, working through the courts we have remade, move the case out of the county and into a courtroom where the sheriff's friends cannot sit on the jury. [? if enforcement_acts = 1 : The Enforcement Acts give them a clear statute to work from. ?]Indictments are returned, and several of the men who led the posse are convicted.
+
+It is the first time anyone in that part of Georgia has answered for killing a <span style="color: #c00000;">**Republican**</span>. <span style="color: #0015bc;">**Democrats**</span> call it federal tyranny dressed up as justice, and the word spreads anyway.
+
+@courts_divided
+on-arrival: {!
+    Q.GA_kkk_strength = Math.max(0, (Q.GA_kkk_strength || 0) - 3);
+    Q.GA_freemen_rep += 1;
+    Q.GA_rural_dem += 1;
+    Q.freemen_rep += 1;
+    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 2);
+    Q.dem_relation -= 1;
+    Q.conservative_dissent += 1;
+!}
+
+The county grand jury balks, but a judge friendly to Reconstruction takes up one narrow part of the case. A handful of men are indicted, fewer are tried, and the leading figures walk free on technicalities.
+
+The message is ambiguous. Justice is possible in Georgia, but no one at the rally's next meeting will count on it.
+
+@courts_closed
+on-arrival: {!
+    Q.GA_kkk_strength = (Q.GA_kkk_strength || 0) + (Q.judicial_reform >= 1 ? 4 : 6);
+    Q.kkk_strength += 1;
+    Q.GA_freemen_rep -= 3;
+    Q.GA_middle_class_dem += 2;
+    Q.GA_rural_dem += 3;
+    Q.freemen_rep -= 3;
+    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 4);
+    Q.dem_relation += 2;
+!}
+
+A grand jury of local men hears the sheriff's account, finds that the marchers provoked the violence, and returns no indictments. The survivors who spoke up find themselves the ones in the dock.
+
+[? if judicial_reform >= 1 : The few judges we have managed to replace sit too far from Camilla to matter. ?][? if judicial_reform < 1 : The bench in that part of Georgia is exactly what it was before the war, and so are its loyalties. ?]
+
+<span style="color: #0015bc;">**Democrats**</span> call it local self-government. Everyone who attended the rally learns what a political meeting can cost.

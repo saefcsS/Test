@@ -1,0 +1,125 @@
+title: The Arkansas Klan War
+subtitle: Night riders besiege Republican voters and officials.
+tags: event
+new-page: true
+view-if: AR_gub_winner = "rep" and AR_kkk_strength + AR_whiteL_strength >= 60
+max-visits: 1
+on-arrival: {!
+    Q.AR_kkk_strength = (Q.AR_kkk_strength || 0) + 4;
+    Q.kkk_strength += 1;
+    Q.AR_freemen_rep -= 3;
+    Q.AR_rural_dem += 1;
+!}
+
+= The Arkansas Klan War
+
+Night riders across several Arkansas counties are whipping <span style="color: #c00000;">**Republican**</span> organizers, burning homes, and killing officials. Sheriffs and juries refuse to act, and in the worst counties the courts have stopped sitting.
+
+The <span style="color: #c00000;">**Republican**</span> governor says the state cannot hold on its own. He asks Washington for martial law in the affected counties, the state militia in the field, and the Army's backing.
+
+[? if AR_occupation_posture >= 1 : There are [+ AR_garrison_troops +] thousand federal troops in the state, enough to be seen but not enough to be everywhere. ?][? if AR_occupation_posture < 1 : There are no federal troops in Arkansas to call upon. ?]
+
+- @call_militia: Support the governor's call to raise the state militia
+- @send_regulars: Send federal troops in place of the militia
+- @withhold: Withhold support and tell the governor to rely on the courts
+
+@call_militia
+choose-if: budget >= 1
+unavailable-subtitle: [? if budget < 1 : We cannot afford to arm and pay a militia. ?]
+on-arrival: {!
+    Q.budget -= 1;
+    Q.state_militia_formed = 1;
+    Q.state_militia_strength = Math.max(Q.state_militia_strength || 0, 25);
+    Q.AR_freemen_rep += 3;
+    Q.AR_rural_dem += 2;
+    Q.dem_relation -= 3;
+    Q.conservative_dissent += 1;
+!}
+go-to: martial_law
+
+We back the governor's call. The militia is raised from freedmen and loyal whites. <span style="color: #0015bc;">**Democrats**</span> warn that arming Black men will bring on the race war the night riders claim they want to prevent.
+
+@send_regulars
+choose-if: army_strength >= 5 and occupation >= 1
+unavailable-subtitle: [? if occupation < 1 : We have no authority to station troops there. ?][? if army_strength < 5 : We have no troops to spare. ?]
+on-arrival: {!
+    Q.AR_occupation_posture = Math.max(1, Q.AR_occupation_posture || 0);
+    Q.AR_garrison_troops = (Q.AR_garrison_troops || 0) + 5;
+    Q.army_strength -= 5;
+    Q.South_army_strength += 5;
+    Q.dem_relation -= 4;
+    Q.conservative_dissent += 2;
+!}
+go-to: martial_law
+
+We send regular troops into the affected counties. They are more disciplined than any militia, and far more resented.
+
+@withhold
+on-arrival: {!
+    Q.AR_kkk_strength = (Q.AR_kkk_strength || 0) + 8;
+    Q.kkk_strength += 2;
+    Q.AR_freemen_rep -= 5;
+    Q.AR_rural_dem += 3;
+    Q.AR_middle_class_dem += 2;
+    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 8);
+    Q.freemen_rep -= 3;
+    Q.dem_relation += 3;
+!}
+
+We tell the governor to rely on the courts. Everyone in Arkansas knows what the courts in those counties are worth, and the night riders take our answer as a pardon in advance.
+
+@martial_law
+
+Martial law is declared in the worst counties. The night riders go to ground and wait to see what the force in the field will do. Its commander has to decide where to use it.
+
+- @sweep: Disarm the counties and break up the night riders
+- @arrests: Arrest the ringleaders and try them by military commission
+- @guard_polls: Guard Republican meetings and polling places instead
+
+@sweep
+on-arrival: {!
+    let force = (Q.AR_garrison_troops || 0) + (Q.state_militia_strength || 0) / 5;
+    Q.AR_kkk_strength = Math.max(0, (Q.AR_kkk_strength || 0) - Math.min(30, 8 + force * 1.5));
+    Q.AR_whiteL_strength = Math.max(0, (Q.AR_whiteL_strength || 0) - Math.min(8, force * 0.4));
+    Q.AR_freemen_rep += 2;
+    Q.AR_rural_dem += 4;
+    Q.AR_middle_class_dem += 1;
+    Q.dem_relation -= 5;
+    Q.PoliticalCostPenalty += 1;
+!}
+
+The force searches the counties house by house, takes away guns, and burns the night riders' meeting places. [? if AR_garrison_troops >= 5 : With regulars in the columns, whole companies of riders disperse without a fight. ?][? if AR_garrison_troops < 5 : The militia does most of the work alone, and it is rough work. ?]
+
+The night riders' network is broken for now. In return, we get a state of disarmed neighbors and furious <span style="color: #0015bc;">**Democrats**</span>.
+
+@arrests
+choose-if: budget >= 1
+unavailable-subtitle: [? if budget < 1 : We cannot afford a string of military trials. ?]
+on-arrival: {!
+    let force = (Q.AR_garrison_troops || 0) + (Q.state_militia_strength || 0) / 5;
+    Q.budget -= 1;
+    Q.AR_kkk_strength = Math.max(0, (Q.AR_kkk_strength || 0) - Math.min(18, 5 + force * 0.8));
+    Q.radical_strength += 3;
+    Q.freemen_rep += 2;
+    Q.dem_relation -= 4;
+    Q.liberal_dissent += 2;
+!}
+
+Officers arrest the ringleaders and try them by military commission, where local juries cannot protect them. Some are convicted. Many more leave the state.
+
+<span style="color: #7A1F5C;">**Radicals**</span> call it justice at last. <span style="color: #DAA520;">**Liberal Republicans**</span> ask what is left of the jury trial when generals decide who is guilty.
+
+@guard_polls
+on-arrival: {!
+    let force = (Q.AR_garrison_troops || 0) + (Q.state_militia_strength || 0) / 5;
+    Q.AR_kkk_strength = Math.max(0, (Q.AR_kkk_strength || 0) - Math.min(8, 2 + force * 0.3));
+    Q.AR_freemen_rep += 5;
+    Q.AR_middle_class_rep += 2;
+    Q.AR_rural_dem += 1;
+    Q.Union_League_strength += 8;
+    Q.dem_relation -= 1;
+!}
+
+Instead of chasing the night riders, the force camps at county seats and escorts organizers to their meetings. The killing slows, and the night riders have to find another way to keep <span style="color: #c00000;">**Republicans**</span> from voting.
+
+<span style="color: #c00000;">**Republican**</span> meetings fill up again, but the night riders are still out there.
