@@ -1,5 +1,5 @@
 title: The Arkansas Klan War
-subtitle: Night riders besiege Republican voters and officials.
+subtitle: Night riders besiege <span style="color: #c00000;">**Republican**</span> voters and officials.
 tags: event
 new-page: true
 view-if: AR_gub_winner = "rep" and AR_kkk_strength + AR_whiteL_strength >= 60
@@ -13,15 +13,15 @@ on-arrival: {!
 
 = The Arkansas Klan War
 
-Night riders across several Arkansas counties are whipping <span style="color: #c00000;">**Republican**</span> organizers, burning homes, and killing officials. Sheriffs and juries refuse to act, and in the worst counties the courts have stopped sitting.
+In Arkansas, the campaign against Reconstruction has become a campaign of terror. Armed bands ride through <span style="color: #c00000;">**Republican**</span> neighborhoods after dark, whipping local organizers, burning freedmen's homes and threatening anyone who tries to register Black voters. County officials look the other way. When suspects do reach court, friendly sheriffs and intimidated jurors make sure they rarely stay in custody for long.
 
-The <span style="color: #c00000;">**Republican**</span> governor says the state cannot hold on its own. He asks Washington for martial law in the affected counties, the state militia in the field, and the Army's backing.
+In several counties, the state government has lost control of the roads after sunset. Republican meetings are abandoned, witnesses flee and officeholders receive warnings to resign or face the consequences. The governor has appealed to Washington for help. He wants martial law in the worst-affected counties, the state militia called into service and federal troops available to back them up.
 
-[? if AR_occupation_posture >= 1 : There are [+ AR_garrison_troops +] thousand federal troops in the state, enough to be seen but not enough to be everywhere. ?][? if AR_occupation_posture < 1 : There are no federal troops in Arkansas to call upon. ?]
+[? if AR_occupation_posture >= 1 : [+ AR_garrison_troops +] thousand federal troops are stationed in Arkansas, though they cannot protect every town and crossroads. ?][? if AR_occupation_posture < 1 : Arkansas has no federal garrison. Any intervention will require troops to be sent from elsewhere. ?]
 
-- @call_militia: Support the governor's call to raise the state militia
-- @send_regulars: Send federal troops in place of the militia
-- @withhold: Withhold support and tell the governor to rely on the courts
+- @call_militia: Help the governor raise a state militia
+- @send_regulars: Send federal regulars into the affected counties
+- @withhold: Refuse intervention and leave the governor to the courts
 
 @call_militia
 choose-if: budget >= 1
@@ -37,7 +37,9 @@ on-arrival: {!
 !}
 go-to: martial_law
 
-We back the governor's call. The militia is raised from freedmen and loyal whites. <span style="color: #0015bc;">**Democrats**</span> warn that arming Black men will bring on the race war the night riders claim they want to prevent.
+We approve the governor's request. The state begins organizing a militia of freedmen and white <span style="color: #B22222;">**Unionists**</span>, many of whom have already been threatened by the night riders. They know the local roads and can protect their own communities, though some have little training beyond their service during the war.
+
+The <span style="color: #0015bc;">**Democrats**</span> denounce the measure as an attempt to arm Black <span style="color: #c00000;">**Republicans**</span> against their white neighbors. The men making those threats have already taken up their weapons.
 
 @send_regulars
 choose-if: army_strength >= 5 and occupation >= 1
@@ -52,7 +54,9 @@ on-arrival: {!
 !}
 go-to: martial_law
 
-We send regular troops into the affected counties. They are more disciplined than any militia, and far more resented.
+We send regulars into the affected counties. They are better trained and more reliable than a hastily assembled militia, and their presence gives federal officers a chance to enforce warrants that local authorities have ignored.
+
+But every regiment sent into Arkansas is another reminder that Reconstruction still depends on the Army. <span style="color: #0015bc;">**Democrats**</span> condemn the deployment as military rule imposed on a state that is supposed to govern itself.
 
 @withhold
 on-arrival: {!
@@ -66,15 +70,21 @@ on-arrival: {!
     Q.dem_relation += 3;
 !}
 
-We tell the governor to rely on the courts. Everyone in Arkansas knows what the courts in those counties are worth, and the night riders take our answer as a pardon in advance.
+We refuse the governor's request and tell him to pursue the cases through the courts. The decision spares us the immediate cost of intervention and avoids another dispute over federal power.
+
+In Arkansas, the message is plain enough. The sheriffs who have refused to act will face no pressure from Washington, and the juries that have let suspects walk will remain untouched. Night riders return to the roads. <span style="color: #c00000;">**Republican**</span> organizers cancel meetings, witnesses leave their homes and the Union League loses members who no longer believe the government can protect them.
+
+The governor's appeal has been rejected. The men terrorizing his state have little reason to stop.
 
 @martial_law
 
-Martial law is declared in the worst counties. The night riders go to ground and wait to see what the force in the field will do. Its commander has to decide where to use it.
+= Martial Law Declared
 
-- @sweep: Disarm the counties and break up the night riders
-- @arrests: Arrest the ringleaders and try them by military commission
-- @guard_polls: Guard Republican meetings and polling places instead
+Martial law takes effect in the worst-affected counties. Soldiers and militia assemble at county seats, and officers begin drawing up lists of suspected night riders. Some flee into neighboring counties. Others hide their weapons, return to their farms and wait for the patrols to move on.
+
+- @sweep: Search the counties, seize weapons and break up the night-rider bands
+- @arrests: Arrest the leaders and try them before military commissions
+- @guard_polls: Protect Republican organizers and polling places
 
 @sweep
 on-arrival: {!
@@ -88,9 +98,11 @@ on-arrival: {!
     Q.PoliticalCostPenalty += 1;
 !}
 
-The force searches the counties house by house, takes away guns, and burns the night riders' meeting places. [? if AR_garrison_troops >= 5 : With regulars in the columns, whole companies of riders disperse without a fight. ?][? if AR_garrison_troops < 5 : The militia does most of the work alone, and it is rough work. ?]
+Patrols fan out across the affected counties, searching suspected meeting places, seizing weapons and arresting men caught carrying out raids. Some bands scatter before the soldiers arrive. Others resist, and militia officers settle old scores under cover of the searches.
 
-The night riders' network is broken for now. In return, we get a state of disarmed neighbors and furious <span style="color: #0015bc;">**Democrats**</span>.
+[? if AR_garrison_troops >= 5 : Federal regulars give the operation discipline and weight. Several bands break apart rather than risk a direct confrontation with the Army. ?][? if AR_garrison_troops < 5 : The militia carries much of the burden. Some patrols do useful work; others provoke fresh feuds with neighbors they accuse of sheltering the riders. ?]
+
+The raids decline, at least for now. But armed searches have brought new complaints of intimidation and property seizures. <span style="color: #0015bc;">**Democratic**</span> leaders seize on every allegation, and the governor must answer for the conduct of the men enforcing his orders.
 
 @arrests
 choose-if: budget >= 1
@@ -105,9 +117,11 @@ on-arrival: {!
     Q.liberal_dissent += 2;
 !}
 
-Officers arrest the ringleaders and try them by military commission, where local juries cannot protect them. Some are convicted. Many more leave the state.
+Federal officers target the men believed to be directing the raids. Arrests follow, and military commissions take up cases that local prosecutors have allowed to languish. A few prominent suspects are convicted. Others flee across county lines before warrants can be served.
 
-<span style="color: #7A1F5C;">**Radicals**</span> call it justice at last. <span style="color: #DAA520;">**Liberal Republicans**</span> ask what is left of the jury trial when generals decide who is guilty.
+The <span style="color: #7A1F5C;">**Radicals**</span> welcome the crackdown and demand further prosecutions. The <span style="color: #DAA520;">**Liberal Republicans**</span> raise a different objection: if local courts have failed, they ask, does that give the Army the right to decide who stands trial and who is guilty?
+
+For the freedmen who testified against their attackers, the arrests offer some hope. Whether the convictions will survive the political fight ahead remains uncertain.
 
 @guard_polls
 on-arrival: {!
@@ -120,6 +134,8 @@ on-arrival: {!
     Q.dem_relation -= 1;
 !}
 
-Instead of chasing the night riders, the force camps at county seats and escorts organizers to their meetings. The killing slows, and the night riders have to find another way to keep <span style="color: #c00000;">**Republicans**</span> from voting.
+Rather than search every suspected hideout, the troops concentrate on county seats, Republican meetings and the roads used by voters on election day. Organizers receive escorts, threatened witnesses are moved to safer homes and soldiers remain near polling places.
 
-<span style="color: #c00000;">**Republican**</span> meetings fill up again, but the night riders are still out there.
+The policy does little to dismantle the night riders' organization. It does make their work harder. Meetings resume, freedmen return to the registration lists and Republican candidates can campaign in places they had been forced to abandon.
+
+The violence has not ended. But the next election will be harder to steal by intimidation alone.

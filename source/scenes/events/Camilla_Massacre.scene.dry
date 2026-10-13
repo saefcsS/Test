@@ -14,17 +14,17 @@ on-arrival: {!
 
 = The Camilla Massacre
 
-A column of Black <span style="color: #c00000;">**Republicans**</span> and a handful of white allies marches into a small county seat for a political rally. They carry a banner, a band, and little else. The town's white leaders have told them to turn back, but the ralliers refuse.
+A procession of Black <span style="color: #c00000;">**Republicans**</span> and their white allies marches from Albany to Camilla, the county seat of Mitchell County. They have come to hear Republican candidates speak and hold a political rally. Among them are Philip Joiner, a Black legislator recently expelled from the state assembly, and several white <span style="color: #c00000;">**Republican**</span> organizers.
 
-Shots ring out from the courthouse square as the marchers scatter into the fields and swamps, and armed whites ride them down over the next day. When it ends, many are dead and wounded, and no one can say how many are still missing.
+White <span style="color: #0015bc;">**Democrats**</span> in Camilla have made clear that no <span style="color: #c00000;">**Republicans**</span> rally will be allowed. As the procession enters the courthouse square, armed white men open fire. The marchers scatter into the surrounding fields and woods. The attackers pursue them along the roads toward Albany, shooting and beating those they catch. About a dozen Black men are killed, and many more are wounded.
 
-Within hours, the county's authorities announced that the <span style="color: #c00000;">**Republicans**</span> had arrived armed and bent on insurrection. Northern papers carry survivors' accounts that say otherwise. 
+Local authorities blame the victims, claiming the procession threatened the town. Survivors tell a different story. Their accounts reach the Freedmen's Bureau and Northern newspapers, turning the massacre into a national scandal. The attack has achieved one of its aims: Black voters across southwest Georgia have been warned what may happen if they take part in <span style="color: #c00000;">**Republican**</span> politics.
 
 [? if GA_occupation_posture >= 1 : There are [+ GA_garrison_troops +] thousand federal troops in Georgia, but none were near enough to Camilla to matter. ?][? if GA_occupation_posture < 1 : There are no federal troops stationed in Georgia to send. ?]
 
-- @military_commission: Convene a military commission to take testimony
-- @congress_inquiry: Ask Congress for a formal investigation
-- @state_courts: Leave the matter to the courts
+- @military_commission: Convene a military commission to investigate the massacre
+- @congress_inquiry: Ask Congress to investigate
+- @state_courts: Leave the matter to the state courts
 
 @military_commission
 choose-if: GA_occupation_posture >= 1 and budget >= 1
@@ -42,9 +42,11 @@ on-arrival: {!
     Q.conservative_dissent += 2;
 !}
 
-A panel of officers is convened to take testimony. [? if GA_garrison_troops >= 8 : With soldiers camped nearby, survivors come forward in numbers, and the commission names the men who led the posse. ?][? if GA_garrison_troops < 8 : Too few soldiers are in the district to guard the witnesses, and many survivors refuse to speak while the men who hunted them still live down the road. The commission names fewer men than it should. ?]
+We send federal officers to take testimony from survivors and identify the men who led the attack. The investigation is conducted under military authority, beyond the reach of local officials who have refused to act.
 
-Arrests follow, and so does a furious reaction from <span style="color: #0015bc;">**Democrats**</span> across the state. The commission's authority is only as strong as the Reconstruction Acts that created it, and everyone knows it.
+[? if GA_garrison_troops >= 8 : With a substantial garrison nearby, soldiers can protect witnesses and help investigators make arrests. Several men identified by survivors are taken into custody. ?][? if GA_garrison_troops < 8 : The force is too small to protect every witness. Some survivors agree to testify, but others fear retaliation from the men who still live in their neighborhoods. The investigation identifies several suspects, though many escape arrest. ?]
+
+The arrests provoke an angry response from <span style="color: #0015bc;">**Democrats**</span> across Georgia. They denounce the commission as an abuse of military power. <span style="color: #7A1F5C;">**Radicals**</span> insist that ordinary courts have already failed the victims. The commission may secure a measure of justice, but its authority depends on the federal government's willingness to enforce it.
 
 @congress_inquiry
 choose-if: rep_majority >= 1
@@ -60,9 +62,11 @@ on-arrival: {!
     Q.conservative_dissent += 1;
 !}
 
-A committee takes testimony from survivors far from Camilla, where the witnesses are safe even if the dead are not avenged. <span style="color: #7A1F5C;">Radicals</span> call the inquiry long overdue, while <span style="color: #0015bc;">Democrats</span> denounce it as a fabrication.
+We ask Congress to investigate the massacre and hear testimony from survivors, Freedmen's Bureau officers and Republican organizers. Witnesses can speak outside Mitchell County, away from the men who attacked them and the local officials who have defended the attackers.
 
-Nothing changes in Georgia itself for months, but the testimony fills Northern newspapers and helps invigorate the reconstruction cause in the north.
+<span style="color: #7A1F5C;">**Radicals**</span> demand federal action against those responsible. <span style="color: #0015bc;">**Democrats**</span> dismiss the investigation as a partisan attack on the South.
+
+The hearings bring the massacre before the country, and Northern newspapers carry the survivors' accounts. The investigation does little to protect Republicans in Mitchell County in the immediate term, but it strengthens the case for continued federal supervision of Georgia. Whether Congress will act on the evidence remains to be seen.
 
 @state_courts
 go-to: courts_remade if judicial_reform >= 3; courts_divided if judicial_reform >= 2 and judicial_reform < 3; courts_closed if judicial_reform < 2
@@ -79,9 +83,9 @@ on-arrival: {!
     Q.conservative_dissent += 1;
 !}
 
-Prosecutors, working through the courts we have remade, move the case out of the county and into a courtroom where the sheriff's friends cannot sit on the jury. [? if enforcement_acts = 1 : The Enforcement Acts give them a clear statute to work from. ?]Indictments are returned, and several of the men who led the posse are convicted.
+The proceedings expose the weakness of Georgia's courts. A judge willing to pursue the case manages to secure a handful of indictments, but local officials obstruct the investigation and several suspects escape trial. The leading figures behind the attack walk free. A few lesser participants face charges, giving prosecutors a limited success to show for their efforts.
 
-It is the first time anyone in that part of Georgia has answered for killing a <span style="color: #c00000;">**Republican**</span>. <span style="color: #0015bc;">**Democrats**</span> call it federal tyranny dressed up as justice, and the word spreads anyway.
+The result offers little comfort to the survivors. Justice is possible in Georgia, but it depends on finding officials willing to pursue a case that much of the local establishment wants buried.
 
 @courts_divided
 on-arrival: {!
@@ -110,8 +114,6 @@ on-arrival: {!
     Q.dem_relation += 2;
 !}
 
-A grand jury of local men hears the sheriff's account, finds that the marchers provoked the violence, and returns no indictments. The survivors who spoke up find themselves the ones in the dock.
+The case goes before a local grand jury, where the sheriff's account carries more weight than the testimony of the survivors. The jurors conclude that the marchers provoked the violence and refuse to return indictments. [? if judicial_reform >= 1 : The few judges we have managed to replace are too far removed from Mitchell County to overcome the local authorities' resistance. ?][? if judicial_reform < 1 : The courts remain under the control of men whose loyalties have changed little since the war. ?]
 
-[? if judicial_reform >= 1 : The few judges we have managed to replace sit too far from Camilla to matter. ?][? if judicial_reform < 1 : The bench in that part of Georgia is exactly what it was before the war, and so are its loyalties. ?]
-
-<span style="color: #0015bc;">**Democrats**</span> call it local self-government. Everyone who attended the rally learns what a political meeting can cost.
+No one is punished for the killings. Some survivors are accused of provoking the attack, while witnesses who spoke to federal investigators face threats of their own. <span style="color: #0015bc;">**Democrats**</span> praise the verdict as a defense of local self-government. Republican organizers draw a different lesson. In Mitchell County, a man can be killed for attending a political meeting, and the courts will do nothing about it.
