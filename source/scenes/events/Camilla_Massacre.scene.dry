@@ -11,6 +11,7 @@ on-arrival: {!
     Q.GA_freemen_rep -= 2;
     Q.GA_rural_dem += 2;
 !}
+face-image: img/thomas-nast-camilla-cartoon_001.jpg
 
 = The Camilla Massacre
 

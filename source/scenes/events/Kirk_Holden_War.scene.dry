@@ -10,6 +10,7 @@ on-arrival: {!
     Q.NC_freemen_rep -= 3;
     Q.NC_rural_dem += 1;
 !}
+face-image: img/George_Washington_Kirk.jpg
 
 = The Piedmont Klan Crisis
 

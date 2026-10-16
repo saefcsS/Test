@@ -10,6 +10,7 @@ on-arrival: {!
     Q.AR_freemen_rep -= 3;
     Q.AR_rural_dem += 1;
 !}
+face-image: img/1845-Map-of-Arkansas.jpg
 
 = The Arkansas Klan War
 
