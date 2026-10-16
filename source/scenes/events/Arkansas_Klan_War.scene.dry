@@ -1,142 +1,123 @@
-title: The Arkansas Klan War
-subtitle: Night riders besiege <span style="color: #c00000;">**Republican**</span> voters and officials.
+title: The Regulators
+subtitle: <span style="color: #c00000;">**Republican**</span> officials are murdered in a campaign of political terror.
 tags: event
 new-page: true
-view-if: AR_gub_winner = "rep" and AR_kkk_strength + AR_whiteL_strength >= 60
+view-if: FL_admitted = 1 and FL_garrison_troops < 8 and FL_kkk_strength + FL_whiteL_strength >= 60
 max-visits: 1
 on-arrival: {!
-    Q.AR_kkk_strength = (Q.AR_kkk_strength || 0) + 4;
+    Q.FL_kkk_strength = (Q.FL_kkk_strength || 0) + 4;
     Q.kkk_strength += 1;
-    Q.AR_freemen_rep -= 3;
-    Q.AR_rural_dem += 1;
+    Q.FL_freemen_rep -= 2;
+    Q.FL_rural_dem += 2;
 !}
-face-image: img/1845-Map-of-Arkansas.jpg
 
-= The Arkansas Klan War
+= The Regulators
 
-In Arkansas, the campaign against Reconstruction has become a campaign of terror. Armed bands ride through <span style="color: #c00000;">**Republican**</span> neighborhoods after dark, whipping local organizers, burning freedmen's homes and threatening anyone who tries to register Black voters. County officials look the other way. When suspects do reach court, friendly sheriffs and intimidated jurors make sure they rarely stay in custody for long.
+Reports from Florida's Panhandle describe a campaign of murder against <span style="color: #c00000;">**Republican**</span> officials and their supporters. Armed bands calling themselves {!<span class="tooltip-text" title="The term draws inspiration from the colonial regulator movement of the 1770s in the Carolinas, where frontier citizens combatted corrupt government officials and outlaws, and formal law enforcement didn't exist">**Regulators**</span>!} have been riding through the county at night, targeting men known to support the <span style="color: #c00000;">**Republican**</span> government. Their victims appear to have been selected in advance.
 
-In several counties, the state government has lost control of the roads after sunset. Republican meetings are abandoned, witnesses flee and officeholders receive warnings to resign or face the consequences. The governor has appealed to Washington for help. He wants martial law in the worst-affected counties, the state militia called into service and federal troops available to back them up.
+The violence began after a local murder that white <span style="color: #0015bc;">**Democrats**</span> blamed on <span style="color: #c00000;">**Republicans**</span>. Since then, a merchant who sold firearms to freedmen has been killed, along with numerous Black residents. The sheriff has made no serious effort to investigate the killings, and local juries have refused to convict suspected assailants. The state government has been unable to establish effective control over the county.
 
-[? if AR_occupation_posture >= 1 : [+ AR_garrison_troops +] thousand federal troops are stationed in Arkansas, though they cannot protect every town and crossroads. ?][? if AR_occupation_posture < 1 : Arkansas has no federal garrison. Any intervention will require troops to be sent from elsewhere. ?]
+The remaining <span style="color: #c00000;">**Republican**</span> officials have received threats against their lives. The circuit clerk, the last white <span style="color: #c00000;">**Republican**</span> officeholder in the county, is among those marked for death. So is the Black legislator responsible for organizing <span style="color: #c00000;">**Republican**</span> voters and bringing them to the polls.
 
-- @call_militia: Help the governor raise a state militia
-- @send_regulars: Send federal regulars into the affected counties
-- @withhold: Refuse intervention and leave the governor to the courts
+Federal troops are scarce in the region. The Regulators appear well aware of their numbers and positions, and the threatened officials have little protection beyond what the government can provide.
 
-@call_militia
-choose-if: budget >= 1
-unavailable-subtitle: [? if budget < 1 : We cannot afford to arm and pay a militia. ?]
-on-arrival: {!
-    Q.budget -= 1;
-    Q.state_militia_formed = 1;
-    Q.state_militia_strength = Math.max(Q.state_militia_strength || 0, 25);
-    Q.AR_freemen_rep += 3;
-    Q.AR_rural_dem += 2;
-    Q.dem_relation -= 3;
-    Q.conservative_dissent += 1;
-!}
-go-to: martial_law
+[? if FL_occupation_posture >= 1 : Florida has [+ FL_garrison_troops +] thousand federal troops, but none are stationed near the threatened officials. ?][? if FL_occupation_posture < 1 : No federal troops are available in Florida to protect the threatened officials. ?]
 
-We approve the governor's request. The state begins organizing a militia of freedmen and white <span style="color: #B22222;">**Unionists**</span>, many of whom have already been threatened by the night riders. They know the local roads and can protect their own communities, though some have little training beyond their service during the war.
+- @guard_clerk: Post troops to protect the circuit clerk
+- @guard_organizers: Protect the legislator and his organizers
+- @warn_leave: Advise both men to leave the county
 
-The <span style="color: #0015bc;">**Democrats**</span> denounce the measure as an attempt to arm Black <span style="color: #c00000;">**Republicans**</span> against their white neighbors. The men making those threats have already taken up their weapons.
-
-@send_regulars
+@guard_clerk
 choose-if: army_strength >= 5 and occupation >= 1
 unavailable-subtitle: [? if occupation < 1 : We have no authority to station troops there. ?][? if army_strength < 5 : We have no troops to spare. ?]
 on-arrival: {!
-    Q.AR_occupation_posture = Math.max(1, Q.AR_occupation_posture || 0);
-    Q.AR_garrison_troops = (Q.AR_garrison_troops || 0) + 5;
-    Q.army_strength -= 5;
-    Q.South_army_strength += 5;
-    Q.dem_relation -= 4;
+    Q.FL_occupation_posture = Math.max(1, Q.FL_occupation_posture || 0);
+    Q.FL_garrison_troops = (Q.FL_garrison_troops || 0) + 3;
+    Q.army_strength -= 3;
+    Q.South_army_strength += 3;
+    Q.FL_kkk_strength = Math.max(0, (Q.FL_kkk_strength || 0) - 4);
+    Q.FL_middle_class_rep += 2;
+    Q.FL_freemen_rep -= 2;
+    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 4);
+    Q.dem_relation -= 2;
+!}
+go-to: tax_sales
+
+We dispatch a detachment to guard the circuit clerk. He continues his work from the courthouse under military escort and survives the season. The legislator receives no protection. He is shot on the road to a political meeting.
+
+The decision saves one official at the expense of another. Black <span style="color: #c00000;">**Republicans**</span> in the county question why the government could protect the clerk but left their own representative exposed.
+
+@guard_organizers
+choose-if: army_strength >= 5 and occupation >= 1
+unavailable-subtitle: [? if occupation < 1 : We have no authority to station troops there. ?][? if army_strength < 5 : We have no troops to spare. ?]
+on-arrival: {!
+    Q.FL_occupation_posture = Math.max(1, Q.FL_occupation_posture || 0);
+    Q.FL_garrison_troops = (Q.FL_garrison_troops || 0) + 3;
+    Q.army_strength -= 3;
+    Q.South_army_strength += 3;
+    Q.FL_kkk_strength = Math.max(0, (Q.FL_kkk_strength || 0) - 4);
+    Q.FL_freemen_rep += 3;
+    Q.FL_middle_class_rep -= 2;
+    Q.Union_League_strength += 4;
+    Q.dem_relation -= 2;
+!}
+go-to: tax_sales
+
+We dispatch a detachment to protect the legislator and his organizers. They continue their political work, and Black voter turnout holds. The circuit clerk, left without a guard, is ambushed near his home and killed.
+
+With his death, the county has no white <span style="color: #c00000;">**Republican**</span> left in county government. The party retains its Black organizers, but its remaining foothold in the local administration has been destroyed.
+
+@warn_leave
+on-arrival: {!
+    Q.FL_kkk_strength = (Q.FL_kkk_strength || 0) + 4;
+    Q.FL_freemen_rep -= 4;
+    Q.FL_rural_dem += 3;
+    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 6);
+    Q.freemen_rep -= 3;
+    Q.radical_dissent += 3;
+    Q.dem_relation += 2;
+!}
+go-to: tax_sales
+
+We advise both men to leave the county. They depart, and the killings subside as the Regulators lose their immediate targets. The <span style="color: #c00000;">**Republican**</span> organization is left without its leading figures, and those who remain have little reason to believe the government will protect them.
+
+<span style="color: #7A1F5C;">**Radicals**</span> condemn the decision as a surrender. By ordering the threatened officials to abandon their posts, they argue, we have allowed the Regulators to destroy the county's <span style="color: #c00000;">**Republican**</span> leadership without facing serious resistance.
+
+@tax_sales
+
+The violence has its roots in a dispute over land. Hard times have left many of the county's planters unable to pay their property taxes. <span style="color: #c00000;">**Republican**</span> officials have responded by selling delinquent land at public tax sales, where freedmen and Northern buyers have purchased farms of their own.
+
+The former owners demand that the sales be halted. The new owners insist that their purchases be honored. The Regulators' campaign has given the dispute a violent edge, with those who enforce the sales and those who benefit from them facing threats of murder.
+
+Florida's <span style="color: #c00000;">**Republican**</span> leaders are divided over how to proceed. They ask the administration whether the tax sales should continue.
+
+- @continue_sales: Back the tax sales
+- @suspend_sales: Quietly suspend the sales
+
+@continue_sales
+on-arrival: {!
+    Q.FL_freemen_rep += 3;
+    Q.FL_rural_dem += 4;
+    Q.FL_kkk_strength = (Q.FL_kkk_strength || 0) + 5;
+    Q.freemen_rep += 2;
+    Q.radical_strength += 2;
     Q.conservative_dissent += 2;
 !}
-go-to: martial_law
 
-We send regulars into the affected counties. They are better trained and more reliable than a hastily assembled militia, and their presence gives federal officers a chance to enforce warrants that local authorities have ignored.
+We uphold the tax sales. Freedmen retain the land they have purchased, and the state government affirms that delinquent property can be sold under the law.
 
-But every regiment sent into Arkansas is another reminder that Reconstruction still depends on the Army. <span style="color: #0015bc;">**Democrats**</span> condemn the deployment as military rule imposed on a state that is supposed to govern itself.
+The decision wins support among Black landowners and strengthens the <span style="color: #7A1F5C;">**Radicals**</span> in our party. The planters, however, now have a grievance that reaches beyond the usual contests for office. The Regulators can present their campaign as a struggle to recover land, giving the violence a new source of support.
 
-@withhold
+@suspend_sales
 on-arrival: {!
-    Q.AR_kkk_strength = (Q.AR_kkk_strength || 0) + 8;
-    Q.kkk_strength += 2;
-    Q.AR_freemen_rep -= 5;
-    Q.AR_rural_dem += 3;
-    Q.AR_middle_class_dem += 2;
-    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 8);
-    Q.freemen_rep -= 3;
-    Q.dem_relation += 3;
+    Q.FL_kkk_strength = Math.max(0, (Q.FL_kkk_strength || 0) - 6);
+    Q.FL_freemen_rep -= 4;
+    Q.FL_middle_class_dem += 2;
+    Q.freemen_rep -= 2;
+    Q.radical_dissent += 4;
+    Q.dem_relation += 2;
 !}
 
-We refuse the governor's request and tell him to pursue the cases through the courts. The decision spares us the immediate cost of intervention and avoids another dispute over federal power.
+We suspend the tax sales in the hope of restoring order. The planters welcome the decision, and the killings subside. Freedmen who have already purchased land are left uncertain whether their titles will be honored.
 
-In Arkansas, the message is plain enough. The sheriffs who have refused to act will face no pressure from Washington, and the juries that have let suspects walk will remain untouched. Night riders return to the roads. <span style="color: #c00000;">**Republican**</span> organizers cancel meetings, witnesses leave their homes and the Union League loses members who no longer believe the government can protect them.
-
-The governor's appeal has been rejected. The men terrorizing his state have little reason to stop.
-
-@martial_law
-
-= Martial Law Declared
-
-Martial law takes effect in the worst-affected counties. Soldiers and militia assemble at county seats, and officers begin drawing up lists of suspected night riders. Some flee into neighboring counties. Others hide their weapons, return to their farms and wait for the patrols to move on.
-
-- @sweep: Search the counties, seize weapons and break up the night-rider bands
-- @arrests: Arrest the leaders and try them before military commissions
-- @guard_polls: Protect Republican organizers and polling places
-
-@sweep
-on-arrival: {!
-    let force = (Q.AR_garrison_troops || 0) + (Q.state_militia_strength || 0) / 5;
-    Q.AR_kkk_strength = Math.max(0, (Q.AR_kkk_strength || 0) - Math.min(30, 8 + force * 1.5));
-    Q.AR_whiteL_strength = Math.max(0, (Q.AR_whiteL_strength || 0) - Math.min(8, force * 0.4));
-    Q.AR_freemen_rep += 2;
-    Q.AR_rural_dem += 4;
-    Q.AR_middle_class_dem += 1;
-    Q.dem_relation -= 5;
-    Q.PoliticalCostPenalty += 1;
-!}
-
-Patrols fan out across the affected counties, searching suspected meeting places, seizing weapons and arresting men caught carrying out raids. Some bands scatter before the soldiers arrive. Others resist, and militia officers settle old scores under cover of the searches.
-
-[? if AR_garrison_troops >= 5 : Federal regulars give the operation discipline and weight. Several bands break apart rather than risk a direct confrontation with the Army. ?][? if AR_garrison_troops < 5 : The militia carries much of the burden. Some patrols do useful work; others provoke fresh feuds with neighbors they accuse of sheltering the riders. ?]
-
-The raids decline, at least for now. But armed searches have brought new complaints of intimidation and property seizures. <span style="color: #0015bc;">**Democratic**</span> leaders seize on every allegation, and the governor must answer for the conduct of the men enforcing his orders.
-
-@arrests
-choose-if: budget >= 1
-unavailable-subtitle: [? if budget < 1 : We cannot afford a string of military trials. ?]
-on-arrival: {!
-    let force = (Q.AR_garrison_troops || 0) + (Q.state_militia_strength || 0) / 5;
-    Q.budget -= 1;
-    Q.AR_kkk_strength = Math.max(0, (Q.AR_kkk_strength || 0) - Math.min(18, 5 + force * 0.8));
-    Q.radical_strength += 3;
-    Q.freemen_rep += 2;
-    Q.dem_relation -= 4;
-    Q.liberal_dissent += 2;
-!}
-
-Federal officers target the men believed to be directing the raids. Arrests follow, and military commissions take up cases that local prosecutors have allowed to languish. A few prominent suspects are convicted. Others flee across county lines before warrants can be served.
-
-The <span style="color: #7A1F5C;">**Radicals**</span> welcome the crackdown and demand further prosecutions. The <span style="color: #DAA520;">**Liberal Republicans**</span> raise a different objection: if local courts have failed, they ask, does that give the Army the right to decide who stands trial and who is guilty?
-
-For the freedmen who testified against their attackers, the arrests offer some hope. Whether the convictions will survive the political fight ahead remains uncertain.
-
-@guard_polls
-on-arrival: {!
-    let force = (Q.AR_garrison_troops || 0) + (Q.state_militia_strength || 0) / 5;
-    Q.AR_kkk_strength = Math.max(0, (Q.AR_kkk_strength || 0) - Math.min(8, 2 + force * 0.3));
-    Q.AR_freemen_rep += 5;
-    Q.AR_middle_class_rep += 2;
-    Q.AR_rural_dem += 1;
-    Q.Union_League_strength += 8;
-    Q.dem_relation -= 1;
-!}
-
-Rather than search every suspected hideout, the troops concentrate on county seats, Republican meetings and the roads used by voters on election day. Organizers receive escorts, threatened witnesses are moved to safer homes and soldiers remain near polling places.
-
-The policy does little to dismantle the night riders' organization. It does make their work harder. Meetings resume, freedmen return to the registration lists and Republican candidates can campaign in places they had been forced to abandon.
-
-The violence has not ended. But the next election will be harder to steal by intimidation alone.
+<span style="color: #7A1F5C;">**Radicals**</span> accuse us of yielding to armed intimidation. The government has suspended lawful sales to quiet the men who terrorized the county, leaving Black landowners to bear the cost of the settlement.
