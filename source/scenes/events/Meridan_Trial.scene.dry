@@ -1,0 +1,205 @@
+title: The Meridian Riot
+subtitle: A teacher's trial pulls a Mississippi railroad town toward the edge.
+tags: event
+new-page: true
+view-if: MS_gub_winner = "rep" and MS_admitted = 1 and MS_kkk_strength + MS_whiteL_strength >= 80
+max-visits: 1
+on-arrival: {!
+    Q.MS_kkk_strength = (Q.MS_kkk_strength || 0) + 4;
+    Q.kkk_strength += 1;
+    Q.MS_freemen_rep -= 2;
+    Q.MS_rural_dem += 2;
+!}
+
+= The Meridian Riot
+
+The federal case against a Black schoolteacher has become the subject of bitter dispute in Meridian, a growing railroad town in eastern Mississippi. The defendant, formerly an organizer for the Union League in Alabama, stands accused of helping seize a deputy sheriff from his bed and beating him.
+
+The charge has a history of its own. The deputy had crossed the state line with armed associates to recover freedmen who had fled attacks in Alabama and found work in Meridian. The teacher's defenders maintain that the men who entered the town were pursuing Black laborers on behalf of the same organization that had driven them away. Federal prosecutors, however, intend to try the assault as a violation of the law against violence committed under disguise.
+
+The case has divided the town as black residents see a man who tried to protect them facing prosecution while the men who drove them from their homes remain at liberty meanwhile white opponents of the teacher have gathered outside the courthouse and threatened those who speak in his defense. The <span style="color: #c00000;">**Republican**</span> mayor, a Northerner appointed by the governor, has struggled to keep the demonstrations from turning violent.
+
+The prosecution is now in federal hands. The question before us is whether to let the case proceed or arrange for the teacher to leave town before the dispute becomes something worse.
+
+- @proceed_trial: Tell the prosecutor to proceed with the trial
+- @arrange_departure: Let the mayor arrange for the teacher to leave town
+
+@proceed_trial
+on-arrival: {!
+    Q.MS_freemen_rep -= 4;
+    Q.MS_rural_dem -= 1;
+    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 4);
+    Q.freemen_rep -= 2;
+    Q.radical_dissent += 3;
+    Q.dem_relation += 2;
+!}
+go-to: troops
+
+We instruct the prosecutor to proceed. The government will apply the law as written, regardless of the defendant's race or political affiliations. That is our public position.
+
+The ruling satisfies white opponents of the teacher, but it has done little to reassure Black residents. They have watched the authorities ignore the men who drove their neighbors across the state line, only to bring a federal case against one of the people who stood up to them. The Loyal League's local organization begins to lose confidence in the administration.
+
+@arrange_departure
+on-arrival: {!
+    Q.MS_freemen_rep -= 2;
+    Q.MS_rural_dem += 1;
+    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 2);
+    Q.radical_dissent += 1;
+!}
+go-to: troops
+
+We allow the mayor to negotiate the teacher's departure. The charges are dropped once he leaves town, and the immediate confrontation subsides.
+
+The arrangement keeps the courthouse open and the streets quiet. It also establishes an uncomfortable precedent: a man facing threats from his political opponents has been forced to leave rather than rely on the protection of the law. Black residents accept the reprieve with little enthusiasm. The mayor has bought time, but he has not restored their confidence in the government.
+
+@troops
+
+The mayor's next dispatch is more urgent. Armed men from Alabama have been seen around the railroad depots and in the streets near the courthouse. Local officials have made no arrests, and the mayor doubts that the county sheriff will act against the newcomers.
+
+He requests federal troops to protect the courthouse and prevent an armed confrontation. A company could reach Meridian within a day, but the Army has limited forces available for occupation duty across the South.
+
+[? if MS_occupation_posture >= 1 : There are [+ MS_garrison_troops +] thousand federal troops stationed in Mississippi, though moving them to Meridian would leave other districts with less protection. ?][? if MS_occupation_posture < 1 : No federal troops are stationed in Mississippi. Sending a detachment would require a new commitment of forces to the state. ?]
+
+- @station_troops: Station troops in Meridian
+- @brief_visit: Send a detachment for a few days
+- @refuse_troops: Tell the mayor the state must handle it
+
+@station_troops
+choose-if: army_strength >= 5 and occupation >= 1
+unavailable-subtitle: [? if occupation < 1 : We have no authority to station troops there. ?][? if army_strength < 5 : We have no troops to spare. ?]
+on-arrival: {!
+    Q.MS_occupation_posture = Math.max(1, Q.MS_occupation_posture || 0);
+    Q.MS_garrison_troops = (Q.MS_garrison_troops || 0) + 5;
+    Q.army_strength -= 5;
+    Q.South_army_strength += 5;
+    Q.dem_relation -= 3;
+    Q.conservative_dissent += 1;
+!}
+go-to: riot_quiet if MS_garrison_troops >= 8; riot_courthouse if MS_garrison_troops < 8
+
+We order a permanent detachment to Meridian and instruct the mayor to coordinate with its commander. The soldiers establish a presence around the courthouse and railroad depot.
+
+The decision provokes objections from <span style="color: #0015bc;">**Democrats**</span>, who ask why federal troops are required to keep order in a town where no riot has yet occurred. The mayor answers that waiting until blood is shed would defeat the purpose of sending them.
+
+@brief_visit
+choose-if: occupation >= 1
+unavailable-subtitle: We have no authority to send troops there.
+on-arrival: {!
+    Q.MS_kkk_strength = Math.max(0, (Q.MS_kkk_strength || 0) - 1);
+    Q.dem_relation -= 1;
+!}
+go-to: riot_quiet if MS_garrison_troops >= 8; riot_courthouse if MS_garrison_troops < 8
+
+We send a detachment to Meridian for a few days. The soldiers arrive, patrol the streets and find no immediate cause to intervene. Within days, they are withdrawn to other duties.
+
+The mayor protests that the danger has not passed. The decision has nevertheless been made, and the armed men watching the courthouse have seen how quickly the government can be persuaded to leave.
+
+@refuse_troops
+on-arrival: {!
+    Q.MS_kkk_strength = (Q.MS_kkk_strength || 0) + 3;
+    Q.MS_freemen_rep -= 3;
+    Q.dem_relation += 2;
+!}
+go-to: riot_quiet if MS_garrison_troops >= 8; riot_courthouse if MS_garrison_troops < 8
+
+We decline the mayor's request. Mississippi's civil authorities, we argue, must be given the opportunity to restore order themselves.
+
+The governor's office receives no new instructions, and the mayor is left to rely on the same sheriff who has refused to act. The decision is welcomed by <span style="color: #0015bc;">**Democrats**</span> who oppose federal intervention. In Meridian, the armed men remain in the streets.
+
+@riot_quiet
+on-arrival: {!
+    Q.MS_kkk_strength = Math.max(0, (Q.MS_kkk_strength || 0) - 5);
+    Q.MS_freemen_rep += 3;
+    Q.MS_rural_dem += 3;
+    Q.MS_middle_class_rep += 1;
+    Q.dem_relation -= 2;
+!}
+
+The confrontation comes to a head at a courthouse meeting called in support of the mayor. Several hundred people attend, most of them Black residents. Speakers condemn the armed men who have been terrorizing the town and urge freedmen to defend their rights. By nightfall, rumors of an approaching white crowd have spread through the business district, and residents on both sides begin collecting firearms.
+
+A fire breaks out among the commercial buildings. No one can establish how it began, but the blaze sends people rushing into the streets and brings the confrontation close to open violence.
+
+The federal detachment holds the approaches to the courthouse and prevents the armed crowds from converging. The fire is contained. No one is lynched, the mayor remains in office and the streets gradually empty.
+
+The town returns to uneasy quiet. The source of the fire remains unknown, and neither side accepts the other's account of what happened.
+
+@riot_courthouse
+on-arrival: {!
+    Q.MS_kkk_strength = (Q.MS_kkk_strength || 0) + 6;
+    Q.kkk_strength += 2;
+    Q.MS_freemen_rep -= 6;
+    Q.MS_rural_dem += 3;
+    Q.MS_middle_class_dem += 2;
+    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 12);
+    Q.freemen_rep -= 4;
+    Q.radical_dissent += 4;
+!}
+go-to: aftermath
+
+The confrontation comes to a head at a courthouse meeting called in support of the mayor. Several hundred people attend, most of them Black residents. Speakers condemn the armed men who have been terrorizing the town and urge freedmen to defend their rights.
+
+That evening, a fire breaks out among the commercial buildings. Its cause is never established. The mayor's opponents accuse his supporters of deliberately provoking a riot, and several of his advisers are arrested on charges of inciting violence.
+
+The next morning, the courthouse fills with armed men and spectators for the proceedings. The atmosphere is tense before testimony begins. An argument between a witness and one of the defendants turns into a scuffle. A shot rings out, and within moments the courtroom erupts in gunfire. The judge is killed in the confusion.
+
+The violence spreads into the streets. For three days, armed bands search for Black community leaders and <span style="color: #c00000;">**Republican**</span> organizers. Homes are entered, men are dragged from hiding places and a church used as a school is burned. The sheriff's office fails to restore order.
+
+The mayor escapes through a neighboring building and hides in an attic. He eventually agrees to leave Meridian in exchange for safe passage. By the time he departs, the town's <span style="color: #c00000;">**Republican**</span> organization has been shattered.
+
+@aftermath
+
+The former mayor reaches the North and sends a detailed account of the riot to a New York newspaper. His letter describes the failure of local law enforcement, the killing of the judge and the destruction of the town's Black institutions. Newspapers across the North reprint it, and demands for federal action grow.
+
+The former mayor argues that ordinary prosecutions cannot succeed while witnesses are afraid to testify and local officials refuse to act. He calls for martial law across the South. His critics contend that his own handling of the crisis helped inflame the town, while Mississippi's <span style="color: #0015bc;">**Democrats**</span> dismiss his account as a partisan attempt to discredit the state government.
+
+Mississippi opens an inquiry and summons more than a hundred witnesses. Many Black residents can identify the men who took part in the killings, but few are willing to testify publicly. Several witnesses have already received threats, and others have left the county.
+
+The administration must decide how to respond to the collapse of order in Meridian.
+
+- @press_for_law: Use the riot to press Congress for stronger federal law
+- @federal_cases: Have federal prosecutors take the cases
+- @inquiry: Call for a congressional investigation
+
+@press_for_law
+view-if: enforcement_acts = 0
+choose-if: radical_strength >= 35
+unavailable-subtitle: The party is not yet behind new legislation.
+on-arrival: {!
+    Q.enforcement_acts_available = 1;
+    Q.radical_strength += 2;
+    Q.conservative_dissent += 3;
+    Q.liberal_dissent += 2;
+    Q.dem_relation -= 4;
+!}
+
+We circulate the former mayor's letter among <span style="color: #c00000;">**Republican**</span> members of Congress and call for stronger federal enforcement powers. The <span style="color: #7A1F5C;">**Radicals**</span> argue that Meridian demonstrates the limits of the existing law: local officials can refuse to act, witnesses can be terrorized into silence and the state government can conduct inquiries without securing convictions.
+
+The proposal gains support among <span style="color: #c00000;">**Republicans**</span> who had previously been reluctant to expand federal authority. <span style="color: #0015bc;">**Democrats**</span> accuse us of exploiting a tragedy to strengthen the national government. The debate over federal enforcement moves back to the center of congressional business.
+
+@federal_cases
+view-if: enforcement_acts = 1
+choose-if: budget >= 1
+unavailable-subtitle: We cannot afford a prosecution on this scale.
+on-arrival: {!
+    Q.budget -= 1;
+    Q.MS_kkk_strength = Math.max(0, (Q.MS_kkk_strength || 0) - 6);
+    Q.MS_freemen_rep += 2;
+    Q.radical_strength += 2;
+    Q.dem_relation -= 3;
+!}
+
+We direct federal prosecutors to reopen the cases arising from the riot and pursue the men implicated by the available testimony. The investigation makes progress, but the obstacles are formidable. Witnesses fear retaliation, records have disappeared and several suspects have left the state.
+
+A handful of indictments follow. The men most responsible for the violence are not among those brought to trial, and the convictions fall short of what the town's survivors had hoped for. Even so, federal prosecutors have made clear that the courthouse killings will not simply be left to local authorities.
+
+@inquiry
+on-arrival: {!
+    Q.moderate_strength += 2;
+    Q.liberal_dissent = Math.max(0, (Q.liberal_dissent || 0) - 2);
+    Q.MS_freemen_rep -= 2;
+    Q.radical_dissent += 3;
+!}
+
+We call for a congressional investigation into the riot and the conduct of local officials. The committee hears testimony from residents, officers and surviving witnesses, but the central questions remain unresolved. No witness can establish who fired the first shot in the courtroom, and no one is convicted for the killings that followed.
+
+The inquiry produces a record of intimidation, official inaction and conflicting testimony. It does not restore the town's destroyed <span style="color: #c00000;">**Republican**</span> organization, nor does it bring its dead back. The report is published, debated and eventually set aside. In Meridian, Black residents are left to conclude that the government has documented their suffering more thoroughly than it has punished those responsible.
