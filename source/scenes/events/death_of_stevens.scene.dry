@@ -5,13 +5,13 @@ max-visits: 1
 on-arrival: stevens_dead = 1; n_advisors -= 1 if stevens_advisor == 1; stevens_advisor = 0; radical_strength -= 3; speaker = "" if speaker = "Stevens"; speaker_election_needed = 1 if speaker = "Stevens";
 tags: event
 new-page: true
-face-image: portaits/Thaddeus_Stevens.jpg
+face-image: img/portraits/Thaddeus_Stevens.jpg
 
 = The Death of Thaddeus Stevens
 
-News has been announced from the home of well respected congressmen Stevens of his tragic passing due to chronic stomach ailments and dropsy. His actions will never be forgetten among all Americans for the advancement of all citizens of the republic no matter of race and previous conditions of servitude. Shortly before he died after learning his soon to be resting place would reside in a whites-only cemetery he promptly moved his resting place to Lancaster with no racial restrictions. Many leading figures of the Republican Party arrive to pay there respect from such as Sumner, Trumbull, Cameron, and other dignitares of all kinds.
+News arrives from Lancaster of the passing of Congressman Thaddeus Stevens, who has succumbed to chronic stomach ailments and dropsy. His life's work in advancing the rights of all citizens, regardless of race or former condition of servitude, will long be remembered. Upon learning that his intended resting place was a whites-only cemetery, Stevens arranged instead to be buried in Lancaster's public cemetery, where no racial restrictions applied. Among those arriving to pay their respects are Sumner, Trumbull, Cameron and other prominent figures of the <span style="color: #c00000;">**Republican Party**</span>.
 
-His death is mourned by the Freemen population and the <span style="color: #7A1F5C;">**Radical Republicans**</span>. Meanwhile Democrats at the New York World egregiously claim he is the "author of more evil and mischief than any other inhabitant of the globe since the end of the Civil War". Despite the Democrats actions to discredit his legacy, hopefully he will be remembers for his actions.
+His death is mourned by the Freemen population and the <span style="color: #7A1F5C;">**Radical Republicans**</span>. The Democratic New York World, however, denounces him as the "author of more evil and mischief than any other inhabitant of the globe since the end of the Civil War." Even in death, Stevens remains a divisive figure, though we can only hope that history will remember him for his lifelong struggle for equality.
 
 {!<figure>!}
   {!<blockquote cite="https://en.wikipedia.org/wiki/Thaddeus_Stevens">!}
@@ -47,9 +47,9 @@ on-display: {!
     contentDiv.appendChild(cardEl);
 !}
 
-His Body will be conveyed from his house with a multi-racial pallbearers to the Capitol to lay in state at the United States Capitol rotunda. Only Clay and Lincoln have ever recieved this privledge and his is the first to be have the guard of honor be comprised of entirely Black soldiers.
+His body will be carried by a racially mixed group of pallbearers to the United States Capitol, where he will lie in state in the Rotunda. Only Henry Clay and Abraham Lincoln have received this honor before him, and Stevens will be the first to receive a guard of honor composed entirely of Black soldiers.
 
-May he rest in piece.
+                                                                                                                                                                  May he rest in peace.
 
 The Detroit Post: {!<cite>"if to die crowned with noble laurels, and ... secure of [recte in] the respect of the world ... is an end worthy the ambition of a well spent life, then the veteran Radical may lie down with the noblest of the fathers to a well contented sleep."<cite>!}
 
