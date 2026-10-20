@@ -5,19 +5,52 @@ max-visits: 1
 on-arrival: stevens_dead = 1; n_advisors -= 1 if stevens_advisor == 1; stevens_advisor = 0; radical_strength -= 3; speaker = "" if speaker = "Stevens"; speaker_election_needed = 1 if speaker = "Stevens";
 tags: event
 new-page: true
+face-image: portaits/Thaddeus_Stevens.jpg
+
+= The Death of Thaddeus Stevens
+
+News has been announced from the home of well respected congressmen Stevens of his tragic passing due to chronic stomach ailments and dropsy. His actions will never be forgetten among all Americans for the advancement of all citizens of the republic no matter of race and previous conditions of servitude. Shortly before he died after learning his soon to be resting place would reside in a whites-only cemetery he promptly moved his resting place to Lancaster with no racial restrictions. Many leading figures of the Republican Party arrive to pay there respect from such as Sumner, Trumbull, Cameron, and other dignitares of all kinds.
+
+His death is mourned by the Freemen population and the <span style="color: #7A1F5C;">**Radical Republicans**</span>. Meanwhile Democrats at the New York World egregiously claim he is the "author of more evil and mischief than any other inhabitant of the globe since the end of the Civil War". Despite the Democrats actions to discredit his legacy, hopefully he will be remembers for his actions.
+
+{!<figure>!}
+  {!<blockquote cite="https://en.wikipedia.org/wiki/Thaddeus_Stevens">!}
+    {!<p>!}
+      I repose in this quiet and secluded spot<br>
+      Not from any natural preference for solitude<br>
+      But, finding other Cemeteries limited as to Race<br>
+      by Charter Rules<br>
+      I have chosen this that I might illustrate<br>
+      in my death<br>
+      The Principles which I advocated<br>
+      through a long life;<br>
+      EQUALITY OF MAN BEFORE HIS CREATOR
+    {!</p>!}
+  {!</blockquote>!}
+  {!<figcaption>— Epitaph of <cite>Thaddeus Stevens</cite></figcaption>!}
+{!</figure>!}
+
+- @respects
+
+@respects
+title: Pay our respects to the man
 on-display: {!  
     var cardEl = document.createElement('div');  
     cardEl.className = "face-figure2";  
 
     var image = new Image();  
     image.className = "face-img";  
-    image.src = "img/Thaedus_Death.png";  
+    image.src = "img/Death_Thadeus.png";  
 
     cardEl.appendChild(image);  
     var contentDiv = document.querySelector("#page #mid_panel #content");
     contentDiv.appendChild(cardEl);
 !}
 
-= The Death of Thaddeus Stevens
+His Body will be conveyed from his house with a multi-racial pallbearers to the Capitol to lay in state at the United States Capitol rotunda. Only Clay and Lincoln have ever recieved this privledge and his is the first to be have the guard of honor be comprised of entirely Black soldiers.
 
-Thaddeus Stevens, a leader of the <span style="color: #7A1F5C;">**radical**</span> wing of our party, has died due to complications from a stomach infection (or some say). He will be missed.
+May he rest in piece.
+
+The Detroit Post: {!<cite>"if to die crowned with noble laurels, and ... secure of [recte in] the respect of the world ... is an end worthy the ambition of a well spent life, then the veteran Radical may lie down with the noblest of the fathers to a well contented sleep."<cite>!}
+
+New York Times: {!<cite>"discerned the expediency of emancipation, and urged it long before Mr. Lincoln issued his proclamation" but that after the war, "on the subject of Reconstruction, then, Mr. Stevens must be deemed the Evil Genius of the Republican Party.<cite>!}

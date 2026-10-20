@@ -18,7 +18,7 @@ With millions of acres to administer, railroads demanding subsidy, freedmen peti
 - @railroad_subsidies: Negoitate with major railroad companies to help build out the west.
 - @Indian_Affairs: Deal with the Indians that live in the western land.
 - @Land_Purchase: Sell land out west to settlers and corporations.
-- @natural_resources_management: Begin conservation efforts to manage public lands and natural resources responsibly.
+- @natural_resources_management: Conduct conservation efforts to manage public lands and natural resources responsibly.
 - @root: Take no action for now.
 - @easy_discard
 - @cancel_advisor_action
@@ -106,7 +106,7 @@ We near the completion of treaty negotiations with the Sioux. The details must s
 
 @Sioux_Treaty
 view-if: Sioux_Treaty = 3
-on-arrival: native_relations += 2; army_loyalty += 0.1; conservative_dissent += 2; liberal_strength += 1
+on-arrival: native_relations += 2; army_loyalty += 0.1; conservative_dissent += 2; liberal_strength += 1; Sioux_Treaty += 1
 
 We sign the Second Treaty of Fort Laramie. Representing the United States are General William Tecumseh Sherman and Commissioner of Indian Affairs Nathaniel G. Taylor.
 

@@ -1,7 +1,7 @@
 title: Election of the Speaker of the House
 new-page: true
 tags: event
-view-if: speaker_election_needed = 1 and rep_majority = 1
+view-if: speaker_election_needed = 1
 on-arrival: speaker_election_needed = 0;
 priority: -1
 
@@ -206,7 +206,7 @@ on-arrival: {!
 !}
 go-to: speaker_end
 
-Elihu Washburne, Grant's close political ally from Illinois, takes the gavel. Reliable, unflashy, and content to serve the party rather than himself, he keeps the caucus orderly and the Grant White House happy.
+Elihu Washburne, Grant's close political ally from Illinois, takes the gavel. Reliable, unflashy, and content to serve the party rather than himself, he keeps the caucus orderly.
 
 His deep interest in foreign affairs opens new diplomatic avenues.
 
