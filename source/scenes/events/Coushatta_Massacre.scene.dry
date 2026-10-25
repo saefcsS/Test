@@ -6,16 +6,16 @@ view-if: whiteL_formed = 1 and LA_gub_winner = "rep" and LA_whiteL_strength >= 4
 max-visits: 1
 on-arrival: {!
     Q.LA_whiteL_strength = (Q.LA_whiteL_strength || 0) + 4;
-    Q.whiteL_strength += 2;
-    Q.LA_freemen_rep -= 2;
-    Q.LA_rural_dem += 2;
+    Q.whiteL_strength = (Q.whiteL_strength || 0) + 2;
+    Q.LA_freemen_rep = (Q.LA_freemen_rep || 0) - 2;
+    Q.LA_rural_dem = (Q.LA_rural_dem || 0) + 2;
 !}
 
 = The Red River Valley
 
 The White League has begun forcing <span style="color: #c00000;">**Republican**</span> governments out of office along the Red River. In a neighboring parish, its men occupied the courthouse and compelled the local officials to resign. The takeover was orderly enough to avoid a battle. Its message was plain: the League could decide who governed, and the law would not stop it.
 
-Now six white <span style="color: #c00000;">**Republican**</span> officeholders in another parish have been arrested by armed League members. They stand accused of plotting an uprising by freedmen, a charge for which the League has offered no evidence. The men are told to sign their resignations and leave Louisiana. If they cooperate, they will be allowed to go. If they refuse, their captors make no promises.
+Now several white <span style="color: #c00000;">**Republican**</span> officeholders in another parish have been arrested by armed League members. They stand accused of plotting an uprising by freedmen, a charge for which the League has offered no evidence. The men are told to sign their resignations and leave Louisiana. If they cooperate, they will be allowed to go. If they refuse, their captors make no promises.
 
 The parish sheriff has few deputies and no reason to trust the men holding his colleagues. The area's leading <span style="color: #c00000;">**Republican**</span> is away at a party convention, leaving the sheriff to decide whether to resist or bargain. He sends an urgent wire to the governor, who passes the matter to us.
 
@@ -25,22 +25,22 @@ The parish sheriff has few deputies and no reason to trust the men holding his c
 - @negotiate_passage: Have them accept the terms, with a guarantee of safe passage
 
 @hold_posts
-go-to: posts_held if LA_garrison_troops >= 10; posts_overrun if LA_garrison_troops < 10
+go-to: posts_held if LA_garrison_troops >= 10; posts_overrun
 
 We order the officials to stand their ground. They were chosen under the law, and the White League has no authority to remove them. If we allow armed men to dictate who holds office, every <span style="color: #c00000;">**Republican**</span> parish government becomes vulnerable to the same threat.
 
 @negotiate_passage
-go-to: passage_kept if LA_garrison_troops >= 5; passage_betrayed if LA_garrison_troops < 5
+go-to: passage_kept if LA_garrison_troops >= 5; passage_betrayed
 
 We authorize a negotiated departure. The officials will sign their resignations and leave the state under escort, with the governor responsible for securing their passage. It may spare their lives, but it also gives the League what it came for. We can promise protection only if we have the means to provide it.
 
 @posts_held
 on-arrival: {!
     Q.LA_whiteL_strength = Math.max(0, (Q.LA_whiteL_strength || 0) - 8);
-    Q.LA_freemen_rep += 2;
-    Q.LA_rural_dem += 2;
-    Q.Union_League_strength += 4;
-    Q.dem_relation -= 2;
+    Q.LA_freemen_rep = (Q.LA_freemen_rep || 0) + 2;
+    Q.LA_rural_dem = (Q.LA_rural_dem || 0) + 2;
+    Q.Union_League_strength = (Q.Union_League_strength || 0) + 4;
+    Q.dem_relation = (Q.dem_relation || 0) - 2;
 !}
 
 The League's leaders reconsider when they learn how many federal soldiers are within reach. An attack on the parish seat could bring the Army down on them, and they withdraw rather than risk a direct confrontation. The officials retain their posts, and <span style="color: #c00000;">**Republican**</span> organizers regain some confidence.
@@ -50,30 +50,30 @@ The retreat is tactical. The League's men leave the parish without surrendering 
 @posts_overrun
 on-arrival: {!
     Q.LA_whiteL_strength = (Q.LA_whiteL_strength || 0) + 6;
-    Q.whiteL_strength += 3;
-    Q.LA_freemen_rep -= 5;
-    Q.LA_rural_dem += 3;
-    Q.LA_middle_class_rep -= 2;
-    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 8);
-    Q.freemen_rep -= 3;
-    Q.radical_strength += 2;
-    Q.dem_relation -= 3;
+    Q.whiteL_strength = (Q.whiteL_strength || 0) + 3;
+    Q.LA_freemen_rep = (Q.LA_freemen_rep || 0) - 5;
+    Q.LA_rural_dem = (Q.LA_rural_dem || 0) + 3;
+    Q.LA_middle_class_rep = (Q.LA_middle_class_rep || 0) - 2;
+    Q.Union_League_strength = Math.max(0, (Q.Union_League_strength || 0) - 8);
+    Q.freemen_rep = (Q.freemen_rep || 0) - 3;
+    Q.radical_strength = (Q.radical_strength || 0) + 2;
+    Q.dem_relation = (Q.dem_relation || 0) - 3;
 !}
 go-to: aftermath
 
-The sheriff refuses to surrender the parish government. The League advances on the seat in force, and the sheriff's deputies are quickly overwhelmed. The six officials are killed. Black <span style="color: #c00000;">**Republicans**</span> who had gathered to defend the courthouse are hunted through the surrounding streets and countryside.
+The captive officials refuse to sign, and the sheriff refuses to surrender the parish government. The League advances on the seat in force, and the sheriff's deputies are quickly overwhelmed. The officials are killed. Black <span style="color: #c00000;">**Republicans**</span> who had gathered to defend the courthouse are hunted through the surrounding streets and countryside.
 
-The courthouse falls without a serious fight. No arrests follow, and the parish's surviving <span style="color: #c00000;">**Republican**</span> officeholders flee or go into hiding. The League has secured the result it wanted: an elected government removed by force, with no effective punishment from the state.
+The courthouse falls within hours. No arrests follow, and the parish's surviving <span style="color: #c00000;">**Republican**</span> officeholders flee or go into hiding. The League has secured the result it wanted: an elected government removed by force, with no effective punishment from the state.
 
 @passage_kept
 on-arrival: {!
     Q.LA_whiteL_strength = (Q.LA_whiteL_strength || 0) + 4;
-    Q.LA_freemen_rep -= 3;
-    Q.LA_rural_dem += 3;
-    Q.LA_middle_class_dem += 1;
-    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 6);
-    Q.radical_dissent += 2;
-    Q.dem_relation += 1;
+    Q.LA_freemen_rep = (Q.LA_freemen_rep || 0) - 3;
+    Q.LA_rural_dem = (Q.LA_rural_dem || 0) + 3;
+    Q.LA_middle_class_dem = (Q.LA_middle_class_dem || 0) + 1;
+    Q.Union_League_strength = Math.max(0, (Q.Union_League_strength || 0) - 6);
+    Q.radical_dissent = (Q.radical_dissent || 0) + 2;
+    Q.dem_relation = (Q.dem_relation || 0) + 1;
 !}
 
 The resignations are signed. Under escort, the officials reach the river and board a boat bound north. None is killed, and the immediate crisis passes without a clash between the League and federal troops.
@@ -83,14 +83,14 @@ The League has still won. Its men have removed a parish government by threatenin
 @passage_betrayed
 on-arrival: {!
     Q.LA_whiteL_strength = (Q.LA_whiteL_strength || 0) + 8;
-    Q.whiteL_strength += 4;
-    Q.LA_freemen_rep -= 6;
-    Q.LA_rural_dem += 3;
-    Q.LA_middle_class_rep -= 2;
-    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 10);
-    Q.freemen_rep -= 3;
-    Q.radical_strength += 3;
-    Q.dem_relation -= 3;
+    Q.whiteL_strength = (Q.whiteL_strength || 0) + 4;
+    Q.LA_freemen_rep = (Q.LA_freemen_rep || 0) - 6;
+    Q.LA_rural_dem = (Q.LA_rural_dem || 0) + 3;
+    Q.LA_middle_class_rep = (Q.LA_middle_class_rep || 0) - 2;
+    Q.Union_League_strength = Math.max(0, (Q.Union_League_strength || 0) - 10);
+    Q.freemen_rep = (Q.freemen_rep || 0) - 3;
+    Q.radical_strength = (Q.radical_strength || 0) + 3;
+    Q.dem_relation = (Q.dem_relation || 0) - 3;
 !}
 go-to: aftermath
 
@@ -106,6 +106,7 @@ The governor asks us to reinforce the Red River parishes. The survivors are frig
 
 - @send_troops: Send troops into the Red River valley
 - @demand_charges: Demand that federal marshals bring charges
+- @leave_to_state: Leave the investigation to the state
 
 @send_troops
 choose-if: army_strength >= 5 and occupation >= 1
@@ -114,11 +115,11 @@ on-arrival: {!
     Q.LA_occupation_posture = Math.max(1, Q.LA_occupation_posture || 0);
     Q.LA_garrison_troops = (Q.LA_garrison_troops || 0) + 5;
     Q.army_strength -= 5;
-    Q.South_army_strength += 5;
+    Q.South_army_strength = (Q.South_army_strength || 0) + 5;
     Q.LA_whiteL_strength = Math.max(0, (Q.LA_whiteL_strength || 0) - 6);
-    Q.LA_freemen_rep += 2;
-    Q.dem_relation -= 3;
-    Q.conservative_dissent += 1;
+    Q.LA_freemen_rep = (Q.LA_freemen_rep || 0) + 2;
+    Q.dem_relation = (Q.dem_relation || 0) - 3;
+    Q.conservative_dissent = (Q.conservative_dissent || 0) + 1;
 !}
 
 Federal reinforcements arrive within weeks. By then, the League's armed companies have dispersed into the countryside, leaving no concentration of men for the Army to confront. Patrols restore a measure of order around the parish seat, but the witnesses remain silent and the officials' killers are still at large.
@@ -127,12 +128,26 @@ The deployment protects the government from an immediate second attack. It does 
 
 @demand_charges
 on-arrival: {!
-    Q.LA_freemen_rep += 1;
-    Q.radical_strength += 2;
-    Q.dem_relation -= 2;
-    Q.liberal_dissent += 1;
+    Q.LA_freemen_rep = (Q.LA_freemen_rep || 0) + 1;
+    Q.radical_strength = (Q.radical_strength || 0) + 2;
+    Q.dem_relation = (Q.dem_relation || 0) - 2;
+    Q.liberal_dissent = (Q.liberal_dissent || 0) + 1;
 !}
 
 We direct the federal marshals to identify the men responsible and bring charges wherever the evidence permits. They find frightened witnesses, missing records, and local officials unwilling to cooperate. The courthouse offers little help, and the League's sympathizers make clear that anyone who speaks may be next.
 
 The investigation produces a report but no indictments. <span style="color: #7A1F5C;">**Radicals**</span> point to the affair as proof that <span style="color: #c00000;">**Republican**</span> officeholders cannot rely on local law to protect them. The governor renews his request for troops, while the League remains free to organize.
+
+@leave_to_state
+on-arrival: {!
+    Q.LA_whiteL_strength = (Q.LA_whiteL_strength || 0) + 4;
+    Q.LA_freemen_rep = (Q.LA_freemen_rep || 0) - 3;
+    Q.LA_rural_dem = (Q.LA_rural_dem || 0) + 2;
+    Q.Union_League_strength = Math.max(0, (Q.Union_League_strength || 0) - 4);
+    Q.radical_dissent = (Q.radical_dissent || 0) + 3;
+    Q.dem_relation = (Q.dem_relation || 0) + 2;
+!}
+
+We decline to intervene and leave the investigation to the state's own officers. The governor, who has no force of his own to spare, can do little more than collect the testimony that frightened witnesses are willing to give.
+
+<span style="color: #0015bc;">**Democrats**</span> welcome the decision as a respect for local self-government. In the Red River parishes, no one expects an arrest, and the League's men carry on as before. <span style="color: #7A1F5C;">**Radicals**</span> condemn the administration for treating the killings as a matter for the same authorities the League has already defied.

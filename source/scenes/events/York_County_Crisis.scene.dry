@@ -6,18 +6,18 @@ view-if: SC_gub_winner = "rep" and enforcement_acts = 1 and habeas_suspended != 
 max-visits: 1
 on-arrival: {!
     Q.SC_kkk_strength = (Q.SC_kkk_strength || 0) + 4;
-    Q.kkk_strength += 1;
-    Q.SC_freemen_rep -= 3;
-    Q.SC_rural_dem += 1;
+    Q.kkk_strength = (Q.kkk_strength || 0) + 1;
+    Q.SC_freemen_rep = (Q.SC_freemen_rep || 0) - 3;
+    Q.SC_rural_dem = (Q.SC_rural_dem || 0) + 1;
 !}
 
 = The Upcountry
 
-The reports reaching Columbia from the South Carolina upcountry have become impossible to ignore. In several districts, Republican meetings have ceased altogether, militia companies have resigned or disappeared. Those who still hold office travel with armed escorts, and witnesses to assaults have begun leaving their homes rather than appear before a grand jury.
+The reports reaching Columbia from the South Carolina upcountry have become impossible to ignore. In several districts, <span style="color: #c00000;">**Republican**</span> meetings have ceased altogether and militia companies have resigned or disappeared. Those who still hold office travel with armed escorts, and witnesses to assaults have begun leaving their homes rather than appear before a grand jury.
 
 The trouble has reached the governor's own administration. He has spent months asking Washington for help, insisting that the state courts cannot be trusted to prosecute the men responsible. The Attorney General has now sent investigators, accompanied by an Army officer, to examine the situation firsthand.
 
-Their findings are severe. Local grand juries routinely refuse to indict suspects, while sheriffs warn witnesses against appearing in court. The investigators describe an organized campaign to make Republican government impossible outside the larger towns. They recommend federal intervention under the Enforcement Acts.
+Their findings are severe. Local grand juries routinely refuse to indict suspects, while sheriffs warn witnesses against appearing in court. The investigators describe an organized campaign to make <span style="color: #c00000;">**Republican**</span> government impossible outside the larger towns. They recommend federal intervention under the Enforcement Acts.
 
 Congress has given the President authority to suspend habeas corpus in areas where unlawful combinations are preventing the enforcement of federal law. Such a suspension would permit the authorities to hold suspected conspirators while the government dismantles their organization. It would also place the administration in direct conflict with those who regard the measure as an abuse of executive power.
 
@@ -30,9 +30,9 @@ Congress has given the President authority to suspend habeas corpus in areas whe
 on-arrival: {!
     Q.SC_kkk_strength = (Q.SC_kkk_strength || 0) + 3;
     Q.liberal_dissent = Math.max(0, (Q.liberal_dissent || 0) - 2);
-    Q.dem_relation -= 1;
+    Q.dem_relation = (Q.dem_relation || 0) - 1;
 !}
-go-to: warning_heeded if SC_garrison_troops >= 10 and kkk_militancy < 0.4; warning_ignored if SC_garrison_troops < 10 or kkk_militancy >= 0.4
+go-to: warning_heeded if SC_garrison_troops >= 10 and kkk_militancy < 0.4; warning_ignored
 
 We issue a proclamation requiring armed organizations in the affected districts to disband, surrender their weapons and abandon their disguises by a specified deadline. Federal marshals distribute copies throughout the region, and the governor orders local officials to post the notice in every courthouse.
 
@@ -46,30 +46,30 @@ on-arrival: {!
     Q.habeas_suspended = 1;
     Q.SC_kkk_strength = Math.max(0, (Q.SC_kkk_strength || 0) - Math.min(45, 20 + troops * 1.5));
     Q.SC_whiteL_strength = Math.max(0, (Q.SC_whiteL_strength || 0) - Math.min(15, 5 + troops * 0.5));
-    Q.kkk_strength = Math.max(0, Q.kkk_strength * 0.85);
-    Q.kkk_militancy += 0.06;
-    Q.SC_freemen_rep += 3;
-    Q.SC_rural_dem += 5;
-    Q.SC_middle_class_dem += 2;
-    Q.radical_strength += 2;
-    Q.liberal_dissent += 8;
-    Q.moderate_dissent += 4;
-    Q.conservative_dissent += 5;
-    Q.dem_relation -= 10;
-    Q.reconstruction_support -= 2;
+    Q.kkk_strength = Math.max(0, (Q.kkk_strength || 0) * 0.85);
+    Q.kkk_militancy = (Q.kkk_militancy || 0) + 0.06;
+    Q.SC_freemen_rep = (Q.SC_freemen_rep || 0) + 3;
+    Q.SC_rural_dem = (Q.SC_rural_dem || 0) + 5;
+    Q.SC_middle_class_dem = (Q.SC_middle_class_dem || 0) + 2;
+    Q.radical_strength = (Q.radical_strength || 0) + 2;
+    Q.liberal_dissent = (Q.liberal_dissent || 0) + 8;
+    Q.moderate_dissent = (Q.moderate_dissent || 0) + 4;
+    Q.conservative_dissent = (Q.conservative_dissent || 0) + 5;
+    Q.dem_relation = (Q.dem_relation || 0) - 10;
+    Q.reconstruction_support = (Q.reconstruction_support || 0) - 2;
 !}
 go-to: trials
 
-We order the immediate arrest of suspected leaders and authorize the suspension of habeas corpus in the affected districts. Federal troops and marshals begin coordinated raids, seizing weapons, correspondence and lists of suspected Republican opponents. Some suspects flee before the columns arrive; others surrender when they learn that the government intends to hold them.
+We order the immediate arrest of suspected leaders and authorize the suspension of habeas corpus in the affected districts. Federal troops and marshals begin coordinated raids, seizing weapons, correspondence and lists of suspected <span style="color: #c00000;">**Republican**</span> opponents. Some suspects flee before the columns arrive; others surrender when they learn that the government intends to hold them.
 
 The operation produces results, but the legal and political objections are immediate. <span style="color: #DAA520;">**Liberal Republicans**</span> question whether the administration has gone too far, while <span style="color: #0015bc;">**Democrats**</span> denounce the arrests as an executive assault on civil liberty. The governor insists that ordinary court proceedings had become a shield for organized violence.
 
 @warning_heeded
 on-arrival: {!
     Q.SC_kkk_strength = Math.max(0, (Q.SC_kkk_strength || 0) - 12);
-    Q.SC_freemen_rep += 2;
-    Q.kkk_militancy += 0.02;
-    Q.dem_relation -= 2;
+    Q.SC_freemen_rep = (Q.SC_freemen_rep || 0) + 2;
+    Q.kkk_militancy = (Q.kkk_militancy || 0) + 0.02;
+    Q.dem_relation = (Q.dem_relation || 0) - 2;
 !}
 
 The deadline passes without a general confrontation. In several districts, armed bands dissolve and their members surrender their disguises and weapons to federal marshals. Local officials report that some of the leading men have left their homes, while others have quietly returned to ordinary life.
@@ -95,17 +95,17 @@ on-arrival: {!
     Q.habeas_suspended = 1;
     Q.SC_kkk_strength = Math.max(0, (Q.SC_kkk_strength || 0) - Math.min(45, 20 + troops * 1.5));
     Q.SC_whiteL_strength = Math.max(0, (Q.SC_whiteL_strength || 0) - Math.min(15, 5 + troops * 0.5));
-    Q.kkk_strength = Math.max(0, Q.kkk_strength * 0.85);
-    Q.kkk_militancy += 0.04;
-    Q.SC_freemen_rep += 3;
-    Q.SC_rural_dem += 4;
-    Q.SC_middle_class_dem += 1;
-    Q.radical_strength += 2;
-    Q.liberal_dissent += 3;
-    Q.moderate_dissent += 2;
-    Q.conservative_dissent += 3;
-    Q.dem_relation -= 6;
-    Q.reconstruction_support -= 1;
+    Q.kkk_strength = Math.max(0, (Q.kkk_strength || 0) * 0.85);
+    Q.kkk_militancy = (Q.kkk_militancy || 0) + 0.04;
+    Q.SC_freemen_rep = (Q.SC_freemen_rep || 0) + 3;
+    Q.SC_rural_dem = (Q.SC_rural_dem || 0) + 4;
+    Q.SC_middle_class_dem = (Q.SC_middle_class_dem || 0) + 1;
+    Q.radical_strength = (Q.radical_strength || 0) + 2;
+    Q.liberal_dissent = (Q.liberal_dissent || 0) + 3;
+    Q.moderate_dissent = (Q.moderate_dissent || 0) + 2;
+    Q.conservative_dissent = (Q.conservative_dissent || 0) + 3;
+    Q.dem_relation = (Q.dem_relation || 0) - 6;
+    Q.reconstruction_support = (Q.reconstruction_support || 0) - 1;
 !}
 go-to: trials
 
@@ -116,23 +116,23 @@ The delay has given some suspects time to escape, but the government has establi
 @stand_down
 on-arrival: {!
     Q.SC_kkk_strength = (Q.SC_kkk_strength || 0) + 6;
-    Q.SC_freemen_rep -= 5;
-    Q.SC_rural_dem += 3;
-    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 8);
-    Q.freemen_rep -= 3;
-    Q.radical_dissent += 5;
-    Q.dem_relation += 3;
+    Q.SC_freemen_rep = (Q.SC_freemen_rep || 0) - 5;
+    Q.SC_rural_dem = (Q.SC_rural_dem || 0) + 3;
+    Q.Union_League_strength = Math.max(0, (Q.Union_League_strength || 0) - 8);
+    Q.freemen_rep = (Q.freemen_rep || 0) - 3;
+    Q.radical_dissent = (Q.radical_dissent || 0) + 5;
+    Q.dem_relation = (Q.dem_relation || 0) + 3;
 !}
 
-We decline to take further action. The proclamation remains in force, but no one expects the Regulators of the upcountry to obey it. Within days, reports of renewed intimidation reach the governor's office.
+We decline to take further action. The proclamation remains in force, but no one expects the men of the upcountry to obey it. Within days, reports of renewed intimidation reach the governor's office.
 
-The decision draws sharp criticism from <span style="color: #7A1F5C;">**Radicals**</span>, who argue that we have exposed the limits of federal protection. The governor is left to administer a law that his own officers cannot enforce, while local Republicans begin to question whether Washington will intervene at all.
+The decision draws sharp criticism from <span style="color: #7A1F5C;">**Radicals**</span>, who argue that we have exposed the limits of federal protection. The governor is left to administer a law that his own officers cannot enforce, while local <span style="color: #c00000;">**Republicans**</span> begin to question whether Washington will intervene at all.
 
 @trials
 
 The arrests overwhelm the local authorities. Jail cells fill, federal marshals struggle to keep track of the prisoners, and prosecutors must decide which cases can be brought first. Some suspects confess to attending meetings or participating in raids. Others deny involvement and insist that the government has arrested them for their political beliefs.
 
-The central problem is now the courts. Years of intimidation have left prosecutors with few willing witnesses, while the number of suspects far exceeds the capacity of the district courts to try them promptly. The Attorney General's office recommends concentrating on the principal organizers, but Republican officials in South Carolina warn that releasing the rank and file will allow the organization to recover.
+The central problem is now the courts. Years of intimidation have left prosecutors with few willing witnesses, while the number of suspects far exceeds the capacity of the district courts to try them promptly. The Attorney General's office recommends concentrating on the principal organizers, but <span style="color: #c00000;">**Republican**</span> officials in South Carolina warn that releasing the rank and file will allow the organization to recover.
 
 We must decide how to handle the prisoners.
 
@@ -142,15 +142,15 @@ We must decide how to handle the prisoners.
 @leniency
 on-arrival: {!
     Q.SC_kkk_strength = Math.max(0, (Q.SC_kkk_strength || 0) - 10);
-    Q.SC_freemen_rep += 1;
-    Q.SC_rural_dem = Q.SC_rural_dem - 2;
-    Q.radical_dissent += 3;
+    Q.SC_freemen_rep = (Q.SC_freemen_rep || 0) + 1;
+    Q.SC_rural_dem = (Q.SC_rural_dem || 0) - 2;
+    Q.radical_dissent = (Q.radical_dissent || 0) + 3;
     Q.liberal_dissent = Math.max(0, (Q.liberal_dissent || 0) - 2);
 !}
 
 We release the men who confess to lesser offenses and concentrate our resources on the alleged organizers. The decision eases the burden on the courts and allows prosecutors to focus on the cases most likely to dismantle the organization.
 
-The policy divides the Republican coalition. <span style="color: #7A1F5C;">**Radicals**</span> argue that men who participated in the campaign of terror have been allowed to escape punishment. The administration replies that a smaller number of convictions against the leaders will do more lasting damage than hundreds of cases the courts cannot finish.
+The policy divides the <span style="color: #c00000;">**Republican**</span> coalition. <span style="color: #7A1F5C;">**Radicals**</span> argue that men who participated in the campaign of terror have been allowed to escape punishment. The administration replies that a smaller number of convictions against the leaders will do more lasting damage than hundreds of cases the courts cannot finish.
 
 @prosecute_all
 choose-if: budget >= 1
@@ -158,13 +158,13 @@ unavailable-subtitle: [? if budget < 1 : We cannot afford that many trials. ?]
 on-arrival: {!
     Q.budget -= 1;
     Q.SC_kkk_strength = Math.max(0, (Q.SC_kkk_strength || 0) - 6);
-    Q.SC_freemen_rep += 3;
-    Q.SC_rural_dem += 6;
-    Q.SC_middle_class_dem += 2;
-    Q.radical_strength += 3;
-    Q.liberal_dissent += 3;
-    Q.dem_relation -= 4;
-    Q.PoliticalCostPenalty += 1;
+    Q.SC_freemen_rep = (Q.SC_freemen_rep || 0) + 3;
+    Q.SC_rural_dem = (Q.SC_rural_dem || 0) + 6;
+    Q.SC_middle_class_dem = (Q.SC_middle_class_dem || 0) + 2;
+    Q.radical_strength = (Q.radical_strength || 0) + 3;
+    Q.liberal_dissent = (Q.liberal_dissent || 0) + 3;
+    Q.dem_relation = (Q.dem_relation || 0) - 4;
+    Q.PoliticalCostPenalty = (Q.PoliticalCostPenalty || 0) + 1;
 !}
 
 We order prosecutors to pursue every case. The district courts remain occupied for months as defendants appear one after another. Many plead guilty rather than face trial, while others are convicted on testimony that local juries would once have refused to hear.

@@ -6,16 +6,16 @@ view-if: FL_admitted = 1 and FL_garrison_troops < 8 and FL_kkk_strength + FL_whi
 max-visits: 1
 on-arrival: {!
     Q.FL_kkk_strength = (Q.FL_kkk_strength || 0) + 4;
-    Q.kkk_strength += 1;
-    Q.FL_freemen_rep -= 2;
-    Q.FL_rural_dem += 2;
+    Q.kkk_strength = (Q.kkk_strength || 0) + 1;
+    Q.FL_freemen_rep = (Q.FL_freemen_rep || 0) - 2;
+    Q.FL_rural_dem = (Q.FL_rural_dem || 0) + 2;
 !}
 
-= The Regulators
+= The Florida Vigilantes
 
-Reports from Florida's Panhandle describe a campaign of murder against <span style="color: #c00000;">**Republican**</span> officials and their supporters. Armed bands calling themselves {!<span class="tooltip-text" title="The term draws inspiration from the colonial regulator movement of the 1770s in the Carolinas, where frontier citizens combatted corrupt government officials and outlaws, and formal law enforcement didn't exist">!}**Regulators**{!</span>!} have been riding through the county at night, targeting men known to support the <span style="color: #c00000;">**Republican**</span> government. Their victims appear to have been selected in advance.
+Reports from Florida's Panhandle describe a campaign of murder against <span style="color: #c00000;">**Republican**</span> officials and their supporters. Armed bands calling themselves {!<span class="tooltip-text" title="The name recalls the Regulator movements of the 1760s and 1770s in the Carolinas, where frontier settlers took the law into their own hands against officials they considered corrupt and against outlaws, in places where formal law enforcement barely existed">!}**Regulators**{!</span>!} have been riding through the county at night, targeting men known to support the <span style="color: #c00000;">**Republican**</span> government. Their victims appear to have been selected in advance.
 
-The violence began after a local murder that white <span style="color: #0015bc;">**Democrats**</span> blamed on <span style="color: #c00000;">**Republicans**</span>. Since then, a merchant who sold firearms to freedmen has been killed, along with numerous Black residents. The sheriff has made no serious effort to investigate the killings, and local juries have refused to convict suspected assailants. The state government has been unable to establish effective control over the county.
+The violence began after a local murder that white <span style="color: #0015bc;">**Democrats**</span> blamed on <span style="color: #c00000;">**Republicans**</span>, and it has fed on older grievances over taxes and land. Since then, a merchant who sold firearms to freedmen has been killed, along with numerous Black residents. The sheriff has made no serious effort to investigate the killings, and local juries have refused to convict suspected assailants. The state government has been unable to establish effective control over the county.
 
 The remaining <span style="color: #c00000;">**Republican**</span> officials have received threats against their lives. The circuit clerk, the last white <span style="color: #c00000;">**Republican**</span> officeholder in the county, is among those marked for death. So is the Black legislator responsible for organizing <span style="color: #c00000;">**Republican**</span> voters and bringing them to the polls.
 
@@ -34,12 +34,13 @@ on-arrival: {!
     Q.FL_occupation_posture = Math.max(1, Q.FL_occupation_posture || 0);
     Q.FL_garrison_troops = (Q.FL_garrison_troops || 0) + 3;
     Q.army_strength -= 3;
-    Q.South_army_strength += 3;
+    Q.South_army_strength = (Q.South_army_strength || 0) + 3;
     Q.FL_kkk_strength = Math.max(0, (Q.FL_kkk_strength || 0) - 4);
-    Q.FL_middle_class_rep += 2;
-    Q.FL_freemen_rep -= 2;
-    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 4);
-    Q.dem_relation -= 2;
+    Q.FL_middle_class_rep = (Q.FL_middle_class_rep || 0) + 2;
+    Q.FL_freemen_rep = (Q.FL_freemen_rep || 0) - 2;
+    Q.Union_League_strength = Math.max(0, (Q.Union_League_strength || 0) - 4);
+    Q.conservative_dissent = Math.max(0, (Q.conservative_dissent || 0) - 2);
+    Q.dem_relation = (Q.dem_relation || 0) - 2;
 !}
 go-to: tax_sales
 
@@ -54,12 +55,12 @@ on-arrival: {!
     Q.FL_occupation_posture = Math.max(1, Q.FL_occupation_posture || 0);
     Q.FL_garrison_troops = (Q.FL_garrison_troops || 0) + 3;
     Q.army_strength -= 3;
-    Q.South_army_strength += 3;
+    Q.South_army_strength = (Q.South_army_strength || 0) + 3;
     Q.FL_kkk_strength = Math.max(0, (Q.FL_kkk_strength || 0) - 4);
-    Q.FL_freemen_rep += 3;
-    Q.FL_middle_class_rep -= 2;
-    Q.Union_League_strength += 4;
-    Q.dem_relation -= 2;
+    Q.FL_freemen_rep = (Q.FL_freemen_rep || 0) + 3;
+    Q.FL_middle_class_rep = (Q.FL_middle_class_rep || 0) - 2;
+    Q.Union_League_strength = (Q.Union_League_strength || 0) + 4;
+    Q.dem_relation = (Q.dem_relation || 0) - 2;
 !}
 go-to: tax_sales
 
@@ -70,12 +71,13 @@ With his death, the county has no white <span style="color: #c00000;">**Republic
 @warn_leave
 on-arrival: {!
     Q.FL_kkk_strength = (Q.FL_kkk_strength || 0) + 4;
-    Q.FL_freemen_rep -= 4;
-    Q.FL_rural_dem += 3;
-    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 6);
-    Q.freemen_rep -= 3;
-    Q.radical_dissent += 3;
-    Q.dem_relation += 2;
+    Q.FL_freemen_rep = (Q.FL_freemen_rep || 0) - 4;
+    Q.FL_rural_dem = (Q.FL_rural_dem || 0) + 3;
+    Q.Union_League_strength = Math.max(0, (Q.Union_League_strength || 0) - 6);
+    Q.freemen_rep = (Q.freemen_rep || 0) - 3;
+    Q.radical_dissent = (Q.radical_dissent || 0) + 3;
+    Q.conservative_dissent = Math.max(0, (Q.conservative_dissent || 0) - 2);
+    Q.dem_relation = (Q.dem_relation || 0) + 2;
 !}
 go-to: tax_sales
 
@@ -85,23 +87,23 @@ We advise both men to leave the county. They depart, and the killings subside as
 
 @tax_sales
 
-The violence has its roots in a dispute over land. Hard times have left many of the county's planters unable to pay their property taxes. <span style="color: #c00000;">**Republican**</span> officials have responded by selling delinquent land at public tax sales, where freedmen and Northern buyers have purchased farms of their own.
+The violence is also bound up with a dispute over land. Debts and falling land values have left many of the county's planters unable to pay their property taxes. <span style="color: #c00000;">**Republican**</span> officials have responded by selling delinquent land at public tax sales, where freedmen and Northern buyers have purchased farms of their own.
 
 The former owners demand that the sales be halted. The new owners insist that their purchases be honored. The Regulators' campaign has given the dispute a violent edge, with those who enforce the sales and those who benefit from them facing threats of murder.
 
 Florida's <span style="color: #c00000;">**Republican**</span> leaders are divided over how to proceed. They ask the administration whether the tax sales should continue.
 
 - @continue_sales: Back the tax sales
-- @suspend_sales: Quietly suspend the sales
+- @suspend_sales: Suspend the sales to restore order
 
 @continue_sales
 on-arrival: {!
-    Q.FL_freemen_rep += 3;
-    Q.FL_rural_dem += 4;
+    Q.FL_freemen_rep = (Q.FL_freemen_rep || 0) + 3;
+    Q.FL_rural_dem = (Q.FL_rural_dem || 0) + 4;
     Q.FL_kkk_strength = (Q.FL_kkk_strength || 0) + 5;
-    Q.freemen_rep += 2;
-    Q.radical_strength += 2;
-    Q.conservative_dissent += 2;
+    Q.freemen_rep = (Q.freemen_rep || 0) + 2;
+    Q.radical_strength = (Q.radical_strength || 0) + 2;
+    Q.conservative_dissent = (Q.conservative_dissent || 0) + 2;
 !}
 
 We uphold the tax sales. Freedmen retain the land they have purchased, and the state government affirms that delinquent property can be sold under the law.
@@ -111,11 +113,11 @@ The decision wins support among Black landowners and strengthens the <span style
 @suspend_sales
 on-arrival: {!
     Q.FL_kkk_strength = Math.max(0, (Q.FL_kkk_strength || 0) - 6);
-    Q.FL_freemen_rep -= 4;
-    Q.FL_middle_class_dem += 2;
-    Q.freemen_rep -= 2;
-    Q.radical_dissent += 4;
-    Q.dem_relation += 2;
+    Q.FL_freemen_rep = (Q.FL_freemen_rep || 0) - 4;
+    Q.FL_middle_class_dem = (Q.FL_middle_class_dem || 0) + 2;
+    Q.freemen_rep = (Q.freemen_rep || 0) - 2;
+    Q.radical_dissent = (Q.radical_dissent || 0) + 4;
+    Q.dem_relation = (Q.dem_relation || 0) + 2;
 !}
 
 We suspend the tax sales in the hope of restoring order. The planters welcome the decision, and the killings subside. Freedmen who have already purchased land are left uncertain whether their titles will be honored.

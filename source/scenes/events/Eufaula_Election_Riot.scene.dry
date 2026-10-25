@@ -1,0 +1,175 @@
+title: Election Day in the Black Belt
+subtitle: The White League plans to take an Alabama county by force.
+tags: event
+new-page: true
+view-if: year >= 1868 and month = 11 and whiteL_formed = 1 and AL_admitted = 1 and AL_whiteL_strength >= 40 and AL_kkk_strength + AL_whiteL_strength >= 90
+max-visits: 1
+on-arrival: {!
+    Q.AL_whiteL_strength = (Q.AL_whiteL_strength || 0) + 4;
+    Q.whiteL_strength = (Q.whiteL_strength || 0) + 2;
+    Q.AL_freemen_rep = (Q.AL_freemen_rep || 0) - 2;
+    Q.AL_rural_dem = (Q.AL_rural_dem || 0) + 2;
+!}
+
+= Election Day in the Black Belt
+
+It is the night before an election in Alabama's Black Belt, and the county seat is afraid. A White League chapter has drilled openly for weeks. Rumors say armed Black men are marching on the town to take it.
+
+They are not. The county's Black <span style="color: #c00000;">**Republicans**</span>, hundreds of them, have camped outside town so they can vote together in the morning. They are afraid to travel alone. Nobody in the League believes that, or wants to.
+
+The League plans to be at every polling place. The county's <span style="color: #c00000;">**Republicans**</span> have asked us for soldiers. We can send some, but we cannot be everywhere.
+
+[? if AL_occupation_posture >= 1 : There are [+ AL_garrison_troops +] thousand federal troops in Alabama. ?][? if AL_occupation_posture < 1 : There are no federal troops in Alabama. ?]
+
+- @camp_protect: Send troops to guard the voters camped outside town
+- @send_home: Advise the voters to go home and vote at their own precincts
+
+@camp_protect
+choose-if: army_strength >= 3 and occupation >= 1
+unavailable-subtitle: [? if occupation < 1 : We have no authority to station troops there. ?][? if army_strength < 3 : We have no troops to spare. ?]
+on-arrival: {!
+    Q.AL_occupation_posture = Math.max(1, Q.AL_occupation_posture || 0);
+    Q.AL_garrison_troops = (Q.AL_garrison_troops || 0) + 3;
+    Q.army_strength -= 3;
+    Q.South_army_strength = (Q.South_army_strength || 0) + 3;
+    Q.AL_whiteL_strength = Math.max(0, (Q.AL_whiteL_strength || 0) - 2);
+    Q.AL_freemen_rep = (Q.AL_freemen_rep || 0) + 1;
+    Q.AL_rural_dem = (Q.AL_rural_dem || 0) + 1;
+    Q.dem_relation = (Q.dem_relation || 0) - 2;
+!}
+go-to: polls
+
+We send soldiers to the camps outside town. The rumor of an invasion gets worse, since the invaders now have an escort, but the voters sleep without being shot at.
+
+@send_home
+on-arrival: {!
+    Q.AL_whiteL_strength = (Q.AL_whiteL_strength || 0) + 1;
+    Q.AL_freemen_rep = (Q.AL_freemen_rep || 0) - 2;
+    Q.AL_rural_dem = (Q.AL_rural_dem || 0) + 1;
+    Q.dem_relation = (Q.dem_relation || 0) + 1;
+!}
+go-to: polls
+
+We advise the voters to go home and vote at their own precincts. The camps empty and the rumor loses its target. The League finds the rural precincts much easier to watch.
+
+@polls
+
+Election day. The League has taken up positions in the county seat and at the rural precincts. A <span style="color: #c00000;">**Republican**</span> voter has to get through armed men to reach the ballot box.
+
+- @guard_polls: Station troops at the polling places
+- @poll_watchers: Rely on federal supervisors and marshals
+
+@guard_polls
+choose-if: army_strength >= 3 and occupation >= 1
+unavailable-subtitle: [? if occupation < 1 : We have no authority to station troops there. ?][? if army_strength < 3 : We have no troops to spare. ?]
+on-arrival: {!
+    Q.AL_occupation_posture = Math.max(1, Q.AL_occupation_posture || 0);
+    Q.AL_garrison_troops = (Q.AL_garrison_troops || 0) + 3;
+    Q.army_strength -= 3;
+    Q.South_army_strength = (Q.South_army_strength || 0) + 3;
+    Q.AL_whiteL_strength = Math.max(0, (Q.AL_whiteL_strength || 0) - 3);
+    Q.AL_freemen_rep = (Q.AL_freemen_rep || 0) + 2;
+    Q.dem_relation = (Q.dem_relation || 0) - 2;
+    Q.conservative_dissent = (Q.conservative_dissent || 0) + 1;
+!}
+go-to: canvass
+
+Soldiers take up positions at the polling places. The League stays where it is, watching them. Voters line up in the street, and some of them get through.
+
+@poll_watchers
+on-arrival: {!
+    if (Q.enforcement_acts == 1) {
+        Q.AL_whiteL_strength = Math.max(0, (Q.AL_whiteL_strength || 0) - 2);
+        Q.AL_freemen_rep = (Q.AL_freemen_rep || 0) + 1;
+    } else {
+        Q.AL_whiteL_strength = (Q.AL_whiteL_strength || 0) + 2;
+        Q.AL_freemen_rep = (Q.AL_freemen_rep || 0) - 1;
+    }
+!}
+go-to: canvass
+
+We rely on a handful of federal supervisors and marshals. They are heavily outnumbered, and the League knows it. They write down what they see.
+
+[? if enforcement_acts = 1 : The new law gives their reports weight, and the League's men are careful about what they do in front of them. ?][? if enforcement_acts != 1 : Without a law behind them, the supervisors have little power to do anything but watch. ?]
+
+@canvass
+
+The polls close. In some places the League has let <span style="color: #c00000;">**Republican**</span> ballots into the box, and in others it has not. The count is what decides the county, and the county's <span style="color: #0015bc;">**Democratic**</span> election officials will be the ones doing it.
+
+- @guard_count: Send troops to guard the canvass
+- @contest_results: Accept the count and contest it in Congress
+
+@guard_count
+choose-if: army_strength >= 3 and occupation >= 1
+unavailable-subtitle: [? if occupation < 1 : We have no authority to station troops there. ?][? if army_strength < 3 : We have no troops to spare. ?]
+on-arrival: {!
+    Q.AL_occupation_posture = Math.max(1, Q.AL_occupation_posture || 0);
+    Q.AL_garrison_troops = (Q.AL_garrison_troops || 0) + 3;
+    Q.army_strength -= 3;
+    Q.South_army_strength = (Q.South_army_strength || 0) + 3;
+    Q.AL_whiteL_strength = Math.max(0, (Q.AL_whiteL_strength || 0) - 2);
+    Q.AL_middle_class_rep = (Q.AL_middle_class_rep || 0) + 1;
+    Q.dem_relation = (Q.dem_relation || 0) - 2;
+!}
+go-to: result_held if AL_garrison_troops >= 10; result_contested if AL_garrison_troops >= 5; result_coup
+
+Soldiers stand at the courthouse while the ballots are counted. The election officials do not like it, and they do not argue.
+
+@contest_results
+on-arrival: {!
+    if (Q.rep_majority >= 1) {
+        Q.AL_freemen_rep = (Q.AL_freemen_rep || 0) + 1;
+    } else {
+        Q.AL_freemen_rep = (Q.AL_freemen_rep || 0) - 1;
+    }
+    Q.radical_dissent = (Q.radical_dissent || 0) + 1;
+    Q.dem_relation = (Q.dem_relation || 0) + 1;
+!}
+go-to: result_held if AL_garrison_troops >= 10; result_contested if AL_garrison_troops >= 5; result_coup
+
+We accept the count as the county reports it and say we will contest it in Congress. It is the legal course, and everyone knows how long it takes.
+
+[? if rep_majority >= 1 : With our majority in Congress, the contest will at least be heard. ?][? if rep_majority < 1 : Without a majority in Congress, the contest has little chance of going anywhere. ?]
+
+@result_held
+on-arrival: {!
+    Q.AL_whiteL_strength = Math.max(0, (Q.AL_whiteL_strength || 0) - 12);
+    Q.AL_freemen_rep = (Q.AL_freemen_rep || 0) + 4;
+    Q.AL_rural_dem = (Q.AL_rural_dem || 0) + 3;
+    Q.AL_middle_class_rep = (Q.AL_middle_class_rep || 0) + 2;
+    Q.radical_strength = (Q.radical_strength || 0) + 2;
+    Q.dem_relation = (Q.dem_relation || 0) - 3;
+!}
+
+[+ AL_garrison_troops +] thousand soldiers are in the state, and the League cannot find a place to start. Voters get to the polls, the ballots are counted, and the <span style="color: #c00000;">**Republicans**</span> carry the county. <span style="color: #0015bc;">**Democrats**</span> say the soldiers stole the election. The county's Black voters say it was the first honest one.
+
+@result_contested
+on-arrival: {!
+    Q.AL_whiteL_strength = (Q.AL_whiteL_strength || 0) + 2;
+    Q.AL_freemen_rep = (Q.AL_freemen_rep || 0) - 2;
+    Q.AL_rural_dem = (Q.AL_rural_dem || 0) + 3;
+    Q.Union_League_strength = Math.max(0, (Q.Union_League_strength || 0) - 4);
+    Q.radical_dissent = (Q.radical_dissent || 0) + 2;
+!}
+
+The soldiers hold the county seat, but not the rest of the county. At one or two rural precincts the League keeps voters away, and the count is disputed. Both sides claim the county. Our soldiers go home, and the quarrel goes to the courts.
+
+@result_coup
+on-arrival: {!
+    Q.AL_whiteL_strength = (Q.AL_whiteL_strength || 0) + 10;
+    Q.whiteL_strength = (Q.whiteL_strength || 0) + 4;
+    Q.AL_freemen_rep = (Q.AL_freemen_rep || 0) - 8;
+    Q.AL_rural_dem = (Q.AL_rural_dem || 0) + 5;
+    Q.AL_middle_class_dem = (Q.AL_middle_class_dem || 0) + 3;
+    Q.Union_League_strength = Math.max(0, (Q.Union_League_strength || 0) - 12);
+    Q.freemen_rep = (Q.freemen_rep || 0) - 4;
+    Q.radical_strength = (Q.radical_strength || 0) + 3;
+    Q.reconstruction_support = (Q.reconstruction_support || 0) - 3;
+    Q.dem_relation = (Q.dem_relation || 0) - 3;
+!}
+
+There are too few soldiers to stop the League. Its men fire on the voters in the streets and at the rural precincts, killing many and wounding many more. Hundreds of people are driven away from the polls without voting.
+
+The League declares the <span style="color: #0015bc;">**Democratic**</span> ticket the winner, throws out the <span style="color: #c00000;">**Republican**</span> ballots, and takes every county office. Federal troops arrive days later and end the violence. They do not reverse the result.
+
+The investigation that follows splits along party lines. <span style="color: #0015bc;">**Democrats**</span> say the League defended the county from an army of armed Black men. No such army is ever found.

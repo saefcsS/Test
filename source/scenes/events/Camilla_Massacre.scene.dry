@@ -1,5 +1,5 @@
 title: The Camilla Massacre
-subtitle: A Republican rally meets gunfire in a small Georgia county seat.
+subtitle: A <span style="color: #c00000;">**Republican**</span> rally meets gunfire in a small Georgia county seat.
 tags: event
 new-page: true
 view-if: GA_admitted = 1 and GA_kkk_strength + GA_whiteL_strength >= 60
@@ -15,7 +15,7 @@ face-image: img/thomas-nast-camilla-cartoon_001.jpg
 
 = The Camilla Massacre
 
-A procession of Black <span style="color: #c00000;">**Republicans**</span> and their white allies marches from Albany to Camilla, the county seat of Mitchell County. They have come to hear Republican candidates speak and hold a political rally. Among them are Philip Joiner, a Black legislator recently expelled from the state assembly, and several white <span style="color: #c00000;">**Republican**</span> organizers.
+A procession of Black <span style="color: #c00000;">**Republicans**</span> and their white allies marches from Albany to Camilla, the county seat of Mitchell County. They have come to hear <span style="color: #c00000;">**Republican**</span> candidates speak and hold a political rally. Among them are Philip Joiner, a Black legislator recently expelled from the state assembly, and several white <span style="color: #c00000;">**Republican**</span> organizers.
 
 White <span style="color: #0015bc;">**Democrats**</span> in Camilla have made clear that no <span style="color: #c00000;">**Republicans**</span> rally will be allowed. As the procession enters the courthouse square, armed white men open fire. The marchers scatter into the surrounding fields and woods. The attackers pursue them along the roads toward Albany, shooting and beating those they catch. About a dozen Black men are killed, and many more are wounded.
 
@@ -63,11 +63,11 @@ on-arrival: {!
     Q.conservative_dissent += 1;
 !}
 
-We ask Congress to investigate the massacre and hear testimony from survivors, Freedmen's Bureau officers and Republican organizers. Witnesses can speak outside Mitchell County, away from the men who attacked them and the local officials who have defended the attackers.
+We ask Congress to investigate the massacre and hear testimony from survivors, Freedmen's Bureau officers and <span style="color: #c00000;">**Republican**</span> organizers. Witnesses can speak outside Mitchell County, away from the men who attacked them and the local officials who have defended the attackers.
 
 <span style="color: #7A1F5C;">**Radicals**</span> demand federal action against those responsible. <span style="color: #0015bc;">**Democrats**</span> dismiss the investigation as a partisan attack on the South.
 
-The hearings bring the massacre before the country, and Northern newspapers carry the survivors' accounts. The investigation does little to protect Republicans in Mitchell County in the immediate term, but it strengthens the case for continued federal supervision of Georgia. Whether Congress will act on the evidence remains to be seen.
+The hearings bring the massacre before the country, and Northern newspapers carry the survivors' accounts. The investigation does little to protect <span style="color: #c00000;">**Republicans**</span> in Mitchell County in the immediate term, but it strengthens the case for continued federal supervision of Georgia. Whether Congress will act on the evidence remains to be seen.
 
 @state_courts
 go-to: courts_remade if judicial_reform >= 3; courts_divided if judicial_reform >= 2 and judicial_reform < 3; courts_closed if judicial_reform < 2

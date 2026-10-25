@@ -41,7 +41,6 @@ on-arrival: {!
     Q.conservative_dissent += 2;
     Q.dem_relation -= 5;
 !}
-go-to: fallout_defied
 
 Washington has endorsed the governor's actions. The military tribunal retains custody of the prisoners, and Klan operations in the two counties have largely ceased. The decision has drawn immediate criticism from <span style="color: #DAA520;">**Liberal Republicans**</span>, who warn that the administration has sanctioned imprisonment without trial. <span style="color: #0015bc;">**Democratic**</span> newspapers describe the affair as an assault on constitutional government.
 
@@ -53,62 +52,7 @@ on-arrival: {!
     Q.liberal_dissent = Math.max(0, (Q.liberal_dissent || 0) - 2);
     Q.dem_relation += 2;
 !}
-go-to: fallout_lawful
 
 The administration has instructed the governor to comply with the writ. The prisoners are brought before the courts, but the prosecutions quickly falter. Witnesses refuse to testify in the presence of suspected Klansmen, and local juries decline to convict their neighbors. Within weeks, the prisoners have been released.
 
-Klan activity resumes in the surrounding counties. Critics of the decision argue that the courts have proved unable to protect those who testify against the organization.
-
-@fallout_defied
-go-to: impeachment
-
-The controversy carries into the state legislative elections. The governor's militia maintains a presence at polling places in several counties, and the election passes without major violence. Nevertheless, the <span style="color: #0015bc;">**Democrats**</span> make the governor's actions their principal campaign issue, accusing him of using military force to intimidate the electorate. They win control of the legislature.
-
-Reports that prisoners were permitted to cast ballots from the courthouse jail provide further ammunition to the opposition. <span style="color: #0015bc;">**Democratic**</span> newspapers describe the affair as the governor's war, a phrase that soon spreads beyond North Carolina.
-
-@fallout_lawful
-go-to: impeachment
-
-The governor complies with the court's order, but the damage to his political standing has already been done. The militia's presence at polling places remains a central issue in the legislative campaign, and the <span style="color: #0015bc;">**Democrats**</span> win control of the legislature.
-
-The governor's supporters argue that he acted against a genuine campaign of political murder. His opponents answer that he exceeded his lawful authority. Klan activity has subsided in two counties but continues elsewhere in the state.
-
-<span style="color: #0015bc;">**Democratic**</span> newspapers continue to call the affair the governor's war, and the phrase becomes a familiar refrain in the new legislature.
-
-@impeachment
-
-The new legislature has voted to impeach the governor. The articles of impeachment accuse him of fabricating the extent of the insurrection, imprisoning citizens without lawful authority and misusing public funds.
-
-The trial continues for several weeks. Prosecutors present testimony concerning the militia's arrests and alleged abuses. The defense calls witnesses who describe Klan murders, threats and the failure of local authorities to intervene. Both sides produce substantial evidence, but the outcome increasingly appears to depend on the political balance in the Senate rather than the testimony alone.
-
-- @defend_governor: Rally the party behind the governor
-- @let_him_fall: Remain neutral and allow the legislature to decide his fate
-
-@defend_governor
-on-arrival: {!
-    Q.radical_strength += 3;
-    Q.freemen_rep += 2;
-    Q.NC_freemen_rep += 3;
-    Q.NC_rural_dem += 2;
-    Q.liberal_dissent += 2;
-    Q.PoliticalCostPenalty += 2;
-    Q.dem_relation -= 3;
-!}
-
-We commit our remaining political capital to the governor's defense, but the effort fails. The Senate convicts him on most of the charges and removes him from office.
-
-Black legislators warn that his removal will leave <span style="color: #c00000;">**Republican**</span> officials and their constituents exposed to renewed intimidation. The governor is in Washington seeking an audience with the President when the verdict is delivered.
-
-@let_him_fall
-on-arrival: {!
-    Q.moderate_strength += 2;
-    Q.liberal_dissent = Math.max(0, (Q.liberal_dissent || 0) - 3);
-    Q.radical_dissent += 4;
-    Q.NC_freemen_rep -= 4;
-    Q.NC_middle_class_dem += 2;
-    Q.dem_relation += 3;
-!}
-
-We decline to intervene. The Senate convicts the governor on most of the charges and removes him from office. <span style="color: #9D2933;">**Moderates**</span> welcome the verdict as a restoration of constitutional order. <span style="color: #7A1F5C;">**Radicals**</span> accuse the administration of abandoning the one Southern governor willing to confront the Klan by force.
-
-<span style="color: #c00000;">**Republican**</span> officials across the South follow the proceedings closely. The verdict sends a warning to governors who might consider using extraordinary powers against organized political violence, particularly when their opponents control the legislature.
+Klan activity reduces but mostly resumes in the surrounding counties. Critics of the decision argue that the courts have proved unable to protect those who testify against the organization.

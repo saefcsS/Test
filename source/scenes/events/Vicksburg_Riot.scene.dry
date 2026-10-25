@@ -1,0 +1,42 @@
+title: The Vicksburg Riots
+subtitle: A Black sheriff is driven from his office, and a city turns on the people who came to defend him.
+tags: event
+new-page: true
+view-if: whiteL_formed = 1 and MS_gub_winner = "rep" and MS_whiteL_strength >= 40 and MS_kkk_strength + MS_whiteL_strength >= 100
+max-visits: 1
+on-arrival: {!
+    let troops = Q.MS_garrison_troops || 0;
+    Q.whiteL_strength += 4;
+    Q.whiteL_militancy += 0.05;
+    Q.MS_whiteL_strength = (Q.MS_whiteL_strength || 0) + 6;
+    Q.MS_freemen_rep -= 5;
+    Q.MS_rural_dem += 3;
+    Q.MS_middle_class_dem += 2;
+    Q.freemen_rep -= 3;
+    Q.radical_strength += 3;
+    Q.liberal_dissent += 2;
+    Q.dem_relation -= 3;
+    if (Q.state_militia_formed == 1) {
+        Q.state_militia_strength = Math.max(0, (Q.state_militia_strength || 0) - 15);
+    } else {
+        Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 8);
+    }
+    if (troops >= 5) {
+        Q.MS_whiteL_strength = Math.max(0, Q.MS_whiteL_strength - 8);
+        Q.MS_freemen_rep += 2;
+    } else {
+        Q.reconstruction_support -= 2;
+    }
+!}
+
+= The Vicksburg Riots
+
+Vicksburg's voters sent a Black sheriff to the courthouse and Black <span style="color: #c00000;">**Republicans**</span> to most of the county's other offices. Ever since, the city's white taxpayers have been organizing against them, first in a "Taxpayers' League" and now in armed companies of the White League.
+
+The League's committee meets the sheriff in his own office and tells him that hundreds of armed men outside will remove him unless he resigns. He signs, and then flees to the capital. The governor tells him to take his office back, and his supporters pour into Vicksburg from the countryside to help him do it. [? if state_militia_formed = 1 : The state militia marches with them. ?]
+
+Armed white men meet them at the edge of the city. Shots are fired, and no one agrees on who fired first. What follows is not a battle. Dozens of Black men are killed the first day, and many more over the days after, in the city and in the countryside. Estimates run from dozens to hundreds. One white man dies.
+
+[? if MS_garrison_troops >= 5 : Our soldiers in Mississippi reach Vicksburg within days and restore order, and the sheriff is returned to his office. ?][? if MS_garrison_troops < 5 : We have few soldiers in Mississippi. The governor's appeal has to cross the country, and by the time a company reaches Vicksburg, the damage is done. ?]
+
+A congressional committee opens hearings. <span style="color: #0015bc;">**Democrats**</span> insist the League acted against an armed mob and that the sheriff's supporters began it. <span style="color: #7A1F5C;">**Radicals**</span> insist the opposite. Everyone agrees on what the League has learned: when you want a Republican government gone, you need only be willing to do it by force. Mississippi's other counties are watching.

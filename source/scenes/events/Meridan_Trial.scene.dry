@@ -6,9 +6,9 @@ view-if: MS_gub_winner = "rep" and MS_admitted = 1 and MS_kkk_strength + MS_whit
 max-visits: 1
 on-arrival: {!
     Q.MS_kkk_strength = (Q.MS_kkk_strength || 0) + 4;
-    Q.kkk_strength += 1;
-    Q.MS_freemen_rep -= 2;
-    Q.MS_rural_dem += 2;
+    Q.kkk_strength = (Q.kkk_strength || 0) + 1;
+    Q.MS_freemen_rep = (Q.MS_freemen_rep || 0) - 2;
+    Q.MS_rural_dem = (Q.MS_rural_dem || 0) + 2;
 !}
 
 = The Meridian Riot
@@ -17,7 +17,7 @@ The federal case against a Black schoolteacher has become the subject of bitter 
 
 The charge has a history of its own. The deputy had crossed the state line with armed associates to recover freedmen who had fled attacks in Alabama and found work in Meridian. The teacher's defenders maintain that the men who entered the town were pursuing Black laborers on behalf of the same organization that had driven them away. Federal prosecutors, however, intend to try the assault as a violation of the law against violence committed under disguise.
 
-The case has divided the town as black residents see a man who tried to protect them facing prosecution while the men who drove them from their homes remain at liberty meanwhile white opponents of the teacher have gathered outside the courthouse and threatened those who speak in his defense. The <span style="color: #c00000;">**Republican**</span> mayor, a Northerner appointed by the governor, has struggled to keep the demonstrations from turning violent.
+The case has divided the town. Black residents see a man who tried to protect them facing prosecution while the men who drove them from their homes remain at liberty, and white opponents of the teacher have gathered outside the courthouse and threatened those who speak in his defense. The <span style="color: #c00000;">**Republican**</span> mayor, a Northerner appointed by the governor, has struggled to keep the demonstrations from turning violent.
 
 The prosecution is now in federal hands. The question before us is whether to let the case proceed or arrange for the teacher to leave town before the dispute becomes something worse.
 
@@ -26,25 +26,26 @@ The prosecution is now in federal hands. The question before us is whether to le
 
 @proceed_trial
 on-arrival: {!
-    Q.MS_freemen_rep -= 4;
-    Q.MS_rural_dem -= 1;
-    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 4);
-    Q.freemen_rep -= 2;
-    Q.radical_dissent += 3;
-    Q.dem_relation += 2;
+    Q.MS_teacher_tried = 1;
+    Q.MS_freemen_rep = (Q.MS_freemen_rep || 0) - 4;
+    Q.MS_rural_dem = (Q.MS_rural_dem || 0) + 1;
+    Q.Union_League_strength = Math.max(0, (Q.Union_League_strength || 0) - 4);
+    Q.freemen_rep = (Q.freemen_rep || 0) - 2;
+    Q.radical_dissent = (Q.radical_dissent || 0) + 3;
+    Q.dem_relation = (Q.dem_relation || 0) + 2;
 !}
 go-to: troops
 
 We instruct the prosecutor to proceed. The government will apply the law as written, regardless of the defendant's race or political affiliations. That is our public position.
 
-The ruling satisfies white opponents of the teacher, but it has done little to reassure Black residents. They have watched the authorities ignore the men who drove their neighbors across the state line, only to bring a federal case against one of the people who stood up to them. The Loyal League's local organization begins to lose confidence in the administration.
+The decision satisfies white opponents of the teacher, but it has done little to reassure Black residents. They have watched the authorities ignore the men who drove their neighbors across the state line, only to bring a federal case against one of the people who stood up to them. The Union League's local organization begins to lose confidence in the administration.
 
 @arrange_departure
 on-arrival: {!
-    Q.MS_freemen_rep -= 2;
-    Q.MS_rural_dem += 1;
-    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 2);
-    Q.radical_dissent += 1;
+    Q.MS_freemen_rep = (Q.MS_freemen_rep || 0) - 2;
+    Q.MS_rural_dem = (Q.MS_rural_dem || 0) + 1;
+    Q.Union_League_strength = Math.max(0, (Q.Union_League_strength || 0) - 2);
+    Q.radical_dissent = (Q.radical_dissent || 0) + 1;
 !}
 go-to: troops
 
@@ -71,11 +72,11 @@ on-arrival: {!
     Q.MS_occupation_posture = Math.max(1, Q.MS_occupation_posture || 0);
     Q.MS_garrison_troops = (Q.MS_garrison_troops || 0) + 5;
     Q.army_strength -= 5;
-    Q.South_army_strength += 5;
-    Q.dem_relation -= 3;
-    Q.conservative_dissent += 1;
+    Q.South_army_strength = (Q.South_army_strength || 0) + 5;
+    Q.dem_relation = (Q.dem_relation || 0) - 3;
+    Q.conservative_dissent = (Q.conservative_dissent || 0) + 1;
 !}
-go-to: riot_quiet if MS_garrison_troops >= 8; riot_courthouse if MS_garrison_troops < 8
+go-to: riot_quiet if MS_garrison_troops >= 8; riot_courthouse
 
 We order a permanent detachment to Meridian and instruct the mayor to coordinate with its commander. The soldiers establish a presence around the courthouse and railroad depot.
 
@@ -86,21 +87,21 @@ choose-if: occupation >= 1
 unavailable-subtitle: We have no authority to send troops there.
 on-arrival: {!
     Q.MS_kkk_strength = Math.max(0, (Q.MS_kkk_strength || 0) - 1);
-    Q.dem_relation -= 1;
+    Q.dem_relation = (Q.dem_relation || 0) - 1;
 !}
-go-to: riot_quiet if MS_garrison_troops >= 8; riot_courthouse if MS_garrison_troops < 8
+go-to: riot_quiet if MS_teacher_tried != 1; riot_courthouse
 
 We send a detachment to Meridian for a few days. The soldiers arrive, patrol the streets and find no immediate cause to intervene. Within days, they are withdrawn to other duties.
 
-The mayor protests that the danger has not passed. The decision has nevertheless been made, and the armed men watching the courthouse have seen how quickly the government can be persuaded to leave.
+[? if MS_teacher_tried != 1 : With the teacher already gone, the crowds have little left to rally around, and the town settles into an uneasy calm. ?][? if MS_teacher_tried = 1 : The mayor protests that the danger has not passed. With the trial still pending, the armed men watching the courthouse have seen how quickly the government can be persuaded to leave. ?]
 
 @refuse_troops
 on-arrival: {!
     Q.MS_kkk_strength = (Q.MS_kkk_strength || 0) + 3;
-    Q.MS_freemen_rep -= 3;
-    Q.dem_relation += 2;
+    Q.MS_freemen_rep = (Q.MS_freemen_rep || 0) - 3;
+    Q.dem_relation = (Q.dem_relation || 0) + 2;
 !}
-go-to: riot_quiet if MS_garrison_troops >= 8; riot_courthouse if MS_garrison_troops < 8
+go-to: riot_courthouse
 
 We decline the mayor's request. Mississippi's civil authorities, we argue, must be given the opportunity to restore order themselves.
 
@@ -109,36 +110,37 @@ The governor's office receives no new instructions, and the mayor is left to rel
 @riot_quiet
 on-arrival: {!
     Q.MS_kkk_strength = Math.max(0, (Q.MS_kkk_strength || 0) - 5);
-    Q.MS_freemen_rep += 3;
-    Q.MS_rural_dem += 3;
-    Q.MS_middle_class_rep += 1;
-    Q.dem_relation -= 2;
+    Q.MS_freemen_rep = (Q.MS_freemen_rep || 0) + 3;
+    Q.MS_rural_dem = (Q.MS_rural_dem || 0) + 3;
+    Q.MS_middle_class_rep = (Q.MS_middle_class_rep || 0) + 1;
+    Q.dem_relation = (Q.dem_relation || 0) - 2;
 !}
 
 The confrontation comes to a head at a courthouse meeting called in support of the mayor. Several hundred people attend, most of them Black residents. Speakers condemn the armed men who have been terrorizing the town and urge freedmen to defend their rights. By nightfall, rumors of an approaching white crowd have spread through the business district, and residents on both sides begin collecting firearms.
 
 A fire breaks out among the commercial buildings. No one can establish how it began, but the blaze sends people rushing into the streets and brings the confrontation close to open violence.
 
-The federal detachment holds the approaches to the courthouse and prevents the armed crowds from converging. The fire is contained. No one is lynched, the mayor remains in office and the streets gradually empty.
+[? if MS_garrison_troops >= 8 : The federal detachment holds the approaches to the courthouse and prevents the armed crowds from converging. ?][? if MS_garrison_troops < 8 : Without soldiers in the town, the mayor and a handful of loyal deputies hold the approaches to the courthouse and talk the crowds into dispersing. ?] The fire is contained. No one is lynched, the mayor remains in office and the streets gradually empty.
 
 The town returns to uneasy quiet. The source of the fire remains unknown, and neither side accepts the other's account of what happened.
 
 @riot_courthouse
 on-arrival: {!
     Q.MS_kkk_strength = (Q.MS_kkk_strength || 0) + 6;
-    Q.kkk_strength += 2;
-    Q.MS_freemen_rep -= 6;
-    Q.MS_rural_dem += 3;
-    Q.MS_middle_class_dem += 2;
-    Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 12);
-    Q.freemen_rep -= 4;
-    Q.radical_dissent += 4;
+    Q.kkk_strength = (Q.kkk_strength || 0) + 2;
+    Q.MS_freemen_rep = (Q.MS_freemen_rep || 0) - 6;
+    Q.MS_rural_dem = (Q.MS_rural_dem || 0) + 3;
+    Q.MS_middle_class_dem = (Q.MS_middle_class_dem || 0) + 2;
+    Q.Union_League_strength = Math.max(0, (Q.Union_League_strength || 0) - 12);
+    Q.freemen_rep = (Q.freemen_rep || 0) - 4;
+    Q.radical_dissent = (Q.radical_dissent || 0) + 4;
+    Q.dem_relation = (Q.dem_relation || 0) + 2;
 !}
 go-to: aftermath
 
 The confrontation comes to a head at a courthouse meeting called in support of the mayor. Several hundred people attend, most of them Black residents. Speakers condemn the armed men who have been terrorizing the town and urge freedmen to defend their rights.
 
-That evening, a fire breaks out among the commercial buildings. Its cause is never established. The mayor's opponents accuse his supporters of deliberately provoking a riot, and several of his advisers are arrested on charges of inciting violence.
+[? if MS_garrison_troops >= 1 : Whatever soldiers the army can spare are too few to hold the courthouse against the crowds that gather. ?]That evening, a fire breaks out among the commercial buildings. Its cause is never established. The mayor's opponents accuse his supporters of deliberately provoking a riot, and several of his advisers are arrested on charges of inciting violence.
 
 The next morning, the courthouse fills with armed men and spectators for the proceedings. The atmosphere is tense before testimony begins. An argument between a witness and one of the defendants turns into a scuffle. A shot rings out, and within moments the courtroom erupts in gunfire. The judge is killed in the confusion.
 
@@ -152,7 +154,7 @@ The former mayor reaches the North and sends a detailed account of the riot to a
 
 The former mayor argues that ordinary prosecutions cannot succeed while witnesses are afraid to testify and local officials refuse to act. He calls for martial law across the South. His critics contend that his own handling of the crisis helped inflame the town, while Mississippi's <span style="color: #0015bc;">**Democrats**</span> dismiss his account as a partisan attempt to discredit the state government.
 
-Mississippi opens an inquiry and summons more than a hundred witnesses. Many Black residents can identify the men who took part in the killings, but few are willing to testify publicly. Several witnesses have already received threats, and others have left the county.
+Mississippi opens an inquiry and summons many witnesses. Many Black residents can identify the men who took part in the killings, but few are willing to testify publicly. Several witnesses have already received threats, and others have left the county.
 
 The administration must decide how to respond to the collapse of order in Meridian.
 
@@ -161,15 +163,15 @@ The administration must decide how to respond to the collapse of order in Meridi
 - @inquiry: Call for a congressional investigation
 
 @press_for_law
-view-if: enforcement_acts = 0
+view-if: enforcement_acts != 1
 choose-if: radical_strength >= 35
 unavailable-subtitle: The party is not yet behind new legislation.
 on-arrival: {!
     Q.enforcement_acts_available = 1;
-    Q.radical_strength += 2;
-    Q.conservative_dissent += 3;
-    Q.liberal_dissent += 2;
-    Q.dem_relation -= 4;
+    Q.radical_strength = (Q.radical_strength || 0) + 2;
+    Q.conservative_dissent = (Q.conservative_dissent || 0) + 3;
+    Q.liberal_dissent = (Q.liberal_dissent || 0) + 2;
+    Q.dem_relation = (Q.dem_relation || 0) - 4;
 !}
 
 We circulate the former mayor's letter among <span style="color: #c00000;">**Republican**</span> members of Congress and call for stronger federal enforcement powers. The <span style="color: #7A1F5C;">**Radicals**</span> argue that Meridian demonstrates the limits of the existing law: local officials can refuse to act, witnesses can be terrorized into silence and the state government can conduct inquiries without securing convictions.
@@ -183,9 +185,9 @@ unavailable-subtitle: We cannot afford a prosecution on this scale.
 on-arrival: {!
     Q.budget -= 1;
     Q.MS_kkk_strength = Math.max(0, (Q.MS_kkk_strength || 0) - 6);
-    Q.MS_freemen_rep += 2;
-    Q.radical_strength += 2;
-    Q.dem_relation -= 3;
+    Q.MS_freemen_rep = (Q.MS_freemen_rep || 0) + 2;
+    Q.radical_strength = (Q.radical_strength || 0) + 2;
+    Q.dem_relation = (Q.dem_relation || 0) - 3;
 !}
 
 We direct federal prosecutors to reopen the cases arising from the riot and pursue the men implicated by the available testimony. The investigation makes progress, but the obstacles are formidable. Witnesses fear retaliation, records have disappeared and several suspects have left the state.
@@ -194,10 +196,10 @@ A handful of indictments follow. The men most responsible for the violence are n
 
 @inquiry
 on-arrival: {!
-    Q.moderate_strength += 2;
+    Q.moderate_strength = (Q.moderate_strength || 0) + 2;
     Q.liberal_dissent = Math.max(0, (Q.liberal_dissent || 0) - 2);
-    Q.MS_freemen_rep -= 2;
-    Q.radical_dissent += 3;
+    Q.MS_freemen_rep = (Q.MS_freemen_rep || 0) - 2;
+    Q.radical_dissent = (Q.radical_dissent || 0) + 3;
 !}
 
 We call for a congressional investigation into the riot and the conduct of local officials. The committee hears testimony from residents, officers and surviving witnesses, but the central questions remain unresolved. No witness can establish who fired the first shot in the courtroom, and no one is convicted for the killings that followed.
