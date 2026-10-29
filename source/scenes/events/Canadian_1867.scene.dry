@@ -187,7 +187,7 @@ while (seatsLeft > 0) {
     let bestParty = null;
     let bestRemainder = -1;
 
-    for (let party of Q.parties) {
+    for (let party of canadaParties) {
 
         let remainder =
             exactSeats[party] - flooredSeats[party];
@@ -206,7 +206,7 @@ while (seatsLeft > 0) {
 
 
 // Store final seat totals
-for (let party of Q.parties) {
+for (let party of canadaParties) {
     Q[party + "_r"] = flooredSeats[party];
 }
 
