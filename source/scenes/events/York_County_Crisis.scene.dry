@@ -10,6 +10,19 @@ on-arrival: {!
     Q.SC_freemen_rep = (Q.SC_freemen_rep || 0) - 3;
     Q.SC_rural_dem = (Q.SC_rural_dem || 0) + 1;
 !}
+on-display: {!  
+    var cardEl = document.createElement('div');  
+    cardEl.className = "face-figure2";  
+
+    var image = new Image();  
+    image.className = "face-img";  
+    image.src = "img/York_County.jpg";  
+
+    cardEl.appendChild(image);  
+    var contentDiv = document.querySelector("#page #mid_panel #content");
+    contentDiv.appendChild(cardEl);
+!}
+
 
 = The Upcountry
 

@@ -5,27 +5,20 @@ new-page: true
 view-if: whiteL_formed = 1 and MS_gub_winner = "rep" and MS_whiteL_strength >= 40 and MS_kkk_strength + MS_whiteL_strength >= 100
 max-visits: 1
 on-arrival: {!
-    let troops = Q.MS_garrison_troops || 0;
-    Q.whiteL_strength += 4;
-    Q.whiteL_militancy += 0.05;
+    Q.whiteL_strength = (Q.whiteL_strength || 0) + 4;
+    Q.whiteL_militancy = (Q.whiteL_militancy || 0) + 0.05;
     Q.MS_whiteL_strength = (Q.MS_whiteL_strength || 0) + 6;
-    Q.MS_freemen_rep -= 5;
-    Q.MS_rural_dem += 3;
-    Q.MS_middle_class_dem += 2;
-    Q.freemen_rep -= 3;
-    Q.radical_strength += 3;
-    Q.liberal_dissent += 2;
-    Q.dem_relation -= 3;
+    Q.MS_freemen_rep = (Q.MS_freemen_rep || 0) - 5;
+    Q.MS_rural_dem = (Q.MS_rural_dem || 0) + 3;
+    Q.MS_middle_class_dem = (Q.MS_middle_class_dem || 0) + 2;
+    Q.freemen_rep = (Q.freemen_rep || 0) - 3;
+    Q.radical_strength = (Q.radical_strength || 0) + 3;
+    Q.liberal_dissent = (Q.liberal_dissent || 0) + 2;
+    Q.dem_relation = (Q.dem_relation || 0) - 3;
     if (Q.state_militia_formed == 1) {
         Q.state_militia_strength = Math.max(0, (Q.state_militia_strength || 0) - 15);
     } else {
-        Q.Union_League_strength = Math.max(0, Q.Union_League_strength - 8);
-    }
-    if (troops >= 5) {
-        Q.MS_whiteL_strength = Math.max(0, Q.MS_whiteL_strength - 8);
-        Q.MS_freemen_rep += 2;
-    } else {
-        Q.reconstruction_support -= 2;
+        Q.Union_League_strength = Math.max(0, (Q.Union_League_strength || 0) - 8);
     }
 !}
 
@@ -37,6 +30,107 @@ The League's committee meets the sheriff in his own office and tells him that hu
 
 Armed white men meet them at the edge of the city. Shots are fired, and no one agrees on who fired first. What follows is not a battle. Dozens of Black men are killed the first day, and many more over the days after, in the city and in the countryside. Estimates run from dozens to hundreds. One white man dies.
 
-[? if MS_garrison_troops >= 5 : Our soldiers in Mississippi reach Vicksburg within days and restore order, and the sheriff is returned to his office. ?][? if MS_garrison_troops < 5 : We have few soldiers in Mississippi. The governor's appeal has to cross the country, and by the time a company reaches Vicksburg, the damage is done. ?]
+The governor has no force of his own that can retake the city. He appeals to Washington, and the appeal lands on our desk while the killing is still going on.
 
-A congressional committee opens hearings. <span style="color: #0015bc;">**Democrats**</span> insist the League acted against an armed mob and that the sheriff's supporters began it. <span style="color: #7A1F5C;">**Radicals**</span> insist the opposite. Everyone agrees on what the League has learned: when you want a Republican government gone, you need only be willing to do it by force. Mississippi's other counties are watching.
+[? if MS_occupation_posture >= 1 : There are [+ MS_garrison_troops +] thousand federal troops in Mississippi, but the nearest are not in Vicksburg. ?][? if MS_occupation_posture < 1 : There are no federal troops in Mississippi, and any force we send would have to cross a great distance to reach the city. ?]
+
+- @proclaim: Issue a proclamation ordering the armed bands to disperse
+- @send_troops: Send troops to Vicksburg
+- @leave_to_state: Tell the governor the state must handle it
+
+@proclaim
+on-arrival: {!
+    Q.MS_whiteL_strength = Math.max(0, (Q.MS_whiteL_strength || 0) - 3);
+    Q.dem_relation = (Q.dem_relation || 0) - 1;
+    Q.conservative_dissent = (Q.conservative_dissent || 0) + 1;
+!}
+go-to: restoration
+
+We issue a proclamation requiring the armed companies to disperse and go to their homes. Copies are posted in the city and read aloud at the courthouse.
+
+[? if MS_garrison_troops >= 5 : The League's leaders know that soldiers are within reach, and most of the armed bands leave the streets within days. ?][? if MS_garrison_troops < 5 : The League's leaders know that few soldiers are within reach. Most of the armed bands leave the streets, but their leaders make clear that they have not surrendered anything. ?]
+
+@send_troops
+choose-if: army_strength >= 5 and occupation >= 1
+unavailable-subtitle: [? if occupation < 1 : We have no authority to station troops there. ?][? if army_strength < 5 : We have no troops to spare. ?]
+on-arrival: {!
+    Q.MS_occupation_posture = Math.max(1, Q.MS_occupation_posture || 0);
+    Q.MS_garrison_troops = (Q.MS_garrison_troops || 0) + 5;
+    Q.army_strength -= 5;
+    Q.South_army_strength = (Q.South_army_strength || 0) + 5;
+    Q.MS_whiteL_strength = Math.max(0, (Q.MS_whiteL_strength || 0) - 8);
+    Q.MS_freemen_rep = (Q.MS_freemen_rep || 0) + 2;
+    Q.dem_relation = (Q.dem_relation || 0) - 3;
+    Q.conservative_dissent = (Q.conservative_dissent || 0) + 1;
+!}
+go-to: restoration
+
+We order a detachment to Vicksburg. It reaches the city within days, and the killing stops once the soldiers are in the streets. The League's companies melt away without a fight.
+
+The soldiers cannot bring back the dead. They can only prevent more of them.
+
+@leave_to_state
+on-arrival: {!
+    Q.MS_whiteL_strength = (Q.MS_whiteL_strength || 0) + 4;
+    Q.MS_freemen_rep = (Q.MS_freemen_rep || 0) - 4;
+    Q.Union_League_strength = Math.max(0, (Q.Union_League_strength || 0) - 6);
+    Q.freemen_rep = (Q.freemen_rep || 0) - 2;
+    Q.radical_dissent = (Q.radical_dissent || 0) + 4;
+    Q.reconstruction_support = (Q.reconstruction_support || 0) - 2;
+    Q.dem_relation = (Q.dem_relation || 0) + 3;
+!}
+go-to: aftermath
+
+We tell the governor that Mississippi must restore order with its own resources. He has none to spare, and the League knows it.
+
+The killing runs its course. When it ends, no one has stopped it, and the sheriff does not return. <span style="color: #7A1F5C;">**Radicals**</span> condemn the decision as an abandonment of the people who answered the governor's call.
+
+@restoration
+
+The violence has stopped, but the question that started it has not been answered. The sheriff is in the capital, his resignation is on file, and the League's committee insists that it is valid.
+
+We can return him to his office, or we can accept that the League has decided who governs Vicksburg.
+
+- @restore_sheriff: Return the sheriff to his office
+- @accept_resignation: Accept the resignation
+
+@restore_sheriff
+choose-if: MS_garrison_troops >= 5
+unavailable-subtitle: We do not have enough soldiers in Mississippi to put him back and keep him there.
+on-arrival: {!
+    Q.MS_sheriff_restored = 1;
+    Q.MS_freemen_rep = (Q.MS_freemen_rep || 0) + 3;
+    Q.MS_whiteL_strength = Math.max(0, (Q.MS_whiteL_strength || 0) - 4);
+    Q.Union_League_strength = (Q.Union_League_strength || 0) + 2;
+    Q.reconstruction_support = (Q.reconstruction_support || 0) - 1;
+    Q.liberal_dissent = (Q.liberal_dissent || 0) + 2;
+    Q.conservative_dissent = (Q.conservative_dissent || 0) + 1;
+    Q.dem_relation = (Q.dem_relation || 0) - 3;
+!}
+go-to: aftermath
+
+We direct the soldiers to escort the sheriff back to the courthouse. He walks in under guard and resumes his duties, and no one in the League's committee makes a move to stop him.
+
+<span style="color: #7A1F5C;">**Radicals**</span> hail the decision as proof that the government will not let armed men decide who holds office. <span style="color: #DAA520;">**Liberal Republicans**</span> and <span style="color: #0015bc;">**Democrats**</span> ask how long soldiers will have to stay for the sheriff to remain in his seat.
+
+@accept_resignation
+on-arrival: {!
+    Q.MS_freemen_rep = (Q.MS_freemen_rep || 0) - 3;
+    Q.MS_whiteL_strength = (Q.MS_whiteL_strength || 0) + 3;
+    Q.freemen_rep = (Q.freemen_rep || 0) - 2;
+    Q.radical_dissent = (Q.radical_dissent || 0) + 3;
+    Q.dem_relation = (Q.dem_relation || 0) + 2;
+!}
+go-to: aftermath
+
+We accept the resignation as filed. A white replacement is named to finish the term, and the courthouse reopens under new management.
+
+The decision spares the city a second confrontation. It also tells the county's Black voters that the office they elected can be taken from them by force and that Washington will not give it back.
+
+@aftermath
+
+A congressional committee opens hearings. <span style="color: #0015bc;">**Democrats**</span> insist the League acted against an armed mob and that the sheriff's supporters began it. <span style="color: #7A1F5C;">**Radicals**</span> insist the opposite.
+
+[? if MS_sheriff_restored = 1 : The sheriff is back at his desk, and every white man in the county knows that soldiers put him there. ?][? if MS_sheriff_restored != 1 : The sheriff's office has a new occupant, and every Black voter in the county knows why. ?]
+
+Everyone agrees on what the League has learned: when you want a <span style="color: #c00000;">**Republican**</span> government gone, you need only be willing to do it by force. Mississippi's other counties are watching.

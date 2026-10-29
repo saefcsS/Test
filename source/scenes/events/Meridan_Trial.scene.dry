@@ -10,6 +10,7 @@ on-arrival: {!
     Q.MS_freemen_rep = (Q.MS_freemen_rep || 0) - 2;
     Q.MS_rural_dem = (Q.MS_rural_dem || 0) + 2;
 !}
+face-image: img/Old_Lauderdale_County_Courthouse.jpg
 
 = The Meridian Riot
 

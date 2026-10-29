@@ -10,6 +10,7 @@ on-arrival: {!
     Q.AL_freemen_rep = (Q.AL_freemen_rep || 0) - 2;
     Q.AL_rural_dem = (Q.AL_rural_dem || 0) + 2;
 !}
+face-image: img/Eufaula.jpg
 
 = Election Day in the Black Belt
 
