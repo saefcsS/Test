@@ -155,7 +155,7 @@ Q.ac_r = 0;
 
 Q.n = 1.25;
 
-Q.parties = ['con', 'libcon', 'clib', 'ac'];
+const canadaParties = ['con', 'libcon', 'clib', 'ac'];
 
 let totalPow =
     Math.pow(Q.con_canada_elections_vote, Q.n) +
@@ -167,7 +167,7 @@ let exactSeats = {};
 let flooredSeats = {};
 let seatsGivenOut = 0;
 
-for (let party of Q.parties) {
+for (let party of canadaParties) {
 
     let percent =
         Math.pow(Q[party + "_canada_elections_vote"], Q.n) /
