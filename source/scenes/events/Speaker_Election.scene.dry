@@ -23,7 +23,7 @@ With our majority in the House of Representatives, we must choose a Speaker to p
 @Colfax
 title: Schuyler Colfax (Indiana)
 subtitle: [? if speaker = "Colfax" : Currently serving: retain him ?][? if speaker != "Colfax" : Moderate Republican. Affable, well-liked across factions. ?]
-view-if: year <= 1869
+view-if: year <= 1869 and house_majority >= 1
 on-arrival: {!
     let wasSpeaker = (Q.speaker === "Colfax");
     Q.speaker = "Colfax";
@@ -63,7 +63,7 @@ His speakership opens channels to Ways & Means, strengthening our hand on tariff
 @Stevens
 title: Thaddeus Stevens (Pennsylvania)
 subtitle: [? if speaker = "Stevens" : Currently serving ?][? if speaker != "Stevens" : Radical choice. Transforms the speakership into a weapon for Reconstruction. ?]
-view-if: year <= 1868 and stevens_advisor = 1 and radical_split = 0
+view-if: year <= 1868 and stevens_advisor = 1 and radical_split = 0 and house_majority >= 1
 on-arrival: {!
     Q.speaker = "Stevens";
     Q.speaker_party = "R";
@@ -84,7 +84,7 @@ Thaddeus Stevens storms into the Speaker's chair like a force of nature. His iro
 @Blaine
 title: James Blaine (Maine)
 subtitle: [? if speaker = "Blaine" : Currently serving ?][? if speaker != "Blaine" : Ambitious moderate. Strong legislator, eye on the presidency. ?]
-view-if: year >= 1868
+view-if: year >= 1868 and house_majority >= 1
 on-arrival: {!
     let wasSpeaker = (Q.speaker === "Blaine");
     Q.speaker = "Blaine";
@@ -115,7 +115,7 @@ His ambitions, however, extend beyond the speakership. Keep an eye on him.
 @Dawes
 title: Henry Dawes (Massachusetts)
 subtitle: Fiscal conservative, known for probity and reform sympathies.
-view-if: year >= 1867
+view-if: year >= 1867 and house_majority >= 1
 on-arrival: {!
     Q.speaker = "Dawes";
     Q.speaker_party = "R";
@@ -152,7 +152,7 @@ His speakership strengthens fiscal oversight and accelerates currency legislatio
 @Garfield
 title: James A. Garfield (Ohio)
 subtitle: Rising star. War hero, moderate Radical, skilled debater.
-view-if: year >= 1869
+view-if: year >= 1869 and house_majority >= 1
 on-arrival: {!
     Q.speaker = "Garfield";
     Q.speaker_party = "R";
@@ -185,7 +185,7 @@ His broad appeal reduces factional friction and opens up Reconstruction-minded l
 @Washburne
 title: Elihu Washburne (Illinois)
 subtitle: Reliably loyal, limited ambition, strong in foreign affairs.
-view-if: year >= 1866 and year <= 1872
+view-if: year >= 1866 and year <= 1872 and house_majority >= 1
 on-arrival: {!
     Q.speaker = "Washburne";
     Q.speaker_party = "R";
@@ -212,7 +212,7 @@ His deep interest in foreign affairs opens new diplomatic avenues.
 
 @keep_speaker
 title: Retain [+ speaker +] as Speaker.
-view-if: speaker != "" and rep_majority >= 2
+view-if: speaker != "" and rep_majority >= 2 and house_majority >= 1
 on-arrival: moderate_dissent -= 1; conservative_dissent -= 1
 go-to: speaker_end
 
