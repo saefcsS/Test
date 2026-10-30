@@ -1,0 +1,294 @@
+title: 1876 <span style="color: #00AEEF;">**National Conservative Party**</span> National Convention
+subtitle: Reformers, Redeemers, Liberals or Conservatives?
+tags: event
+view-if: year = 1876 and month = 7 and ncp_founded = 1
+max-visits: 1
+face-image: img/1876_Democratic_National_Convention_-_Missouri.jpg
+
+= National Conservative Convention, 1876
+
+The <span style="color: #00AEEF;">**National Conservative Party**</span> gathers in St. Louis for the first presidential convention in its short history. The coalition that held together in 1874 must now prove it can agree on a single name. Samuel J. Tilden's <span style="color: #4682B4;">**Reformers**</span> hold that honest government and hard money are the whole reason the party exists, and they mean to nominate the man who broke the Tweed Ring. The <span style="color: #002765;">**Redeemers**</span>, sidelined during the merger in 1874, still control the Southern delegations and expect the new party to remember who delivers its votes below the Mason-Dixon line.
+
+Carl Schurz's <span style="color: #DAA520;">**Liberal Republicans**</span> want a standard-bearer who can win over independents, and they put forward Lyman Trumbull and David Davis. The <span style="color: #B5651D;">**Conservative Republicans**</span>, who broke with their party over Radicalism, argue that the surest path to the White House is a candidate with a record against the scandals of the <span style="color: #c00000;">**Republican**</span> administration. Four factions arrive in St. Louis, each convinced the party was built for its own purposes.
+
+[? if dem_reform_strength > dem_bourbon_strength : The Reformers arrive with the largest delegation, though no single faction commands a majority. ?][? if dem_bourbon_strength >= dem_reform_strength : The Redeemers arrive with more delegates than the Reformers expected, and they intend to use them. ?]
+
+- @ncp_convention_decision_76: See what the convention decides...
+
+@ncp_convention_decision_76
+on-arrival: {!
+
+    let reformFloor = Q.dem_reform_strength || 0;
+    reformFloor -= (Q.dem_reform_dissent || 0) * 0.5;
+    reformFloor += (Math.random() * 20) - 10;
+
+    let redeemerFloor = Q.dem_bourbon_strength || 0;
+    redeemerFloor -= (Q.dem_bourbon_dissent || 0) * 0.5;
+    redeemerFloor -= 10;
+    redeemerFloor += (Math.random() * 20) - 10;
+
+    let liberalFloor = (Q.liberal_strength || 0) * 1.5;
+    liberalFloor -= (Q.liberal_dissent || 0) * 0.5;
+    liberalFloor += (Q.liberal_courtship || 0) * 0.3;
+    liberalFloor += (Math.random() * 20) - 10;
+
+    let defectors = (Q.conservative_defection == 1) ? ((Q.conservative_defectors_house || 0) + (Q.conservative_defectors_senate || 0) * 2) : 0;
+    let conservativeFloor = (Q.conservative_strength || 0) * 1.5;
+    conservativeFloor -= (Q.conservative_dissent || 0) * 0.5;
+    conservativeFloor += defectors * 0.5;
+    conservativeFloor += (Math.random() * 20) - 10;
+
+    let ncpNationalSupport = (Q.workers_dem + Q.middle_class_dem + Q.rural_dem + Q.immigrant_laborers_dem + Q.unemployed_dem) / 5;
+
+    if (ncpNationalSupport < 45) {
+        reformFloor += 15;
+    } else {
+        redeemerFloor += 10;
+    }
+
+    if ((Q.kkk_strength || 0) + (Q.whiteL_strength || 0) >= 400) {
+        redeemerFloor += 10;
+    }
+
+    let winnerFloor = Math.max(reformFloor, redeemerFloor, liberalFloor, conservativeFloor);
+
+    if (winnerFloor === reformFloor) {
+        Q.ncp_faction_76 = "reform";
+    }
+    else if (winnerFloor === redeemerFloor) {
+        Q.ncp_faction_76 = "redeemer";
+    }
+    else if (winnerFloor === liberalFloor) {
+        Q.ncp_faction_76 = "liberal";
+    }
+    else {
+        Q.ncp_faction_76 = "conservative";
+    }
+
+    if (Q.ncp_faction_76 === "reform") {
+        Q.dem_candidate_1876 = "Tilden";
+        Q.dem_vp_candidate_1876 = "Hendricks";
+
+        Q.dem_reform_strength += 6;
+        Q.dem_reform_dissent -= 4;
+        Q.dem_bourbon_dissent += 8;
+        Q.liberal_dissent -= 3;
+
+        Q.dem_relation += 3;
+        Q.middle_class_dem += 5;
+        Q.workers_dem += 2;
+        Q.rural_dem -= 2;
+        Q.immigrant_laborers_dem += 2;
+
+        Q.NY_workers_dem += 10;
+        Q.NY_rural_dem += 10;
+        Q.NY_immigrant_laborers_dem += 10;
+        Q.NY_unemployed_dem += 10;
+
+        Q.whiteL_militancy -= 0.02;
+
+    } else if (Q.ncp_faction_76 === "redeemer") {
+        let weights = {
+            "Hendricks": 45 + (Math.random() * 20),
+            "Bayard":    30 + (Math.random() * 20),
+            "Hancock":   30 + (Math.random() * 20),
+            "Allen":     20 + (Math.random() * 20),
+        };
+
+        if ((Q.unemployed || 0) > 8) weights["Allen"] += 15;
+        if ((Q.inflation || 0) < 0) weights["Allen"] += 10;
+
+        let repStrength = (Q.rep_r || 0) / ((Q.total_house_seats || 293) / 100);
+        if (repStrength >= 55) weights["Hancock"] += 15;
+
+        if ((Q.kkk_strength || 0) + (Q.whiteL_strength || 0) >= 400) weights["Bayard"] += 15;
+
+        let totalWeight = Object.values(weights).reduce((a, b) => a + b, 0);
+        let roll = Math.random() * totalWeight;
+        let cumulative = 0;
+        let chosen = "Hendricks";
+        for (let [candidate, weight] of Object.entries(weights)) {
+            cumulative += weight;
+            if (roll <= cumulative) {
+                chosen = candidate;
+                break;
+            }
+        }
+
+        Q.dem_candidate_1876 = chosen;
+        Q.dem_bourbon_strength += 6;
+        Q.dem_bourbon_dissent -= 4;
+        Q.dem_reform_dissent += 8;
+        Q.liberal_dissent += 10;
+        Q.conservative_dissent += 6;
+        Q.dem_relation += 2;
+
+        Q.whiteL_militancy += 0.03;
+        Q.kkk_militancy += 0.02;
+
+        if (chosen === "Hendricks") {
+            Q.dem_vp_candidate_1876 = "Hampton";
+            Q.rural_dem += 4;
+            Q.workers_dem += 3;
+            Q.inflation += 0.15;
+            Q.middle_class_dem -= 2;
+        }
+        else if (chosen === "Bayard") {
+            Q.dem_vp_candidate_1876 = "Hampton";
+            Q.rural_dem += 5;
+            Q.middle_class_dem += 4;
+            Q.workers_dem -= 2;
+            Q.DE_rural_dem += 5;
+            Q.MD_rural_dem += 4;
+            Q.MO_rural_dem += 3;
+        }
+        else if (chosen === "Hancock") {
+            Q.dem_vp_candidate_1876 = "English";
+            Q.workers_dem += 4;
+            Q.rural_dem += 5;
+            Q.middle_class_dem += 3;
+            Q.immigrant_laborers_dem += 3;
+            Q.workers_rep -= 2;
+            Q.rural_rep -= 2;
+        }
+        else if (chosen === "Allen") {
+            Q.dem_vp_candidate_1876 = "Hampton";
+            Q.workers_dem += 6;
+            Q.unemployed_dem += 5;
+            Q.rural_dem += 4;
+            Q.middle_class_dem -= 3;
+            Q.immigrant_laborers_dem += 3;
+            Q.inflation += 0.25;
+        }
+
+    } else if (Q.ncp_faction_76 === "liberal") {
+        let weights = {
+            "Trumbull": 60 + (Math.random() * 20),
+            "Davis":    40 + (Math.random() * 20),
+        };
+
+        let totalWeight = Object.values(weights).reduce((a, b) => a + b, 0);
+        let roll = Math.random() * totalWeight;
+        let cumulative = 0;
+        let chosen = "Trumbull";
+        for (let [candidate, weight] of Object.entries(weights)) {
+            cumulative += weight;
+            if (roll <= cumulative) {
+                chosen = candidate;
+                break;
+            }
+        }
+
+        Q.dem_candidate_1876 = chosen;
+        Q.liberal_strength += 6;
+        Q.liberal_dissent -= 4;
+        Q.dem_bourbon_dissent += 10;
+        Q.dem_reform_dissent += 3;
+        Q.dem_relation += 1;
+
+        Q.middle_class_dem += 5;
+        Q.freemen_dem += 3;
+        Q.rural_dem -= 3;
+        Q.workers_dem -= 1;
+
+        Q.whiteL_militancy -= 0.01;
+
+        if (chosen === "Trumbull") {
+            Q.dem_vp_candidate_1876 = "Hendricks";
+            Q.IL_middle_class_dem += 6;
+            Q.IL_rural_dem += 4;
+            Q.IL_workers_dem += 3;
+        }
+        else if (chosen === "Davis") {
+            Q.dem_vp_candidate_1876 = "Bayard";
+            Q.workers_dem += 2;
+            Q.rural_dem += 2;
+            Q.IL_rural_dem += 5;
+            Q.IN_rural_dem += 4;
+        }
+
+    } else {
+        let weights = {
+            "Bristow": 65 + (Math.random() * 20),
+            "Fish":    35 + (Math.random() * 20),
+        };
+
+        let totalWeight = Object.values(weights).reduce((a, b) => a + b, 0);
+        let roll = Math.random() * totalWeight;
+        let cumulative = 0;
+        let chosen = "Bristow";
+        for (let [candidate, weight] of Object.entries(weights)) {
+            cumulative += weight;
+            if (roll <= cumulative) {
+                chosen = candidate;
+                break;
+            }
+        }
+
+        Q.dem_candidate_1876 = chosen;
+        Q.conservative_strength += 6;
+        Q.conservative_dissent -= 4;
+        Q.dem_bourbon_dissent += 8;
+        Q.liberal_dissent += 3;
+        Q.dem_relation += 1;
+
+        Q.middle_class_dem += 6;
+        Q.workers_dem -= 1;
+        Q.rural_dem -= 2;
+
+        Q.middle_class_rep -= 3;
+        Q.rural_rep -= 1;
+        Q.moderate_dissent += 2;
+
+        if (chosen === "Bristow") {
+            Q.dem_vp_candidate_1876 = "Hendricks";
+            Q.KY_rural_dem += 5;
+            Q.OH_middle_class_dem += 4;
+            Q.workers_dem += 1;
+        }
+        else if (chosen === "Fish") {
+            Q.dem_vp_candidate_1876 = "Bayard";
+            Q.NY_middle_class_dem += 5;
+            Q.NY_workers_dem += 3;
+        }
+    }
+!}
+go-to: ncp_convention_end_76
+
+@ncp_convention_end_76
+
+= The <span style="color: #00AEEF;">**National Conservatives**</span> Have Chosen
+
+[? if dem_candidate_1876 = "Tilden" : <div class="face-figure"><img src="img/portraits/Samuel_Tilden._Portrait_of_the_American_politician,_who_served_as_the_25th_Governor_of_New_York,_Samuel_Jones_Tilden_(1814-1886),_by_JosÃŠ_MarÃ­a_Mora,_c._1870.jpg" alt="Samuel Tilden" class="face-img"></div> ?][? if dem_candidate_1876 = "Hendricks" : <div class="face-figure"><img src="img/portraits/Thomas_Andrews_Hendricks,_photo_portrait_seated,_1860-65.jpg" alt="Thomas Hendricks" class="face-img"></div> ?][? if dem_candidate_1876 = "Bayard" : <div class="face-figure"><img src="img/portraits/960px-Thomas_F._Bayard,_Brady-Handy_photo_portrait,_circa_1870-1880_(cropped)(b).jpg" alt="Thomas Bayard" class="face-img"></div> ?][? if dem_candidate_1876 = "Hancock" : <div class="face-figure"><img src="img/portraits/Gen._Winfield_S._Hancock_-_NARA_-_529369_(cropped,_retouched).jpg" alt="Winfield Hancock" class="face-img"></div> ?][? if dem_candidate_1876 = "Allen" : <div class="face-figure"><img src="img/portraits/William_Allen_governor_-_Brady-Handy.jpg" alt="William Allen" class="face-img"></div> ?][? if dem_candidate_1876 = "Trumbull" : <div class="face-figure"><img src="img/portraits/Lyman_Trumbull.jpg" alt="Lyman Trumbull" class="face-img"></div> ?][? if dem_candidate_1876 = "Davis" : <div class="face-figure"><img src="img/portraits/960px-David_Davis_Supreme_Court_justice_-_Brady-Handy.jpg" alt="David Davis" class="face-img"></div> ?][? if dem_candidate_1876 = "Bristow" : <div class="face-figure"><img src="img/portraits/Benjamin_Helm_Bristow_Brady_-_Handy_U.S._Secretary_of_Treasury.jpg" alt="Benjamin Bristow" class="face-img"></div> ?][? if dem_candidate_1876 = "Fish" : <div class="face-figure"><img src="img/portraits/Hamilton_Fish.jpg" alt="Hamilton Fish" class="face-img"></div> ?]
+
+[? if ncp_faction_76 = "reform" : The <span style="color: #4682B4;">**Reformers**</span> carry the convention. Samuel J. Tilden is nominated for President with [+ dem_vp_candidate_1876 +] for Vice President. The ticket will make corruption in the Grant administration its central issue. ?]
+
+[? if ncp_faction_76 = "redeemer" : The <span style="color: #002765;">**Redeemers**</span> prevail. [+ dem_candidate_1876 +] is nominated for President with [+ dem_vp_candidate_1876 +] for Vice President. The party that was supposed to leave Redemption behind will campaign on home rule in the South. ?]
+
+[? if ncp_faction_76 = "liberal" : The <span style="color: #DAA520;">**Liberal Republicans**</span> win the nomination. [+ dem_candidate_1876 +] is nominated for President with [+ dem_vp_candidate_1876 +] for Vice President, a ticket built to appeal to independents and disaffected Republicans. ?]
+
+[? if ncp_faction_76 = "conservative" : The <span style="color: #B5651D;">**Conservative Republicans**</span> take the nomination. [+ dem_candidate_1876 +] is nominated for President with [+ dem_vp_candidate_1876 +] for Vice President. The party has chosen a man who until recently sat in a Republican cabinet. ?]
+
+[? if dem_candidate_1876 = "Tilden" : Tilden's record against the Tweed Ring gives the <span style="color: #4682B4;">**Reformers**</span> a strong candidate in the North, though Southern <span style="color: #002765;">**Redeemers**</span> remain wary of his position on Reconstruction. ?]
+
+[? if dem_candidate_1876 = "Hendricks" : Hendricks' soft-money views and ties to the <span style="color: #002765;">**Redeemers**</span> make him a reliable choice for the Southern wing, though hard-money <span style="color: #4682B4;">**Reformers**</span> in the Northeast are dissatisfied. ?]
+
+[? if dem_candidate_1876 = "Bayard" : Bayard's hard-money views and deep ties to the <span style="color: #002765;">**Redeemers**</span> make him a safe choice for the party establishment, though he has little appeal among working-class voters. ?]
+
+[? if dem_candidate_1876 = "Hancock" : Hancock's Civil War record gives the ticket an answer to Republican attacks on the loyalty of the opposition. ?]
+
+[? if dem_candidate_1876 = "Allen" : Allen's Greenback sympathies appeal to debtors and laborers, while the hard-money <span style="color: #4682B4;">**Reformers**</span> threaten to stay home in November. ?]
+
+[? if dem_candidate_1876 = "Trumbull" : Trumbull, once a Republican Senator and the author of the Thirteenth Amendment, gives the <span style="color: #DAA520;">**Liberals**</span> a candidate with a reform record and a Radical past, though Southern <span style="color: #002765;">**Redeemers**</span> accept him only reluctantly. ?]
+
+[? if dem_candidate_1876 = "Davis" : Davis, a Supreme Court Justice with a long Illinois political following, is attractive to independents, though he is a stranger to most party organizers and his judicial career leaves him with little record to run on. ?]
+
+[? if dem_candidate_1876 = "Bristow" : Bristow's prosecution of the Whiskey Ring makes him the most credible reformer the party could have found. Many Republicans who have lost faith in their own party's honesty are watching him closely. ?]
+
+[? if dem_candidate_1876 = "Fish" : Fish, long-serving Secretary of State under Grant, offers steady diplomacy and respectability, though he lacks any popular following and is distrusted by the party's reform wing. ?]
+
+[? if ncp_faction_76 != "reform" : The <span style="color: #4682B4;">**Reformers**</span> are unhappy with the outcome. Some of Tilden's supporters threaten to sit out the fall campaign. ?]
+
+[? if ncp_faction_76 != "redeemer" : The <span style="color: #002765;">**Redeemers**</span> feel their loyalty was ignored once again, and Southern newspapers have begun attacking the ticket. ?]
+
+[? if ncp_faction_76 = "liberal" or ncp_faction_76 = "conservative" : Delegates from the <span style="color: #002765;">**Redeemer**</span> wing warn that a ticket headed by a former Republican will cost the party the South. ?]

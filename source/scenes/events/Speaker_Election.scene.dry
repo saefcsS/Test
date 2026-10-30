@@ -2,14 +2,52 @@ title: Election of the Speaker of the House
 new-page: true
 tags: event
 view-if: speaker_election_needed = 1
-on-arrival: speaker_election_needed = 0;
 priority: -1
+on-arrival: {!
+    Q.speaker_election_needed = 0;
+
+    Q.previous_speaker = Q.speaker;
+    Q.previous_speaker_party = Q.speaker_party;
+
+    if (Q.house_majority >= 1) {
+        Q.speaker_control = "rep";
+    }
+    else if (Q.rep_lib_working_majority == 1 && Q.liberal_split == 1) {
+        Q.speaker_control = "coalition";
+    }
+    else if (Q.dem_r > Q.rep_r) {
+        Q.speaker_control = "dem";
+    }
+    else {
+        Q.speaker_control = "contested";
+    }
+
+    // In a contested House, the largest minor bloc decides who gets the gavel
+    Q.speaker_kingmaker = "";
+    if (Q.speaker_control === "contested") {
+        if (Q.liberal_split == 1 && Q.lib_r > Q.rad_r && Q.lib_r >= Q.other_r) {
+            Q.speaker_kingmaker = "liberal";
+        }
+        else if (Q.radical_split == 1 && Q.rad_r > Q.lib_r && Q.rad_r >= Q.other_r) {
+            Q.speaker_kingmaker = "radical";
+        }
+        else {
+            Q.speaker_kingmaker = "other";
+        }
+    }
+!}
 
 = Election of the Speaker
 
-With our majority in the House of Representatives, we must choose a Speaker to preside over the chamber. The Speaker sets the legislative agenda, assigns committee chairmanships. This is not a ceremonial choice.
+[? if previous_speaker != "" and speaker_control != "dem" : [+ previous_speaker +] has held the gavel until now, but a new Congress means a new vote. ?][? if previous_speaker != "" and speaker_control = "dem" : [+ previous_speaker +] has held the gavel until now, but the new Congress will not return it to him. ?]
 
-[? if speaker != "" : The current Speaker is [+ speaker +]. ?]
+[? if speaker_control = "rep" : With a Republican majority in the House, the choice of Speaker is ours to make. The Speaker sets the legislative agenda, assigns the committee chairmanships, and decides which bills ever reach the floor. This is not a ceremonial choice. ?]
+
+[? if speaker_control = "coalition" : No party holds an outright majority in the House, but the <span style="color: #c00000;">**Republicans**</span> and <span style="color: #DAA520;">**Liberal Republicans**</span> together command enough votes to organize the chamber. The gavel can be ours, but the Liberals will expect a say in who holds it, and they will not forget it if we ignore them. ?]
+
+[? if speaker_control = "contested" : No party commands a majority, and the chamber cannot organize itself without help from the smaller blocs. The Speakership will go to whoever can assemble the votes, and every bloc knows its price. ?][? if speaker_kingmaker = "liberal" : The <span style="color: #DAA520;">**Liberal Republicans**</span> hold the balance, and their votes will decide who can organize the House. ?][? if speaker_kingmaker = "radical" : The <span style="color: #7A1F5C;">**Radical Republicans**</span> hold the balance, and their votes will decide who can organize the House. ?][? if speaker_kingmaker = "other" : The minor parties and independents hold the balance, and each of them is bargaining for something. ?]
+
+[? if speaker_control = "dem" : The new Congress convenes with the <span style="color: [+ dem_color+];">**[+ dem_name +]**</span> holding the largest bloc in the House, and the Speaker's chair belongs to them. We can nominate no candidate of our own. The Speaker will assign the chairmanships, control the calendar and decide which of our bills ever see a vote, and we will watch from the minority benches. ?]
 
 - @Colfax
 - @Stevens
@@ -23,11 +61,11 @@ With our majority in the House of Representatives, we must choose a Speaker to p
 @Colfax
 title: Schuyler Colfax (Indiana)
 subtitle: [? if speaker = "Colfax" : Currently serving: retain him ?][? if speaker != "Colfax" : Moderate Republican. Affable, well-liked across factions. ?]
-view-if: year <= 1869 and house_majority >= 1
+view-if: year <= 1869 and speaker_control != "dem"
 on-arrival: {!
     let wasSpeaker = (Q.speaker === "Colfax");
     Q.speaker = "Colfax";
-    Q.speaker_party = "R";
+    Q.speaker_party = "Rep";
 
     if (!wasSpeaker) {
         Q.moderate_strength += 4;
@@ -50,45 +88,56 @@ on-arrival: {!
 !}
 go-to: speaker_end
 
-Schuyler Colfax, the "Smiler," is elected Speaker. Known for his warm personality and skill at building consensus, he is popular across the party's <span style="color: #9D2933;">**moderate**</span> and <span style="color: #B5651D;">**conservative**</span> wings.
+Schuyler Colfax, the "Smiler," is elected Speaker. His warmth and his talent for building consensus have made him popular across the party's <span style="color: #9D2933;">**moderate**</span> and <span style="color: #B5651D;">**conservative**</span> wings, and few members have a bad word to say about him.
 
-[? if radical_split = 0 : <span style="color: #7A1F5C;">**Radicals**</span> tolerate him, if not love him. ?]
+[? if radical_split = 0 : The <span style="color: #7A1F5C;">**Radicals**</span> tolerate him, if they do not love him. ?]
 
-[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> has no particular love for him either, though it is no longer their problem to solve. ?]
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> has no particular love for him either, though he is no longer their problem to solve. ?]
 
-[? if speaker = "Colfax" : Colfax continues his tenure. The House settles into its familiar rhythms under his steady hand. ?]
+[? if speaker = "Colfax" : Colfax continues his tenure, and the House settles back into its familiar rhythms under his steady hand. ?]
 
-His speakership opens channels to Ways & Means, strengthening our hand on tariff legislation.
+His allies on Ways and Means will smooth the path for tariff legislation.
 
 @Stevens
 title: Thaddeus Stevens (Pennsylvania)
-subtitle: [? if speaker = "Stevens" : Currently serving ?][? if speaker != "Stevens" : Radical choice. Transforms the speakership into a weapon for Reconstruction. ?]
-view-if: year <= 1868 and stevens_advisor = 1 and radical_split = 0 and house_majority >= 1
+subtitle: [? if speaker = "Stevens" : Currently serving ?][? if speaker != "Stevens" : Radical choice. Turns the speakership into a weapon for Reconstruction. ?]
+view-if: year <= 1868 and stevens_advisor = 1 and stevens_dead != 1 and radical_split = 0 and speaker_control = "rep"
 on-arrival: {!
+    let wasSpeaker = (Q.speaker === "Stevens");
     Q.speaker = "Stevens";
-    Q.speaker_party = "R";
-    Q.moderate_dissent += 5;
-    Q.conservative_dissent += 8;
-    Q.radical_strength += 8;
-    Q.radical_dissent -= 6;
-    Q.liberal_dissent += 4;
-    Q.freemen_rep += 4;
-    Q.rural_dem -= 2;
+    Q.speaker_party = "Rep";
+
+    if (!wasSpeaker) {
+        Q.moderate_dissent += 5;
+        Q.conservative_dissent += 8;
+        Q.radical_strength += 8;
+        Q.radical_dissent -= 6;
+        Q.liberal_dissent += 4;
+        Q.freemen_rep += 4;
+        Q.rural_dem -= 2;
+    } else {
+        Q.radical_strength += 2;
+        Q.radical_dissent -= 2;
+        Q.conservative_dissent += 2;
+    }
+
     Q.speaker_boosted_committee = "civil_rights";
     Q.speaker_boost_amount = 3;
 !}
 go-to: speaker_end
 
-Thaddeus Stevens storms into the Speaker's chair like a force of nature. His iron control of the House floor and committee assignments transforms the chamber into an engine of Radical Reconstruction. <span style="color: #0015bc;">**Democrats**</span> are apoplectic. <span style="color: #B5651D;">**Conservative Republicans**</span> are alarmed. <span style="color: #7A1F5C;">**Radicals**</span> are finally satisfied.
+Thaddeus Stevens takes the Speaker's chair like a force of nature. His iron grip on the floor and on committee assignments turns the chamber into an engine of Radical Reconstruction. The <span style="color: [+ dem_color+];">**[+ dem_name +]**</span> are apoplectic, the <span style="color: #B5651D;">**Conservative Republicans**</span> are alarmed, and the <span style="color: #7A1F5C;">**Radicals**</span> are finally satisfied.
+
+His allies on the Reconstruction Committee will move civil rights legislation at a speed no other Speaker could match.
 
 @Blaine
 title: James Blaine (Maine)
 subtitle: [? if speaker = "Blaine" : Currently serving ?][? if speaker != "Blaine" : Ambitious moderate. Strong legislator, eye on the presidency. ?]
-view-if: year >= 1868 and house_majority >= 1
+view-if: year >= 1868 and speaker_control != "dem"
 on-arrival: {!
     let wasSpeaker = (Q.speaker === "Blaine");
     Q.speaker = "Blaine";
-    Q.speaker_party = "R";
+    Q.speaker_party = "Rep";
 
     if (!wasSpeaker) {
         Q.moderate_strength += 5;
@@ -100,6 +149,9 @@ on-arrival: {!
         }
         Q.liberal_dissent -= 2;
         Q.middle_class_rep += 3;
+    } else {
+        Q.moderate_dissent -= 2;
+        Q.conservative_dissent -= 1;
     }
 
     Q.speaker_boosted_committee = "fiscal_policy";
@@ -107,159 +159,233 @@ on-arrival: {!
 !}
 go-to: speaker_end
 
-James Blaine of Maine takes the gavel. Energetic, politically cunning, and already cultivating a national profile, Blaine is a skilled legislative operator. He consolidates support from the <span style="color: #9D2933;">**moderate**</span> and <span style="color: #B5651D;">**conservative**</span> wings and proves adept at managing the floor.
+James Blaine of Maine takes the gavel. Energetic, politically cunning and already building a national following, he is a gifted floor manager who consolidates the <span style="color: #9D2933;">**moderate**</span> and <span style="color: #B5651D;">**conservative**</span> wings behind him almost at once.
 
-His ambitions, however, extend beyond the speakership. Keep an eye on him.
+[? if speaker = "Blaine" : Blaine's grip on the chamber is firmer than ever. ?]
 
+His ambitions, however, reach well beyond the Speakership, and it would be wise to keep an eye on him.
 
 @Dawes
 title: Henry Dawes (Massachusetts)
-subtitle: Fiscal conservative, known for probity and reform sympathies.
-view-if: year >= 1867 and house_majority >= 1
+subtitle: [? if speaker = "Dawes" : Currently serving ?][? if speaker != "Dawes" : Fiscal conservative, known for probity and reform sympathies. ?]
+view-if: year >= 1867 and speaker_control != "dem"
 on-arrival: {!
+    let wasSpeaker = (Q.speaker === "Dawes");
     Q.speaker = "Dawes";
-    Q.speaker_party = "R";
+    Q.speaker_party = "Rep";
 
-    Q.conservative_strength += 5;
-    Q.conservative_dissent -= 4;
-    if (Q.radical_split == 1) {
-        Q.radical_relation -= 5;
+    if (!wasSpeaker) {
+        Q.conservative_strength += 5;
+        Q.conservative_dissent -= 4;
+        if (Q.radical_split == 1) {
+            Q.radical_relation -= 5;
+        } else {
+            Q.radical_dissent += 5;
+        }
+        Q.liberal_dissent -= 3;
+        Q.moderate_dissent += 2;
+
+        Q.middle_class_rep += 4;
+        Q.workers_rep -= 2;
     } else {
-        Q.radical_dissent += 5;
+        Q.conservative_dissent -= 2;
+        Q.liberal_dissent -= 1;
     }
-    Q.liberal_dissent -= 3;
-    Q.moderate_dissent += 2;
-
-    Q.middle_class_rep += 4;
-    Q.workers_rep -= 2;
 
     Q.speaker_boosted_committee = "monetary_policy";
     Q.speaker_boost_amount = 2;
 !}
 go-to: speaker_end
 
-Henry Dawes brings a reputation for financial integrity and reform sympathies to the speakership. His selection satisfies the <span style="color: #B5651D;">**conservative**</span> and <span style="color: #DAA520;">**liberal**</span> factions, who see him as a counterweight to Radical excess.
+Henry Dawes brings a reputation for financial integrity and reform sympathies to the Speakership. His selection satisfies the <span style="color: #B5651D;">**conservative**</span> and <span style="color: #DAA520;">**liberal**</span> factions, who see in him a counterweight to Radical excess.
 
-[? if radical_split = 0 : <span style="color: #7A1F5C;">**Radicals**</span> distrust him. ?]
+[? if radical_split = 0 : The <span style="color: #7A1F5C;">**Radicals**</span> distrust him. ?]
 
-[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> distrusts him, unsurprised that the regular organization would pick a counterweight to everything they stood for. ?]
+[? if radical_split = 1 : The breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> distrusts him, and is unsurprised that the regular organization would pick a counterweight to everything it stood for. ?]
 
-The working class, sensing he will not be their champion, shift slightly.
+Working men, sensing that he will not be their champion, drift slightly away from the party.
 
-His speakership strengthens fiscal oversight and accelerates currency legislation.
-
+His Speakership strengthens fiscal oversight and speeds currency and banking legislation through committee.
 
 @Garfield
 title: James A. Garfield (Ohio)
-subtitle: Rising star. War hero, moderate Radical, skilled debater.
-view-if: year >= 1869 and house_majority >= 1
+subtitle: [? if speaker = "Garfield" : Currently serving ?][? if speaker != "Garfield" : Rising star. War hero, moderate Radical, skilled debater. ?]
+view-if: year >= 1869 and speaker_control != "dem"
 on-arrival: {!
+    let wasSpeaker = (Q.speaker === "Garfield");
     Q.speaker = "Garfield";
-    Q.speaker_party = "R";
+    Q.speaker_party = "Rep";
 
-    Q.moderate_strength += 4;
-    if (Q.radical_split == 1) {
-        Q.radical_relation += 2;
+    if (!wasSpeaker) {
+        Q.moderate_strength += 4;
+        if (Q.radical_split == 1) {
+            Q.radical_relation += 2;
+        } else {
+            Q.radical_dissent -= 2;
+        }
+        Q.conservative_dissent += 1;
+        Q.liberal_dissent -= 1;
+
+        Q.workers_rep += 2;
+        Q.rural_rep += 2;
+        Q.freemen_rep += 2;
     } else {
-        Q.radical_dissent -= 2;
+        Q.moderate_dissent -= 2;
+        Q.conservative_dissent -= 1;
     }
-    Q.conservative_dissent += 1;
-    Q.liberal_dissent -= 1;
-
-    Q.workers_rep += 2;
-    Q.rural_rep += 2;
-    Q.freemen_rep += 2;
 
     Q.speaker_boosted_committee = "civil_rights";
     Q.speaker_boost_amount = 2;
 !}
 go-to: speaker_end
 
-James Garfield, the self-made man from Ohio and celebrated Union general, brings credibility with both <span style="color: #7A1F5C;">**Radical**</span> and <span style="color: #9D2933;">**moderate**</span> wings. A gifted orator, he commands the floor with natural authority.
+James Garfield, the self-made man from Ohio and celebrated Union general, carries credibility with both the <span style="color: #7A1F5C;">**Radical**</span> and <span style="color: #9D2933;">**moderate**</span> wings. A gifted orator, he commands the floor with natural authority.
 
 [? if radical_split = 1 : Even the breakaway <span style="color: #7A1F5C;">**Radical Republican Party**</span> regards him as one of the few men left in the regular organization it can still work with. ?]
 
-His broad appeal reduces factional friction and opens up Reconstruction-minded legislation.
-
+His broad appeal lowers factional friction and clears the way for Reconstruction-minded legislation.
 
 @Washburne
 title: Elihu Washburne (Illinois)
-subtitle: Reliably loyal, limited ambition, strong in foreign affairs.
-view-if: year >= 1866 and year <= 1872 and house_majority >= 1
+subtitle: [? if speaker = "Washburne" : Currently serving ?][? if speaker != "Washburne" : Reliably loyal, limited ambition, strong in foreign affairs. ?]
+view-if: year >= 1866 and year <= 1872 and speaker_control != "dem"
 on-arrival: {!
+    let wasSpeaker = (Q.speaker === "Washburne");
     Q.speaker = "Washburne";
-    Q.speaker_party = "R";
+    Q.speaker_party = "Rep";
 
-    Q.moderate_strength += 3;
-    Q.conservative_strength += 2;
-    if (Q.radical_split == 1) {
-        Q.radical_relation -= 1;
+    if (!wasSpeaker) {
+        Q.moderate_strength += 3;
+        Q.conservative_strength += 2;
+        if (Q.radical_split == 1) {
+            Q.radical_relation -= 1;
+        } else {
+            Q.radical_dissent += 1;
+        }
+        Q.liberal_dissent += 2;
+
+        Q.uk_relation += 2;
     } else {
-        Q.radical_dissent += 1;
+        Q.moderate_dissent -= 1;
+        Q.conservative_dissent -= 1;
     }
-    Q.liberal_dissent += 2;
-
-    Q.uk_relation += 2;
 
     Q.speaker_boosted_committee = "judiciary";
     Q.speaker_boost_amount = 2;
 !}
 go-to: speaker_end
 
-Elihu Washburne, Grant's close political ally from Illinois, takes the gavel. Reliable, unflashy, and content to serve the party rather than himself, he keeps the caucus orderly.
+Elihu Washburne, a close political ally of Grant from Illinois, takes the gavel. Reliable, unflashy, and content to serve the party rather than himself, he keeps the caucus orderly and the floor quiet.
 
-His deep interest in foreign affairs opens new diplomatic avenues.
+His long interest in foreign affairs opens new diplomatic avenues, and his friendship with the General keeps the House and the Executive on good terms.
 
 @keep_speaker
 title: Retain [+ speaker +] as Speaker.
-view-if: speaker != "" and rep_majority >= 2 and house_majority >= 1
-on-arrival: moderate_dissent -= 1; conservative_dissent -= 1
+subtitle: Continuity has its value.
+view-if: speaker != "" and speaker_party != "Dem" and speaker_party != "NCP" and speaker_control != "dem"
+on-arrival: {!
+    Q.moderate_dissent -= 1;
+    Q.conservative_dissent -= 1;
+
+    // The Speaker keeps the same committee priority as before
+    if (Q.speaker_boosted_committee === undefined || Q.speaker_boosted_committee === "") {
+        Q.speaker_boosted_committee = "fiscal_policy";
+        Q.speaker_boost_amount = 2;
+    }
+!}
 go-to: speaker_end
 
-The House re-elects [+ speaker +] without controversy. Continuity has its value.
+The House re-elects [+ speaker +] without controversy. The members know his habits, the committees know their chairmen, and no one sees a reason to disturb an arrangement that works.
 
 @dem_speaker_note
-title: (Democrats hold the House we cannot elect a Speaker.)
-view-if: rep_majority = 0
+title: Watch the House organize without us.
+subtitle: The <span style="color: [+ dem_color+];">**[+ dem_name +]**</span> choose the Speaker.
+view-if: speaker_control = "dem"
 go-to: dem_speaker
 
 @dem_speaker
 on-arrival: {!
-    // Michael Kerr (1875) or Samuel Randall (1876)
-    if (Q.year >= 1875) {
+    let wasOpposition = (Q.speaker_party === "Dem" || Q.speaker_party === "NCP");
+
+    // Michael Kerr (elected 1875, died in 1876) or Samuel Randall (elected late 1876)
+    if (Q.year >= 1876) {
         Q.speaker = "Randall";
-        Q.speaker_party = "D";
     } else {
         Q.speaker = "Kerr";
-        Q.speaker_party = "D";
     }
+    Q.speaker_party = (Q.ncp_founded == 1) ? "NCP" : "Dem";
 
-    if (Q.radical_split == 1) {
-        Q.radical_relation -= 5;
+    if (!wasOpposition) {
+        // We have just lost the chamber
+        if (Q.radical_split == 1) {
+            Q.radical_relation -= 5;
+        } else {
+            Q.radical_dissent += 5;
+        }
+        Q.moderate_dissent += 3;
+        Q.conservative_dissent += 2;
+
+        // Reconstruction support is recalculated every month, so the cost is
+        // applied to the persistent political cost penalty instead of the support itself
+        Q.PoliticalCostPenalty = (Q.PoliticalCostPenalty || 0) + 10;
     } else {
-        Q.radical_dissent += 5;
+        Q.moderate_dissent += 1;
     }
-    Q.moderate_dissent += 3;
-    Q.reconstruction_support -= 5;
 
     Q.speaker_boosted_committee = "";
     Q.speaker_boost_amount = 0;
 !}
 go-to: speaker_end
 
-With the <span style="color: #0015bc;">**Democrats**</span> in control of the House, [+ speaker +] takes the gavel as Speaker. Our legislative agenda is now effectively blocked. Bills that reach the floor will be shaped by <span style="color: #0015bc;">**Democratic**</span> priorities, not ours.
+The <span style="color: [+ dem_color+];">**[+ dem_name +]**</span> hold the House, and [+ speaker +] takes the gavel as Speaker.
 
-This is the consequence of losing the House. Reconstruction stalls. Our chairmanships are stripped. We can oppose, but we cannot govern.
+[? if speaker = "Kerr" : Michael Kerr of Indiana is a lawyer of the old school, a defender of hard money and a steady opponent of Reconstruction measures. He does not need to be aggressive. He only needs to be in the chair. ?][? if speaker = "Randall" : Samuel Randall of Pennsylvania is a tough parliamentary tactician, a protectionist and a harsh critic of the administration. He knows the House rules better than anyone, and he knows exactly how to use them. ?]
 
+Our legislative agenda is now effectively blocked. Bills that reach the floor will be shaped by <span style="color: [+ dem_color+];">**[+ dem_name +]**</span> priorities, not ours.
+
+This is the price of losing the House. Reconstruction stalls, our chairmanships are stripped, and we can oppose but we cannot govern.
 
 @speaker_end
 title: Finish Voting
-on-arrival: speaker_election_needed = 0
+on-arrival: {!
+    Q.speaker_election_needed = 0;
+
+    // Republicans who organize a House without a majority of their own pay for it
+    if (Q.speaker_control === "coalition") {
+        Q.liberal_strength += 2;
+        Q.liberal_dissent -= 3;
+        Q.conservative_dissent += 1;
+    }
+    else if (Q.speaker_control === "contested") {
+        if (Q.speaker_kingmaker === "liberal") {
+            Q.liberal_strength += 3;
+            Q.liberal_dissent -= 3;
+            Q.conservative_dissent += 2;
+        }
+        else if (Q.speaker_kingmaker === "radical") {
+            Q.radical_relation += 3;
+            Q.conservative_dissent += 3;
+            Q.moderate_dissent += 2;
+        }
+        else {
+            Q.PoliticalCostPenalty = (Q.PoliticalCostPenalty || 0) + 2;
+            Q.corruption += 1;
+        }
+    }
+!}
 
 The election of [+ speaker +] as Speaker is complete.
 
-[? if speaker_boosted_committee = "fiscal_policy" : The new Speaker's allies on Ways & Means will smooth the path for fiscal and tariff legislation. ?]
+[? if speaker_control = "coalition" : The <span style="color: #DAA520;">**Liberal Republicans**</span> have delivered the votes we needed, and they will expect their price to be paid in committee seats and influence. ?]
+
+[? if speaker_control = "contested" and speaker_kingmaker = "liberal" : The <span style="color: #DAA520;">**Liberal Republicans**</span> have sold their votes dearly, and they leave with several chairmanships and a promise of influence. ?]
+
+[? if speaker_control = "contested" and speaker_kingmaker = "radical" : The <span style="color: #7A1F5C;">**Radical Republicans**</span> have named their price, and the party's moderates are not happy about the bargain. ?]
+
+[? if speaker_control = "contested" and speaker_kingmaker = "other" : The minor parties and independents have extracted patronage and committee seats in return for their votes, and the bargain was not a clean one. ?]
+
+[? if speaker_boosted_committee = "fiscal_policy" : The new Speaker's allies on Ways and Means will smooth the path for fiscal and tariff legislation. ?]
 [? if speaker_boosted_committee = "monetary_policy" : The new Speaker prioritizes currency and banking legislation, speeding it through committee. ?]
 [? if speaker_boosted_committee = "civil_rights" : The new Speaker assigns a Reconstruction Committee favorable to our agenda, speeding civil rights legislation through the House. ?]
-[? if speaker_boosted_committee = "judiciary" : The new Speaker keeps pressure on the courts, speeding judiciary reform through committee. ?]
-[? if speaker_boosted_committee = "" : <span style="color: #0015bc;">**Democrats**</span> controlling the chamber ?]
+[? if speaker_boosted_committee = "judiciary" : The new Speaker keeps close watch on the courts and speeds judiciary reform through committee. ?]
+[? if speaker_boosted_committee = "" : The committees now answer to the <span style="color: [+ dem_color+];">**[+ dem_name +]**</span>, and none of our legislation will be speeded through. ?]
