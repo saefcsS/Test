@@ -6,11 +6,11 @@ audio: music/Dixie's_Land_Instrumental.mp3
 set-bg: img/Confederate_congress.jpg
 max-visits: 1
 
-Seven Southern states hold their first elections since the collapse of the rebellion. With the old political order broken, Unionists seek to rebuild within the restored Union while Conservatives, drawn largely from the planter class and former Confederates, move to reclaim control over Southern affairs.
+Seven Southern states go to the polls in the first elections since the rebellion collapsed. With the old political order shattered, Unionists hope to rebuild within the restored Union, while Conservatives, drawn largely from the planter class and the former Confederacy, move to reclaim control of Southern affairs.
 
-President Johnson's lenient Reconstruction has returned civilian government to the South remarkably quickly. Freedmen remain barred from the ballot, while pardoned Confederates return to public office across the region. Whether these elections mark genuine reunion or the restoration of the old order will be decided in Washington.
+President Johnson's lenient Reconstruction has returned civilian government to the South with remarkable speed. Freedmen remain barred from the ballot, and pardoned Confederates are returning to public office across the region. Whether these elections mark a genuine reunion or the restoration of the old order will be decided in Washington.
 
-- @Dixie: Lets see the results
+- @Dixie: Let's see the results
 
 @Dixie
 on-arrival: {!
@@ -48,22 +48,41 @@ let dixie1865 = {
 
 let partyLabel = { rep: "Unionist", dem: "Conservative" };
 
-let baselineRep = 55;
-let baselineDem = 42;
-let nationalRepSwing = (Q.workers_rep + Q.middle_class_rep + Q.rural_rep + Q.freemen_rep) / 4 - baselineRep;
-nationalRepSwing = Math.max(-6, Math.min(6, nationalRepSwing));
+function clamp(value, low, high) {
+  return Math.max(low, Math.min(high, value));
+}
+
+let startWhiteRep = (52 + 65 + 58) / 3;   // starting workers, middle class, rural
+let currentWhiteRep = (Q.workers_rep + Q.middle_class_rep + Q.rural_rep) / 3;
+let supportShift = clamp((currentWhiteRep - startWhiteRep) * 0.4, -3, 3);
+
+let armyShift = clamp(((Q.South_army_strength || 0) - 100) / 100 * 4, -4, 4);
+
+let leagueShift = clamp(((Q.Union_League_strength || 0) - 60) / 60 * 2, -2, 2);
+
+let directionShift = clamp(((Q.radical_strength - 20) - (Q.conservative_strength - 15)) * 0.1, -2, 2);
+
+let playerShift = clamp(supportShift + armyShift + leagueShift + directionShift, -8, 8);
+Q.dixie_1865_shift = Math.round(playerShift * 10) / 10;
 
 function resolveRace(race) {
-  let floorMargin = race.contested ? race.margin : Math.max(80, race.margin - Math.abs(nationalRepSwing) * 2);
-  let adjMargin = floorMargin;
+  let sign = race.winner === "rep" ? 1 : -1;
+  let signedMargin = sign * race.margin;   // positive = Unionist lead
+
   if (race.contested) {
-    adjMargin += nationalRepSwing * (race.winner === "rep" ? 1 : -1);
-    adjMargin += (Math.random() * 10) - 5;
-    adjMargin = Math.max(0.5, adjMargin);
+    signedMargin += playerShift;
+    let winner = signedMargin >= 0 ? "rep" : "dem";
+
+    signedMargin += (Math.random() * 10) - 5;
+    signedMargin = (winner === "rep") ? Math.max(0.5, signedMargin) : Math.min(-0.5, signedMargin);
+  } else {
+    signedMargin += playerShift * 0.4;
+    signedMargin = sign * clamp(sign * signedMargin, 60, 99);
   }
-  let repShare = race.winner === "rep" ? 50 + adjMargin / 2 : 50 - adjMargin / 2;
+
+  let repShare = clamp(50 + signedMargin / 2, 1, 99);
   let demShare = 100 - repShare;
-  let finalWinner = repShare >= demShare ? "rep" : "dem";
+  let finalWinner = repShare >= 50 ? "rep" : "dem";
   return { repShare: repShare, demShare: demShare, winner: finalWinner };
 }
 
