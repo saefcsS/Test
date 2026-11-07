@@ -105,7 +105,6 @@ The reunion restores much of the old coalition, but not its old trust. Moderates
 on-arrival: {!
 
 let relationScore = Q.liberal_relation || 30;
-// Civil service deal brings back slightly more
 let returnRate = 0.65 + (relationScore / 100) * 0.15;
 let demRate = 0.20 - (relationScore / 100) * 0.08;
 let otherRate = 1 - returnRate - demRate;
@@ -143,8 +142,7 @@ Q.liberal_dissent += 8;
 Q.conservative_dissent += 8; // conservatives hate the civil service concession
 Q.radical_dissent += 3;
 
-// Civil service reform moves the needle on corruption
-Q.civil_service_reform += 1;
+Q.civil_service_act_available = 1;
 
 Q.middle_class_rep += 6; // civil service reform appeals to middle class
 Q.middle_class_lib = 0;
@@ -186,7 +184,6 @@ unavailable-subtitle: Not enough resources to offer meaningful patronage positio
 on-arrival: {!
 
 let relationScore = Q.liberal_relation || 30;
-// Patronage works well if relations aren't rock bottom
 let returnRate = 0.62 + (relationScore / 100) * 0.10;
 let demRate = 0.22 - (relationScore / 100) * 0.08;
 let otherRate = 1 - returnRate - demRate;

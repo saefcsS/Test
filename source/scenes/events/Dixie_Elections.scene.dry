@@ -70,20 +70,19 @@ function resolveRace(race) {
   let signedMargin = sign * race.margin;   // positive = Unionist lead
 
   if (race.contested) {
-    signedMargin += playerShift;
-    let winner = signedMargin >= 0 ? "rep" : "dem";
-
-    signedMargin += (Math.random() * 10) - 5;
-    signedMargin = (winner === "rep") ? Math.max(0.5, signedMargin) : Math.min(-0.5, signedMargin);
+    signedMargin += playerShift * 0.5;
+    signedMargin += (Math.random() * 6) - 3;
+    // Never lets the margin cross zero, so the storybook winner always wins
+    signedMargin = sign * Math.max(0.5, sign * signedMargin);
   } else {
-    signedMargin += playerShift * 0.4;
-    signedMargin = sign * clamp(sign * signedMargin, 60, 99);
+    signedMargin += playerShift * 0.3;
+    signedMargin += (Math.random() * 4) - 2;
+    signedMargin = sign * clamp(sign * signedMargin, 70, 99);
   }
 
   let repShare = clamp(50 + signedMargin / 2, 1, 99);
   let demShare = 100 - repShare;
-  let finalWinner = repShare >= 50 ? "rep" : "dem";
-  return { repShare: repShare, demShare: demShare, winner: finalWinner };
+  return { repShare: repShare, demShare: demShare, winner: race.winner };
 }
 
 for (let state in dixie1865) {
