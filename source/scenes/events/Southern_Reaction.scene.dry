@@ -1,0 +1,115 @@
+title: Southern Reaction
+subtitle: [+ southern_reaction_state_name +]
+tags: event
+priority: -1
+view-if: southern_reaction_active = 1
+on-arrival: {!
+    let s = Q.southern_reaction_state;
+    Q.southern_reaction_active = 0;
+    Q.southern_reaction_posture = Q[s + '_occupation_posture'] || 0;
+    Q.southern_reaction_dem_gov = Q[s + '_gub_winner'] === 'dem' ? 1 : 0;
+!}
+
+[? if southern_reaction_stage = 1 : Conservative newspapers in [+ southern_reaction_state_name +] have turned openly against the occupation. Planters talk of boycotting Northern merchants, county clubs are organizing, and sheriffs somehow lose the paperwork on federal orders. Nothing is illegal yet, but the mood is hardening. ?]
+
+[? if southern_reaction_stage = 2 : The legislature of [+ southern_reaction_state_name +] has passed resolutions condemning federal interference and instructing local officials not to cooperate with the army. Redeemer leaders openly speak of taking back the statehouse at the next election. ?]
+
+[? if southern_reaction_dem_gov = 1 : The state's <span style="color: [+ dem_color+];">**[+ dem_name +]**</span> governor has done nothing to discourage them. ?]
+
+- @sr_enforce: Enforce federal authority
+- @sr_negotiate: Negotiate a settlement
+- @sr_give_ground: [? if southern_reaction_stage = 1 : Let the protests run their course ?][? if southern_reaction_stage = 2 : Reduce the federal presence ?]
+
+@sr_enforce
+choose-if: southern_reaction_posture >= 1 and army_strength >= 1
+unavailable-subtitle: [? if southern_reaction_posture < 1 : We have no federal presence there to act. ?][? if army_strength < 1 : The army has no troops to spare. ?]
+subtitle: [? if southern_reaction_stage = 1 : Breaks the organizing for now, at the price of deeper resentment. ?][? if southern_reaction_stage = 2 : Sends up to 3 thousand troops. Deepens resentment. ?]
+on-arrival: {!
+    let s = Q.southern_reaction_state;
+    if (Q.southern_reaction_stage == 1) {
+        Q[s + '_resentment'] = Math.min(100, (Q[s + '_resentment'] || 0) + 8);
+        Q[s + '_redemption_strength'] = Math.max(0, (Q[s + '_redemption_strength'] || 0) - 3);
+        Q.dem_relation -= 3;
+        Q.liberal_dissent += 3;
+        Q.conservative_dissent += 2;
+        if (Q.radical_split == 1) { Q.radical_relation += 2; } else { Q.radical_dissent -= 2; }
+    } else {
+        let sent = Math.min(3, Q.army_strength);
+        Q[s + '_garrison_troops'] = (Q[s + '_garrison_troops'] || 0) + sent;
+        Q.army_strength -= sent;
+        Q.South_army_strength += sent;
+        Q[s + '_resentment'] = Math.min(100, (Q[s + '_resentment'] || 0) + 10);
+        Q[s + '_redemption_strength'] = (Q[s + '_redemption_strength'] || 0) + 2;
+        Q.dem_relation -= 4;
+        Q.freemen_rep += 2;
+        Q.liberal_dissent += 3;
+    }
+!}
+
+[? if southern_reaction_stage = 1 : The district commander shuts down the most hostile papers and disperses the clubs. The organizing goes quiet, but every arrest becomes a grievance, and <span style="color: #DAA520;">**Liberal Republicans**</span> are uncomfortable with soldiers being used against newspapers. ?]
+
+[? if southern_reaction_stage = 2 : Fresh troops arrive and the order goes out: federal authority will be obeyed. Officials quietly comply, but the legislature's defiance becomes a rallying cry across the South. ?]
+
+@sr_negotiate
+choose-if: moderate_strength + conservative_strength >= 40
+unavailable-subtitle: We lack the political weight to carry a settlement.
+subtitle: Cools the state, but Radicals will call it weakness.
+on-arrival: {!
+    let s = Q.southern_reaction_state;
+    if (Q.southern_reaction_stage == 1) {
+        Q[s + '_resentment'] = Math.max(0, (Q[s + '_resentment'] || 0) - 8);
+        Q[s + '_redemption_strength'] = (Q[s + '_redemption_strength'] || 0) + 1;
+        Q.moderate_strength += 1;
+        Q.dem_relation += 2;
+        Q.freemen_rep -= 1;
+        if (Q.radical_split == 1) { Q.radical_relation -= 3; } else { Q.radical_dissent += 3; }
+    } else {
+        Q[s + '_resentment'] = Math.max(0, (Q[s + '_resentment'] || 0) - 15);
+        Q[s + '_redemption_strength'] = (Q[s + '_redemption_strength'] || 0) + 5;
+        Q.dem_relation += 3;
+        Q.freemen_rep -= 3;
+        Q.conservative_strength += 1;
+        if (Q.radical_split == 1) { Q.radical_relation -= 5; } else { Q.radical_dissent += 6; }
+    }
+!}
+
+[? if southern_reaction_stage = 1 : We send a delegation of loyal Southern moderates to hear the planters' grievances and promise that the occupation will be conducted with restraint. The tone in the state softens, though freedmen note that no one asked them. ?]
+
+[? if southern_reaction_stage = 2 : We open talks with the legislature's leaders. The resolutions are quietly shelved in return for assurances on local self-government. Freedmen and Unionists in the state feel traded away. ?]
+
+@sr_give_ground
+choose-if: southern_reaction_stage = 1 or southern_reaction_posture >= 1
+unavailable-subtitle: There is no federal presence to reduce.
+subtitle: [? if southern_reaction_stage = 1 : Cheap, but the organizers grow bolder. ?][? if southern_reaction_stage = 2 : Lowers the temperature, emboldens the Redeemers. ?]
+on-arrival: {!
+    let s = Q.southern_reaction_state;
+    if (Q.southern_reaction_stage == 1) {
+        Q[s + '_redemption_strength'] = (Q[s + '_redemption_strength'] || 0) + 4;
+        Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+        if (Q.radical_split == 1) { Q.radical_relation -= 2; } else { Q.radical_dissent += 2; }
+    } else {
+        let posture = Q[s + '_occupation_posture'] || 0;
+        let troops = Q[s + '_garrison_troops'] || 0;
+        let newPosture = Math.max(0, posture - 1);
+        let returning;
+        if (newPosture === 0) {
+            returning = troops;
+        } else {
+            returning = Math.min(troops, Math.max(3, Math.round(troops * 0.5)));
+            returning = Math.max(returning, troops - 15);
+        }
+        Q[s + '_occupation_posture'] = newPosture;
+        Q[s + '_garrison_troops'] = troops - returning;
+        Q.army_strength += returning;
+        Q.South_army_strength -= returning;
+        Q[s + '_resentment'] = Math.max(0, (Q[s + '_resentment'] || 0) - 20);
+        Q[s + '_redemption_strength'] = (Q[s + '_redemption_strength'] || 0) + 8;
+        Q.dem_relation += 3;
+        Q.freemen_rep -= 3;
+        if (Q.radical_split == 1) { Q.radical_relation -= 4; } else { Q.radical_dissent += 5; }
+    }
+!}
+
+[? if southern_reaction_stage = 1 : We decline to answer the protests. Nothing is done, and the organizers take that as permission to continue. ?]
+
+[? if southern_reaction_stage = 2 : We pull back part of the garrison. The legislature claims a victory and tensions ease, but Unionists and freedmen in the state feel their protection slipping away. ?]

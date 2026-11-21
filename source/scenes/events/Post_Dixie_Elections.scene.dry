@@ -89,6 +89,7 @@ for (let state of Q.southern_states) {
   // State loyalty (occupation, judicial reform, violence, amendments) pulls the
   // result toward or away from Republican strength, on top of the raw demographic math.
   repPct += ((Q[state + "_loyalty"] || 50) - 50) * 0.3;
+  repPct -= Math.min(8, (Q[state + "_redemption_strength"] || 0) * 0.08);
 
   // Incumbency/momentum - states don't flip from scratch every cycle
   repPct += (Q[state + "_gub_winner"] === "rep") ? 2 : (Q[state + "_gub_winner"] === "dem" ? -2 : 0);

@@ -890,9 +890,10 @@ if (Q.month_actions >= 1) {
     let avgPosture = Q.southern_states.length ? avgPostureTotal / Q.southern_states.length : 0;
 
     if (nationalOccupationLevel === 0) {
-        // No Reconstruction Act passed - occupation mechanics stay fully dormant
         Q.occupation_month_total = 0;
         Q.occupation_upkeep_total = 0;
+        Q.occupation_upkeep_display = 0;
+        Q.occupation_fatigue_display = 0;
         Q.occupation_scandal_penalty = Math.max(0, (Q.occupation_scandal_penalty || 0) - 0.5);
     } else {
         // BASELINE GROWTH / SUPPRESSION (monthly) - driven by average posture
@@ -908,38 +909,96 @@ if (Q.month_actions >= 1) {
             if (Q.whiteL_formed == 1){ Q.whiteL_strength += 0.5; }
         }
 
-        // --- Per-state occupation months, upkeep ---
+        let occUpkeepBase = [0, 0.003, 0.005];
+        let occUpkeepPerThousand = 0.0008;
+        let occStateNames = { AL: "Alabama", AR: "Arkansas", FL: "Florida", GA: "Georgia", LA: "Louisiana", MS: "Mississippi", NC: "North Carolina", SC: "South Carolina", TN: "Tennessee", TX: "Texas", VA: "Virginia" };
+        let occCostRows = [];
+
         Q.occupation_month_total = 0;
         Q.occupation_upkeep_total = 0;
         for (let state of Q.southern_states) {
             let posture = Q[state + '_occupation_posture'] || 0;
+            let troops = Q[state + '_garrison_troops'] || 0;
             Q[state + '_occupation_months'] = posture > 0 ? (Q[state + '_occupation_months'] || 0) + 1 : 0;
             Q.occupation_month_total += Q[state + '_occupation_months'];
 
-            // TUNE: placeholder upkeep formula, needs balancing against Q.budget scale
-            let troops = Q[state + '_garrison_troops'] || 0;
-            let upkeep = posture === 0 ? 0 : (posture === 1 ? 0.003 + troops * 0.0008 : 0.005 + troops * 0.0008);
+            let upkeep = posture === 0 ? 0 : occUpkeepBase[posture] + troops * occUpkeepPerThousand;
             Q[state + '_occupation_upkeep'] = upkeep;
+            Q[state + '_upkeep_year'] = Math.round(upkeep * 12 * 100) / 100;
             Q.occupation_upkeep_total += upkeep;
+            if (upkeep > 0) occCostRows.push({ name: occStateNames[state] || state, cost: upkeep * 12 });
         }
-        Q.budget -= Q.occupation_upkeep_total; // TUNE: confirm this is the right scale before shipping
+        Q.budget -= Q.occupation_upkeep_total;
         Q.occupation_upkeep_display = Math.round(Q.occupation_upkeep_total * 12 * 10) / 10;
-        // --- Scandal penalty decay (generator lives in future scandal/atrocity events) ---
+
+        occCostRows.sort(function (a, b) { return b.cost - a.cost; });
+        Q.occupation_top_cost_text = occCostRows.slice(0, 3).map(function (r) { return r.name + " (" + r.cost.toFixed(1) + ")"; }).join(", ");
+
         Q.occupation_scandal_penalty = Math.max(0, (Q.occupation_scandal_penalty || 0) - 0.5);
 
-        // --- Redemption strength drift (placeholder pending full design pass) ---
-        for (let state of Q.southern_states) {
-            let posture = Q[state + '_occupation_posture'] || 0;
-            let drift = posture === 0 ? 0.4 : (posture === 1 ? 0.15 : -0.1);
-            if (Q[state + '_gub_winner'] === 'dem') drift += 0.2;
-            Q[state + '_redemption_strength'] = Math.max(0, (Q[state + '_redemption_strength'] || 0) + drift);
+        Q.occupation_fatigue_display = Math.round((Q.FatiguePenalty || 0) * 10) / 10;
+        Q.middle_class_rep -= Q.occupation_upkeep_total * 2;      // taxpayers
+        Q.conservative_dissent += Q.occupation_upkeep_total * 2;  // fiscal conservatives
+        if (Q.budget < 0) {
+            Q.middle_class_rep -= 0.3;
+            Q.liberal_dissent += 0.3;
         }
 
-        // --- Propagate national kkk/whiteL delta to states, scaled by local conditions ---
-        // Garrison troops only ever suppress GROWTH, and only within the ceiling
-        // the state's own occupation posture allows (posture gates, garrison
-        // modifies within the gate - never crosses into another posture tier's
-        // range). Decline is untouched by garrison, per design call.
+        let occRedemptionTotal = 0;
+        for (let state of Q.southern_states) {
+            let posture = Q[state + '_occupation_posture'] || 0;
+            let troops = Q[state + '_garrison_troops'] || 0;
+
+            let rGrowth = posture === 2 ? 1.2 : (posture === 1 ? 0.4 : -0.5);
+            if (posture > 0) rGrowth += troops * 0.04;
+            if (Q.habeas_suspended == 1 && posture > 0) rGrowth += 0.5;
+            if (Q.state_militia_formed == 1 && posture > 0) rGrowth += 0.2;
+            rGrowth -= 0.3;   // grievances fade slowly on their own
+            Q[state + '_resentment'] = Math.max(0, Math.min(100, (Q[state + '_resentment'] || 0) + rGrowth));
+
+            let drift = posture === 0 ? 0.4 : (posture === 1 ? 0.15 : -0.1);
+            if (Q[state + '_gub_winner'] === 'dem') drift += 0.2;
+            drift += Q[state + '_resentment'] * 0.004;
+            Q[state + '_redemption_strength'] = Math.max(0, Math.min(100, (Q[state + '_redemption_strength'] || 0) + drift));
+            occRedemptionTotal += Q[state + '_redemption_strength'];
+        }
+
+        let occAvgRedemption = occRedemptionTotal / Q.southern_states.length;
+        Q.dem_bourbon_strength += (occAvgRedemption / 100) * 0.25;
+        Q.rural_dem += (occAvgRedemption / 100) * 0.1;
+
+        Q.southern_reaction_cooldown = Math.max(0, (Q.southern_reaction_cooldown || 0) - 1);
+        if (Q.southern_reaction_active != 1 && Q.southern_reaction_cooldown === 0) {
+            let bestState = '';
+            let bestStage = 0;
+            let bestScore = 0;
+            for (let state of Q.southern_states) {
+                let stage = Q[state + '_reaction_stage'] || 0;
+                let resentment = Q[state + '_resentment'] || 0;
+                let redemption = Q[state + '_redemption_strength'] || 0;
+                if (resentment < 10 && stage > 0) {
+                    Q[state + '_reaction_stage'] = 0;   // calmed down, can escalate again later
+                    stage = 0;
+                }
+                let nextStage = 0;
+                if (stage === 0 && resentment >= 30) nextStage = 1;
+                else if (stage === 1 && resentment >= 55 && redemption >= 25) nextStage = 2;
+                if (nextStage > 0 && resentment > bestScore) {
+                    bestState = state;
+                    bestStage = nextStage;
+                    bestScore = resentment;
+                }
+            }
+            if (bestState !== '') {
+                Q.southern_reaction_active = 1;
+                Q.southern_reaction_state = bestState;
+                Q.southern_reaction_state_name = occStateNames[bestState] || bestState;
+                Q.southern_reaction_stage = bestStage;
+                Q.southern_reaction_cooldown = 6;
+                Q[bestState + '_reaction_stage'] = bestStage;
+            }
+        }
+        
         let kkkDelta = Q.kkk_strength - (Q.kkk_strength_last || 0);
         let whiteLDelta = Q.whiteL_strength - (Q.whiteL_strength_last || 0);
         for (let state of Q.southern_states) {
@@ -954,6 +1013,7 @@ if (Q.month_actions >= 1) {
                 let kkkGarrisonSuppression = troops / (troops + 20);
                 kkkMult *= kkkBaseMult - (kkkBaseMult - kkkFloorMult) * kkkGarrisonSuppression;
                 kkkMult *= gub === 'dem' ? 1.3 : (gub === 'rep' ? 0.8 : 1.0);
+                kkkMult *= 1 + (Q[state + '_redemption_strength'] || 0) / 250;
                 kkkMult *= Q.enforcement_acts == 1 ? 0.85 : 1.0;
             } else {
                 kkkMult *= posture === 2 ? 1.4 : (posture === 1 ? 1.15 : 1.0);
@@ -969,6 +1029,7 @@ if (Q.month_actions >= 1) {
                 whiteLMult *= whiteLBaseMult - (whiteLBaseMult - whiteLFloorMult) * whiteLGarrisonSuppression;
                 whiteLMult *= gub === 'dem' ? 1.3 : (gub === 'rep' ? 0.8 : 1.0);
                 whiteLMult *= Q.enforcement_acts == 1 ? 0.85 : 1.0;
+                whiteLMult *= 1 + (Q[state + '_redemption_strength'] || 0) / 250;
             } else {
                 whiteLMult *= posture === 2 ? 1.4 : (posture === 1 ? 1.15 : 1.0);
                 whiteLMult *= gub === 'dem' ? 0.7 : (gub === 'rep' ? 1.25 : 1.0);

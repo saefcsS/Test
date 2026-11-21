@@ -132,6 +132,10 @@ Senate Seats:
 
 [? if rep_majority = 1 : Budget: [+ budget +] ?]
 
+[? if occupation_upkeep_display > 0 : Occupation upkeep: -[+ occupation_upkeep_display +] per year ?]
+
+[? if occupation_fatigue_display > 0 : Occupation fatigue: -[+ occupation_fatigue_display +] Reconstruction support ?]
+
 Next House election: [+ next_house_election_month : month +] [+ next_house_election_year +]
 
 Next Senate election: [+ next_senate_election_month : month +] [+ next_senate_election_year +]

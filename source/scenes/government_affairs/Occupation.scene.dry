@@ -26,8 +26,17 @@ window.DixieOccupationMap = {
     return '#4a7c3c';
   },
 
+   resentmentColor: function(stateId) {
+    var r = this.data[stateId].resentment;
+    if (r >= 60) return '#8b1a1a';
+    if (r >= 40) return '#c76b2e';
+    if (r >= 20) return '#d4b23c';
+    if (r >= 8)  return '#8fae4a';
+    return '#4a7c3c';
+  },
+
   recolor: function() {
-    var colorFn = this.mode === 'danger' ? this.dangerColor : this.postureColor;
+    var colorFn = this.mode === 'danger' ? this.dangerColor : (this.mode === 'resentment' ? this.resentmentColor : this.postureColor);
     for (var id in this.paths) {
       if (id === 'Outline') continue;
       this.paths[id].style.fill = colorFn.call(this, id);
@@ -133,19 +142,40 @@ window.DixieOccupationMap = {
   }
 };
 
-DixieOccupationMap.draw({ container: "#Dixie-map" }, {
-    AL: { posture: Q.AL_occupation_posture, danger: (Q.AL_kkk_strength||0) + (Q.AL_whiteL_strength||0) },
-    AR: { posture: Q.AR_occupation_posture, danger: (Q.AR_kkk_strength||0) + (Q.AR_whiteL_strength||0) },
-    FL: { posture: Q.FL_occupation_posture, danger: (Q.FL_kkk_strength||0) + (Q.FL_whiteL_strength||0) },
-    GA: { posture: Q.GA_occupation_posture, danger: (Q.GA_kkk_strength||0) + (Q.GA_whiteL_strength||0) },
-    LA: { posture: Q.LA_occupation_posture, danger: (Q.LA_kkk_strength||0) + (Q.LA_whiteL_strength||0) },
-    MS: { posture: Q.MS_occupation_posture, danger: (Q.MS_kkk_strength||0) + (Q.MS_whiteL_strength||0) },
-    NC: { posture: Q.NC_occupation_posture, danger: (Q.NC_kkk_strength||0) + (Q.NC_whiteL_strength||0) },
-    SC: { posture: Q.SC_occupation_posture, danger: (Q.SC_kkk_strength||0) + (Q.SC_whiteL_strength||0) },
-    TN: { posture: Q.TN_occupation_posture, danger: (Q.TN_kkk_strength||0) + (Q.TN_whiteL_strength||0) },
-    TX: { posture: Q.TX_occupation_posture, danger: (Q.TX_kkk_strength||0) + (Q.TX_whiteL_strength||0) },
-    VA: { posture: Q.VA_occupation_posture, danger: (Q.VA_kkk_strength||0) + (Q.VA_whiteL_strength||0) },
+window.refreshOccupationCosts = function(Qs) {
+  var base = [0, 0.003, 0.005];
+  var cost = function(p, t) { return p === 0 ? 0 : base[p] + t * 0.0008; };
+  var round2 = function(x) { return Math.round(x * 12 * 100) / 100; };
+  var total = 0, moodTotal = 0;
+  Qs.southern_states.forEach(function(s) {
+    var posture = Qs[s + '_occupation_posture'] || 0;
+    var troops = Qs[s + '_garrison_troops'] || 0;
+    var now = cost(posture, troops);
+    var newP = Math.max(0, posture - 1), ret;
+    if (newP === 0) { ret = troops; }
+    else { ret = Math.min(troops, Math.max(3, Math.round(troops * 0.5))); ret = Math.max(ret, troops - 15); }
+    Qs[s + '_upkeep_year'] = round2(now);
+    Qs[s + '_upkeep_increase'] = posture < 2 ? round2(cost(posture + 1, troops + 3) - now) : 0;
+    Qs[s + '_upkeep_send'] = round2(cost(posture, troops + 5) - now);
+    Qs[s + '_upkeep_saved'] = round2(now - cost(newP, troops - ret));
+    total += now;
+    moodTotal += Qs[s + '_resentment'] || 0;
+  });
+  Qs.occupation_upkeep_display = Math.round(total * 12 * 10) / 10;
+  var avg = moodTotal / Qs.southern_states.length;
+  Qs.southern_mood = avg >= 40 ? 3 : (avg >= 25 ? 2 : (avg >= 10 ? 1 : 0));
+};
+window.refreshOccupationCosts(Q);
+
+var occMapData = {};
+Q.southern_states.forEach(function(s) {
+  occMapData[s] = {
+    posture: Q[s + '_occupation_posture'],
+    danger: (Q[s + '_kkk_strength'] || 0) + (Q[s + '_whiteL_strength'] || 0),
+    resentment: Q[s + '_resentment'] || 0
+  };
 });
+DixieOccupationMap.draw({ container: "#Dixie-map" }, occMapData);
 
 !}
 
@@ -154,6 +184,7 @@ DixieOccupationMap.draw({ container: "#Dixie-map" }, {
 {!<div class="map-controls">!}
   <button class="map-btn active" data-mode="posture" onclick="window.DixieOccupationMap.setMode('posture')">Occupation Level</button>
   <button class="map-btn" data-mode="danger" onclick="window.DixieOccupationMap.setMode('danger')">Paramilitary Danger</button>
+  <button class="map-btn" data-mode="resentment" onclick="window.DixieOccupationMap.setMode('resentment')">Southern Resentment</button>
 {!</div>!}
 
 {!<div id="Dixie-map"></div>!}
@@ -163,7 +194,13 @@ With <span style="color: #c00000;">**Republican**</span> control of Congress, we
 [? if enforcement_acts = 1 : The Enforcement Acts are in effect. Federal courts and marshals now have expanded authority to act against organized violence in the South. ?]
 [? if enforcement_acts = 0 and kkk_strength + whiteL_strength >= 400 : Paramilitary violence across the South is reaching a point where our current legal tools are no longer adequate. Congress has begun discussing whether new legislation is needed. ?]
 
-[? if occupation_upkeep_display > 0 : Maintaining the occupation costs about [+ occupation_upkeep_display +] budget per year. ?]
+[? if occupation_upkeep_display > 0 : **Cost of occupation:** about [+ occupation_upkeep_display +] budget per year, led by [+ occupation_top_cost_text +]. ?]
+
+[? if occupation_fatigue_display > 0 : **Northern fatigue:** continued occupation is costing us [+ occupation_fatigue_display +] points of Reconstruction support. ?]
+
+[? if budget < 0 : The treasury is in deficit, and taxpayers and fiscal conservatives are beginning to notice. ?]
+
+[? if southern_mood = 1 : Southern resentment of the occupation is beginning to harden into open grumbling. ?][? if southern_mood = 2 : Southern resentment runs deep. Conservative newspapers, planters and Democratic clubs are organizing against the occupation. ?][? if southern_mood = 3 : The South is seething. Open defiance of federal authority has become a matter of local pride, and Conservative organizations are drawing strength from it. ?]
 
 - @enforcement_acts_btn: Pass the Enforcement Acts
 - @Reform
@@ -296,8 +333,13 @@ To avoid further escalation, we order the demobilization of <span style="color: 
 
 @AL_posture
 title: Alabama
+on-arrival: {! if (window.refreshOccupationCosts) window.refreshOccupationCosts(Q); !}
 
 Alabama currently has [+ AL_garrison_troops +] thousand federal troops stationed, at [? if AL_occupation_posture = 0 : no federal presence ?][? if AL_occupation_posture = 1 : a light federal presence ?][? if AL_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ AL_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ AL_whiteL_strength +] ?].
+
+[? if AL_occupation_posture > 0 : Occupying Alabama costs about [+ AL_upkeep_year +] budget per year, and federal authority has now lasted [+ AL_occupation_months +] months. ?]
+
+[? if AL_resentment >= 55 : Alabama is seething. Resistance to federal authority has become a matter of local pride. ?][? if AL_resentment >= 30 and AL_resentment < 55 : Resentment of the occupation is hardening, and Conservative leaders are giving it a voice. ?][? if AL_resentment >= 10 and AL_resentment < 30 : There is grumbling in the county seats about the soldiers and the officials they protect. ?][? if AL_redemption_strength >= 40 : Conservative organizations in Alabama are now strong enough to contest control of the state. ?]
 
 - @Occ_AL_Increase: Increase presence in Alabama
 - @Occ_AL_Reduce: Reduce occupation level
@@ -306,6 +348,7 @@ Alabama currently has [+ AL_garrison_troops +] thousand federal troops stationed
 
 @Occ_AL_Increase
 title: Increase presence in Alabama
+subtitle: About +[+ AL_upkeep_increase +] budget per year.
 view-if: AL_occupation_posture < 2
 choose-if: AL_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if AL_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
@@ -322,6 +365,7 @@ More federal troops move into Alabama, and Reconstruction officials' writ now ru
 
 @Occ_AL_Reduce
 title: Reduce occupation level in Alabama
+subtitle: Saves about [+ AL_upkeep_saved +] budget per year.
 choose-if: AL_occupation_posture > 0
 unavailable-subtitle: [? if AL_occupation_posture <= 0 : Alabama is already free from federal oversight. ?]
 on-arrival: {!
@@ -340,12 +384,15 @@ on-arrival: {!
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
     Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+    Q.AL_resentment = Math.max(0, (Q.AL_resentment || 0) - 6);
+    Q.AL_redemption_strength = (Q.AL_redemption_strength || 0) + 2;
 !}
 
 Federal troops pull back from Alabama. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
 
 @Occ_AL_Send
 title: Send additional troops to Alabama
+subtitle: About +[+ AL_upkeep_send +] budget per year.
 choose-if: army_strength >= 5 and AL_occupation_posture > 0 and (AL_occupation_posture >= 2 or AL_garrison_troops + 5 <= 15)
 unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to Alabama. ?][? if AL_occupation_posture <= 0 : Alabama is currently under civilian control. We would need to establish a federal presence first. ?][? if AL_occupation_posture = 1 and AL_garrison_troops + 5 > 15 : A light federal presence cannot support a larger garrison. Full military government is required to deploy further. ?]
 on-arrival: {!
@@ -354,6 +401,7 @@ on-arrival: {!
     Q.South_army_strength += 5;
     Q.dem_relation -= 2;
     Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+    Q.AL_resentment = Math.min(100, (Q.AL_resentment || 0) + 3);
 !}
 
 We send another regiment to the state of Alabama to enforce federal authority across the state.
@@ -374,14 +422,20 @@ on-arrival: {!
     Q.radical_strength += 3;
     Q.conservative_strength -= 3;
     Q.conservative_dissent += 2;
+    Q.AL_resentment = Math.min(100, (Q.AL_resentment || 0) + 3);
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Alabama.
 
 @AR_posture
-title: Arkansas
+title:  Arkansas
+on-arrival: {! if (window.refreshOccupationCosts) window.refreshOccupationCosts(Q); !}
 
 Arkansas currently has [+ AR_garrison_troops +] thousand federal troops stationed, at [? if AR_occupation_posture = 0 : no federal presence ?][? if AR_occupation_posture = 1 : a light federal presence ?][? if AR_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ AR_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ AR_whiteL_strength +] ?].
+
+[? if AR_occupation_posture > 0 : Occupying Arkansas costs about [+ AR_upkeep_year +] budget per year, and federal authority has now lasted [+ AR_occupation_months +] months. ?]
+
+[? if AR_resentment >= 55 : Arkansas is seething. Resistance to federal authority has become a matter of local pride. ?][? if AR_resentment >= 30 and AR_resentment < 55 : Resentment of the occupation is hardening, and Conservative leaders are giving it a voice. ?][? if AR_resentment >= 10 and AR_resentment < 30 : There is grumbling in the county seats about the soldiers and the officials they protect. ?][? if AR_redemption_strength >= 40 : Conservative organizations in Arkansas are now strong enough to contest control of the state. ?]
 
 - @Occ_AR_Increase: Increase presence in Arkansas
 - @Occ_AR_Reduce: Reduce occupation level
@@ -391,6 +445,7 @@ Arkansas currently has [+ AR_garrison_troops +] thousand federal troops statione
 @Occ_AR_Increase
 title: Increase presence in Arkansas
 view-if: AR_occupation_posture < 2
+subtitle: About +[+ AR_upkeep_increase +] budget per year.
 choose-if: AR_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if AR_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
@@ -400,12 +455,14 @@ on-arrival: {!
     Q.South_army_strength += 3;
     Q.dem_relation -= 1;
     Q.rural_dem += 1;
+    Q.AL_resentment = Math.min(100, (Q.AL_resentment || 0) + 4);
 !}
 
 More federal troops move into Arkansas, and Reconstruction officials' writ now runs further into the countryside.[? if AR_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
 
 @Occ_AR_Reduce
 title: Reduce occupation level in Arkansas
+subtitle: Saves about [+ AR_upkeep_saved +] budget per year.
 choose-if: AR_occupation_posture > 0
 unavailable-subtitle: [? if AR_occupation_posture <= 0 : Arkansas is already free from federal oversight. ?]
 on-arrival: {!
@@ -424,12 +481,15 @@ on-arrival: {!
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
     Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+    Q.AR_resentment = Math.max(0, (Q.AR_resentment || 0) - 6);
+    Q.AR_redemption_strength = (Q.AR_redemption_strength || 0) + 2;
 !}
 
 Federal troops pull back from Arkansas. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
 
 @Occ_AR_Send
 title: Send additional troops to Arkansas
+subtitle: About +[+ AR_upkeep_send +] budget per year.
 choose-if: army_strength >= 5 and AR_occupation_posture > 0 and (AR_occupation_posture >= 2 or AR_garrison_troops + 5 <= 15)
 unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to Arkansas. ?][? if AR_occupation_posture <= 0 : Arkansas is currently under civilian control. We would need to establish a federal presence first. ?][? if AR_occupation_posture = 1 and AR_garrison_troops + 5 > 15 : A light federal presence cannot support a larger garrison. Full military government is required to deploy further. ?]
 on-arrival: {!
@@ -438,6 +498,7 @@ on-arrival: {!
     Q.South_army_strength += 5;
     Q.dem_relation -= 2;
     Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+    Q.AR_resentment = Math.min(100, (Q.AR_resentment || 0) + 3);
 !}
 
 We send another regiment to the state of Arkansas to enforce federal authority across the state.
@@ -458,15 +519,21 @@ on-arrival: {!
     Q.radical_strength += 3;
     Q.conservative_strength -= 3;
     Q.conservative_dissent += 2;
+    Q.AR_resentment = Math.min(100, (Q.AR_resentment || 0) + 3);
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Arkansas.
 
 
 @FL_posture
-title: Florida
+title:  Florida
+on-arrival: {! if (window.refreshOccupationCosts) window.refreshOccupationCosts(Q); !}
 
 Florida currently has [+ FL_garrison_troops +] thousand federal troops stationed, at [? if FL_occupation_posture = 0 : no federal presence ?][? if FL_occupation_posture = 1 : a light federal presence ?][? if FL_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ FL_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ FL_whiteL_strength +] ?].
+
+[? if FL_occupation_posture > 0 : Occupying Florida costs about [+ FL_upkeep_year +] budget per year, and federal authority has now lasted [+ FL_occupation_months +] months. ?]
+
+[? if FL_resentment >= 55 : Florida is seething. Resistance to federal authority has become a matter of local pride. ?][? if FL_resentment >= 30 and FL_resentment < 55 : Resentment of the occupation is hardening, and Conservative leaders are giving it a voice. ?][? if FL_resentment >= 10 and FL_resentment < 30 : There is grumbling in the county seats about the soldiers and the officials they protect. ?][? if FL_redemption_strength >= 40 : Conservative organizations in Florida are now strong enough to contest control of the state. ?]
 
 - @Occ_FL_Increase: Increase presence in Florida
 - @Occ_FL_Reduce: Reduce occupation level
@@ -476,6 +543,7 @@ Florida currently has [+ FL_garrison_troops +] thousand federal troops stationed
 @Occ_FL_Increase
 title: Increase presence in Florida
 view-if: FL_occupation_posture < 2
+subtitle: About +[+ FL_upkeep_increase +] budget per year.
 choose-if: FL_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if FL_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
@@ -485,12 +553,14 @@ on-arrival: {!
     Q.South_army_strength += 3;
     Q.dem_relation -= 1;
     Q.rural_dem += 1;
+    Q.FL_resentment = Math.min(100, (Q.FL_resentment || 0) + 4);
 !}
 
 More federal troops move into Florida, and Reconstruction officials' writ now runs further into the countryside.[? if FL_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
 
 @Occ_FL_Reduce
 title: Reduce occupation level in Florida
+subtitle: Saves about [+ FL_upkeep_saved +] budget per year.
 choose-if: FL_occupation_posture > 0
 unavailable-subtitle: [? if FL_occupation_posture <= 0 : Florida is already free from federal oversight. ?]
 on-arrival: {!
@@ -509,12 +579,15 @@ on-arrival: {!
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
     Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+    Q.FL_resentment = Math.max(0, (Q.FL_resentment || 0) - 6);
+    Q.FL_redemption_strength = (Q.FL_redemption_strength || 0) + 2;
 !}
 
 Federal troops pull back from Florida. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
 
 @Occ_FL_Send
 title: Send additional troops to Florida
+subtitle: About +[+ FL_upkeep_send +] budget per year.
 choose-if: army_strength >= 5 and FL_occupation_posture > 0 and (FL_occupation_posture >= 2 or FL_garrison_troops + 5 <= 15)
 unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to Florida. ?][? if FL_occupation_posture <= 0 : Florida is currently under civilian control. We would need to establish a federal presence first. ?][? if FL_occupation_posture = 1 and FL_garrison_troops + 5 > 15 : A light federal presence cannot support a larger garrison. Full military government is required to deploy further. ?]
 on-arrival: {!
@@ -523,6 +596,7 @@ on-arrival: {!
     Q.South_army_strength += 5;
     Q.dem_relation -= 2;
     Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+    Q.FL_resentment = Math.min(100, (Q.FL_resentment || 0) + 3);
 !}
 
 We send another regiment to the state of Florida to enforce federal authority across the state.
@@ -543,15 +617,21 @@ on-arrival: {!
     Q.radical_strength += 3;
     Q.conservative_strength -= 3;
     Q.conservative_dissent += 2;
+    Q.FL_resentment = Math.min(100, (Q.FL_resentment || 0) + 3);
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Florida.
 
 
 @GA_posture
-title: Georgia
+title:  Georgia
+on-arrival: {! if (window.refreshOccupationCosts) window.refreshOccupationCosts(Q); !}
 
 Georgia currently has [+ GA_garrison_troops +] thousand federal troops stationed, at [? if GA_occupation_posture = 0 : no federal presence ?][? if GA_occupation_posture = 1 : a light federal presence ?][? if GA_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ GA_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ GA_whiteL_strength +] ?].
+
+[? if GA_occupation_posture > 0 : Occupying Georgia costs about [+ GA_upkeep_year +] budget per year, and federal authority has now lasted [+ GA_occupation_months +] months. ?]
+
+[? if GA_resentment >= 55 : Georgia is seething. Resistance to federal authority has become a matter of local pride. ?][? if GA_resentment >= 30 and GA_resentment < 55 : Resentment of the occupation is hardening, and Conservative leaders are giving it a voice. ?][? if GA_resentment >= 10 and GA_resentment < 30 : There is grumbling in the county seats about the soldiers and the officials they protect. ?][? if GA_redemption_strength >= 40 : Conservative organizations in Georgia are now strong enough to contest control of the state. ?]
 
 - @Occ_GA_Increase: Increase presence in Georgia
 - @Occ_GA_Reduce: Reduce occupation level
@@ -561,6 +641,7 @@ Georgia currently has [+ GA_garrison_troops +] thousand federal troops stationed
 @Occ_GA_Increase
 title: Increase presence in Georgia
 view-if: GA_occupation_posture < 2
+subtitle: About +[+ GA_upkeep_increase +] budget per year.
 choose-if: GA_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if GA_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
@@ -570,12 +651,14 @@ on-arrival: {!
     Q.South_army_strength += 3;
     Q.dem_relation -= 1;
     Q.rural_dem += 1;
+    Q.GA_resentment = Math.min(100, (Q.GA_resentment || 0) + 4);
 !}
 
 More federal troops move into Georgia, and Reconstruction officials' writ now runs further into the countryside.[? if GA_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
 
 @Occ_GA_Reduce
 title: Reduce occupation level in Georgia
+subtitle: Saves about [+ GA_upkeep_saved +] budget per year.
 choose-if: GA_occupation_posture > 0
 unavailable-subtitle: [? if GA_occupation_posture <= 0 : Georgia is already free from federal oversight. ?]
 on-arrival: {!
@@ -594,12 +677,15 @@ on-arrival: {!
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
     Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+    Q.GA_resentment = Math.max(0, (Q.GA_resentment || 0) - 6);
+    Q.GA_redemption_strength = (Q.GA_redemption_strength || 0) + 2;
 !}
 
 Federal troops pull back from Georgia. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
 
 @Occ_GA_Send
 title: Send additional troops to Georgia
+subtitle: About +[+ GA_upkeep_send +] budget per year.
 choose-if: army_strength >= 5 and GA_occupation_posture > 0 and (GA_occupation_posture >= 2 or GA_garrison_troops + 5 <= 15)
 unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to Georgia. ?][? if GA_occupation_posture <= 0 : Georgia is currently under civilian control. We would need to establish a federal presence first. ?][? if GA_occupation_posture = 1 and GA_garrison_troops + 5 > 15 : A light federal presence cannot support a larger garrison. Full military government is required to deploy further. ?]
 on-arrival: {!
@@ -608,6 +694,7 @@ on-arrival: {!
     Q.South_army_strength += 5;
     Q.dem_relation -= 2;
     Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+    Q.GA_resentment = Math.min(100, (Q.GA_resentment || 0) + 3);
 !}
 
 We send another regiment to the state of Georgia to enforce federal authority across the state.
@@ -628,15 +715,21 @@ on-arrival: {!
     Q.radical_strength += 3;
     Q.conservative_strength -= 3;
     Q.conservative_dissent += 2;
+    Q.GA_resentment = Math.min(100, (Q.GA_resentment || 0) + 3);
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Georgia.
 
 
 @LA_posture
-title: Louisiana
+title:  Louisiana
+on-arrival: {! if (window.refreshOccupationCosts) window.refreshOccupationCosts(Q); !}
 
 Louisiana currently has [+ LA_garrison_troops +] thousand federal troops stationed, at [? if LA_occupation_posture = 0 : no federal presence ?][? if LA_occupation_posture = 1 : a light federal presence ?][? if LA_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ LA_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ LA_whiteL_strength +] ?].
+
+[? if LA_occupation_posture > 0 : Occupying Louisiana costs about [+ LA_upkeep_year +] budget per year, and federal authority has now lasted [+ LA_occupation_months +] months. ?]
+
+[? if LA_resentment >= 55 : Louisiana is seething. Resistance to federal authority has become a matter of local pride. ?][? if LA_resentment >= 30 and LA_resentment < 55 : Resentment of the occupation is hardening, and Conservative leaders are giving it a voice. ?][? if LA_resentment >= 10 and LA_resentment < 30 : There is grumbling in the county seats about the soldiers and the officials they protect. ?][? if LA_redemption_strength >= 40 : Conservative organizations in Louisiana are now strong enough to contest control of the state. ?]
 
 - @Occ_LA_Increase: Increase presence in Louisiana
 - @Occ_LA_Reduce: Reduce occupation level
@@ -646,6 +739,7 @@ Louisiana currently has [+ LA_garrison_troops +] thousand federal troops station
 @Occ_LA_Increase
 title: Increase presence in Louisiana
 view-if: LA_occupation_posture < 2
+subtitle: About +[+ LA_upkeep_increase +] budget per year.
 choose-if: LA_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if LA_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
@@ -655,12 +749,14 @@ on-arrival: {!
     Q.South_army_strength += 3;
     Q.dem_relation -= 1;
     Q.rural_dem += 1;
+    Q.LA_resentment = Math.min(100, (Q.LA_resentment || 0) + 4);
 !}
 
 More federal troops move into Louisiana, and Reconstruction officials' writ now runs further into the countryside.[? if LA_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
 
 @Occ_LA_Reduce
 title: Reduce occupation level in Louisiana
+subtitle: Saves about [+ LA_upkeep_saved +] budget per year.
 choose-if: LA_occupation_posture > 0
 unavailable-subtitle: [? if LA_occupation_posture <= 0 : Louisiana is already free from federal oversight. ?]
 on-arrival: {!
@@ -678,13 +774,16 @@ on-arrival: {!
     Q.army_strength += returning;
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
-    Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+    Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);4
+    Q.LA_resentment = Math.max(0, (Q.LA_resentment || 0) - 6);
+    Q.LA_redemption_strength = (Q.LA_redemption_strength || 0) + 2;
 !}
 
 Federal troops pull back from Louisiana. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
 
 @Occ_LA_Send
 title: Send additional troops to Louisiana
+subtitle: About +[+ LA_upkeep_send +] budget per year.
 choose-if: army_strength >= 5 and LA_occupation_posture > 0 and (LA_occupation_posture >= 2 or LA_garrison_troops + 5 <= 15)
 unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to Louisiana. ?][? if LA_occupation_posture <= 0 : Louisiana is currently under civilian control. We would need to establish a federal presence first. ?][? if LA_occupation_posture = 1 and LA_garrison_troops + 5 > 15 : A light federal presence cannot support a larger garrison. Full military government is required to deploy further. ?]
 on-arrival: {!
@@ -693,6 +792,7 @@ on-arrival: {!
     Q.South_army_strength += 5;
     Q.dem_relation -= 2;
     Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+    Q.LA_resentment = Math.min(100, (Q.LA_resentment || 0) + 3);
 !}
 
 We send another regiment to the state of Louisiana to enforce federal authority across the state.
@@ -713,15 +813,21 @@ on-arrival: {!
     Q.radical_strength += 3;
     Q.conservative_strength -= 3;
     Q.conservative_dissent += 2;
+    Q.LA_resentment = Math.min(100, (Q.LA_resentment || 0) + 3);
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Louisiana.
 
 
 @MS_posture
-title: Mississippi
+title:  Mississippi
+on-arrival: {! if (window.refreshOccupationCosts) window.refreshOccupationCosts(Q); !}
 
 Mississippi currently has [+ MS_garrison_troops +] thousand federal troops stationed, at [? if MS_occupation_posture = 0 : no federal presence ?][? if MS_occupation_posture = 1 : a light federal presence ?][? if MS_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ MS_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ MS_whiteL_strength +] ?].
+
+[? if MS_occupation_posture > 0 : Occupying Mississippi costs about [+ MS_upkeep_year +] budget per year, and federal authority has now lasted [+ MS_occupation_months +] months. ?]
+
+[? if MS_resentment >= 55 : Mississippi is seething. Resistance to federal authority has become a matter of local pride. ?][? if MS_resentment >= 30 and MS_resentment < 55 : Resentment of the occupation is hardening, and Conservative leaders are giving it a voice. ?][? if MS_resentment >= 10 and MS_resentment < 30 : There is grumbling in the county seats about the soldiers and the officials they protect. ?][? if MS_redemption_strength >= 40 : Conservative organizations in Mississippi are now strong enough to contest control of the state. ?]
 
 - @Occ_MS_Increase: Increase presence in Mississippi
 - @Occ_MS_Reduce: Reduce occupation level
@@ -731,6 +837,7 @@ Mississippi currently has [+ MS_garrison_troops +] thousand federal troops stati
 @Occ_MS_Increase
 title: Increase presence in Mississippi
 view-if: MS_occupation_posture < 2
+subtitle: About +[+ MS_upkeep_increase +] budget per year.
 choose-if: MS_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if MS_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
@@ -740,12 +847,14 @@ on-arrival: {!
     Q.South_army_strength += 3;
     Q.dem_relation -= 1;
     Q.rural_dem += 1;
+    Q.MS_resentment = Math.min(100, (Q.MS_resentment || 0) + 4);
 !}
 
 More federal troops move into Mississippi, and Reconstruction officials' writ now runs further into the countryside.[? if MS_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
 
 @Occ_MS_Reduce
 title: Reduce occupation level in Mississippi
+subtitle: Saves about [+ MS_upkeep_saved +] budget per year.
 choose-if: MS_occupation_posture > 0
 unavailable-subtitle: [? if MS_occupation_posture <= 0 : Mississippi is already free from federal oversight. ?]
 on-arrival: {!
@@ -764,12 +873,15 @@ on-arrival: {!
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
     Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+    Q.MS_resentment = Math.max(0, (Q.MS_resentment || 0) - 6);
+    Q.MS_redemption_strength = (Q.MS_redemption_strength || 0) + 2;
 !}
 
 Federal troops pull back from Mississippi. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
 
 @Occ_MS_Send
 title: Send additional troops to Mississippi
+subtitle: About +[+ MS_upkeep_send +] budget per year.
 choose-if: army_strength >= 5 and MS_occupation_posture > 0 and (MS_occupation_posture >= 2 or MS_garrison_troops + 5 <= 15)
 unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to Mississippi. ?][? if MS_occupation_posture <= 0 : Mississippi is currently under civilian control. We would need to establish a federal presence first. ?][? if MS_occupation_posture = 1 and MS_garrison_troops + 5 > 15 : A light federal presence cannot support a larger garrison. Full military government is required to deploy further. ?]
 on-arrival: {!
@@ -778,6 +890,7 @@ on-arrival: {!
     Q.South_army_strength += 5;
     Q.dem_relation -= 2;
     Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+    Q.MS_resentment = Math.min(100, (Q.MS_resentment || 0) + 3);
 !}
 
 We send another regiment to the state of Mississippi to enforce federal authority across the state.
@@ -798,15 +911,21 @@ on-arrival: {!
     Q.radical_strength += 3;
     Q.conservative_strength -= 3;
     Q.conservative_dissent += 2;
+    Q.MS_resentment = Math.min(100, (Q.MS_resentment || 0) + 3);
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Mississippi.
 
 
 @NC_posture
-title: North Carolina
+title:  North Carolina
+on-arrival: {! if (window.refreshOccupationCosts) window.refreshOccupationCosts(Q); !}
 
 North Carolina currently has [+ NC_garrison_troops +] thousand federal troops stationed, at [? if NC_occupation_posture = 0 : no federal presence ?][? if NC_occupation_posture = 1 : a light federal presence ?][? if NC_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ NC_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ NC_whiteL_strength +] ?].
+
+[? if NC_occupation_posture > 0 : Occupying North Carolina costs about [+ NC_upkeep_year +] budget per year, and federal authority has now lasted [+ NC_occupation_months +] months. ?]
+
+[? if NC_resentment >= 55 : North Carolina is seething. Resistance to federal authority has become a matter of local pride. ?][? if NC_resentment >= 30 and NC_resentment < 55 : Resentment of the occupation is hardening, and Conservative leaders are giving it a voice. ?][? if NC_resentment >= 10 and NC_resentment < 30 : There is grumbling in the county seats about the soldiers and the officials they protect. ?][? if NC_redemption_strength >= 40 : Conservative organizations in North Carolina are now strong enough to contest control of the state. ?]
 
 - @Occ_NC_Increase: Increase presence in North Carolina
 - @Occ_NC_Reduce: Reduce occupation level
@@ -816,6 +935,7 @@ North Carolina currently has [+ NC_garrison_troops +] thousand federal troops st
 @Occ_NC_Increase
 title: Increase presence in North Carolina
 view-if: NC_occupation_posture < 2
+subtitle: About +[+ NC_upkeep_increase +] budget per year.
 choose-if: NC_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if NC_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
 on-arrival: {!
@@ -825,12 +945,14 @@ on-arrival: {!
     Q.South_army_strength += 3;
     Q.dem_relation -= 1;
     Q.rural_dem += 1;
+    Q.NC_resentment = Math.min(100, (Q.NC_resentment || 0) + 4);
 !}
 
 More federal troops move into North Carolina, and Reconstruction officials' writ now runs further into the countryside.[? if NC_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
 
 @Occ_NC_Reduce
 title: Reduce occupation level in North Carolina
+subtitle: Saves about [+ NC_upkeep_saved +] budget per year.
 choose-if: NC_occupation_posture > 0
 unavailable-subtitle: [? if NC_occupation_posture <= 0 : North Carolina is already free from federal oversight. ?]
 on-arrival: {!
@@ -849,12 +971,15 @@ on-arrival: {!
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
     Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+    Q.NC_resentment = Math.max(0, (Q.NC_resentment || 0) - 6);
+    Q.NC_redemption_strength = (Q.NC_redemption_strength || 0) + 2;
 !}
 
 Federal troops pull back from North Carolina. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
 
 @Occ_NC_Send
 title: Send additional troops to North Carolina
+subtitle: About +[+ NC_upkeep_send +] budget per year.
 choose-if: army_strength >= 5 and NC_occupation_posture > 0 and (NC_occupation_posture >= 2 or NC_garrison_troops + 5 <= 15)
 unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to North Carolina. ?][? if NC_occupation_posture <= 0 : North Carolina is currently under civilian control. We would need to establish a federal presence first. ?][? if NC_occupation_posture = 1 and NC_garrison_troops + 5 > 15 : A light federal presence cannot support a larger garrison. Full military government is required to deploy further. ?]
 on-arrival: {!
@@ -863,6 +988,7 @@ on-arrival: {!
     Q.South_army_strength += 5;
     Q.dem_relation -= 2;
     Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+    Q.NC_resentment = Math.min(100, (Q.NC_resentment || 0) + 3);
 !}
 
 We send another regiment to the state of North Carolina to enforce federal authority across the state.
@@ -883,15 +1009,21 @@ on-arrival: {!
     Q.radical_strength += 3;
     Q.conservative_strength -= 3;
     Q.conservative_dissent += 2;
+    Q.NC_resentment = Math.min(100, (Q.NC_resentment || 0) + 3);
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in North Carolina.
 
 
 @SC_posture
-title: South Carolina
+title:  South Carolina
+on-arrival: {! if (window.refreshOccupationCosts) window.refreshOccupationCosts(Q); !}
 
 South Carolina currently has [+ SC_garrison_troops +] thousand federal troops stationed, at [? if SC_occupation_posture = 0 : no federal presence ?][? if SC_occupation_posture = 1 : a light federal presence ?][? if SC_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ SC_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ SC_whiteL_strength +] ?].
+
+[? if SC_occupation_posture > 0 : Occupying South Carolina costs about [+ SC_upkeep_year +] budget per year, and federal authority has now lasted [+ SC_occupation_months +] months. ?]
+
+[? if SC_resentment >= 55 : South Carolina is seething. Resistance to federal authority has become a matter of local pride. ?][? if SC_resentment >= 30 and SC_resentment < 55 : Resentment of the occupation is hardening, and Conservative leaders are giving it a voice. ?][? if SC_resentment >= 10 and SC_resentment < 30 : There is grumbling in the county seats about the soldiers and the officials they protect. ?][? if SC_redemption_strength >= 40 : Conservative organizations in South Carolina are now strong enough to contest control of the state. ?]
 
 - @Occ_SC_Increase: Increase presence in South Carolina
 - @Occ_SC_Reduce: Reduce occupation level
@@ -900,6 +1032,7 @@ South Carolina currently has [+ SC_garrison_troops +] thousand federal troops st
 
 @Occ_SC_Increase
 title: Increase presence in South Carolina
+subtitle: About +[+ SC_upkeep_increase +] budget per year.
 view-if: SC_occupation_posture < 2
 choose-if: SC_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if SC_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
@@ -910,12 +1043,14 @@ on-arrival: {!
     Q.South_army_strength += 3;
     Q.dem_relation -= 1;
     Q.rural_dem += 1;
+    Q.SC_resentment = Math.min(100, (Q.SC_resentment || 0) + 4);
 !}
 
 More federal troops move into South Carolina, and Reconstruction officials' writ now runs further into the countryside.[? if SC_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
 
 @Occ_SC_Reduce
 title: Reduce occupation level in South Carolina
+subtitle: Saves about [+ SC_upkeep_saved +] budget per year.
 choose-if: SC_occupation_posture > 0
 unavailable-subtitle: [? if SC_occupation_posture <= 0 : South Carolina is already free from federal oversight. ?]
 on-arrival: {!
@@ -934,12 +1069,15 @@ on-arrival: {!
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
     Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+    Q.SC_resentment = Math.max(0, (Q.SC_resentment || 0) - 6);
+    Q.SC_redemption_strength = (Q.SC_redemption_strength || 0) + 2;
 !}
 
 Federal troops pull back from South Carolina. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
 
 @Occ_SC_Send
 title: Send additional troops to South Carolina
+subtitle: About +[+ SC_upkeep_send +] budget per year.
 choose-if: army_strength >= 5 and SC_occupation_posture > 0 and (SC_occupation_posture >= 2 or SC_garrison_troops + 5 <= 15)
 unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to South Carolina. ?][? if SC_occupation_posture <= 0 : South Carolina is currently under civilian control. We would need to establish a federal presence first. ?][? if SC_occupation_posture = 1 and SC_garrison_troops + 5 > 15 : A light federal presence cannot support a larger garrison. Full military government is required to deploy further. ?]
 on-arrival: {!
@@ -948,6 +1086,7 @@ on-arrival: {!
     Q.South_army_strength += 5;
     Q.dem_relation -= 2;
     Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+    Q.SC_resentment = Math.min(100, (Q.SC_resentment || 0) + 3);
 !}
 
 We send another regiment to the state of South Carolina to enforce federal authority across the state.
@@ -968,15 +1107,21 @@ on-arrival: {!
     Q.radical_strength += 3;
     Q.conservative_strength -= 3;
     Q.conservative_dissent += 2;
+    Q.SC_resentment = Math.min(100, (Q.SC_resentment || 0) + 3);
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in South Carolina.
 
 
 @TN_posture
-title: Tennessee
+title:  Tennessee
+on-arrival: {! if (window.refreshOccupationCosts) window.refreshOccupationCosts(Q); !}
 
 Tennessee currently has [+ TN_garrison_troops +] thousand federal troops stationed, at [? if TN_occupation_posture = 0 : no federal presence ?][? if TN_occupation_posture = 1 : a light federal presence ?][? if TN_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ TN_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ TN_whiteL_strength +] ?].
+
+[? if TN_occupation_posture > 0 : Occupying Tennessee costs about [+ TN_upkeep_year +] budget per year, and federal authority has now lasted [+ TN_occupation_months +] months. ?]
+
+[? if TN_resentment >= 55 : Tennessee is seething. Resistance to federal authority has become a matter of local pride. ?][? if TN_resentment >= 30 and TN_resentment < 55 : Resentment of the occupation is hardening, and Conservative leaders are giving it a voice. ?][? if TN_resentment >= 10 and TN_resentment < 30 : There is grumbling in the county seats about the soldiers and the officials they protect. ?][? if TN_redemption_strength >= 40 : Conservative organizations in Tennessee are now strong enough to contest control of the state. ?]
 
 - @Occ_TN_Increase: Increase presence in Tennessee
 - @Occ_TN_Reduce: Reduce occupation level
@@ -985,6 +1130,7 @@ Tennessee currently has [+ TN_garrison_troops +] thousand federal troops station
 
 @Occ_TN_Increase
 title: Increase presence in Tennessee
+subtitle: About +[+ TN_upkeep_increase +] budget per year.
 view-if: TN_occupation_posture < 2
 choose-if: TN_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if TN_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
@@ -995,12 +1141,14 @@ on-arrival: {!
     Q.South_army_strength += 3;
     Q.dem_relation -= 1;
     Q.rural_dem += 1;
+    Q.TN_resentment = Math.min(100, (Q.TN_resentment || 0) + 4);
 !}
 
 More federal troops move into Tennessee, and Reconstruction officials' writ now runs further into the countryside.[? if TN_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
 
 @Occ_TN_Reduce
 title: Reduce occupation level in Tennessee
+subtitle: Saves about [+ TN_upkeep_saved +] budget per year.
 choose-if: TN_occupation_posture > 0
 unavailable-subtitle: [? if TN_occupation_posture <= 0 : Tennessee is already free from federal oversight. ?]
 on-arrival: {!
@@ -1019,12 +1167,15 @@ on-arrival: {!
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
     Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+    Q.TN_resentment = Math.max(0, (Q.TN_resentment || 0) - 6);
+    Q.TN_redemption_strength = (Q.TN_redemption_strength || 0) + 2;
 !}
 
 Federal troops pull back from Tennessee. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
 
 @Occ_TN_Send
 title: Send additional troops to Tennessee
+subtitle: About +[+ TN_upkeep_send +] budget per year.
 choose-if: army_strength >= 5 and TN_occupation_posture > 0 and (TN_occupation_posture >= 2 or TN_garrison_troops + 5 <= 15)
 unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to Tennessee. ?][? if TN_occupation_posture <= 0 : Tennessee is currently under civilian control. We would need to establish a federal presence first. ?][? if TN_occupation_posture = 1 and TN_garrison_troops + 5 > 15 : A light federal presence cannot support a larger garrison. Full military government is required to deploy further. ?]
 on-arrival: {!
@@ -1033,6 +1184,7 @@ on-arrival: {!
     Q.South_army_strength += 5;
     Q.dem_relation -= 2;
     Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+    Q.TN_resentment = Math.min(100, (Q.TN_resentment || 0) + 3);
 !}
 
 We send another regiment to the state of Tennessee to enforce federal authority across the state.
@@ -1053,15 +1205,21 @@ on-arrival: {!
     Q.radical_strength += 3;
     Q.conservative_strength -= 3;
     Q.conservative_dissent += 2;
+    Q.TN_resentment = Math.min(100, (Q.TN_resentment || 0) + 3);
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Tennessee.
 
 
 @TX_posture
-title: Texas
+title:  Texas
+on-arrival: {! if (window.refreshOccupationCosts) window.refreshOccupationCosts(Q); !}
 
 Texas currently has [+ TX_garrison_troops +] thousand federal troops stationed, at [? if TX_occupation_posture = 0 : no federal presence ?][? if TX_occupation_posture = 1 : a light federal presence ?][? if TX_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ TX_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ TX_whiteL_strength +] ?].
+
+[? if TX_occupation_posture > 0 : Occupying Texas costs about [+ TX_upkeep_year +] budget per year, and federal authority has now lasted [+ TX_occupation_months +] months. ?]
+
+[? if TX_resentment >= 55 : Texas is seething. Resistance to federal authority has become a matter of local pride. ?][? if TX_resentment >= 30 and TX_resentment < 55 : Resentment of the occupation is hardening, and Conservative leaders are giving it a voice. ?][? if TX_resentment >= 10 and TX_resentment < 30 : There is grumbling in the county seats about the soldiers and the officials they protect. ?][? if TX_redemption_strength >= 40 : Conservative organizations in Texas are now strong enough to contest control of the state. ?]
 
 - @Occ_TX_Increase: Increase presence in Texas
 - @Occ_TX_Reduce: Reduce occupation level
@@ -1070,6 +1228,7 @@ Texas currently has [+ TX_garrison_troops +] thousand federal troops stationed, 
 
 @Occ_TX_Increase
 title: Increase presence in Texas
+subtitle: About +[+ TX_upkeep_increase +] budget per year.
 view-if: TX_occupation_posture < 2
 choose-if: TX_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if TX_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
@@ -1080,12 +1239,14 @@ on-arrival: {!
     Q.South_army_strength += 3;
     Q.dem_relation -= 1;
     Q.rural_dem += 1;
+    Q.TX_resentment = Math.min(100, (Q.TX_resentment || 0) + 4);
 !}
 
 More federal troops move into Texas, and Reconstruction officials' writ now runs further into the countryside.[? if TX_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
 
 @Occ_TX_Reduce
 title: Reduce occupation level in Texas
+subtitle: Saves about [+ TX_upkeep_saved +] budget per year.
 choose-if: TX_occupation_posture > 0
 unavailable-subtitle: [? if TX_occupation_posture <= 0 : Texas is already free from federal oversight. ?]
 on-arrival: {!
@@ -1104,12 +1265,15 @@ on-arrival: {!
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
     Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+    Q.TX_resentment = Math.max(0, (Q.TX_resentment || 0) - 6);
+    Q.TX_redemption_strength = (Q.TX_redemption_strength || 0) + 2;
 !}
 
 Federal troops pull back from Texas. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
 
 @Occ_TX_Send
 title: Send additional troops to Texas
+subtitle: About +[+ TX_upkeep_send +] budget per year.
 choose-if: army_strength >= 5 and TX_occupation_posture > 0 and (TX_occupation_posture >= 2 or TX_garrison_troops + 5 <= 15)
 unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to Texas. ?][? if TX_occupation_posture <= 0 : Texas is currently under civilian control. We would need to establish a federal presence first. ?][? if TX_occupation_posture = 1 and TX_garrison_troops + 5 > 15 : A light federal presence cannot support a larger garrison. Full military government is required to deploy further. ?]
 on-arrival: {!
@@ -1118,6 +1282,7 @@ on-arrival: {!
     Q.South_army_strength += 5;
     Q.dem_relation -= 2;
     Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+    Q.TX_resentment = Math.min(100, (Q.TX_resentment || 0) + 3);
 !}
 
 We send another regiment to the state of Texas to enforce federal authority across the state.
@@ -1138,15 +1303,21 @@ on-arrival: {!
     Q.radical_strength += 3;
     Q.conservative_strength -= 3;
     Q.conservative_dissent += 2;
+    Q.TX_resentment = Math.min(100, (Q.TX_resentment || 0) + 3);
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Texas.
 
 
 @VA_posture
-title: Virginia
+title:  Virginia
+on-arrival: {! if (window.refreshOccupationCosts) window.refreshOccupationCosts(Q); !}
 
 Virginia currently has [+ VA_garrison_troops +] thousand federal troops stationed, at [? if VA_occupation_posture = 0 : no federal presence ?][? if VA_occupation_posture = 1 : a light federal presence ?][? if VA_occupation_posture = 2 : full military government ?]. Klan strength in the state stands at [+ VA_kkk_strength +][? if whiteL_formed = 1 : , with White League strength at [+ VA_whiteL_strength +] ?].
+
+[? if VA_occupation_posture > 0 : Occupying Virginia costs about [+ VA_upkeep_year +] budget per year, and federal authority has now lasted [+ VA_occupation_months +] months. ?]
+
+[? if VA_resentment >= 55 : Virginia is seething. Resistance to federal authority has become a matter of local pride. ?][? if VA_resentment >= 30 and VA_resentment < 55 : Resentment of the occupation is hardening, and Conservative leaders are giving it a voice. ?][? if VA_resentment >= 10 and VA_resentment < 30 : There is grumbling in the county seats about the soldiers and the officials they protect. ?][? if VA_redemption_strength >= 40 : Conservative organizations in Virginia are now strong enough to contest control of the state. ?]
 
 - @Occ_VA_Increase: Increase presence in Virginia
 - @Occ_VA_Reduce: Reduce occupation level
@@ -1155,6 +1326,7 @@ Virginia currently has [+ VA_garrison_troops +] thousand federal troops statione
 
 @Occ_VA_Increase
 title: Increase presence in Virginia
+subtitle: About +[+ VA_upkeep_increase +] budget per year.
 view-if: VA_occupation_posture < 2
 choose-if: VA_occupation_posture < occupation and army_strength >= 3
 unavailable-subtitle: [? if VA_occupation_posture >= occupation : National policy does not currently authorize a stronger presence here. ?][? if army_strength < 3 : The army does not have troops to spare. ?]
@@ -1165,12 +1337,14 @@ on-arrival: {!
     Q.South_army_strength += 3;
     Q.dem_relation -= 1;
     Q.rural_dem += 1;
+    Q.VA_resentment = Math.min(100, (Q.VA_resentment || 0) + 4);
 !}
 
 More federal troops move into Virginia, and Reconstruction officials' writ now runs further into the countryside.[? if VA_occupation_posture = 2 : With full military government now in place, they can act with far less fear of local reprisal. ?]
 
 @Occ_VA_Reduce
 title: Reduce occupation level in Virginia
+subtitle: Saves about [+ VA_upkeep_saved +] budget per year.
 choose-if: VA_occupation_posture > 0
 unavailable-subtitle: [? if VA_occupation_posture <= 0 : Virginia is already free from federal oversight. ?]
 on-arrival: {!
@@ -1189,12 +1363,15 @@ on-arrival: {!
     Q.South_army_strength -= returning;
     Q.dem_relation += 2;
     Q.moderate_dissent = Math.max(0, (Q.moderate_dissent || 0) - 1);
+    Q.VA_resentment = Math.max(0, (Q.VA_resentment || 0) - 6);
+    Q.VA_redemption_strength = (Q.VA_redemption_strength || 0) + 2; 
 !}
 
 Federal troops pull back from Virginia. <span style="color: #0015bc;">**Democrats**</span> welcome the news, while <span style="color: #c00000;">**Republican**</span> officials and freedmen in the state grow uneasy about what happens once the soldiers are gone.
 
 @Occ_VA_Send
 title: Send additional troops to Virginia
+subtitle: About +[+ VA_upkeep_send +] budget per year.
 choose-if: army_strength >= 5 and VA_occupation_posture > 0 and (VA_occupation_posture >= 2 or VA_garrison_troops + 5 <= 15)
 unavailable-subtitle: [? if army_strength < 5 : We have no troops to spare to send to Virginia. ?][? if VA_occupation_posture <= 0 : Virginia is currently under civilian control. We would need to establish a federal presence first. ?][? if VA_occupation_posture = 1 and VA_garrison_troops + 5 > 15 : A light federal presence cannot support a larger garrison. Full military government is required to deploy further. ?]
 on-arrival: {!
@@ -1203,6 +1380,7 @@ on-arrival: {!
     Q.South_army_strength += 5;
     Q.dem_relation -= 2;
     Q.moderate_dissent = (Q.moderate_dissent || 0) + 1;
+    Q.VA_resentment = Math.min(100, (Q.VA_resentment || 0) + 3);
 !}
 
 We send another regiment to the state of Virginia to enforce federal authority across the state.
@@ -1223,6 +1401,7 @@ on-arrival: {!
     Q.radical_strength += 3;
     Q.conservative_strength -= 3;
     Q.conservative_dissent += 2;
+    Q.VA_resentment = Math.min(100, (Q.VA_resentment || 0) + 3);
 !}
 
 United States forces, together with the Union League and local police, move to arrest and suppress Klan[? if whiteL_formed = 1 : and White League ?] activity in Virginia. 
