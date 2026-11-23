@@ -252,9 +252,25 @@ if (Q.disputed_states_1876.length > 0 && repUndisputed < majority && demUndisput
   Q.potus_winner = "house";
 }
 
-if(Q.demEVTotal == 0 && Q.libEVTotal == 0 && Q.radEVTotal == 0)
-{
-  this.achieve("washington");
+Q.faithless_elector = 0;
+let sweepParty = "";
+if (totalEV > 0) {
+if (Q.repEVTotal == totalEV) sweepParty = "rep";
+else if (Q.demEVTotal == totalEV) sweepParty = "dem";
+else if (Q.libEVTotal == totalEV) sweepParty = "lib";
+else if (Q.radEVTotal == totalEV) sweepParty = "rad";
+}
+
+if (sweepParty !== "") {
+let rivalParty = (sweepParty === "rep") ? "dem" : "rep";
+Q[sweepParty + "EVTotal"] -= 1;
+Q[rivalParty + "EVTotal"] += 1;
+Q.faithless_elector = 1;
+
+Q.faithless_vote_for = (sweepParty === "rep") ? Q.dem_candidate_1876 : Q.Candidate;
+
+// Washington Reborn: sweeping every state is still rewarded
+if (sweepParty === "rep") this.achieve("washington");
 }
 
 !}
@@ -346,6 +362,8 @@ go-to: potus_menu_1876
 [? if Disputed_Yes == 1 : The following number is the amount of disputed electoral votes produced from the election:  [+ disputedRepEV + disputedDemEV +] electoral votes ?]
 
 [? if potus_winner != "disputed" and Disputed_Yes == 1 : But fortunately, the disputed states didn't matter in resulting in the winner of the election. ?]
+
+[? if faithless_elector = 1 : A single elector broke ranks and cast his ballot for [+ faithless_vote_for +], so that no president would ever match George Washington's unanimous election. ?]
 
 @potus_menu_1876
 
