@@ -251,6 +251,122 @@ blockquote + blockquote.attribution {
     background-color: var(--tab-hover-color);
 }
 
+#Occ_sidebar {
+  display: none; 
+  width: 15.2rem;
+  box-sizing: border-box;
+  padding: 0.9em 1em 1em 1em;
+  text-indent: 0;
+  line-height: 1.3em;
+}
+
+.occ-sb-header {
+  position: relative;
+  margin-bottom: 0.6em;
+  padding: 0 1.4em 0.5em 1.4em;
+  border-bottom: 1px solid var(--card-border-color);
+}
+
+.occ-sb-title {
+  margin: 0;
+  font-size: 1.1em;
+  font-weight: normal;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: rgba(255, 255, 255, 0.75) 2px 2px 2px,
+               rgba(0, 0, 0, 0.1) -1px -1px 2px;
+}
+
+.occ-sb-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-family: inherit;
+  font-size: 1em;
+  line-height: 1;
+  color: var(--text-color);
+  background: none;
+  border: none;
+  padding: 0.1em 0.2em;
+  cursor: pointer;
+}
+
+.occ-sb-close:hover {
+  color: var(--link-color);
+}
+
+.occ-sb-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.8em;
+  padding: 0.2em 0;
+  border-bottom: 1px dotted var(--card-border-color);
+}
+
+.occ-sb-row:last-of-type {
+  border-bottom: none;
+}
+
+.occ-sb-label {
+  flex-shrink: 0;
+  font-size: 0.9em;
+  font-style: italic;
+}
+
+.occ-sb-value {
+  text-align: right;
+}
+
+#occ-sb-actions {
+  margin-top: 0.8em;
+  padding-top: 0.7em;
+  border-top: 1px solid var(--card-border-color);
+}
+
+.occ-sb-action {
+  margin-bottom: 0.7em;
+}
+
+.occ-sb-action .map-btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+.occ-sb-note {
+  margin-top: 0.2em;
+  font-size: 0.85em;
+  font-style: italic;
+  text-align: center;
+  opacity: 0.85;
+}
+
+.map-btn:disabled {
+  color: var(--unavailable-color);
+  background-color: var(--unavailable-bg-color);
+  border-color: var(--card-border-color);
+  box-shadow: none;
+  cursor: default;
+}
+
+.map-btn:disabled:hover {
+  color: var(--unavailable-color);
+  background-color: var(--unavailable-bg-color);
+  border-color: var(--card-border-color);
+}
+
+.occ-sb-action .map-btn:disabled + .occ-sb-note {
+  color: var(--unavailable-color);
+  opacity: 1;
+}
+
+@media screen and (max-width: 560px) {
+  #Occ_sidebar {
+    width: 90%;
+  }
+}
 
 .overlay {
     background: rgba(0,0,0,0.7);
