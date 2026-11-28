@@ -133,8 +133,8 @@ window.DixieOccupationMap = {
         var stateId = path.id;
         self.paths[stateId] = path;
         if (stateId === "Outline") return;
-        path.addEventListener("click", function() {
-            window.dendryUI.dendryEngine.goToScene("Occupation." + stateId + "_posture");
+        path.addEventListener("click", () => {
+            window.openOccSidebar(stateId);
         });
     });
 
@@ -142,27 +142,35 @@ window.DixieOccupationMap = {
   }
 };
 
-window.refreshOccupationCosts = function(Qs) {
-  var base = [0, 0.003, 0.005];
-  var cost = function(p, t) { return p === 0 ? 0 : base[p] + t * 0.0008; };
-  var round2 = function(x) { return Math.round(x * 12 * 100) / 100; };
-  var total = 0, moodTotal = 0;
-  Qs.southern_states.forEach(function(s) {
-    var posture = Qs[s + '_occupation_posture'] || 0;
-    var troops = Qs[s + '_garrison_troops'] || 0;
-    var now = cost(posture, troops);
-    var newP = Math.max(0, posture - 1), ret;
-    if (newP === 0) { ret = troops; }
-    else { ret = Math.min(troops, Math.max(3, Math.round(troops * 0.5))); ret = Math.max(ret, troops - 15); }
-    Qs[s + '_upkeep_year'] = round2(now);
-    Qs[s + '_upkeep_increase'] = posture < 2 ? round2(cost(posture + 1, troops + 3) - now) : 0;
-    Qs[s + '_upkeep_send'] = round2(cost(posture, troops + 5) - now);
-    Qs[s + '_upkeep_saved'] = round2(now - cost(newP, troops - ret));
+window.refreshOccupationCosts = (Qs) => {
+  let base = [0, 0.003, 0.005];
+  let total = 0;
+  let moodTotal = 0;
+  for (let s of Qs.southern_states) {
+    let posture = Qs[s + "_occupation_posture"] || 0;
+    let troops = Qs[s + "_garrison_troops"] || 0;
+    let now = posture === 0 ? 0 : base[posture] + troops * 0.0008;
+
+    // Same troop return rule the Reduce option uses
+    let newPosture = Math.max(0, posture - 1);
+    let returning = troops;
+    if (newPosture > 0) {
+      returning = Math.min(troops, Math.max(3, Math.round(troops * 0.5)));
+      returning = Math.max(returning, troops - 15);
+    }
+    let afterReduce = newPosture === 0 ? 0 : base[newPosture] + (troops - returning) * 0.0008;
+    let afterIncrease = posture < 2 ? base[posture + 1] + (troops + 3) * 0.0008 : now;
+    let afterSend = posture === 0 ? 0 : base[posture] + (troops + 5) * 0.0008;
+
+    Qs[s + "_upkeep_year"] = Math.round(now * 12 * 100) / 100;
+    Qs[s + "_upkeep_increase"] = Math.round((afterIncrease - now) * 12 * 100) / 100;
+    Qs[s + "_upkeep_send"] = Math.round((afterSend - now) * 12 * 100) / 100;
+    Qs[s + "_upkeep_saved"] = Math.round((now - afterReduce) * 12 * 100) / 100;
     total += now;
-    moodTotal += Qs[s + '_resentment'] || 0;
-  });
+    moodTotal += Qs[s + "_resentment"] || 0;
+  }
   Qs.occupation_upkeep_display = Math.round(total * 12 * 10) / 10;
-  var avg = moodTotal / Qs.southern_states.length;
+  let avg = moodTotal / Qs.southern_states.length;
   Qs.southern_mood = avg >= 40 ? 3 : (avg >= 25 ? 2 : (avg >= 10 ? 1 : 0));
 };
 window.refreshOccupationCosts(Q);
@@ -177,6 +185,160 @@ Q.southern_states.forEach(function(s) {
 });
 DixieOccupationMap.draw({ container: "#Dixie-map" }, occMapData);
 
+window.closeOccSidebar = () => {
+  let sidebar = document.querySelector("#Occ_sidebar");
+  if (sidebar) {
+    sidebar.style.display = "none";
+    sidebar.innerHTML = "";
+  }
+  window.DixieSelectedState = "";
+  for (let id in window.DixieOccupationMap.paths) {
+    window.DixieOccupationMap.paths[id].style.stroke = "";
+    window.DixieOccupationMap.paths[id].style.strokeWidth = "";
+  }
+};
+
+window.openOccSidebar = (stateId) => {
+  let sidebar = document.querySelector("#Occ_sidebar");
+  if (!sidebar) return;
+
+  // Clicking the selected state again closes the sidebar
+  if (window.DixieSelectedState === stateId) {
+    window.closeOccSidebar();
+    return;
+  }
+
+  window.refreshOccupationCosts(Q);
+
+  let names = { AL: "Alabama", AR: "Arkansas", FL: "Florida", GA: "Georgia", LA: "Louisiana", MS: "Mississippi", NC: "North Carolina", SC: "South Carolina", TN: "Tennessee", TX: "Texas", VA: "Virginia" };
+  let name = names[stateId];
+  let postureLabels = ["No federal presence", "Light federal presence", "Full military government"];
+
+  let posture = Q[stateId + "_occupation_posture"] || 0;
+  let troops = Q[stateId + "_garrison_troops"] || 0;
+  let months = Q[stateId + "_occupation_months"] || 0;
+  let kkk = Q[stateId + "_kkk_strength"] || 0;
+  let whiteL = Q[stateId + "_whiteL_strength"] || 0;
+  let resentment = Q[stateId + "_resentment"] || 0;
+  let redemption = Q[stateId + "_redemption_strength"] || 0;
+
+  let mood = "Quiet";
+  if (resentment >= 55) mood = "Seething";
+  else if (resentment >= 30) mood = "Resentment is hardening";
+  else if (resentment >= 10) mood = "Grumbling";
+
+  let redemptionText = "Weak";
+  if (redemption >= 40) redemptionText = "Strong enough to contest the state";
+  else if (redemption >= 20) redemptionText = "Growing";
+
+  let governor = "";
+  if (Q[stateId + "_gub_winner"] === "rep") governor = "Republican";
+  else if (Q[stateId + "_gub_winner"] === "dem") governor = Q.ncp_founded == 1 ? "National Conservative" : "Democratic";
+
+  let rows = [];
+  rows.push(["Federal presence", postureLabels[posture]]);
+  rows.push(["Garrison", troops + " thousand troops"]);
+  if (posture > 0) rows.push(["Occupied for", months + " months"]);
+  if (posture > 0) rows.push(["Upkeep", Q[stateId + "_upkeep_year"] + " budget per year"]);
+  rows.push(["Klan strength", Math.round(kkk)]);
+  if (Q.whiteL_formed == 1) rows.push(["White League strength", Math.round(whiteL)]);
+  rows.push(["Local mood", mood]);
+  rows.push(["Redemption movement", redemptionText]);
+  if (governor !== "") rows.push(["Governor", governor]);
+
+  let rowsHtml = "";
+  for (let row of rows) {
+    rowsHtml += `<div class="occ-sb-row"><span class="occ-sb-label">${row[0]}</span><span class="occ-sb-value">${row[1]}</span></div>`;
+  }
+
+  sidebar.innerHTML = `<div class="occ-sb-header"><h2 class="occ-sb-title">${name}</h2><button class="occ-sb-close" id="occ-sb-close">✕</button></div>${rowsHtml}<div id="occ-sb-actions"></div>`;
+  sidebar.style.display = "block";
+  sidebar.querySelector("#occ-sb-close").addEventListener("click", () => {
+    window.closeOccSidebar();
+  });
+
+  // Same rules as the choose-if lines on the Occ_XX_* scenes
+  let actions = [
+    {
+      key: "Increase",
+      label: "Increase presence",
+      show: posture < 2,
+      ok: posture < Q.occupation && Q.army_strength >= 3,
+      why: posture >= Q.occupation ? "National policy does not currently authorize a stronger presence here." : "The army does not have troops to spare.",
+      note: "About +" + Q[stateId + "_upkeep_increase"] + " budget per year"
+    },
+    {
+      key: "Reduce",
+      label: "Reduce occupation level",
+      show: true,
+      ok: posture > 0,
+      why: name + " is already free from federal oversight.",
+      note: "Saves about " + Q[stateId + "_upkeep_saved"] + " budget per year"
+    },
+    {
+      key: "Send",
+      label: "Send additional troops",
+      show: true,
+      ok: Q.army_strength >= 5 && posture > 0 && (posture >= 2 || troops + 5 <= 15),
+      why: Q.army_strength < 5 ? "We have no troops to spare." : (posture <= 0 ? name + " is under civilian control. A federal presence must be established first." : "A light federal presence cannot support a larger garrison. Full military government is required."),
+      note: "About +" + Q[stateId + "_upkeep_send"] + " budget per year"
+    },
+    {
+      key: "Crack",
+      label: "Crack down on paramilitaries",
+      show: true,
+      ok: kkk > 0 || whiteL > 0,
+      why: "The Klan and White League have been eradicated in " + name + ".",
+      note: ""
+    }
+  ];
+
+  let box = sidebar.querySelector("#occ-sb-actions");
+  for (let action of actions) {
+    if (!action.show) continue;
+
+    let wrap = document.createElement("div");
+    wrap.className = "occ-sb-action";
+
+    let button = document.createElement("button");
+    button.className = "map-btn";
+    button.textContent = action.label;
+    wrap.appendChild(button);
+
+    let note = document.createElement("div");
+    note.className = "occ-sb-note";
+    note.textContent = action.ok ? action.note : action.why;
+    wrap.appendChild(note);
+
+    if (action.ok) {
+      button.addEventListener("click", () => {
+        window.closeOccSidebar();
+        window.dendryUI.dendryEngine.goToScene("Occupation.Occ_" + stateId + "_" + action.key);
+      });
+    } else {
+      button.disabled = true;
+    }
+    box.appendChild(wrap);
+  }
+
+  for (let id in window.DixieOccupationMap.paths) {
+    if (id === "Outline") continue;
+    window.DixieOccupationMap.paths[id].style.stroke = id === stateId ? "#000000" : "";
+    window.DixieOccupationMap.paths[id].style.strokeWidth = id === stateId ? "1.5" : "";
+  }
+  window.DixieSelectedState = stateId;
+};
+
+window.closeOccSidebar();
+if (window.DixieSidebarWatcher) window.DixieSidebarWatcher.disconnect();
+window.DixieSidebarWatcher = new MutationObserver(() => {
+  if (!document.querySelector("#Dixie-map")) {
+    window.closeOccSidebar();
+    window.DixieSidebarWatcher.disconnect();
+  }
+});
+window.DixieSidebarWatcher.observe(document.querySelector("#content"), { childList: true, subtree: true });
+
 !}
 
 = Dealing with Southern Occupation
@@ -186,6 +348,8 @@ DixieOccupationMap.draw({ container: "#Dixie-map" }, occMapData);
   <button class="map-btn" data-mode="danger" onclick="window.DixieOccupationMap.setMode('danger')">Paramilitary Danger</button>
   <button class="map-btn" data-mode="resentment" onclick="window.DixieOccupationMap.setMode('resentment')">Southern Resentment</button>
 {!</div>!}
+
+Select a state on the map to decide local occupation actions
 
 {!<div id="Dixie-map"></div>!}
 

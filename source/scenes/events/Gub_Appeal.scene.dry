@@ -10,7 +10,7 @@ A letter arrives from the Governor of [+ gov_appeal_state +]. Nightriders have b
 - @nah: The state must handle its own affairs
 
 @new
-subtitle: Fight fire with fire
+subtitle: Fight fire with fire with the enforcement acts
 choose-if: radical_strength >= 35
 unavailable-subtitle: The bulk of the party isn't behind this yet.
 on-arrival: {!
@@ -22,7 +22,7 @@ on-arrival: {!
     Q.liberal_dissent += 2;
 !}
 
-Word goes out that new legislation is coming - something with federal marshals, federal courts, and none of the local sympathies that have let men walk free after burning a man's barn or worse. The Governor will have his answer soon enough.
+Word goes out that new legislation is coming something with federal marshals, federal courts, and none of the local sympathies that have let men walk free after burning a man's barn or worse. The Governor will have his answer soon enough.
 
 @nah
 subtitle: Let the state handle it

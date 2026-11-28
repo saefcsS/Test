@@ -5,13 +5,11 @@ new-page: true
 max-visits: 1
 view-if: year = 1874 and month >= 6 and dem_control = "reform" and liberal_survive = 1 and liberal_reunion_seen = 0 and ncp_founded = 0 and liberal_courtship >= 10 and conservative_defection = 1
 on-arrival: {!
-    // Enthusiasm for actually merging vs. staying loose allies
     let reformStrength = Q.dem_reform_strength || 0;
     let liberalStrength = Q.liberal_strength || 0;
     let courtship = Q.liberal_courtship || 0;
     let defectors = (Q.conservative_defection == 1) ? ((Q.conservative_defectors_house || 0) + (Q.conservative_defectors_senate || 0) * 2) : 0;
 
-    // Internal resistance: reformers and liberals both have factions that hate the idea
     let friction = (Q.dem_bourbon_strength || 0) * 0.5 + (Q.liberal_dissent || 0) * 0.3 + (Q.dem_reform_dissent || 0) * 0.3;
 
     let score = (reformStrength - 60) * 0.5 + (liberalStrength - 20) * 0.6 + courtship * 0.4 + defectors * 0.5 - friction * 0.4;
@@ -22,7 +20,7 @@ on-arrival: {!
 
 By the summer of 1874, the political lines that once separated three different movements have begun to blur. Samuel Tilden's <span style="color: #4682B4;">**reform Democracy**</span> now controls much of the Northern party machinery. Carl Schurz's <span style="color: #DAA520;">**Liberal Republicans**</span>, still independent after Cincinnati, have watched Tilden turn the fight against corruption into a national Democratic cause. Meanwhile, <span style="color: #B5651D;">**conservative**</span> Republicans who broke with their party over Radicalism have found a place among the reform Democrats.
 
-Their reasons for crossing party lines differ, but their destination is increasingly the same. The defectors have already shown that Tilden's Democracy can absorb former Republicans without surrendering its new reform program. The Liberals now have to decide whether they should remain a separate party with a shrinking base or join a movement that is beginning to resemble their own.
+Their reasons for crossing party lines differ, but their destination is increasingly the same. The defectors have already shown that Tilden's Democracy can absorb former Republicans without surrendering its new reform program. The <span style="color: #DAA520;">**Liberals**</span> now have to decide whether they should remain a separate party with a shrinking base or join a movement that is beginning to resemble their own.
 
 Delegates from the three camps begin meeting in New York. At first the gatherings are informal. By summer, they are negotiating platforms, organization and the question that would have been unthinkable a few years earlier: whether the old party lines have outlived their usefulness.
 
@@ -60,7 +58,7 @@ on-arrival: {!
 
 !}
 
-It happens. <span style="color: #4682B4;">**Reformers**</span>, <span style="color: #DAA520;">**Liberals**</span> and <span style="color: #B5651D;">**conservative**</span> defectors agree to dissolve their separate organizations and establish a new party: the <span style="color: #00AEEF;">**National Conservative Party**</span>.
+The <span style="color: #4682B4;">**Reformers**</span>, <span style="color: #DAA520;">**Liberals**</span> and <span style="color: #B5651D;">**conservative**</span> defectors agree to dissolve their separate organizations and establish a new party: the <span style="color: #00AEEF;">**National Conservative Party**</span>.
 
 Its program is a curious mixture of the movements that created it: civil service reform, hard money, retrenchment and an end to military Reconstruction. The new party accepts the postwar constitutional settlement while rejecting both the old Democratic machine and the Radical Republican program. It presents itself as a national opposition party built around reform, economy and reconciliation.
 
